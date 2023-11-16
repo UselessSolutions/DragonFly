@@ -1,0 +1,15 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "useless.dragonfly.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "BlockModelRenderBlocksAccessor",
+    "RenderBlocksAccessor"
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
