@@ -3,6 +3,7 @@ package useless.dragonfly;
 import net.minecraft.client.render.RenderBlocks;
 import net.minecraft.client.render.block.model.BlockModelRenderBlocks;
 import net.minecraft.core.block.Block;
+import useless.dragonfly.mixininterfaces.ExtraRendering;
 import useless.dragonfly.model.BlockBenchModel;
 
 import java.lang.reflect.Field;
@@ -27,7 +28,7 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 
 	@Override
 	public boolean render(Block block, int x, int y, int z) {
-		return getRenderBlock().renderBlockByRenderType(block, this.renderType, x, y, z);
+		return ((ExtraRendering)getRenderBlock()).renderModelNormal(baseModel, block, x, y, z);
 	}
 
 	@Override

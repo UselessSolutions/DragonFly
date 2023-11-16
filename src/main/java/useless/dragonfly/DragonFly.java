@@ -17,7 +17,12 @@ public class DragonFly implements ModInitializer {
 	public static final Gson GSON = new Gson();
 	public static final Block testBlock = new BlockBuilder(MOD_ID)
 		.setBlockModel(new BlockModelDragonFly(BlockBenchModel.decodeModel(MOD_ID, "TestBlock.json")))
+		.setTextures(3,1)
 		.build(new Block("testblock", 1000, Material.stone));
+	public static final Block testBlock2 = new BlockBuilder(MOD_ID)
+		.setBlockModel(new BlockModelDragonFly(BlockBenchModel.decodeModel(MOD_ID, "TestBlock2.json")))
+		.setTextures(13,13)
+		.build(new Block("testblock2", 1001, Material.stone));
 
     @Override
     public void onInitialize() {
