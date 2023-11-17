@@ -264,17 +264,17 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 		if (this.overbright) {
 			this.colorRedTopRight = r;
-			this.colorRedBottomRight = this.colorRedTopRight;
-			this.colorRedBottomLeft = this.colorRedTopRight;
-			this.colorRedTopLeft = this.colorRedTopRight;
+			this.colorRedBottomRight = r;
+			this.colorRedBottomLeft = r;
+			this.colorRedTopLeft = r;
 			this.colorGreenTopRight = g;
-			this.colorGreenBottomRight = this.colorGreenTopRight;
-			this.colorGreenBottomLeft = this.colorGreenTopRight;
-			this.colorGreenTopLeft = this.colorGreenTopRight;
+			this.colorGreenBottomRight = g;
+			this.colorGreenBottomLeft = g;
+			this.colorGreenTopLeft = g;
 			this.colorBlueTopRight = b;
-			this.colorBlueBottomRight = this.colorBlueTopRight;
-			this.colorBlueBottomLeft = this.colorBlueTopRight;
-			this.colorBlueTopLeft = this.colorBlueTopRight;
+			this.colorBlueBottomRight = b;
+			this.colorBlueBottomLeft = b;
+			this.colorBlueTopLeft = b;
 		} else {
 			this.colorRedBottomRight = this.colorRedTopRight = r * SIDE_LIGHT_MULTIPLIER[side.getId()];
 			this.colorRedBottomLeft = this.colorRedTopRight;
