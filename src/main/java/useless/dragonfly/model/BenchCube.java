@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 public class BenchCube{
+	private static final float COMPARE_CONST = 0.001f;
 	@SerializedName("from")
 	public int[] from;
 	@SerializedName("to")
@@ -16,12 +17,13 @@ public class BenchCube{
 	public int color;
 	@SerializedName("faces")
 	public HashMap<String, BenchFace> faces;
-	private static final float COMPARE_CONST = 0.001f;
-
 	public float[] fromScaled;
 	public float[] toScaled;
 	public boolean[] outerFace;
 	public boolean[] faceVisible;
+	private static boolean equalFloats(float a, float b){
+		return Math.abs(Float.compare(a, b)) < COMPARE_CONST;
+	}
 	public void process(){
 		outerFace = new boolean[6];
 		faceVisible = new boolean[6];
@@ -41,9 +43,6 @@ public class BenchCube{
 		for (int i = 0; i < outerFace.length; i++) {
 			outerFace[i] = equalFloats(getAxisPosition(Side.getSideById(i)), 0f) || equalFloats(getAxisPosition(Side.getSideById(i)), 1f);
 		}
-	}
-	private static boolean equalFloats(float a, float b){
-		return Math.abs(Float.compare(a, b)) < COMPARE_CONST;
 	}
 	public void processVisibleFaces(BlockBenchModel model){
 		for (BenchCube otherCube: model.elements) {

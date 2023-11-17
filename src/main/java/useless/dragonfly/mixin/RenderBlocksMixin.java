@@ -5,7 +5,6 @@ import net.minecraft.client.render.RenderBlockCache;
 import net.minecraft.client.render.RenderBlocks;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.TextureFX;
-import net.minecraft.client.render.block.color.BlockColor;
 import net.minecraft.client.render.block.color.BlockColorDispatcher;
 import net.minecraft.core.Global;
 import net.minecraft.core.block.Block;
@@ -16,6 +15,7 @@ import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import useless.dragonfly.DragonFly;
 import useless.dragonfly.mixininterfaces.ExtraRendering;
 import useless.dragonfly.model.BenchCube;
 import useless.dragonfly.model.BenchFace;
@@ -45,28 +45,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 	private boolean renderAllFaces;
 
 	@Shadow
-	public abstract void renderBottomFace(Block block, double d, double d1, double d2, int i);
-
-	@Shadow
-	public abstract void renderTopFace(Block block, double d, double d1, double d2, int i);
-
-	@Shadow
-	public abstract void renderNorthFace(Block block, double d, double d1, double d2, int i);
-
-	@Shadow
-	public static boolean fancyGrass;
-
-	@Shadow
 	private int overrideBlockTexture;
-
-	@Shadow
-	public abstract void renderSouthFace(Block block, double d, double d1, double d2, int i);
-
-	@Shadow
-	public abstract void renderWestFace(Block block, double d, double d1, double d2, int i);
-
-	@Shadow
-	public abstract void renderEastFace(Block block, double d, double d1, double d2, int i);
 
 	@Shadow
 	public boolean overbright;
@@ -167,7 +146,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		int dirX = side.getOffsetX();
 		int dirY = side.getOffsetY();
 		int dirZ = side.getOffsetZ();
-		boolean flag = side == Side.TOP || notGrass;;
+		boolean flag = side == Side.TOP || notGrass;
 		boolean rendered = false;
 		boolean renderOuterSide = block.shouldSideBeRendered(this.blockAccess, x + dirX, y + dirY, z + dirZ, side.getId(), meta);
 		if (this.renderAllFaces || renderOuterSide || model.hasFaceToRender(side)) {
@@ -271,19 +250,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 				for (BenchCube cube: model.elements) {
 					if (!renderOuterSide && cube.isOuterFace(side)) continue;
 					if (!cube.faceVisible[side.getId()]) continue;
-					if (side == Side.BOTTOM) {
-						this.renderBottomFace(cube, block, x, y, z, tex);
-					} else if (side == Side.TOP) {
-						this.renderTopFace(cube, block, x, y, z, tex);
-					} else if (side == Side.NORTH) {
-						this.renderNorthFace(cube, block, x, y, z, tex);
-					} else if (side == Side.SOUTH) {
-						this.renderSouthFace(cube, block, x, y, z, tex);
-					} else if (side == Side.WEST) {
-						this.renderWestFace(cube, block, x, y, z, tex);
-					} else if (side == Side.EAST) {
-						this.renderEastFace(cube, block, x, y, z, tex);
-					}
+					renderModelFaceBySide(cube, side, block, x, y, z, tex);
 				}
 				rendered = true;
 			}
@@ -787,7 +754,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		this.enableAO = false;
 		int meta = this.blockAccess.getBlockMetadata(x, y, z);
 		Tessellator tessellator = Tessellator.instance;
-		boolean flag = false;
+		boolean renderedSomething = false;
 		float cBottom = 0.5f;
 		float cTop = 1.0f;
 		float cNorthSouth = 0.8f;
@@ -804,89 +771,90 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		float bBottom = cBottom;
 		float bNorthSouth = cNorthSouth;
 		float bEastWest = cEastWest;
-		if (block != Block.grass) {
-			rBottom *= r;
-			rNorthSouth *= r;
-			rEastWest *= r;
-			gBottom *= g;
-			gNorthSouth *= g;
-			gEastWest *= g;
-			bBottom *= b;
-			bNorthSouth *= b;
-			bEastWest *= b;
+		rBottom *= r;
+		rNorthSouth *= r;
+		rEastWest *= r;
+		gBottom *= g;
+		gNorthSouth *= g;
+		gEastWest *= g;
+		bBottom *= b;
+		bNorthSouth *= b;
+		bEastWest *= b;
+		float blockBrightness = this.getBlockBrightness(this.blockAccess, x, y, z);
+		for (BenchCube cube: model.elements) {
+			for (Side side: DragonFly.sides) {
+				int _x = x + side.getOffsetX();
+				int _y = y + side.getOffsetY();
+				int _z = z + side.getOffsetZ();
+				if (!this.renderAllFaces){
+					boolean isOuterFace = cube.isOuterFace(side);
+					boolean isFaceVisible = cube.faceVisible[side.getId()];
+					boolean renderSide = block.shouldSideBeRendered(this.blockAccess, _x, _y, _z, side.getId(), meta);
+					if (!isFaceVisible || (isOuterFace && !renderSide)) continue;
+				}
+				float sideBrightness = getBlockBrightness(this.blockAccess, _x, _y, _z);
+				float red;
+				float green;
+				float blue;
+				if (!cube.isOuterFace(side) && !block.blockMaterial.isLiquid()){
+					sideBrightness = blockBrightness;
+				}
+				switch (side){
+					case TOP:
+						red = rTop;
+						green = gTop;
+						blue = bTop;
+						break;
+					case BOTTOM:
+						red = rBottom;
+						green = gBottom;
+						blue = bBottom;
+						break;
+					case NORTH:
+					case SOUTH:
+						red = rNorthSouth;
+						green = gNorthSouth;
+						blue = bNorthSouth;
+						break;
+					case WEST:
+					case EAST:
+						red = rEastWest;
+						green = gEastWest;
+						blue = bEastWest;
+						break;
+					default:
+						throw new RuntimeException("Specified side does not exist on a cube!!!");
+				}
+				tessellator.setColorOpaque_F(red * sideBrightness, green * sideBrightness, blue * sideBrightness);
+				renderModelFaceBySide(cube, side, block, x, y, z, block.getBlockTexture(this.blockAccess, x, y, z, side));
+				renderedSomething = true;
+			}
 		}
-		float f19 = this.getBlockBrightness(this.blockAccess, x, y, z);
-		if (this.renderAllFaces || block.shouldSideBeRendered(this.blockAccess, x, y - 1, z, 0, meta)) {
-			float brightness = this.getBlockBrightness(this.blockAccess, x, y - 1, z);
-			tessellator.setColorOpaque_F(rBottom * brightness, gBottom * brightness, bBottom * brightness);
-			this.renderBottomFace(block, x, y, z, block.getBlockTexture(this.blockAccess, x, y, z, Side.BOTTOM));
-			flag = true;
+		return renderedSomething;
+	}
+	@Unique
+	public void renderModelFaceBySide(BenchCube cube, Side side, Block block, double x, double y, double z, int texture){
+		switch (side){
+			case TOP:
+				renderTopFace(cube, block, x, y, z, texture);
+				break;
+			case BOTTOM:
+				renderBottomFace(cube, block, x, y, z, texture);
+				break;
+			case NORTH:
+				renderNorthFace(cube, block, x, y, z, texture);
+				break;
+			case SOUTH:
+				renderSouthFace(cube, block, x, y, z, texture);
+				break;
+			case WEST:
+				renderWestFace(cube, block, x, y, z, texture);
+				break;
+			case EAST:
+				renderEastFace(cube, block, x, y, z, texture);
+				break;
+			default:
+				throw new RuntimeException("Specified side does not exist on a cube!!!");
 		}
-		if (this.renderAllFaces || block.shouldSideBeRendered(this.blockAccess, x, y + 1, z, 1, meta)) {
-			float f21 = this.getBlockBrightness(this.blockAccess, x, y + 1, z);
-			if (block.maxY != 1.0 && !block.blockMaterial.isLiquid()) {
-				f21 = f19;
-			}
-			tessellator.setColorOpaque_F(rTop * f21, gTop * f21, bTop * f21);
-			this.renderTopFace(block, x, y, z, block.getBlockTexture(this.blockAccess, x, y, z, Side.TOP));
-			flag = true;
-		}
-		if (this.renderAllFaces || block.shouldSideBeRendered(this.blockAccess, x, y, z - 1, 2, meta)) {
-			float f22 = this.getBlockBrightness(this.blockAccess, x, y, z - 1);
-			if (block.minZ > 0.0) {
-				f22 = f19;
-			}
-			tessellator.setColorOpaque_F(rNorthSouth * f22, gNorthSouth * f22, bNorthSouth * f22);
-			int l = block.getBlockTexture(this.blockAccess, x, y, z, Side.NORTH);
-			this.renderNorthFace(block, x, y, z, l);
-			if (fancyGrass && l == 3 && this.overrideBlockTexture < 0) {
-				tessellator.setColorOpaque_F(rNorthSouth * f22 * r, gNorthSouth * f22 * g, bNorthSouth * f22 * b);
-				this.renderNorthFace(block, x, y, z, Block.texCoordToIndex(6, 2));
-			}
-			flag = true;
-		}
-		if (this.renderAllFaces || block.shouldSideBeRendered(this.blockAccess, x, y, z + 1, 3, meta)) {
-			float f23 = this.getBlockBrightness(this.blockAccess, x, y, z + 1);
-			if (block.maxZ < 1.0) {
-				f23 = f19;
-			}
-			tessellator.setColorOpaque_F(rNorthSouth * f23, gNorthSouth * f23, bNorthSouth * f23);
-			int i1 = block.getBlockTexture(this.blockAccess, x, y, z, Side.SOUTH);
-			this.renderSouthFace(block, x, y, z, i1);
-			if (fancyGrass && i1 == 3 && this.overrideBlockTexture < 0) {
-				tessellator.setColorOpaque_F(rNorthSouth * f23 * r, gNorthSouth * f23 * g, bNorthSouth * f23 * b);
-				this.renderSouthFace(block, x, y, z, Block.texCoordToIndex(6, 2));
-			}
-			flag = true;
-		}
-		if (this.renderAllFaces || block.shouldSideBeRendered(this.blockAccess, x - 1, y, z, 4, meta)) {
-			float f24 = this.getBlockBrightness(this.blockAccess, x - 1, y, z);
-			if (block.minX > 0.0) {
-				f24 = f19;
-			}
-			tessellator.setColorOpaque_F(rEastWest * f24, gEastWest * f24, bEastWest * f24);
-			int j1 = block.getBlockTexture(this.blockAccess, x, y, z, Side.WEST);
-			this.renderWestFace(block, x, y, z, j1);
-			if (fancyGrass && j1 == 3 && this.overrideBlockTexture < 0) {
-				tessellator.setColorOpaque_F(rEastWest * f24 * r, gEastWest * f24 * g, bEastWest * f24 * b);
-				this.renderWestFace(block, x, y, z, Block.texCoordToIndex(6, 2));
-			}
-			flag = true;
-		}
-		if (this.renderAllFaces || block.shouldSideBeRendered(this.blockAccess, x + 1, y, z, 5, meta)) {
-			float f25 = this.getBlockBrightness(this.blockAccess, x + 1, y, z);
-			if (block.maxX < 1.0) {
-				f25 = f19;
-			}
-			tessellator.setColorOpaque_F(rEastWest * f25, gEastWest * f25, bEastWest * f25);
-			int k1 = block.getBlockTexture(this.blockAccess, x, y, z, Side.EAST);
-			this.renderEastFace(block, x, y, z, k1);
-			if (fancyGrass && k1 == 3 && this.overrideBlockTexture < 0) {
-				tessellator.setColorOpaque_F(rEastWest * f25 * r, gEastWest * f25 * g, bEastWest * f25 * b);
-				this.renderEastFace(block, x, y, z, Block.texCoordToIndex(6, 2));
-			}
-			flag = true;
-		}
-		return flag;
 	}
 }

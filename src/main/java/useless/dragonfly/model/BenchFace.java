@@ -3,8 +3,6 @@ package useless.dragonfly.model;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.core.util.helper.Side;
 
-import java.util.HashMap;
-
 public class BenchFace{
 	@SerializedName("uv")
 	public int[] uv;
