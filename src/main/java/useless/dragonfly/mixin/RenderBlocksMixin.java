@@ -5,10 +5,8 @@ import net.minecraft.client.render.RenderBlockCache;
 import net.minecraft.client.render.RenderBlocks;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.TextureFX;
-import net.minecraft.client.render.block.color.BlockColor;
 import net.minecraft.client.render.block.color.BlockColorDispatcher;
 import net.minecraft.client.render.block.model.BlockModelDispatcher;
-import net.minecraft.client.render.block.model.BlockModelRenderBlocks;
 import net.minecraft.core.Global;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.util.helper.Side;
@@ -22,7 +20,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import useless.dragonfly.BlockModelDragonFly;
+import useless.dragonfly.model.BlockModelDragonFly;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.mixininterfaces.ExtraRendering;
 import useless.dragonfly.model.BenchCube;
@@ -137,8 +135,8 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		for (BenchCube cube: modelDragonFly.baseModel.elements) {
 			for (BenchFace face: cube.faces.values()) {
 				tessellator.startDrawingQuads();
-				tessellator.setNormal(face.side.getOffsetX(), face.side.getOffsetY(), face.side.getOffsetZ());
-				renderModelFaceBySide(cube, face.side, block, 0, 0, 0, block.getBlockTextureFromSideAndMetadata(face.side, meta));
+				tessellator.setNormal(face.getSide().getOffsetX(), face.getSide().getOffsetY(), face.getSide().getOffsetZ());
+				renderModelFaceBySide(cube, face.getSide(), block, 0, 0, 0, block.getBlockTextureFromSideAndMetadata(face.getSide(), meta));
 				tessellator.draw();
 			}
 		}
@@ -196,7 +194,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 
 		if (!(this.renderAllFaces || renderOuterSide || model.hasFaceToRender(side))) return false;
 		if (!renderOuterSide && cube.isOuterFace(side)) return false;
-		if (!cube.faceVisible[side.getId()]) return false;
+		if (!cube.isFaceVisible(side)) return false;
 
 		float lightTL;
 		float lightBL;

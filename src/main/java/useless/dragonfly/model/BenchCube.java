@@ -17,10 +17,10 @@ public class BenchCube{
 	public int color;
 	@SerializedName("faces")
 	public HashMap<String, BenchFace> faces;
-	public float[] fromScaled;
-	public float[] toScaled;
-	public boolean[] outerFace;
-	public boolean[] faceVisible;
+	protected float[] fromScaled;
+	protected float[] toScaled;
+	protected boolean[] outerFace;
+	protected boolean[] faceVisible;
 	private static boolean equalFloats(float a, float b){
 		return Math.abs(Float.compare(a, b)) < COMPARE_CONST;
 	}
@@ -91,6 +91,7 @@ public class BenchCube{
 	public boolean isOuterFace(Side side){
 		return outerFace[side.getId()];
 	}
+	public boolean isFaceVisible(Side side) { return faceVisible[side.getId()];}
 
 	public BenchFace getFaceFromSide(Side side){
 		return faces.get(BlockBenchModel.sideToKey.get(side));

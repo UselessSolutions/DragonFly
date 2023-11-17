@@ -1,10 +1,9 @@
-package useless.dragonfly;
+package useless.dragonfly.model;
 
 import net.minecraft.client.render.RenderBlocks;
 import net.minecraft.client.render.block.model.BlockModelRenderBlocks;
 import net.minecraft.core.block.Block;
 import useless.dragonfly.mixininterfaces.ExtraRendering;
-import useless.dragonfly.model.BlockBenchModel;
 
 import java.lang.reflect.Field;
 

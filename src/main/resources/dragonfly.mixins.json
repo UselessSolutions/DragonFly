@@ -4,7 +4,6 @@
   "package": "useless.dragonfly.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "BlockModelRenderBlocksAccessor",
     "RenderBlocksMixin"
   ],
   "client": [

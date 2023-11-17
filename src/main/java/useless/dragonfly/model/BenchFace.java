@@ -8,8 +8,8 @@ public class BenchFace{
 	public int[] uv;
 	@SerializedName("texture")
 	public String texture;
-	public float[] uvScaled;
-	public Side side;
+	protected float[] uvScaled;
+	protected Side side;
 	public void process(String key){
 		uvScaled = new float[uv.length];
 		for (int i = 0; i < uv.length; i++) {
@@ -29,4 +29,5 @@ public class BenchFace{
 	public float vMax(){
 		return uvScaled[3];
 	}
+	public Side getSide(){ return side;}
 }
