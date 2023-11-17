@@ -20,12 +20,12 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import useless.dragonfly.model.BlockModelDragonFly;
+import useless.dragonfly.model.block.BlockModelDragonFly;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.mixininterfaces.ExtraRendering;
-import useless.dragonfly.model.BenchCube;
-import useless.dragonfly.model.BenchFace;
-import useless.dragonfly.model.BlockBenchModel;
+import useless.dragonfly.model.block.BenchCube;
+import useless.dragonfly.model.block.BenchFace;
+import useless.dragonfly.model.block.BlockBenchModel;
 
 @Mixin(value = RenderBlocks.class, remap = false)
 public abstract class RenderBlocksMixin implements ExtraRendering {

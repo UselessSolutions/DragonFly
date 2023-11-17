@@ -1,4 +1,4 @@
-package useless.dragonfly.model;
+package useless.dragonfly.model.block;
 
 import net.minecraft.client.render.RenderBlocks;
 import net.minecraft.client.render.block.model.BlockModelRenderBlocks;

@@ -1,12 +1,11 @@
 package useless.dragonfly.block;
 
-import net.minecraft.core.block.Block;
 import net.minecraft.core.block.BlockTransparent;
 import net.minecraft.core.block.material.Material;
 import net.minecraft.core.util.phys.AABB;
 import net.minecraft.core.world.World;
-import useless.dragonfly.model.BenchCube;
-import useless.dragonfly.model.BlockBenchModel;
+import useless.dragonfly.model.block.BenchCube;
+import useless.dragonfly.model.block.BlockBenchModel;
 
 import java.util.ArrayList;
 

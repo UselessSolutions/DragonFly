@@ -23,23 +23,10 @@ import java.util.List;
  */
 public class BenchEntityModel extends ModelBase {
 	private final HashMap<String, BenchEntityBones> indexBones = new HashMap<>();
-	public static HashMap<String, BenchEntityModel> benchEntityModelMap = new HashMap<>();
 	@SerializedName("format_version")
 	private String formatVersion;
 	@SerializedName("minecraft:geometry")
 	private List<BenchEntityGeometry> benchEntityGeometry;
-
-	public static BenchEntityModel decodeModel(String modID, String modelSource, Class<? extends BenchEntityModel> baseModel) {
-		if (!benchEntityModelMap.containsKey(ModelHelper.getModelLocation(modID, modelSource))) {
-			InputStream inputStream = baseModel.getResourceAsStream(ModelHelper.getModelLocation(modID, modelSource));
-			JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(inputStream)));
-			BenchEntityModel model = DragonFly.GSON.fromJson(reader, baseModel);
-			benchEntityModelMap.put(ModelHelper.getModelLocation(modID, modelSource), model);
-			return model;
-		} else {
-			return benchEntityModelMap.get(ModelHelper.getModelLocation(modID, modelSource));
-		}
-	}
 
 	public HashMap<String, BenchEntityBones> getIndexBones() {
 		return indexBones;

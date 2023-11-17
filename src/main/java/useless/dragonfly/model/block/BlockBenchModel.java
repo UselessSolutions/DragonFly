@@ -1,4 +1,4 @@
-package useless.dragonfly.model;
+package useless.dragonfly.model.block;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.core.util.helper.Side;
