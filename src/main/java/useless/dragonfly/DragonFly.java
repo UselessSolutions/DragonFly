@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.render.block.model.BlockModelRenderBlocks;
 import net.minecraft.core.block.Block;
+import net.minecraft.core.block.BlockGlass;
+import net.minecraft.core.block.BlockMesh;
+import net.minecraft.core.block.BlockTransparent;
 import net.minecraft.core.block.material.Material;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,11 +21,15 @@ public class DragonFly implements ModInitializer {
 	public static final Block testBlock = new BlockBuilder(MOD_ID)
 		.setBlockModel(new BlockModelDragonFly(BlockBenchModel.decodeModel(MOD_ID, "TestBlock.json")))
 		.setTextures(3,1)
-		.build(new Block("testblock", 1000, Material.stone));
+		.build(new BlockMesh("testblock", 1000));
 	public static final Block testBlock2 = new BlockBuilder(MOD_ID)
 		.setBlockModel(new BlockModelDragonFly(BlockBenchModel.decodeModel(MOD_ID, "TestBlock2.json")))
 		.setTextures(13,13)
-		.build(new Block("testblock2", 1001, Material.stone));
+		.build(new BlockMesh("testblock2", 1001));
+	public static final Block testBlock3 = new BlockBuilder(MOD_ID)
+		.setBlockModel(new BlockModelDragonFly(BlockBenchModel.decodeModel(MOD_ID, "TestBlock3.json")))
+		.setTextures(4,0)
+		.build(new BlockMesh("testblock2", 1002));
 
     @Override
     public void onInitialize() {
