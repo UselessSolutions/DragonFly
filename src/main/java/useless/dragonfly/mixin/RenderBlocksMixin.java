@@ -169,8 +169,8 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		int dirZ = side.getOffsetZ();
 		boolean flag = side == Side.TOP || notGrass;;
 		boolean rendered = false;
-		boolean renderOuterSides = block.shouldSideBeRendered(this.blockAccess, x + dirX, y + dirY, z + dirZ, side.getId(), meta);
-		if (this.renderAllFaces || renderOuterSides || model.hasFaceToRender(side)) {
+		boolean renderOuterSide = block.shouldSideBeRendered(this.blockAccess, x + dirX, y + dirY, z + dirZ, side.getId(), meta);
+		if (this.renderAllFaces || renderOuterSide || model.hasFaceToRender(side)) {
 			float lightTL;
 			float lightBL;
 			float lightBR;
@@ -269,7 +269,8 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 			int tex = this.overbright ? block.getBlockOverbrightTexture(this.blockAccess, x, y, z, side.getId()) : block.getBlockTexture(this.blockAccess, x, y, z, side);
 			if (tex >= 0) {
 				for (BenchCube cube: model.elements) {
-					if (!renderOuterSides && cube.isOuterFace(side)) continue;
+					if (!renderOuterSide && cube.isOuterFace(side)) continue;
+					if (!cube.faceVisible[side.getId()]) continue;
 					if (side == Side.BOTTOM) {
 						this.renderBottomFace(cube, block, x, y, z, tex);
 					} else if (side == Side.TOP) {

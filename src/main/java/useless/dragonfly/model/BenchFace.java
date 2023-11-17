@@ -1,6 +1,9 @@
 package useless.dragonfly.model;
 
 import com.google.gson.annotations.SerializedName;
+import net.minecraft.core.util.helper.Side;
+
+import java.util.HashMap;
 
 public class BenchFace{
 	@SerializedName("uv")
@@ -8,11 +11,13 @@ public class BenchFace{
 	@SerializedName("texture")
 	public String texture;
 	public float[] uvScaled;
-	public void process(){
+	public Side side;
+	public void process(String key){
 		uvScaled = new float[uv.length];
 		for (int i = 0; i < uv.length; i++) {
 			uvScaled[i] = uv[i]/BlockBenchModel.textureSize;
 		}
+		this.side = BlockBenchModel.keyToSide.get(key);
 	}
 	public float uMin(){
 		return uvScaled[0];

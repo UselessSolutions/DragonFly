@@ -1,8 +1,10 @@
 package useless.dragonfly.model;
 
 import com.google.gson.annotations.SerializedName;
+import net.minecraft.core.util.helper.Axis;
 import net.minecraft.core.util.helper.Side;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class BenchCube{
@@ -14,12 +16,16 @@ public class BenchCube{
 	public int color;
 	@SerializedName("faces")
 	public HashMap<String, BenchFace> faces;
+	private static final float COMPARE_CONST = 0.001f;
 
 	public float[] fromScaled;
 	public float[] toScaled;
 	public boolean[] outerFace;
+	public boolean[] faceVisible;
 	public void process(){
 		outerFace = new boolean[6];
+		faceVisible = new boolean[6];
+		Arrays.fill(faceVisible, true);
 		fromScaled = new float[from.length];
 		for (int i = 0; i < from.length; i++) {
 			fromScaled[i] = from[i]/BlockBenchModel.textureSize;
@@ -28,45 +34,67 @@ public class BenchCube{
 		for (int i = 0; i < to.length; i++) {
 			toScaled[i] = to[i]/BlockBenchModel.textureSize;
 		}
-		for (BenchFace face: faces.values()) {
-			face.process();
+		for (String key: faces.keySet()) {
+			BenchFace face = faces.get(key);
+			face.process(key);
 		}
-		outerFace[Side.TOP.getId()] = Math.abs(Float.compare(yMax(), 1f)) < 0.001f;
-		outerFace[Side.BOTTOM.getId()] = Math.abs(Float.compare(yMin(), 0f)) < 0.001f;
-		outerFace[Side.NORTH.getId()] = Math.abs(Float.compare(zMin(), 0f)) < 0.001f;
-		outerFace[Side.SOUTH.getId()] = Math.abs(Float.compare(zMax(), 1f)) < 0.001f;
-		outerFace[Side.WEST.getId()] = Math.abs(Float.compare(xMin(), 0f)) < 0.001f;
-		outerFace[Side.EAST.getId()] = Math.abs(Float.compare(xMax(), 1f)) < 0.001f;
+		for (int i = 0; i < outerFace.length; i++) {
+			outerFace[i] = equalFloats(getAxisPosition(Side.getSideById(i)), 0f) || equalFloats(getAxisPosition(Side.getSideById(i)), 1f);
+		}
+	}
+	private static boolean equalFloats(float a, float b){
+		return Math.abs(Float.compare(a, b)) < COMPARE_CONST;
+	}
+	public void processVisibleFaces(BlockBenchModel model){
+		for (BenchCube otherCube: model.elements) {
+			if (this.equals(otherCube)) continue;
+			for (BenchFace thisFace: faces.values()) {
+				BenchFace otherFace = otherCube.getFaceFromSide(thisFace.side.getOpposite());
+				if (!equalFloats(this.getAxisPosition(thisFace.side), otherCube.getAxisPosition(otherFace.side))) continue;
+				float[] thisFaceDim = this.faceDimensions(thisFace.side);
+				float[] otherFaceDim = otherCube.faceDimensions(otherFace.side);
+				faceVisible[thisFace.side.getId()] &= face1Visible(thisFaceDim, otherFaceDim);
+			}
+		}
+	}
+	public boolean face1Visible(float[] face1, float[] face2){
+		if (face1[0] < face2[0] || face1[1] < face2[1]){
+			return true;
+		}
+		return face1[2] > face2[2] || face1[3] > face2[3];
+	}
+	public float[] faceDimensions(Side side){
+		if (side.getAxis() == Axis.Y){
+			return new float[]{xMin(), zMin(), xMax(), zMax()};
+		}
+		if (side.getAxis() == Axis.X){
+			return new float[]{yMin(), zMin(), yMax(), zMax()};
+		}
+		return new float[]{xMin(), yMin(), xMax(), yMax()};
+	}
+	public float getAxisPosition(Side side){
+		switch (side){
+			case TOP:
+				return yMax();
+			case BOTTOM:
+				return yMin();
+			case NORTH:
+				return zMin();
+			case SOUTH:
+				return zMax();
+			case WEST:
+				return xMin();
+			case EAST:
+				return xMax();
+		}
+		throw new RuntimeException("Specified side does not exist on a cube!!!");
 	}
 	public boolean isOuterFace(Side side){
 		return outerFace[side.getId()];
 	}
 
 	public BenchFace getFaceFromSide(Side side){
-		String key;
-		switch (side){
-			case BOTTOM:
-				key = "down";
-				break;
-			case TOP:
-				key = "up";
-				break;
-			case NORTH:
-				key = "north";
-				break;
-			case SOUTH:
-				key = "south";
-				break;
-			case WEST:
-				key = "west";
-				break;
-			case EAST:
-				key = "east";
-				break;
-			default:
-				throw new RuntimeException("Cube is missing face for side: " + side);
-		}
-		return faces.get(key);
+		return faces.get(BlockBenchModel.sideToKey.get(side));
 	}
 	public float xMin(){
 		return fromScaled[0];
