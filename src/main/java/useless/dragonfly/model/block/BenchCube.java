@@ -49,6 +49,7 @@ public class BenchCube{
 			if (this.equals(otherCube)) continue;
 			for (BenchFace thisFace: faces.values()) {
 				BenchFace otherFace = otherCube.getFaceFromSide(thisFace.side.getOpposite());
+				if (otherFace == null) continue;
 				if (!equalFloats(this.getAxisPosition(thisFace.side), otherCube.getAxisPosition(otherFace.side))) continue;
 				float[] thisFaceDim = this.faceDimensions(thisFace.side);
 				float[] otherFaceDim = otherCube.faceDimensions(otherFace.side);

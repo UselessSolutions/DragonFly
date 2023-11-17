@@ -200,6 +200,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 	}
 	@Unique
 	public boolean renderModelSide(BlockBenchModel model, BenchCube cube, Block block, int x, int y, int z, float r, float g, float b, Side side, int meta, float depth, int topX, int topY, int topZ, float topP, float botP, int lefX, int lefY, int lefZ, float lefP, float rigP) {
+		if (cube.getFaceFromSide(side) == null) return false;
 		int dirX = side.getOffsetX();
 		int dirY = side.getOffsetY();
 		int dirZ = side.getOffsetZ();
@@ -835,6 +836,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		float blockBrightness = this.getBlockBrightness(this.blockAccess, x, y, z);
 		for (BenchCube cube: model.elements) {
 			for (Side side: DragonFly.sides) {
+				if (cube.getFaceFromSide(side) == null) continue;
 				int _x = x + side.getOffsetX();
 				int _y = y + side.getOffsetY();
 				int _z = z + side.getOffsetZ();
