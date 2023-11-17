@@ -31,6 +31,14 @@ public class DragonFly implements ModInitializer {
 		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateModel(MOD_ID, "TestBlock3.json")))
 		.setTextures(4,0)
 		.build(new BlockModel("testblock3", 1002, Material.dirt, ModelHelper.getOrCreateModel(MOD_ID, "TestBlock3.json")));
+	public static final Block testBlock4 = new BlockBuilder(MOD_ID)
+		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateModel(MOD_ID, "dragon_egg.json")))
+		.setTextures(5,2)
+		.build(new BlockModel("testblock4", 1003, Material.dirt, ModelHelper.getOrCreateModel(MOD_ID, "dragon_egg.json")));
+	public static final Block testBlock5 = new BlockBuilder(MOD_ID)
+		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateModel(MOD_ID, "brewing_stand.json")))
+		.setTextures(1,0)
+		.build(new BlockModel("testblock5", 1004, Material.dirt, ModelHelper.getOrCreateModel(MOD_ID, "brewing_stand.json")));
 
     @Override
     public void onInitialize() {

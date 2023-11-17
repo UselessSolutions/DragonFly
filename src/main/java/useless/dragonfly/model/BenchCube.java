@@ -10,9 +10,9 @@ import java.util.HashMap;
 public class BenchCube{
 	private static final float COMPARE_CONST = 0.001f;
 	@SerializedName("from")
-	public int[] from;
+	public float[] from;
 	@SerializedName("to")
-	public int[] to;
+	public float[] to;
 	@SerializedName("color")
 	public int color;
 	@SerializedName("faces")
