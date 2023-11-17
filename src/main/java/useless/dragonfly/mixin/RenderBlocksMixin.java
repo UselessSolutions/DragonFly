@@ -126,6 +126,20 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		return this.renderStandardModelWithColorMultiplier(model, block, x, y, z, red, green, blue);
 	}
 	@Unique
+	public boolean renderModelNoCulling(BlockBenchModel model, Block block, int x, int y, int z){
+		this.renderAllFaces = true;
+		boolean result = this.renderModelNormal(model, block, x, y, z);
+		this.renderAllFaces = false;
+		return result;
+	}
+	@Unique
+	public boolean renderModelBlockUsingTexture(BlockBenchModel model, Block block, int x, int y, int z, int textureIndex){
+		this.overrideBlockTexture = textureIndex;
+		boolean result = this.renderModelNormal(model, block, x, y, z);
+		this.overrideBlockTexture = -1;
+		return result;
+	}
+	@Unique
 	public boolean renderStandardModelWithAmbientOcclusion(BlockBenchModel model, Block block, int x, int y, int z, float r, float g, float b) {
 		this.enableAO = true;
 		int meta = this.blockAccess.getBlockMetadata(x, y, z);
