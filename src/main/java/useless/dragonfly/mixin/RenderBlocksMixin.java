@@ -185,6 +185,20 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		return somethingRendered;
 	}
 	@Unique
+	public boolean renderSide(BlockBenchModel model, BenchCube cube, Side side, boolean renderOuterSide){
+		if (model.hasFaceToRender(side)){
+			if (cube.isOuterFace(side)){
+				if (!renderOuterSide){
+					return false;
+				}
+			}
+			if (!cube.isFaceVisible(side)){
+				return false;
+			}
+		}
+		return true;
+	}
+	@Unique
 	public boolean renderModelSide(BlockBenchModel model, BenchCube cube, Block block, int x, int y, int z, float r, float g, float b, Side side, int meta, float depth, int topX, int topY, int topZ, float topP, float botP, int lefX, int lefY, int lefZ, float lefP, float rigP) {
 		int dirX = side.getOffsetX();
 		int dirY = side.getOffsetY();
@@ -192,9 +206,10 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 
 		boolean renderOuterSide = block.shouldSideBeRendered(this.blockAccess, x + dirX, y + dirY, z + dirZ, side.getId(), meta);
 
-		if (!(this.renderAllFaces || renderOuterSide || model.hasFaceToRender(side))) return false;
-		if (!renderOuterSide && cube.isOuterFace(side)) return false;
-		if (!cube.isFaceVisible(side)) return false;
+		if (!this.renderAllFaces){
+			if (!renderSide(model, cube, side, renderOuterSide)) return false;
+		}
+
 
 		float lightTL;
 		float lightBL;
@@ -824,7 +839,9 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 				int _y = y + side.getOffsetY();
 				int _z = z + side.getOffsetZ();
 
-				if (!this.renderAllFaces && (!block.shouldSideBeRendered(this.blockAccess, _x, _y, _z, side.getId(), meta) || !model.hasFaceToRender(side))) continue;
+				if (!this.renderAllFaces){
+					if (!renderSide(model, cube, side, block.shouldSideBeRendered(this.blockAccess, _x, _y, _z, side.getId(), meta))) continue;
+				}
 
 				float sideBrightness;
 				if (!cube.isOuterFace(side) && !block.blockMaterial.isLiquid()){
