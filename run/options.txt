@@ -89,7 +89,7 @@ overlayShowTime:true
 overlayShowSeason:true
 overlayShowWeather:true
 overlayShowBiome:true
-lastServer:
+lastServer:localhost
 skin:Default
 selectedController:
 language:en_US

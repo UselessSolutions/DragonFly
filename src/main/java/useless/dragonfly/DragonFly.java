@@ -13,6 +13,7 @@ import useless.dragonfly.block.BlockModel;
 import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.model.block.BlockModelDragonFly;
 import useless.dragonfly.model.entity.BenchEntityModel;
+import useless.dragonfly.registries.TextureRegistry;
 import useless.dragonfly.testentity.EntityZombieTest;
 import useless.dragonfly.testentity.RenderZombieTest;
 import useless.dragonfly.testentity.ZombieModelTest;
@@ -47,6 +48,7 @@ public class DragonFly implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("DragonFly initialized.");
+		TextureRegistry.init();
 
 		//TEST Entity
 		EntityHelper.createEntity(EntityZombieTest.class, new RenderZombieTest(ModelHelper.getOrCreateEntityModel(MOD_ID, "zombie_test.json", ZombieModelTest.class), 0.5F), 10000, "ZombieTest");
