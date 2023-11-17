@@ -9,9 +9,14 @@ import net.minecraft.core.util.helper.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import turniplabs.halplibe.helper.BlockBuilder;
+import turniplabs.halplibe.helper.EntityHelper;
 import useless.dragonfly.block.BlockModel;
 import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.model.BlockModelDragonFly;
+import useless.dragonfly.model.entity.BenchEntityModel;
+import useless.dragonfly.testentity.EntityZombieTest;
+import useless.dragonfly.testentity.RenderZombieTest;
+import useless.dragonfly.testentity.ZombieModelTest;
 
 
 public class DragonFly implements ModInitializer {
@@ -45,7 +50,7 @@ public class DragonFly implements ModInitializer {
         LOGGER.info("DragonFly initialized.");
 
 		//TEST Entity
-		//EntityHelper.createEntity(EntityZombieTest.class, new RenderZombieTest(BenchEntityModel.decodeModel(MOD_ID, "zombie_test.json", ZombieModelTest.class), 0.5F), 10000, "ZombieTest");
+		EntityHelper.createEntity(EntityZombieTest.class, new RenderZombieTest(BenchEntityModel.decodeModel(MOD_ID, "zombie_test.json", ZombieModelTest.class), 0.5F), 10000, "ZombieTest");
     }
 
 }

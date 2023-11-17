@@ -6,6 +6,7 @@ import net.minecraft.client.render.model.ModelBase;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 import useless.dragonfly.DragonFly;
+import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.model.entity.processor.BenchEntityBones;
 import useless.dragonfly.model.entity.processor.BenchEntityCube;
 import useless.dragonfly.model.entity.processor.BenchEntityGeometry;
@@ -29,14 +30,14 @@ public class BenchEntityModel extends ModelBase {
 	private List<BenchEntityGeometry> benchEntityGeometry;
 
 	public static BenchEntityModel decodeModel(String modID, String modelSource, Class<? extends BenchEntityModel> baseModel) {
-		if (!benchEntityModelMap.containsKey(DragonFly.getModelLocation(modID, modelSource))) {
-			InputStream inputStream = baseModel.getResourceAsStream(DragonFly.getModelLocation(modID, modelSource));
+		if (!benchEntityModelMap.containsKey(ModelHelper.getModelLocation(modID, modelSource))) {
+			InputStream inputStream = baseModel.getResourceAsStream(ModelHelper.getModelLocation(modID, modelSource));
 			JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(inputStream)));
 			BenchEntityModel model = DragonFly.GSON.fromJson(reader, baseModel);
-			benchEntityModelMap.put(DragonFly.getModelLocation(modID, modelSource), model);
+			benchEntityModelMap.put(ModelHelper.getModelLocation(modID, modelSource), model);
 			return model;
 		} else {
-			return benchEntityModelMap.get(DragonFly.getModelLocation(modID, modelSource));
+			return benchEntityModelMap.get(ModelHelper.getModelLocation(modID, modelSource));
 		}
 	}
 
