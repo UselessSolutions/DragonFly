@@ -2,12 +2,8 @@ package useless.dragonfly;
 
 import com.google.gson.Gson;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.client.render.block.model.BlockModelRenderBlocks;
 import net.minecraft.core.block.Block;
-import net.minecraft.core.block.BlockGlass;
 import net.minecraft.core.block.BlockMesh;
-import net.minecraft.core.block.BlockTransparent;
-import net.minecraft.core.block.material.Material;
 import net.minecraft.core.util.helper.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +32,9 @@ public class DragonFly implements ModInitializer {
     @Override
     public void onInitialize() {
         LOGGER.info("DragonFly initialized.");
+
+		//TEST Entity
+		//EntityHelper.createEntity(EntityZombieTest.class, new RenderZombieTest(BenchEntityModel.decodeModel(MOD_ID, "zombie_test.json", ZombieModelTest.class), 0.5F), 10000, "ZombieTest");
     }
 	public static String getModelLocation(String modID, String modelSource){
 		return "/assets/" + modID + "/model/" + modelSource;
