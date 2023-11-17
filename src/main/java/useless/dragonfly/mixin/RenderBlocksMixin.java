@@ -130,132 +130,131 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		this.enableAO = true;
 		int meta = this.blockAccess.getBlockMetadata(x, y, z);
 		this.cache.setupCache(block, this.blockAccess, x, y, z);
-		boolean notGrass = (block != Block.grass);
-		boolean somethingRendered;
-		somethingRendered = renderModelSide(model, block, x, y, z, r, g, b, notGrass, Side.BOTTOM, meta, (float)block.minY, 0, 0, 1, (float)block.maxZ, (float)block.minZ, -1, 0, 0, 1.0F - (float)block.minX, 1.0F - (float)block.maxX);
-		somethingRendered |= renderModelSide(model, block, x, y, z, r, g, b, notGrass, Side.TOP, meta, 1.0F - (float)block.maxY, 0, 0, 1, (float)block.maxZ, (float)block.minZ, 1, 0, 0, (float)block.maxX, (float)block.minX);
-		somethingRendered |= renderModelSide(model, block, x, y, z, r, g, b, notGrass, Side.NORTH, meta, (float)block.minZ, -1, 0, 0, 1.0F - (float)block.minX, 1.0F - (float)block.maxX, 0, 1, 0, (float)block.maxY, (float)block.minY);
-		somethingRendered |= renderModelSide(model, block, x, y, z, r, g, b, notGrass, Side.SOUTH, meta, 1.0F - (float)block.maxZ, 0, 1, 0, (float)block.maxY, (float)block.minY, -1, 0, 0, 1.0F - (float)block.minX, 1.0F - (float)block.maxX);
-		somethingRendered |= renderModelSide(model, block, x, y, z, r, g, b, notGrass, Side.WEST, meta, (float)block.minX, 0, 0, 1, (float)block.maxZ, (float)block.minZ, 0, 1, 0, (float)block.maxY, (float)block.minY);
-		somethingRendered |= renderModelSide(model, block, x, y, z, r, g, b, notGrass, Side.EAST, meta, 1.0F - (float)block.maxX, 0, 0, 1, (float)block.maxZ, (float)block.minZ, 0, -1, 0, 1.0F - (float)block.minY, 1.0F - (float)block.maxY);
+		boolean somethingRendered = false;
+		for (BenchCube cube: model.elements) {
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, r, g, b, Side.BOTTOM, meta, cube.yMin(), 0, 0, 1, cube.zMax(), cube.zMin(), -1, 0, 0, 1.0F - cube.xMin(), 1.0F - cube.xMax());
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, r, g, b, Side.TOP, meta, 1.0F - cube.yMax(), 0, 0, 1, cube.zMax(), cube.zMin(), 1, 0, 0, cube.xMax(), cube.xMin());
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, r, g, b, Side.NORTH, meta, cube.zMin(), -1, 0, 0, 1.0F - cube.xMin(), 1.0F - cube.xMax(), 0, 1, 0, cube.yMax(), cube.yMin());
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, r, g, b, Side.SOUTH, meta, 1.0F - cube.zMax(), 0, 1, 0, cube.yMax(), cube.yMin(), -1, 0, 0, 1.0F - cube.xMin(), 1.0F - cube.xMax());
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, r, g, b, Side.WEST, meta, cube.xMin(), 0, 0, 1, cube.zMax(), cube.zMin(), 0, 1, 0, cube.yMax(), cube.yMin());
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, r, g, b, Side.EAST, meta, 1.0F - cube.xMax(), 0, 0, 1, cube.zMax(), cube.zMin(), 0, -1, 0, 1.0F - cube.yMin(), 1.0F - cube.yMax());
+		}
 		this.enableAO = false;
 		return somethingRendered;
 	}
 	@Unique
-	public boolean renderModelSide(BlockBenchModel model, Block block, int x, int y, int z, float r, float g, float b, boolean notGrass, Side side, int meta, float depth, int topX, int topY, int topZ, float topP, float botP, int lefX, int lefY, int lefZ, float lefP, float rigP) {
+	public boolean renderModelSide(BlockBenchModel model, BenchCube cube, Block block, int x, int y, int z, float r, float g, float b, Side side, int meta, float depth, int topX, int topY, int topZ, float topP, float botP, int lefX, int lefY, int lefZ, float lefP, float rigP) {
 		int dirX = side.getOffsetX();
 		int dirY = side.getOffsetY();
 		int dirZ = side.getOffsetZ();
-		boolean flag = side == Side.TOP || notGrass;
-		boolean rendered = false;
+
 		boolean renderOuterSide = block.shouldSideBeRendered(this.blockAccess, x + dirX, y + dirY, z + dirZ, side.getId(), meta);
-		if (this.renderAllFaces || renderOuterSide || model.hasFaceToRender(side)) {
-			float lightTL;
-			float lightBL;
-			float lightBR;
-			float lightTR;
-			if (this.overbright) {
-				lightTR = 1.0f;
-				lightBR = 1.0f;
-				lightBL = 1.0f;
-				lightTL = 1.0f;
-			} else if (this.field_22352_G <= 0) {
-				lightBR = lightTR = this.cache.getBrightness(dirX, dirY, dirZ);
-				lightBL = lightTR;
-				lightTL = lightTR;
-			} else {
-				float dirB = this.cache.getBrightness(dirX, dirY, dirZ);
-				boolean lefT = this.cache.getOpacity(dirX + lefX, dirY + lefY, dirZ + lefZ);
-				boolean botT = this.cache.getOpacity(dirX - topX, dirY - topY, dirZ - topZ);
-				boolean topT = this.cache.getOpacity(dirX + topX, dirY + topY, dirZ + topZ);
-				boolean rigT = this.cache.getOpacity(dirX - lefX, dirY - lefY, dirZ - lefZ);
-				float lB = this.cache.getBrightness(dirX + lefX, dirY + lefY, dirZ + lefZ);
-				float bB = this.cache.getBrightness(dirX - topX, dirY - topY, dirZ - topZ);
-				float tB = this.cache.getBrightness(dirX + topX, dirY + topY, dirZ + topZ);
-				float rB = this.cache.getBrightness(dirX - lefX, dirY - lefY, dirZ - lefZ);
-				float blB = botT && lefT ? lB : this.cache.getBrightness(dirX + lefX - topX, dirY + lefY - topY, dirZ + lefZ - topZ);
-				float tlB = topT && lefT ? lB : this.cache.getBrightness(dirX + lefX + topX, dirY + lefY + topY, dirZ + lefZ + topZ);
-				float brB = botT && rigT ? rB : this.cache.getBrightness(dirX - lefX - topX, dirY - lefY - topY, dirZ - lefZ - topZ);
-				float trB = topT && rigT ? rB : this.cache.getBrightness(dirX - lefX + topX, dirY - lefY + topY, dirZ - lefZ + topZ);
-				lightTL = (tlB + lB + tB + dirB) / 4.0f;
-				lightTR = (tB + dirB + trB + rB) / 4.0f;
-				lightBR = (dirB + bB + rB + brB) / 4.0f;
-				lightBL = (lB + blB + dirB + bB) / 4.0f;
-				if ((double)depth > 0.01) {
-					dirB = this.cache.getBrightness(0, 0, 0);
-					lefT = this.cache.getOpacity(lefX, lefY, lefZ);
-					botT = this.cache.getOpacity(-topX, -topY, -topZ);
-					topT = this.cache.getOpacity(topX, topY, topZ);
-					rigT = this.cache.getOpacity(-lefX, -lefY, -lefZ);
-					lB = this.cache.getBrightness(lefX, lefY, lefZ);
-					bB = this.cache.getBrightness(-topX, -topY, -topZ);
-					tB = this.cache.getBrightness(topX, topY, topZ);
-					rB = this.cache.getBrightness(-lefX, -lefY, -lefZ);
-					blB = botT && lefT ? lB : this.cache.getBrightness(lefX - topX, lefY - topY, lefZ - topZ);
-					tlB = topT && lefT ? lB : this.cache.getBrightness(lefX + topX, lefY + topY, lefZ + topZ);
-					brB = botT && rigT ? rB : this.cache.getBrightness(-lefX - topX, -lefY - topY, -lefZ - topZ);
-					trB = topT && rigT ? rB : this.cache.getBrightness(-lefX + topX, -lefY + topY, -lefZ + topZ);
-					lightTL = (tlB + lB + tB + dirB) / 4.0f * depth + lightTL * (1.0f - depth);
-					lightTR = (tB + dirB + trB + rB) / 4.0f * depth + lightTR * (1.0f - depth);
-					lightBR = (dirB + bB + rB + brB) / 4.0f * depth + lightBR * (1.0f - depth);
-					lightBL = (lB + blB + dirB + bB) / 4.0f * depth + lightBL * (1.0f - depth);
-				}
-			}
-			if (this.overbright) {
-				this.colorRedTopRight = flag ? r : 1.0f;
-				this.colorRedBottomRight = this.colorRedTopRight;
-				this.colorRedBottomLeft = this.colorRedTopRight;
-				this.colorRedTopLeft = this.colorRedTopRight;
-				this.colorGreenTopRight = flag ? g : 1.0f;
-				this.colorGreenBottomRight = this.colorGreenTopRight;
-				this.colorGreenBottomLeft = this.colorGreenTopRight;
-				this.colorGreenTopLeft = this.colorGreenTopRight;
-				this.colorBlueTopRight = flag ? b : 1.0f;
-				this.colorBlueBottomRight = this.colorBlueTopRight;
-				this.colorBlueBottomLeft = this.colorBlueTopRight;
-				this.colorBlueTopLeft = this.colorBlueTopRight;
-			} else {
-				this.colorRedBottomRight = this.colorRedTopRight = (flag ? r : 1.0f) * SIDE_LIGHT_MULTIPLIER[side.getId()];
-				this.colorRedBottomLeft = this.colorRedTopRight;
-				this.colorRedTopLeft = this.colorRedTopRight;
-				this.colorGreenBottomRight = this.colorGreenTopRight = (flag ? g : 1.0f) * SIDE_LIGHT_MULTIPLIER[side.getId()];
-				this.colorGreenBottomLeft = this.colorGreenTopRight;
-				this.colorGreenTopLeft = this.colorGreenTopRight;
-				this.colorBlueBottomRight = this.colorBlueTopRight = (flag ? b : 1.0f) * SIDE_LIGHT_MULTIPLIER[side.getId()];
-				this.colorBlueBottomLeft = this.colorBlueTopRight;
-				this.colorBlueTopLeft = this.colorBlueTopRight;
-			}
-			float tl = topP * lightTL + (1.0f - topP) * lightBL;
-			float tr = topP * lightTR + (1.0f - topP) * lightBR;
-			float bl2 = botP * lightTL + (1.0f - botP) * lightBL;
-			float br = botP * lightTR + (1.0f - botP) * lightBR;
-			float ltl = lefP * tl + (1.0f - lefP) * tr;
-			float lbl = lefP * bl2 + (1.0f - lefP) * br;
-			float lbr = rigP * bl2 + (1.0f - rigP) * br;
-			float ltr = rigP * tl + (1.0f - rigP) * tr;
-			this.colorRedTopLeft *= ltl;
-			this.colorGreenTopLeft *= ltl;
-			this.colorBlueTopLeft *= ltl;
-			this.colorRedBottomLeft *= lbl;
-			this.colorGreenBottomLeft *= lbl;
-			this.colorBlueBottomLeft *= lbl;
-			this.colorRedBottomRight *= lbr;
-			this.colorGreenBottomRight *= lbr;
-			this.colorBlueBottomRight *= lbr;
-			this.colorRedTopRight *= ltr;
-			this.colorGreenTopRight *= ltr;
-			this.colorBlueTopRight *= ltr;
-			int tex = this.overbright ? block.getBlockOverbrightTexture(this.blockAccess, x, y, z, side.getId()) : block.getBlockTexture(this.blockAccess, x, y, z, side);
-			if (tex >= 0) {
-				for (BenchCube cube: model.elements) {
-					if (!renderOuterSide && cube.isOuterFace(side)) continue;
-					if (!cube.faceVisible[side.getId()]) continue;
-					renderModelFaceBySide(cube, side, block, x, y, z, tex);
-				}
-				rendered = true;
+
+		if (!(this.renderAllFaces || renderOuterSide || model.hasFaceToRender(side))) return false;
+		if (!renderOuterSide && cube.isOuterFace(side)) return false;
+		if (!cube.faceVisible[side.getId()]) return false;
+
+		float lightTL;
+		float lightBL;
+		float lightBR;
+		float lightTR;
+		if (this.overbright) {
+			lightTR = 1.0f;
+			lightBR = 1.0f;
+			lightBL = 1.0f;
+			lightTL = 1.0f;
+		} else if (this.field_22352_G <= 0) {
+			lightBR = lightTR = this.cache.getBrightness(dirX, dirY, dirZ);
+			lightBL = lightTR;
+			lightTL = lightTR;
+		} else {
+			float dirB = this.cache.getBrightness(dirX, dirY, dirZ);
+			boolean lefT = this.cache.getOpacity(dirX + lefX, dirY + lefY, dirZ + lefZ);
+			boolean botT = this.cache.getOpacity(dirX - topX, dirY - topY, dirZ - topZ);
+			boolean topT = this.cache.getOpacity(dirX + topX, dirY + topY, dirZ + topZ);
+			boolean rigT = this.cache.getOpacity(dirX - lefX, dirY - lefY, dirZ - lefZ);
+			float lB = this.cache.getBrightness(dirX + lefX, dirY + lefY, dirZ + lefZ);
+			float bB = this.cache.getBrightness(dirX - topX, dirY - topY, dirZ - topZ);
+			float tB = this.cache.getBrightness(dirX + topX, dirY + topY, dirZ + topZ);
+			float rB = this.cache.getBrightness(dirX - lefX, dirY - lefY, dirZ - lefZ);
+			float blB = botT && lefT ? lB : this.cache.getBrightness(dirX + lefX - topX, dirY + lefY - topY, dirZ + lefZ - topZ);
+			float tlB = topT && lefT ? lB : this.cache.getBrightness(dirX + lefX + topX, dirY + lefY + topY, dirZ + lefZ + topZ);
+			float brB = botT && rigT ? rB : this.cache.getBrightness(dirX - lefX - topX, dirY - lefY - topY, dirZ - lefZ - topZ);
+			float trB = topT && rigT ? rB : this.cache.getBrightness(dirX - lefX + topX, dirY - lefY + topY, dirZ - lefZ + topZ);
+			lightTL = (tlB + lB + tB + dirB) / 4.0f;
+			lightTR = (tB + dirB + trB + rB) / 4.0f;
+			lightBR = (dirB + bB + rB + brB) / 4.0f;
+			lightBL = (lB + blB + dirB + bB) / 4.0f;
+			if ((double)depth > 0.01) {
+				dirB = this.cache.getBrightness(0, 0, 0);
+				lefT = this.cache.getOpacity(lefX, lefY, lefZ);
+				botT = this.cache.getOpacity(-topX, -topY, -topZ);
+				topT = this.cache.getOpacity(topX, topY, topZ);
+				rigT = this.cache.getOpacity(-lefX, -lefY, -lefZ);
+				lB = this.cache.getBrightness(lefX, lefY, lefZ);
+				bB = this.cache.getBrightness(-topX, -topY, -topZ);
+				tB = this.cache.getBrightness(topX, topY, topZ);
+				rB = this.cache.getBrightness(-lefX, -lefY, -lefZ);
+				blB = botT && lefT ? lB : this.cache.getBrightness(lefX - topX, lefY - topY, lefZ - topZ);
+				tlB = topT && lefT ? lB : this.cache.getBrightness(lefX + topX, lefY + topY, lefZ + topZ);
+				brB = botT && rigT ? rB : this.cache.getBrightness(-lefX - topX, -lefY - topY, -lefZ - topZ);
+				trB = topT && rigT ? rB : this.cache.getBrightness(-lefX + topX, -lefY + topY, -lefZ + topZ);
+				lightTL = (tlB + lB + tB + dirB) / 4.0f * depth + lightTL * (1.0f - depth);
+				lightTR = (tB + dirB + trB + rB) / 4.0f * depth + lightTR * (1.0f - depth);
+				lightBR = (dirB + bB + rB + brB) / 4.0f * depth + lightBR * (1.0f - depth);
+				lightBL = (lB + blB + dirB + bB) / 4.0f * depth + lightBL * (1.0f - depth);
 			}
 		}
-		return rendered;
+		if (this.overbright) {
+			this.colorRedTopRight = r;
+			this.colorRedBottomRight = this.colorRedTopRight;
+			this.colorRedBottomLeft = this.colorRedTopRight;
+			this.colorRedTopLeft = this.colorRedTopRight;
+			this.colorGreenTopRight = g;
+			this.colorGreenBottomRight = this.colorGreenTopRight;
+			this.colorGreenBottomLeft = this.colorGreenTopRight;
+			this.colorGreenTopLeft = this.colorGreenTopRight;
+			this.colorBlueTopRight = b;
+			this.colorBlueBottomRight = this.colorBlueTopRight;
+			this.colorBlueBottomLeft = this.colorBlueTopRight;
+			this.colorBlueTopLeft = this.colorBlueTopRight;
+		} else {
+			this.colorRedBottomRight = this.colorRedTopRight = r * SIDE_LIGHT_MULTIPLIER[side.getId()];
+			this.colorRedBottomLeft = this.colorRedTopRight;
+			this.colorRedTopLeft = this.colorRedTopRight;
+			this.colorGreenBottomRight = this.colorGreenTopRight = g * SIDE_LIGHT_MULTIPLIER[side.getId()];
+			this.colorGreenBottomLeft = this.colorGreenTopRight;
+			this.colorGreenTopLeft = this.colorGreenTopRight;
+			this.colorBlueBottomRight = this.colorBlueTopRight = b * SIDE_LIGHT_MULTIPLIER[side.getId()];
+			this.colorBlueBottomLeft = this.colorBlueTopRight;
+			this.colorBlueTopLeft = this.colorBlueTopRight;
+		}
+		float tl = topP * lightTL + (1.0f - topP) * lightBL;
+		float tr = topP * lightTR + (1.0f - topP) * lightBR;
+		float bl2 = botP * lightTL + (1.0f - botP) * lightBL;
+		float br = botP * lightTR + (1.0f - botP) * lightBR;
+		float ltl = lefP * tl + (1.0f - lefP) * tr;
+		float lbl = lefP * bl2 + (1.0f - lefP) * br;
+		float lbr = rigP * bl2 + (1.0f - rigP) * br;
+		float ltr = rigP * tl + (1.0f - rigP) * tr;
+		this.colorRedTopLeft *= ltl;
+		this.colorGreenTopLeft *= ltl;
+		this.colorBlueTopLeft *= ltl;
+		this.colorRedBottomLeft *= lbl;
+		this.colorGreenBottomLeft *= lbl;
+		this.colorBlueBottomLeft *= lbl;
+		this.colorRedBottomRight *= lbr;
+		this.colorGreenBottomRight *= lbr;
+		this.colorBlueBottomRight *= lbr;
+		this.colorRedTopRight *= ltr;
+		this.colorGreenTopRight *= ltr;
+		this.colorBlueTopRight *= ltr;
+		int tex = this.overbright ? block.getBlockOverbrightTexture(this.blockAccess, x, y, z, side.getId()) : block.getBlockTexture(this.blockAccess, x, y, z, side);
+		if (tex >= 0) {
+			renderModelFaceBySide(cube, side, block, x, y, z, tex);
+			return true;
+		}
+		return false;
 	}
 	@Unique
 	public void renderBottomFace(BenchCube cube, Block block, double x, double y, double z, int texture) {
@@ -786,19 +785,20 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 				int _x = x + side.getOffsetX();
 				int _y = y + side.getOffsetY();
 				int _z = z + side.getOffsetZ();
-				if (!this.renderAllFaces){
-					boolean isOuterFace = cube.isOuterFace(side);
-					boolean isFaceVisible = cube.faceVisible[side.getId()];
-					boolean renderSide = block.shouldSideBeRendered(this.blockAccess, _x, _y, _z, side.getId(), meta);
-					if (!isFaceVisible || (isOuterFace && !renderSide)) continue;
+
+				if (!this.renderAllFaces && (!block.shouldSideBeRendered(this.blockAccess, _x, _y, _z, side.getId(), meta) || !model.hasFaceToRender(side))) continue;
+
+				float sideBrightness;
+				if (!cube.isOuterFace(side) && !block.blockMaterial.isLiquid()){
+					sideBrightness = blockBrightness;
+				} else {
+					sideBrightness = getBlockBrightness(this.blockAccess, _x, _y, _z);
 				}
-				float sideBrightness = getBlockBrightness(this.blockAccess, _x, _y, _z);
+
 				float red;
 				float green;
 				float blue;
-				if (!cube.isOuterFace(side) && !block.blockMaterial.isLiquid()){
-					sideBrightness = blockBrightness;
-				}
+
 				switch (side){
 					case TOP:
 						red = rTop;

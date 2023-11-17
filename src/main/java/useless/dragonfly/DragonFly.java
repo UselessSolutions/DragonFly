@@ -31,7 +31,7 @@ public class DragonFly implements ModInitializer {
 	public static final Block testBlock3 = new BlockBuilder(MOD_ID)
 		.setBlockModel(new BlockModelDragonFly(BlockBenchModel.decodeModel(MOD_ID, "TestBlock3.json")))
 		.setTextures(4,0)
-		.build(new BlockMesh("testblock2", 1002));
+		.build(new BlockMesh("testblock3", 1002));
 
     @Override
     public void onInitialize() {
