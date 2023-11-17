@@ -17,7 +17,9 @@ public class BenchCube{
 
 	public float[] fromScaled;
 	public float[] toScaled;
+	public boolean[] outerFace;
 	public void process(){
+		outerFace = new boolean[6];
 		fromScaled = new float[from.length];
 		for (int i = 0; i < from.length; i++) {
 			fromScaled[i] = from[i]/BlockBenchModel.textureSize;
@@ -29,6 +31,15 @@ public class BenchCube{
 		for (BenchFace face: faces.values()) {
 			face.process();
 		}
+		outerFace[Side.TOP.getId()] = Math.abs(Float.compare(yMax(), 1f)) < 0.001f;
+		outerFace[Side.BOTTOM.getId()] = Math.abs(Float.compare(yMin(), 0f)) < 0.001f;
+		outerFace[Side.NORTH.getId()] = Math.abs(Float.compare(zMin(), 0f)) < 0.001f;
+		outerFace[Side.SOUTH.getId()] = Math.abs(Float.compare(zMax(), 1f)) < 0.001f;
+		outerFace[Side.WEST.getId()] = Math.abs(Float.compare(xMin(), 0f)) < 0.001f;
+		outerFace[Side.EAST.getId()] = Math.abs(Float.compare(xMax(), 1f)) < 0.001f;
+	}
+	public boolean isOuterFace(Side side){
+		return outerFace[side.getId()];
 	}
 
 	public BenchFace getFaceFromSide(Side side){
