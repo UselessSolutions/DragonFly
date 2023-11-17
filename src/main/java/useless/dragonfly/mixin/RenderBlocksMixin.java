@@ -5,16 +5,24 @@ import net.minecraft.client.render.RenderBlockCache;
 import net.minecraft.client.render.RenderBlocks;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.TextureFX;
+import net.minecraft.client.render.block.color.BlockColor;
 import net.minecraft.client.render.block.color.BlockColorDispatcher;
+import net.minecraft.client.render.block.model.BlockModelDispatcher;
+import net.minecraft.client.render.block.model.BlockModelRenderBlocks;
 import net.minecraft.core.Global;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.util.helper.Side;
 import net.minecraft.core.world.World;
 import net.minecraft.core.world.WorldSource;
+import org.lwjgl.opengl.GL11;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import useless.dragonfly.BlockModelDragonFly;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.mixininterfaces.ExtraRendering;
 import useless.dragonfly.model.BenchCube;
@@ -113,7 +121,29 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 
 	@Shadow
 	private int uvRotateSouth;
-
+	@Inject(method = "renderBlockOnInventory(Lnet/minecraft/core/block/Block;IF)V", at = @At("HEAD"), cancellable = true)
+	public void redirectRenderer(Block block, int metadata, float brightness, CallbackInfo ci){
+		if (BlockModelDispatcher.getInstance().getDispatch(block) instanceof BlockModelDragonFly){
+			BlockModelDragonFly blockModelDragonFly = (BlockModelDragonFly) BlockModelDispatcher.getInstance().getDispatch(block);
+			renderModelInventory(blockModelDragonFly, block, metadata, brightness);
+			ci.cancel();
+		}
+	}
+	@Unique
+	public void renderModelInventory(BlockModelDragonFly modelDragonFly, Block block, int meta, float brightness){
+		float yOffset = 0.5f;
+		Tessellator tessellator = Tessellator.instance;
+		GL11.glTranslatef(-0.5f, 0.0f - yOffset, -0.5f);
+		for (BenchCube cube: modelDragonFly.baseModel.elements) {
+			for (BenchFace face: cube.faces.values()) {
+				tessellator.startDrawingQuads();
+				tessellator.setNormal(face.side.getOffsetX(), face.side.getOffsetY(), face.side.getOffsetZ());
+				renderModelFaceBySide(cube, face.side, block, 0, 0, 0, block.getBlockTextureFromSideAndMetadata(face.side, meta));
+				tessellator.draw();
+			}
+		}
+		GL11.glTranslatef(0.5f, 0.5f, 0.5f);
+	}
 	@Unique
 	public boolean renderModelNormal(BlockBenchModel model, Block block, int x, int y, int z) {
 		int color = BlockColorDispatcher.getInstance().getDispatch(block).getWorldColor(this.world, x, y, z);
@@ -426,7 +456,6 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 			tessellator.addVertexWithUV(renderMinX, renderY, renderMaxZ, renderU4, renderV4);
 		}
 	}
-
 	@Unique
 	public void renderNorthFace(BenchCube cube, Block block, double x, double y, double z, int texture) {
 		BenchFace face = cube.getFaceFromSide(Side.NORTH);
@@ -510,7 +539,6 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 			tessellator.addVertexWithUV(renderXMin, renderYMin, renderZ, renderU4, renderV4);
 		}
 	}
-
 	@Unique
 	public void renderSouthFace(BenchCube cube, Block block, double x, double y, double z, int texture) {
 		BenchFace face = cube.getFaceFromSide(Side.SOUTH);
@@ -594,7 +622,6 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 			tessellator.addVertexWithUV(renderXMax, renderYMax, renderZ, renderU4, renderV4);
 		}
 	}
-
 	@Unique
 	public void renderWestFace(BenchCube cube, Block block, double x, double y, double z, int texture) {
 		BenchFace face = cube.getFaceFromSide(Side.WEST);
@@ -678,7 +705,6 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 			tessellator.addVertexWithUV(renderX, renderYMin, renderZMax, renderU4, renderV4);
 		}
 	}
-
 	@Unique
 	public void renderEastFace(BenchCube cube, Block block, double x, double y, double z, int texture) {
 		BenchFace face = cube.getFaceFromSide(Side.EAST);

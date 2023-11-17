@@ -47,9 +47,9 @@ armorDurabilityOverlay:false
 armorProtectionOverlay:true
 heldItemCountOverlay:false
 pauseOnLostFocus:true
-showDebugScreen:false
+showDebugScreen:true
 showFrameTimes:false
-showItemDebugInfo:false
+showItemDebugInfo:true
 showChunkBorders:false
 showCollisionBoxes:false
 swapCraftingButtons:false
@@ -63,7 +63,7 @@ guiBackgroundColor:r=16,g=16,b=16,a=192
 difficulty:NORMAL
 thirdPersonView:0
 renderDistance:FAR
-limitFramerate:3
+limitFramerate:0
 guiScale:0
 overlayMode:0
 rotationOverlayMode:0
