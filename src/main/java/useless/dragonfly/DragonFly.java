@@ -28,9 +28,6 @@ public class DragonFly implements ModInitializer, PreLaunchEntrypoint {
     @Override
     public void onInitialize() {
         LOGGER.info("DragonFly initialized.");
-		
-		//TEST Entity
-		EntityHelper.createEntity(EntityZombieTest.class, new RenderZombieTest(ModelHelper.getOrCreateEntityModel(MOD_ID, "zombie_test.json", ZombieModelTest.class), 0.5F), 10000, "ZombieTest");
     }
 
 	@Override
