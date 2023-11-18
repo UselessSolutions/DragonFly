@@ -4,14 +4,13 @@ import net.minecraft.core.block.BlockTransparent;
 import net.minecraft.core.block.material.Material;
 import net.minecraft.core.util.phys.AABB;
 import net.minecraft.core.world.World;
-import useless.dragonfly.model.block.BenchCube;
-import useless.dragonfly.model.block.BlockBenchModel;
+import useless.dragonfly.model.block.processed.BlockCube;
 
 import java.util.ArrayList;
 
 public class BlockModel extends BlockTransparent {
-	public BlockBenchModel model;
-	public BlockModel(String key, int id, Material material, BlockBenchModel model) {
+	public useless.dragonfly.model.block.processed.BlockModel model;
+	public BlockModel(String key, int id, Material material, useless.dragonfly.model.block.processed.BlockModel model) {
 		super(key, id, material, false);
 		this.model = model;
 	}
@@ -26,7 +25,7 @@ public class BlockModel extends BlockTransparent {
 		return true;
 	}
 	public void getCollidingBoundingBoxes(World world, int x, int y, int z, AABB aabb, ArrayList aabbList) {
-		for (BenchCube cube: model.elements) {
+		for (BlockCube cube: model.elements) {
 			setBlockBounds(cube.xMin(), cube.yMin(), cube.zMin(), cube.xMax(), cube.yMax(), cube.zMax());
 			super.getCollidingBoundingBoxes(world, x, y, z, aabb, aabbList);
 		}

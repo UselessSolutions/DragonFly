@@ -23,9 +23,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import useless.dragonfly.model.block.BlockModelDragonFly;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.mixininterfaces.ExtraRendering;
-import useless.dragonfly.model.block.BenchCube;
-import useless.dragonfly.model.block.BenchFace;
-import useless.dragonfly.model.block.BlockBenchModel;
+import useless.dragonfly.model.block.processed.BlockCube;
+import useless.dragonfly.model.block.processed.BlockFace;
+import useless.dragonfly.model.block.processed.BlockModel;
 import useless.dragonfly.registries.TextureRegistry;
 
 @Mixin(value = RenderBlocks.class, remap = false)
@@ -133,8 +133,8 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		float yOffset = 0.5f;
 		Tessellator tessellator = Tessellator.instance;
 		GL11.glTranslatef(-0.5f, 0.0f - yOffset, -0.5f);
-		for (BenchCube cube: modelDragonFly.baseModel.elements) {
-			for (BenchFace face: cube.faces.values()) {
+		for (BlockCube cube: modelDragonFly.baseModel.elements) {
+			for (BlockFace face: cube.faces.values()) {
 				tessellator.startDrawingQuads();
 				tessellator.setNormal(face.getSide().getOffsetX(), face.getSide().getOffsetY(), face.getSide().getOffsetZ());
 				renderModelFaceBySide(cube, face.getSide(), block, 0, 0, 0, block.getBlockTextureFromSideAndMetadata(face.getSide(), meta));
@@ -144,7 +144,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		GL11.glTranslatef(0.5f, 0.5f, 0.5f);
 	}
 	@Unique
-	public boolean renderModelNormal(BlockBenchModel model, Block block, int x, int y, int z) {
+	public boolean renderModelNormal(BlockModel model, Block block, int x, int y, int z) {
 		int color = BlockColorDispatcher.getInstance().getDispatch(block).getWorldColor(this.world, x, y, z);
 		float red = (float)(color >> 16 & 0xFF) / 255.0f;
 		float green = (float)(color >> 8 & 0xFF) / 255.0f;
@@ -155,26 +155,26 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		return this.renderStandardModelWithColorMultiplier(model, block, x, y, z, red, green, blue);
 	}
 	@Unique
-	public boolean renderModelNoCulling(BlockBenchModel model, Block block, int x, int y, int z){
+	public boolean renderModelNoCulling(BlockModel model, Block block, int x, int y, int z){
 		this.renderAllFaces = true;
 		boolean result = this.renderModelNormal(model, block, x, y, z);
 		this.renderAllFaces = false;
 		return result;
 	}
 	@Unique
-	public boolean renderModelBlockUsingTexture(BlockBenchModel model, Block block, int x, int y, int z, int textureIndex){
+	public boolean renderModelBlockUsingTexture(BlockModel model, Block block, int x, int y, int z, int textureIndex){
 		this.overrideBlockTexture = textureIndex;
 		boolean result = this.renderModelNormal(model, block, x, y, z);
 		this.overrideBlockTexture = -1;
 		return result;
 	}
 	@Unique
-	public boolean renderStandardModelWithAmbientOcclusion(BlockBenchModel model, Block block, int x, int y, int z, float r, float g, float b) {
+	public boolean renderStandardModelWithAmbientOcclusion(BlockModel model, Block block, int x, int y, int z, float r, float g, float b) {
 		this.enableAO = true;
 		int meta = this.blockAccess.getBlockMetadata(x, y, z);
 		this.cache.setupCache(block, this.blockAccess, x, y, z);
 		boolean somethingRendered = false;
-		for (BenchCube cube: model.elements) {
+		for (BlockCube cube: model.elements) {
 			somethingRendered |= renderModelSide(model, cube, block, x, y, z, r, g, b, Side.BOTTOM, meta, cube.yMin(), 0, 0, 1, cube.zMax(), cube.zMin(), -1, 0, 0, 1.0F - cube.xMin(), 1.0F - cube.xMax());
 			somethingRendered |= renderModelSide(model, cube, block, x, y, z, r, g, b, Side.TOP, meta, 1.0F - cube.yMax(), 0, 0, 1, cube.zMax(), cube.zMin(), 1, 0, 0, cube.xMax(), cube.xMin());
 			somethingRendered |= renderModelSide(model, cube, block, x, y, z, r, g, b, Side.NORTH, meta, cube.zMin(), -1, 0, 0, 1.0F - cube.xMin(), 1.0F - cube.xMax(), 0, 1, 0, cube.yMax(), cube.yMin());
@@ -186,7 +186,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		return somethingRendered;
 	}
 	@Unique
-	public boolean renderSide(BlockBenchModel model, BenchCube cube, Side side, boolean renderOuterSide){
+	public boolean renderSide(BlockModel model, BlockCube cube, Side side, boolean renderOuterSide){
 		if (model.hasFaceToRender(side)){
 			if (cube.isOuterFace(side)){
 				if (!renderOuterSide){
@@ -200,7 +200,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		return true;
 	}
 	@Unique
-	public boolean renderModelSide(BlockBenchModel model, BenchCube cube, Block block, int x, int y, int z, float r, float g, float b, Side side, int meta, float depth, int topX, int topY, int topZ, float topP, float botP, int lefX, int lefY, int lefZ, float lefP, float rigP) {
+	public boolean renderModelSide(BlockModel model, BlockCube cube, Block block, int x, int y, int z, float r, float g, float b, Side side, int meta, float depth, int topX, int topY, int topZ, float topP, float botP, int lefX, int lefY, int lefZ, float lefP, float rigP) {
 		if (cube.getFaceFromSide(side) == null) return false;
 		int dirX = side.getOffsetX();
 		int dirY = side.getOffsetY();
@@ -316,8 +316,8 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		return false;
 	}
 	@Unique
-	public void renderBottomFace(BenchCube cube, Block block, double x, double y, double z, int texture) {
-		BenchFace face = cube.getFaceFromSide(Side.BOTTOM);
+	public void renderBottomFace(BlockCube cube, Block block, double x, double y, double z, int texture) {
+		BlockFace face = cube.getFaceFromSide(Side.BOTTOM);
 		Tessellator tessellator = Tessellator.instance;
 		if (this.overrideBlockTexture >= 0) {
 			texture = this.overrideBlockTexture;
@@ -394,8 +394,8 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 	}
 	@Unique
-	public void renderTopFace(BenchCube cube, Block block, double x, double y, double z, int texture) {
-		BenchFace face = cube.getFaceFromSide(Side.TOP);
+	public void renderTopFace(BlockCube cube, Block block, double x, double y, double z, int texture) {
+		BlockFace face = cube.getFaceFromSide(Side.TOP);
 		Tessellator tessellator = Tessellator.instance;
 		if (this.overrideBlockTexture >= 0) {
 			texture = this.overrideBlockTexture;
@@ -472,8 +472,8 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 	}
 	@Unique
-	public void renderNorthFace(BenchCube cube, Block block, double x, double y, double z, int texture) {
-		BenchFace face = cube.getFaceFromSide(Side.NORTH);
+	public void renderNorthFace(BlockCube cube, Block block, double x, double y, double z, int texture) {
+		BlockFace face = cube.getFaceFromSide(Side.NORTH);
 		Tessellator tessellator = Tessellator.instance;
 		if (this.overrideBlockTexture >= 0) {
 			texture = this.overrideBlockTexture;
@@ -555,8 +555,8 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 	}
 	@Unique
-	public void renderSouthFace(BenchCube cube, Block block, double x, double y, double z, int texture) {
-		BenchFace face = cube.getFaceFromSide(Side.SOUTH);
+	public void renderSouthFace(BlockCube cube, Block block, double x, double y, double z, int texture) {
+		BlockFace face = cube.getFaceFromSide(Side.SOUTH);
 		Tessellator tessellator = Tessellator.instance;
 		if (this.overrideBlockTexture >= 0) {
 			texture = this.overrideBlockTexture;
@@ -638,8 +638,8 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 	}
 	@Unique
-	public void renderWestFace(BenchCube cube, Block block, double x, double y, double z, int texture) {
-		BenchFace face = cube.getFaceFromSide(Side.WEST);
+	public void renderWestFace(BlockCube cube, Block block, double x, double y, double z, int texture) {
+		BlockFace face = cube.getFaceFromSide(Side.WEST);
 		Tessellator tessellator = Tessellator.instance;
 		if (this.overrideBlockTexture >= 0) {
 			texture = this.overrideBlockTexture;
@@ -721,8 +721,8 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 	}
 	@Unique
-	public void renderEastFace(BenchCube cube, Block block, double x, double y, double z, int texture) {
-		BenchFace face = cube.getFaceFromSide(Side.EAST);
+	public void renderEastFace(BlockCube cube, Block block, double x, double y, double z, int texture) {
+		BlockFace face = cube.getFaceFromSide(Side.EAST);
 		Tessellator tessellator = Tessellator.instance;
 		if (this.overrideBlockTexture >= 0) {
 			texture = this.overrideBlockTexture;
@@ -804,7 +804,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 	}
 	@Unique
-	public boolean renderStandardModelWithColorMultiplier(BlockBenchModel model, Block block, int x, int y, int z, float r, float g, float b) {
+	public boolean renderStandardModelWithColorMultiplier(BlockModel model, Block block, int x, int y, int z, float r, float g, float b) {
 		this.enableAO = false;
 		int meta = this.blockAccess.getBlockMetadata(x, y, z);
 		Tessellator tessellator = Tessellator.instance;
@@ -835,7 +835,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		bNorthSouth *= b;
 		bEastWest *= b;
 		float blockBrightness = this.getBlockBrightness(this.blockAccess, x, y, z);
-		for (BenchCube cube: model.elements) {
+		for (BlockCube cube: model.elements) {
 			for (Side side: DragonFly.sides) {
 				if (cube.getFaceFromSide(side) == null) continue;
 				int _x = x + side.getOffsetX();
@@ -891,7 +891,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		return renderedSomething;
 	}
 	@Unique
-	public void renderModelFaceBySide(BenchCube cube, Side side, Block block, double x, double y, double z, int texture){
+	public void renderModelFaceBySide(BlockCube cube, Side side, Block block, double x, double y, double z, int texture){
 		texture = TextureRegistry.getIndexOrDefault(cube.getFaceFromSide(side).texture, texture);
 		switch (side){
 			case TOP:
