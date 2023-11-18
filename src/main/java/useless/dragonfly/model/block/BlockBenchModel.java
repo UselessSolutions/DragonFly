@@ -45,4 +45,6 @@ public class BlockBenchModel {
 	public String credit = "";
 	@SerializedName("elements")
 	public BenchCube[] elements;
+	@SerializedName("textures")
+	public HashMap<String, String> textures;
 }

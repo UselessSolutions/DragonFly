@@ -26,6 +26,7 @@ import useless.dragonfly.mixininterfaces.ExtraRendering;
 import useless.dragonfly.model.block.BenchCube;
 import useless.dragonfly.model.block.BenchFace;
 import useless.dragonfly.model.block.BlockBenchModel;
+import useless.dragonfly.registries.TextureRegistry;
 
 @Mixin(value = RenderBlocks.class, remap = false)
 public abstract class RenderBlocksMixin implements ExtraRendering {
@@ -891,6 +892,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 	}
 	@Unique
 	public void renderModelFaceBySide(BenchCube cube, Side side, Block block, double x, double y, double z, int texture){
+		texture = TextureRegistry.getIndexOrDefault(cube.getFaceFromSide(side).texture, texture);
 		switch (side){
 			case TOP:
 				renderTopFace(cube, block, x, y, z, texture);

@@ -45,6 +45,12 @@ public class BenchCube{
 		}
 	}
 	public void processVisibleFaces(BlockBenchModel model){
+		for (BenchFace face: faces.values()) {
+			if (model.textures == null) continue;
+			if (model.textures.get(face.texture.replaceFirst("[#]", "")) != null){
+				face.texture = model.textures.get(face.texture.replaceFirst("[#]", ""));
+			}
+		}
 		for (BenchCube otherCube: model.elements) {
 			if (this.equals(otherCube)) continue;
 			for (BenchFace thisFace: faces.values()) {
