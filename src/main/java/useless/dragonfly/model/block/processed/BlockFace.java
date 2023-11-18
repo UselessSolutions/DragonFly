@@ -1,21 +1,18 @@
-package useless.dragonfly.model.block;
+package useless.dragonfly.model.block.processed;
 
-import com.google.gson.annotations.SerializedName;
+import net.minecraft.client.render.TextureFX;
 import net.minecraft.core.util.helper.Side;
+import useless.dragonfly.model.block.data.FaceData;
 
-public class BenchFace{
-	@SerializedName("uv")
-	public int[] uv;
-	@SerializedName("texture")
-	public String texture;
+public class BlockFace extends FaceData {
 	protected float[] uvScaled;
 	protected Side side;
 	public void process(String key){
 		uvScaled = new float[uv.length];
 		for (int i = 0; i < uv.length; i++) {
-			uvScaled[i] = (BlockBenchModel.textureSize - uv[i])/BlockBenchModel.textureSize;
+			uvScaled[i] = (float) (TextureFX.tileWidthTerrain - uv[i]) / TextureFX.tileWidthTerrain;
 		}
-		this.side = BlockBenchModel.keyToSide.get(key);
+		this.side = BlockModel.keyToSide.get(key);
 	}
 	public float uMin(){
 		return uvScaled[2];

@@ -1,22 +1,14 @@
-package useless.dragonfly.model.block;
+package useless.dragonfly.model.block.processed;
 
-import com.google.gson.annotations.SerializedName;
+import net.minecraft.client.render.TextureFX;
 import net.minecraft.core.util.helper.Axis;
 import net.minecraft.core.util.helper.Side;
+import useless.dragonfly.model.block.data.CubeData;
 
 import java.util.Arrays;
-import java.util.HashMap;
 
-public class BenchCube{
+public class BlockCube extends CubeData {
 	private static final float COMPARE_CONST = 0.001f;
-	@SerializedName("from")
-	public float[] from;
-	@SerializedName("to")
-	public float[] to;
-	@SerializedName("color")
-	public int color;
-	@SerializedName("faces")
-	public HashMap<String, BenchFace> faces;
 	protected float[] fromScaled;
 	protected float[] toScaled;
 	protected boolean[] outerFace;
@@ -30,31 +22,31 @@ public class BenchCube{
 		Arrays.fill(faceVisible, true);
 		fromScaled = new float[from.length];
 		for (int i = 0; i < from.length; i++) {
-			fromScaled[i] = from[i]/BlockBenchModel.textureSize;
+			fromScaled[i] = from[i]/ TextureFX.tileWidthTerrain;
 		}
 		toScaled = new float[to.length];
 		for (int i = 0; i < to.length; i++) {
-			toScaled[i] = to[i]/BlockBenchModel.textureSize;
+			toScaled[i] = to[i]/TextureFX.tileWidthTerrain;
 		}
 		for (String key: faces.keySet()) {
-			BenchFace face = faces.get(key);
+			BlockFace face = faces.get(key);
 			face.process(key);
 		}
 		for (int i = 0; i < outerFace.length; i++) {
 			outerFace[i] = equalFloats(getAxisPosition(Side.getSideById(i)), 0f) || equalFloats(getAxisPosition(Side.getSideById(i)), 1f);
 		}
 	}
-	public void processVisibleFaces(BlockBenchModel model){
-		for (BenchFace face: faces.values()) {
+	public void processVisibleFaces(BlockModel model){
+		for (BlockFace face: faces.values()) {
 			if (model.textures == null) continue;
 			if (model.textures.get(face.texture.replaceFirst("[#]", "")) != null){
 				face.texture = model.textures.get(face.texture.replaceFirst("[#]", ""));
 			}
 		}
-		for (BenchCube otherCube: model.elements) {
+		for (BlockCube otherCube: model.elements) {
 			if (this.equals(otherCube)) continue;
-			for (BenchFace thisFace: faces.values()) {
-				BenchFace otherFace = otherCube.getFaceFromSide(thisFace.side.getOpposite());
+			for (BlockFace thisFace: faces.values()) {
+				BlockFace otherFace = otherCube.getFaceFromSide(thisFace.side.getOpposite());
 				if (otherFace == null) continue;
 				if (!equalFloats(this.getAxisPosition(thisFace.side), otherCube.getAxisPosition(otherFace.side))) continue;
 				float[] thisFaceDim = this.faceDimensions(thisFace.side);
@@ -100,8 +92,8 @@ public class BenchCube{
 	}
 	public boolean isFaceVisible(Side side) { return faceVisible[side.getId()];}
 
-	public BenchFace getFaceFromSide(Side side){
-		return faces.get(BlockBenchModel.sideToKey.get(side));
+	public BlockFace getFaceFromSide(Side side){
+		return faces.get(BlockModel.sideToKey.get(side));
 	}
 	public float xMin(){
 		return fromScaled[0];

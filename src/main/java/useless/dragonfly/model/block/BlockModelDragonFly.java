@@ -4,18 +4,19 @@ import net.minecraft.client.render.RenderBlocks;
 import net.minecraft.client.render.block.model.BlockModelRenderBlocks;
 import net.minecraft.core.block.Block;
 import useless.dragonfly.mixininterfaces.ExtraRendering;
+import useless.dragonfly.model.block.processed.BlockModel;
 
 import java.lang.reflect.Field;
 
 public class BlockModelDragonFly extends BlockModelRenderBlocks {
-	public BlockBenchModel baseModel;
+	public BlockModel baseModel;
 	public boolean render3d;
 	public float renderScale;
-	public BlockModelDragonFly(BlockBenchModel model) {
+	public BlockModelDragonFly(BlockModel model) {
 		this(model,true, 0.25f);
 	}
 
-	public BlockModelDragonFly(BlockBenchModel model, boolean render3d, float renderScale) {
+	public BlockModelDragonFly(BlockModel model, boolean render3d, float renderScale) {
 		super(0);
 		this.baseModel = model;
 		this.render3d = render3d;
