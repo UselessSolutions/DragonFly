@@ -60,7 +60,7 @@ placementMode:DEFAULT
 discordRichPresence:false
 immersiveMode:0
 guiBackgroundColor:r=16,g=16,b=16,a=192
-difficulty:EASY
+difficulty:PEACEFUL
 thirdPersonView:0
 renderDistance:FAR
 limitFramerate:0

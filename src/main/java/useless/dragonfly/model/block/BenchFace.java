@@ -13,21 +13,19 @@ public class BenchFace{
 	public void process(String key){
 		uvScaled = new float[uv.length];
 		for (int i = 0; i < uv.length; i++) {
-			uvScaled[i] = uv[i]/BlockBenchModel.textureSize;
+			uvScaled[i] = (BlockBenchModel.textureSize - uv[i])/BlockBenchModel.textureSize;
 		}
 		this.side = BlockBenchModel.keyToSide.get(key);
 	}
 	public float uMin(){
-		return uvScaled[0];
-	}
-	public float vMin(){
-		return uvScaled[1];
-	}
-	public float uMax(){
 		return uvScaled[2];
 	}
+	public float vMin(){ return uvScaled[3];}
+	public float uMax(){
+		return uvScaled[0];
+	}
 	public float vMax(){
-		return uvScaled[3];
+		return uvScaled[1];
 	}
 	public Side getSide(){ return side;}
 }
