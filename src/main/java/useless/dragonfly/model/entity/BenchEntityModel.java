@@ -86,20 +86,19 @@ public class BenchEntityModel extends ModelBase {
 					GL11.glTranslatef(bones.rotationPointX * scale, bones.rotationPointY * scale, bones.rotationPointZ * scale);
 				}
 				if (rotation != null) {
-					GL11.glRotatef(rotation.get(0) * ((float) Math.PI / 180F), 0.0f, 0.0f, 1.0f);
-					GL11.glRotatef(rotation.get(1) * ((float) Math.PI / 180F), 0.0f, 1.0f, 0.0f);
-
-					GL11.glRotatef(rotation.get(2) * ((float) Math.PI / 180F), 1.0f, 0.0f, 0.0f);
+					GL11.glRotatef((float) Math.toRadians(rotation.get(0)), 0.0f, 0.0f, 1.0f);
+					GL11.glRotatef((float) Math.toRadians(rotation.get(1)), 0.0f, 1.0f, 0.0f);
+					GL11.glRotatef((float) Math.toRadians(rotation.get(2)), 1.0f, 0.0f, 0.0f);
 				}
 
 				if (bones.rotateAngleZ != 0.0f) {
-					GL11.glRotatef(bones.rotateAngleZ * 57.29578f, 0.0f, 0.0f, 1.0f);
+					GL11.glRotatef((float) (Math.toDegrees(bones.rotateAngleZ)), 0.0f, 0.0f, 1.0f);
 				}
 				if (bones.rotateAngleY != 0.0f) {
-					GL11.glRotatef(bones.rotateAngleY * 57.29578f, 0.0f, 1.0f, 0.0f);
+					GL11.glRotatef((float) (Math.toDegrees(bones.rotateAngleY)), 0.0f, 1.0f, 0.0f);
 				}
 				if (bones.rotateAngleX != 0.0f) {
-					GL11.glRotatef(bones.rotateAngleX * 57.29578f, 1.0f, 0.0f, 0.0f);
+					GL11.glRotatef((float) (Math.toDegrees(bones.rotateAngleX)), 1.0f, 0.0f, 0.0f);
 				}
 
 				GL11.glCallList(cube.getDisplayList());
@@ -121,18 +120,18 @@ public class BenchEntityModel extends ModelBase {
 							if (child.rotationPointX != 0.0f || child.rotationPointY != 0.0f || child.rotationPointZ != 0.0f) {
 								GL11.glTranslatef(child.rotationPointX * ((float) Math.PI / 180F), child.rotationPointY * scale, child.rotationPointZ * scale);
 							}
-							GL11.glRotatef(convertPivot(child, 0) * ((float) Math.PI / 180F), 0.0f, 0.0f, 1.0f);
-							GL11.glRotatef(convertPivot(child, 1) * ((float) Math.PI / 180F), 0.0f, 1.0f, 0.0f);
+							GL11.glRotatef((float) (Math.toRadians(convertPivot(child, 0))), 0.0f, 0.0f, 1.0f);
+							GL11.glRotatef((float) Math.toRadians(convertPivot(child, 1)), 0.0f, 1.0f, 0.0f);
 
-							GL11.glRotatef(convertPivot(child, 2) * ((float) Math.PI / 180F), 1.0f, 0.0f, 0.0f);
+							GL11.glRotatef((float) Math.toRadians(convertPivot(child, 2)), 1.0f, 0.0f, 0.0f);
 							if (child.rotateAngleZ != 0.0f) {
-								GL11.glRotatef(child.rotateAngleZ * 57.29578f, 0.0f, 0.0f, 1.0f);
+								GL11.glRotatef((float) Math.toDegrees(child.rotateAngleZ), 0.0f, 0.0f, 1.0f);
 							}
 							if (child.rotateAngleY != 0.0f) {
-								GL11.glRotatef(child.rotateAngleY * 57.29578f, 0.0f, 1.0f, 0.0f);
+								GL11.glRotatef((float) Math.toDegrees(child.rotateAngleY), 0.0f, 1.0f, 0.0f);
 							}
 							if (child.rotateAngleX != 0.0f) {
-								GL11.glRotatef(child.rotateAngleX * 57.29578f, 1.0f, 0.0f, 0.0f);
+								GL11.glRotatef((float) Math.toDegrees(child.rotateAngleX), 1.0f, 0.0f, 0.0f);
 							}
 
 							GL11.glCallList(cube2.getDisplayList());
