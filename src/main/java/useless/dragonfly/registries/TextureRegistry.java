@@ -7,8 +7,8 @@ import turniplabs.halplibe.helper.TextureHelper;
 import java.util.HashMap;
 
 public class TextureRegistry {
-	public static HashMap<String, Integer> textureNameToIndex = new HashMap<>();
-	public static HashMap<Integer, String> textureIndexToName = new HashMap<>();
+	protected static HashMap<String, Integer> textureNameToIndex = new HashMap<>();
+	protected static HashMap<Integer, String> textureIndexToName = new HashMap<>();
 	public static void init(){}
 	protected static void registerTexture(String namespace, String textureName, int index){
 		String texKey = getTextureKey(namespace.toLowerCase(), textureName.toLowerCase());
@@ -34,6 +34,18 @@ public class TextureRegistry {
 
 	public static String getTextureKey(String namespace, String texturename){
 		return namespace + ":" + texturename;
+	}
+	public static int getIndex(String key){
+		return textureNameToIndex.getOrDefault(key, 0);
+	}
+	public static int getIndexOrDefault(String key, int defaultIndex){
+		return textureNameToIndex.getOrDefault(key, defaultIndex);
+	}
+	public static String getKey(int index){
+		return textureIndexToName.get(index);
+	}
+	public static String getKey(int x, int y){
+		return getKey(Block.texCoordToIndex(x,y));
 	}
 	private static void registerVanillaTexture(String texturename, int texX, int texY){
 		registerTexture("minecraft", texturename, texX, texY);
