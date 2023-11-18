@@ -3,7 +3,9 @@
         "particle": "minecraft:block/glass",
         "glass": "minecraft:block/glass",
         "obsidian": "minecraft:block/obsidian",
-        "beacon": "minecraft:block/block_diamond"
+        "beacon_top": "minecraft:block/block_diamond_top",
+        "beacon_side": "minecraft:block/block_diamond_side",
+        "beacon_bottom": "minecraft:block/block_diamond_bottom"
     },
     "elements": [
         {   "__comment": "Glass shell",
@@ -34,12 +36,12 @@
             "from": [ 3, 3, 3 ],
             "to": [ 13, 14, 13 ],
             "faces": {
-                "down":  { "uv": [ 3, 3, 13, 13 ], "texture": "#beacon" },
-                "up":    { "uv": [ 3, 3, 13, 13 ], "texture": "#beacon" },
-                "north": { "uv": [ 3, 2, 13, 13 ], "texture": "#beacon" },
-                "south": { "uv": [ 3, 2, 13, 13 ], "texture": "#beacon" },
-                "west":  { "uv": [ 3, 2, 13, 13 ], "texture": "#beacon" },
-                "east":  { "uv": [ 3, 2, 13, 13 ], "texture": "#beacon" }
+                "down":  { "uv": [ 3, 3, 13, 13 ], "texture": "#beacon_bottom" },
+                "up":    { "uv": [ 3, 3, 13, 13 ], "texture": "#beacon_top" },
+                "north": { "uv": [ 3, 2, 13, 13 ], "texture": "#beacon_side" },
+                "south": { "uv": [ 3, 2, 13, 13 ], "texture": "#beacon_side" },
+                "west":  { "uv": [ 3, 2, 13, 13 ], "texture": "#beacon_side" },
+                "east":  { "uv": [ 3, 2, 13, 13 ], "texture": "#beacon_side" }
             }
         }
     ]
