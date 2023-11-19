@@ -30,15 +30,15 @@ public class BlockFace {
 			switch (side){ // TODO replace with actual port of vanilla's uv generation
 				case NORTH:
 				case SOUTH:
-					_uvs = new float[]{cube.cubeData.from[0], cube.cubeData.from[1], cube.cubeData.from[0] + xDif, cube.cubeData.from[1] + yDif};
+					_uvs = new float[]{cube.cubeData.from[0], TextureFX.tileWidthTerrain - cube.cubeData.to[1], cube.cubeData.from[0] + xDif, TextureFX.tileWidthTerrain - cube.cubeData.to[1] + yDif};
 					break;
 				case EAST:
 				case WEST:
-					_uvs = new float[]{cube.cubeData.from[2], cube.cubeData.from[1], cube.cubeData.from[2] + zDif, cube.cubeData.from[1] + yDif};
+					_uvs = new float[]{cube.cubeData.from[2], TextureFX.tileWidthTerrain - cube.cubeData.to[1], cube.cubeData.from[2] + zDif, TextureFX.tileWidthTerrain - cube.cubeData.to[1] + yDif};
 					break;
 				case TOP:
 				case BOTTOM:
-					_uvs = new float[]{cube.cubeData.from[0], cube.cubeData.from[2], cube.cubeData.from[0] + xDif, cube.cubeData.from[2] + zDif};
+					_uvs = new float[]{cube.cubeData.from[0], TextureFX.tileWidthTerrain - cube.cubeData.to[2], cube.cubeData.from[0] + xDif, TextureFX.tileWidthTerrain - cube.cubeData.to[2] + zDif};
 					break;
 			}
 
