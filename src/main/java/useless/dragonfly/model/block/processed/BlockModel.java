@@ -3,42 +3,36 @@ package useless.dragonfly.model.block.processed;
 import net.minecraft.core.util.helper.Side;
 import useless.dragonfly.model.block.data.ModelData;
 
-import java.util.Arrays;
-
-public class BlockModel extends ModelData {
+public class BlockModel {
 	public boolean[] hasFaceToRenderOnSide;
+	public BlockCube[] blockCubes;
+	protected ModelData modelData;
 	public boolean hasFaceToRender(Side side){
 		return hasFaceToRenderOnSide[side.getId()];
 	}
 	public BlockModel(ModelData modelData){
-		this.textures = modelData.textures;
-		this.credit = modelData.credit;
-		this.elements = modelData.elements;
+		this.modelData = modelData;
+		this.blockCubes = new BlockCube[modelData.elements.length];
+		for (int i = 0; i < blockCubes.length; i++) {
+			blockCubes[i] = new BlockCube(modelData.elements[i]);
+		}
+
 
 		hasFaceToRenderOnSide = new boolean[6];
-		for (BlockCube cube: elements) {
+		for (BlockCube cube: blockCubes) {
 			cube.process();
 			for (int i = 0; i < hasFaceToRenderOnSide.length; i++) {
 				hasFaceToRenderOnSide[i] |= cube.isOuterFace(Side.getSideById(i));
 			}
 		}
-		for (BlockCube cube: elements) {
+		for (BlockCube cube: blockCubes) {
 			cube.processVisibleFaces(this);
 		}
 	}
-	public String toString(){
-		StringBuilder builder = new StringBuilder(this.credit);
-		for (BlockCube cube: elements) {
-			builder.append(Arrays.toString(cube.from));
-			builder.append(Arrays.toString(cube.to));
-			builder.append(cube.color);
-			for (String key: cube.faces.keySet()) {
-				builder.append(key);
-				BlockFace face = cube.faces.get(key);
-				builder.append(face.texture);
-				builder.append(Arrays.toString(face.uv));
-			}
-		}
-		return builder.toString();
+	public String getTexture(String faceTexKey){
+		return modelData.textures.get(faceTexKey.substring(1));
+	}
+	public boolean getAO(){
+		return modelData.ambientocclusion;
 	}
 }

@@ -7,12 +7,14 @@ import useless.dragonfly.model.block.processed.BlockCube;
 import java.util.HashMap;
 
 public class ModelData {
-	@SerializedName("credit")
-	public String credit = "";
+	@SerializedName("parent")
+	public String parent = null;
+	@SerializedName("ambientocclusion")
+	public boolean ambientocclusion = true;
 	@SerializedName("elements")
-	public BlockCube[] elements;
+	public CubeData[] elements = new CubeData[0];
 	@SerializedName("textures")
-	public HashMap<String, String> textures;
+	public HashMap<String, String> textures = new HashMap<>();
 	public static final HashMap<String, Side> keyToSide = new HashMap<>();
 	public static final HashMap<Side, String> sideToKey = new HashMap<>();
 	private static void registerSide(Side side, String key){

@@ -133,11 +133,11 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		float yOffset = 0.5f;
 		Tessellator tessellator = Tessellator.instance;
 		GL11.glTranslatef(-0.5f, 0.0f - yOffset, -0.5f);
-		for (BlockCube cube: modelDragonFly.baseModel.elements) {
+		for (BlockCube cube: modelDragonFly.baseModel.blockCubes) {
 			for (BlockFace face: cube.faces.values()) {
 				tessellator.startDrawingQuads();
 				tessellator.setNormal(face.getSide().getOffsetX(), face.getSide().getOffsetY(), face.getSide().getOffsetZ());
-				renderModelFaceBySide(cube, face.getSide(), block, 0, 0, 0, block.getBlockTextureFromSideAndMetadata(face.getSide(), meta));
+				renderModelFaceBySide(modelDragonFly.baseModel, cube, face.getSide(), block, 0, 0, 0, block.getBlockTextureFromSideAndMetadata(face.getSide(), meta));
 				tessellator.draw();
 			}
 		}
@@ -149,7 +149,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		float red = (float)(color >> 16 & 0xFF) / 255.0f;
 		float green = (float)(color >> 8 & 0xFF) / 255.0f;
 		float blue = (float)(color & 0xFF) / 255.0f;
-		if (mc.isAmbientOcclusionEnabled()) {
+		if (mc.isAmbientOcclusionEnabled() && model.getAO()) {
 			return this.renderStandardModelWithAmbientOcclusion(model, block, x, y, z, red, green, blue);
 		}
 		return this.renderStandardModelWithColorMultiplier(model, block, x, y, z, red, green, blue);
@@ -174,7 +174,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		int meta = this.blockAccess.getBlockMetadata(x, y, z);
 		this.cache.setupCache(block, this.blockAccess, x, y, z);
 		boolean somethingRendered = false;
-		for (BlockCube cube: model.elements) {
+		for (BlockCube cube: model.blockCubes) {
 			somethingRendered |= renderModelSide(model, cube, block, x, y, z, r, g, b, Side.BOTTOM, meta, cube.yMin(), 0, 0, 1, cube.zMax(), cube.zMin(), -1, 0, 0, 1.0F - cube.xMin(), 1.0F - cube.xMax());
 			somethingRendered |= renderModelSide(model, cube, block, x, y, z, r, g, b, Side.TOP, meta, 1.0F - cube.yMax(), 0, 0, 1, cube.zMax(), cube.zMin(), 1, 0, 0, cube.xMax(), cube.xMin());
 			somethingRendered |= renderModelSide(model, cube, block, x, y, z, r, g, b, Side.NORTH, meta, cube.zMin(), -1, 0, 0, 1.0F - cube.xMin(), 1.0F - cube.xMax(), 0, 1, 0, cube.yMax(), cube.yMin());
@@ -310,7 +310,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		this.colorBlueTopRight *= ltr;
 		int tex = this.overbright ? block.getBlockOverbrightTexture(this.blockAccess, x, y, z, side.getId()) : block.getBlockTexture(this.blockAccess, x, y, z, side);
 		if (tex >= 0) {
-			renderModelFaceBySide(cube, side, block, x, y, z, tex);
+			renderModelFaceBySide(model, cube, side, block, x, y, z, tex);
 			return true;
 		}
 		return false;
@@ -835,7 +835,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		bNorthSouth *= b;
 		bEastWest *= b;
 		float blockBrightness = this.getBlockBrightness(this.blockAccess, x, y, z);
-		for (BlockCube cube: model.elements) {
+		for (BlockCube cube: model.blockCubes) {
 			for (Side side: DragonFly.sides) {
 				if (cube.getFaceFromSide(side) == null) continue;
 				int _x = x + side.getOffsetX();
@@ -884,15 +884,15 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 						throw new RuntimeException("Specified side does not exist on a cube!!!");
 				}
 				tessellator.setColorOpaque_F(red * sideBrightness, green * sideBrightness, blue * sideBrightness);
-				renderModelFaceBySide(cube, side, block, x, y, z, block.getBlockTexture(this.blockAccess, x, y, z, side));
+				renderModelFaceBySide(model, cube, side, block, x, y, z, block.getBlockTexture(this.blockAccess, x, y, z, side));
 				renderedSomething = true;
 			}
 		}
 		return renderedSomething;
 	}
 	@Unique
-	public void renderModelFaceBySide(BlockCube cube, Side side, Block block, double x, double y, double z, int texture){
-		texture = TextureRegistry.getIndexOrDefault(cube.getFaceFromSide(side).texture, texture);
+	public void renderModelFaceBySide(BlockModel model, BlockCube cube, Side side, Block block, double x, double y, double z, int texture){
+		texture = TextureRegistry.getIndexOrDefault(model.getTexture(cube.getFaceFromSide(side).getTexture()), texture);
 		switch (side){
 			case TOP:
 				renderTopFace(cube, block, x, y, z, texture);
