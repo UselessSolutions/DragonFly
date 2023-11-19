@@ -43,5 +43,9 @@ public class DebugBlocks {
 		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/black_wool.json")))
 		.setTextures(0,0)
 		.build(new BlockModel("parentModelTest", 1008, Material.dirt, ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/black_wool.json")));
+	public static final Block anvil = new BlockBuilder(MOD_ID)
+		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/anvil.json")))
+		.setTextures(0,0)
+		.build(new BlockModel("anvilTest", 1009, Material.dirt, ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/anvil.json")));
 	public static void init() {}
 }
