@@ -12,12 +12,43 @@ public class BlockFace {
 	public BlockFace(FaceData faceData){
 		this.faceData = faceData;
 	}
-	public void process(String key){
-		uvScaled = new float[faceData.uv.length];
-		for (int i = 0; i < faceData.uv.length; i++) {
-			uvScaled[i] = (float) (TextureFX.tileWidthTerrain - faceData.uv[i]) / TextureFX.tileWidthTerrain;
-		}
+	public void process(BlockCube cube, String key){
 		this.side = ModelData.keyToSide.get(key);
+		generateUVs(cube);
+
+
+
+
+	}
+	protected void generateUVs(BlockCube cube){
+		uvScaled = new float[4];
+		float[] _uvs = new float[0];
+		if (faceData.uv == null){
+			float xDif = cube.cubeData.to[0] - cube.cubeData.from[0];
+			float yDif = cube.cubeData.to[1] - cube.cubeData.from[1];
+			float zDif = cube.cubeData.to[2] - cube.cubeData.from[2];
+			switch (side){ // TODO replace with actual port of vanilla's uv generation
+				case NORTH:
+				case SOUTH:
+					_uvs = new float[]{cube.cubeData.from[0], cube.cubeData.from[1], cube.cubeData.from[0] + xDif, cube.cubeData.from[1] + yDif};
+					break;
+				case EAST:
+				case WEST:
+					_uvs = new float[]{cube.cubeData.from[2], cube.cubeData.from[1], cube.cubeData.from[2] + zDif, cube.cubeData.from[1] + yDif};
+					break;
+				case TOP:
+				case BOTTOM:
+					_uvs = new float[]{cube.cubeData.from[0], cube.cubeData.from[2], cube.cubeData.from[0] + xDif, cube.cubeData.from[2] + zDif};
+					break;
+			}
+
+		} else {
+			_uvs = faceData.uv;
+		}
+
+		for (int i = 0; i < _uvs.length; i++) {
+			uvScaled[i] = (TextureFX.tileWidthTerrain - _uvs[i]) / TextureFX.tileWidthTerrain;
+		}
 	}
 	public float uMin(){
 		return uvScaled[2];

@@ -62,8 +62,8 @@ immersiveMode:0
 guiBackgroundColor:r=16,g=16,b=16,a=192
 difficulty:PEACEFUL
 thirdPersonView:0
-renderDistance:NORMAL
-limitFramerate:0
+renderDistance:EXTREME
+limitFramerate:3
 guiScale:0
 overlayMode:0
 rotationOverlayMode:0

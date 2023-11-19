@@ -1,4 +1,4 @@
-package useless.dragonfly.mixin;
+package useless.dragonfly.mixins.mixin;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.RenderBlockCache;
@@ -22,7 +22,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import useless.dragonfly.model.block.BlockModelDragonFly;
 import useless.dragonfly.DragonFly;
-import useless.dragonfly.mixininterfaces.ExtraRendering;
+import useless.dragonfly.mixins.mixininterfaces.ExtraRendering;
 import useless.dragonfly.model.block.processed.BlockCube;
 import useless.dragonfly.model.block.processed.BlockFace;
 import useless.dragonfly.model.block.processed.BlockModel;

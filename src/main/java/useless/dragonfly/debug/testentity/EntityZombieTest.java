@@ -1,8 +1,6 @@
-package useless.dragonfly.testentity;
+package useless.dragonfly.debug.testentity;
 
-import net.minecraft.core.entity.animal.EntityPig;
 import net.minecraft.core.entity.monster.EntityHuman;
-import net.minecraft.core.entity.monster.EntityZombie;
 import net.minecraft.core.world.World;
 
 public class EntityZombieTest extends EntityHuman {
