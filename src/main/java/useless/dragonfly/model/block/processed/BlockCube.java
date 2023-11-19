@@ -1,62 +1,54 @@
-package useless.dragonfly.model.block;
+package useless.dragonfly.model.block.processed;
 
-import com.google.gson.annotations.SerializedName;
+import net.minecraft.client.render.TextureFX;
 import net.minecraft.core.util.helper.Axis;
 import net.minecraft.core.util.helper.Side;
+import useless.dragonfly.DragonFly;
+import useless.dragonfly.model.block.data.CubeData;
+import useless.dragonfly.model.block.data.ModelData;
 
 import java.util.Arrays;
 import java.util.HashMap;
 
-public class BenchCube{
-	private static final float COMPARE_CONST = 0.001f;
-	@SerializedName("from")
-	public float[] from;
-	@SerializedName("to")
-	public float[] to;
-	@SerializedName("color")
-	public int color;
-	@SerializedName("faces")
-	public HashMap<String, BenchFace> faces;
+public class BlockCube {
+	protected CubeData cubeData;
 	protected float[] fromScaled;
 	protected float[] toScaled;
 	protected boolean[] outerFace;
 	protected boolean[] faceVisible;
-	private static boolean equalFloats(float a, float b){
-		return Math.abs(Float.compare(a, b)) < COMPARE_CONST;
+	public HashMap<String, BlockFace> faces = new HashMap<>();
+
+	public BlockCube(CubeData cubeData){
+		this.cubeData = cubeData;
 	}
 	public void process(){
 		outerFace = new boolean[6];
 		faceVisible = new boolean[6];
 		Arrays.fill(faceVisible, true);
-		fromScaled = new float[from.length];
-		for (int i = 0; i < from.length; i++) {
-			fromScaled[i] = from[i]/BlockBenchModel.textureSize;
+		fromScaled = new float[cubeData.from.length];
+		for (int i = 0; i < cubeData.from.length; i++) {
+			fromScaled[i] = cubeData.from[i]/ TextureFX.tileWidthTerrain;
 		}
-		toScaled = new float[to.length];
-		for (int i = 0; i < to.length; i++) {
-			toScaled[i] = to[i]/BlockBenchModel.textureSize;
+		toScaled = new float[cubeData.to.length];
+		for (int i = 0; i < cubeData.to.length; i++) {
+			toScaled[i] = cubeData.to[i]/TextureFX.tileWidthTerrain;
 		}
-		for (String key: faces.keySet()) {
-			BenchFace face = faces.get(key);
+		for (String key: cubeData.faces.keySet()) {
+			BlockFace face = new BlockFace(cubeData.faces.get(key));
 			face.process(key);
+			faces.put(key, face);
 		}
 		for (int i = 0; i < outerFace.length; i++) {
-			outerFace[i] = equalFloats(getAxisPosition(Side.getSideById(i)), 0f) || equalFloats(getAxisPosition(Side.getSideById(i)), 1f);
+			outerFace[i] = DragonFly.equalFloats(getAxisPosition(Side.getSideById(i)), 0f) || DragonFly.equalFloats(getAxisPosition(Side.getSideById(i)), 1f);
 		}
 	}
-	public void processVisibleFaces(BlockBenchModel model){
-		for (BenchFace face: faces.values()) {
-			if (model.textures == null) continue;
-			if (model.textures.get(face.texture.replaceFirst("[#]", "")) != null){
-				face.texture = model.textures.get(face.texture.replaceFirst("[#]", ""));
-			}
-		}
-		for (BenchCube otherCube: model.elements) {
+	public void processVisibleFaces(BlockModel model){
+		for (BlockCube otherCube: model.blockCubes) {
 			if (this.equals(otherCube)) continue;
-			for (BenchFace thisFace: faces.values()) {
-				BenchFace otherFace = otherCube.getFaceFromSide(thisFace.side.getOpposite());
+			for (BlockFace thisFace: faces.values()) {
+				BlockFace otherFace = otherCube.getFaceFromSide(thisFace.side.getOpposite());
 				if (otherFace == null) continue;
-				if (!equalFloats(this.getAxisPosition(thisFace.side), otherCube.getAxisPosition(otherFace.side))) continue;
+				if (!DragonFly.equalFloats(this.getAxisPosition(thisFace.side), otherCube.getAxisPosition(otherFace.side))) continue;
 				float[] thisFaceDim = this.faceDimensions(thisFace.side);
 				float[] otherFaceDim = otherCube.faceDimensions(otherFace.side);
 				faceVisible[thisFace.side.getId()] &= face1Visible(thisFaceDim, otherFaceDim);
@@ -100,8 +92,8 @@ public class BenchCube{
 	}
 	public boolean isFaceVisible(Side side) { return faceVisible[side.getId()];}
 
-	public BenchFace getFaceFromSide(Side side){
-		return faces.get(BlockBenchModel.sideToKey.get(side));
+	public BlockFace getFaceFromSide(Side side){
+		return faces.get(ModelData.sideToKey.get(side));
 	}
 	public float xMin(){
 		return fromScaled[0];

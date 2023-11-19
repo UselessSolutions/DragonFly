@@ -1,10 +1,9 @@
 package useless.dragonfly.helper;
 
 import com.google.gson.stream.JsonReader;
-import net.minecraft.core.util.helper.Side;
 import useless.dragonfly.DragonFly;
-import useless.dragonfly.model.block.BenchCube;
-import useless.dragonfly.model.block.BlockBenchModel;
+import useless.dragonfly.model.block.data.ModelData;
+import useless.dragonfly.model.block.processed.BlockModel;
 import useless.dragonfly.model.entity.BenchEntityModel;
 
 import java.io.BufferedReader;
@@ -14,33 +13,34 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ModelHelper {
-	public static final Map<String, BlockBenchModel> registeredModels = new HashMap<>();
+	public static final Map<String, ModelData> modelDataFiles = new HashMap<>();
+	public static final Map<String, BlockModel> registeredModels = new HashMap<>();
 	public static HashMap<String, BenchEntityModel> benchEntityModelMap = new HashMap<>();
 
 	/**
 	 * Place mod models in the <i>assets/modid/item/</i> directory for them to be seen.
 	 */
-	public static BlockBenchModel getOrCreateBlockModel(String modId, String modelSource) {
+	public static BlockModel getOrCreateBlockModel(String modId, String modelSource) {
 		String modelKey = ModelHelper.getModelLocation(modId, modelSource);
 		if (registeredModels.containsKey(modelKey)){
 			return registeredModels.get(modelKey);
 		}
-		InputStream inputStream = BlockBenchModel.class.getResourceAsStream(modelKey);
-		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(inputStream)));
-		BlockBenchModel model = DragonFly.GSON.fromJson(reader, BlockBenchModel.class);
-		model.hasFaceToRenderOnSide = new boolean[6];
-		for (BenchCube cube: model.elements) {
-			cube.process();
-			for (int i = 0; i < model.hasFaceToRenderOnSide.length; i++) {
-				model.hasFaceToRenderOnSide[i] |= cube.isOuterFace(Side.getSideById(i));
-			}
-		}
-		for (BenchCube cube: model.elements) {
-			cube.processVisibleFaces(model);
-		}
+		BlockModel model = new BlockModel(loadBlockModel(modelKey));
 		registeredModels.put(modelKey, model);
 		return model;
 	}
+
+	public static ModelData loadBlockModel(String modelKey){
+		if (modelDataFiles.containsKey(modelKey)){
+			return modelDataFiles.get(modelKey);
+		}
+		InputStream inputStream = BlockModel.class.getResourceAsStream(modelKey);
+		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(inputStream)));
+		ModelData modelData = DragonFly.GSON.fromJson(reader, ModelData.class);
+		modelDataFiles.put(modelKey, modelData);
+		return modelData;
+	}
+
 	/**
 	 * Place mod models in the <i>assets/modid/item/</i> directory for them to be seen.
 	 */
