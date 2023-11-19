@@ -2,6 +2,8 @@ package useless.dragonfly.model.block.data;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.Arrays;
+
 public class FaceData {
 	@SerializedName("uv")
 	public int[] uv = new int[4];
@@ -14,4 +16,12 @@ public class FaceData {
 	@SerializedName("tintindex")
 	public int tintindex = -1; // Should mean white tint, unsure how to handle other values seems to pass it into BlockColor to get a color from there in vanilla
 
+	public String toString(){
+		return
+			"uv: " + Arrays.toString(uv) + "\n" +
+			"texture: " + texture + "\n" +
+			"cullface: " + cullface + "\n" +
+			"rotation: " + rotation + "\n" +
+			"tintindex: " + tintindex;
+	}
 }

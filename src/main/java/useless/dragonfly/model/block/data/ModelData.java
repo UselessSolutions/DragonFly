@@ -2,6 +2,7 @@ package useless.dragonfly.model.block.data;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.core.util.helper.Side;
+import useless.dragonfly.DragonFly;
 
 import java.util.HashMap;
 
@@ -30,5 +31,26 @@ public class ModelData {
 		registerSide(Side.SOUTH, "south");
 		registerSide(Side.WEST, "west");
 		registerSide(Side.EAST, "east");
+	}
+	public String toString(){
+		StringBuilder builder = new StringBuilder("\n");
+		builder.append("parent: ").append(parent).append("\n");
+		builder.append("ambientocclusion: ").append(ambientocclusion).append("\n");
+		builder.append("display: ").append("\n");
+		for (String key: display.keySet()) {
+			builder.append("\t").append(key).append("\n");;
+			builder.append(DragonFly.tabBlock(display.get(key).toString(), 2));
+		}
+		builder.append("textures: ").append("\n");
+		for (String key: textures.keySet()) {
+			builder.append("\t").append(key).append(": ").append(textures.get(key)).append("\n");
+		}
+		builder.append("elements: ").append("\n");
+		for (CubeData cube: elements) {
+			builder.append("\t{\n");
+			builder.append(DragonFly.tabBlock(cube.toString(),1));
+			builder.append("\t}\n");
+		}
+		return builder.toString();
 	}
 }
