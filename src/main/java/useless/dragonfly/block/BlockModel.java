@@ -25,7 +25,7 @@ public class BlockModel extends BlockTransparent {
 		return true;
 	}
 	public void getCollidingBoundingBoxes(World world, int x, int y, int z, AABB aabb, ArrayList aabbList) {
-		for (BlockCube cube: model.elements) {
+		for (BlockCube cube: model.blockCubes) {
 			setBlockBounds(cube.xMin(), cube.yMin(), cube.zMin(), cube.xMax(), cube.yMax(), cube.zMax());
 			super.getCollidingBoundingBoxes(world, x, y, z, aabb, aabbList);
 		}
