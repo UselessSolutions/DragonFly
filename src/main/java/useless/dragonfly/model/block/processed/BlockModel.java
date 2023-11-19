@@ -15,7 +15,19 @@ public class BlockModel {
 	}
 	public BlockModel(ModelData modelData){
 		this.modelData = modelData;
-		ModelHelper.loadBlockModel(modelData.parent);
+
+		if (modelData.parent != null && !modelData.parent.equals("block/block")){
+			String namespace;
+			String modelName;
+			if (modelData.parent.contains(":")){
+				namespace = modelData.parent.split(":")[0];
+				modelName = modelData.parent.split(":")[1];
+			} else {
+				namespace = TextureRegistry.coreNamepaceId;
+				modelName = modelData.parent;
+			}
+			parentModel = ModelHelper.loadBlockModel(namespace, modelName);
+		}
 		initializeTextures();
 
 		this.blockCubes = new BlockCube[modelData.elements.length];
