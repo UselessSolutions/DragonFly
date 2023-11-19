@@ -9,7 +9,7 @@ public class BlockModel {
 	public boolean[] hasFaceToRenderOnSide;
 	public BlockCube[] blockCubes;
 	protected ModelData modelData;
-	protected ModelData parentModel;
+	protected BlockModel parentModel;
 	public boolean hasFaceToRender(Side side){
 		return hasFaceToRenderOnSide[side.getId()];
 	}
@@ -26,15 +26,25 @@ public class BlockModel {
 				namespace = TextureRegistry.coreNamepaceId;
 				modelName = modelData.parent;
 			}
-			parentModel = ModelHelper.loadBlockModel(namespace, modelName);
+			parentModel = ModelHelper.getOrCreateBlockModel(namespace, modelName );
 		}
+
+
+
+		loadModel();
+	}
+	protected void loadModel(){
+
+		if (parentModel != null && modelData.elements == null){
+			this.blockCubes = parentModel.blockCubes;
+		} else {
+			this.blockCubes = new BlockCube[modelData.elements.length];
+			for (int i = 0; i < blockCubes.length; i++) {
+				blockCubes[i] = new BlockCube(modelData.elements[i]);
+			}
+		}
+
 		initializeTextures();
-
-		this.blockCubes = new BlockCube[modelData.elements.length];
-		for (int i = 0; i < blockCubes.length; i++) {
-			blockCubes[i] = new BlockCube(modelData.elements[i]);
-		}
-
 
 		hasFaceToRenderOnSide = new boolean[6];
 		for (BlockCube cube: blockCubes) {

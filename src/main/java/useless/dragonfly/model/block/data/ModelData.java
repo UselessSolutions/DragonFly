@@ -16,7 +16,7 @@ public class ModelData {
 	@SerializedName("textures")
 	public HashMap<String, String> textures = new HashMap<>();
 	@SerializedName("elements")
-	public CubeData[] elements = new CubeData[0];
+	public CubeData[] elements;
 
 	public static final HashMap<String, Side> keyToSide = new HashMap<>();
 	public static final HashMap<Side, String> sideToKey = new HashMap<>();
@@ -46,10 +46,14 @@ public class ModelData {
 			builder.append("\t").append(key).append(": ").append(textures.get(key)).append("\n");
 		}
 		builder.append("elements: ").append("\n");
-		for (CubeData cube: elements) {
-			builder.append("\t{\n");
-			builder.append(Utilities.tabBlock(cube.toString(),1));
-			builder.append("\t}\n");
+		if (elements != null){
+			for (CubeData cube: elements) {
+				builder.append("\t{\n");
+				builder.append(Utilities.tabBlock(cube.toString(),1));
+				builder.append("\t}\n");
+			}
+		} else {
+			builder.append("\tnull").append("\n");
 		}
 		return builder.toString();
 	}

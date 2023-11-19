@@ -36,7 +36,7 @@ public class BlockCube {
 		}
 		for (String key: cubeData.faces.keySet()) {
 			BlockFace face = new BlockFace(cubeData.faces.get(key));
-			face.process(key);
+			face.process(this, key);
 			faces.put(key, face);
 		}
 		for (int i = 0; i < outerFace.length; i++) {

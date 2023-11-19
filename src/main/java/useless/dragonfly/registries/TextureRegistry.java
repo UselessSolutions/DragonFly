@@ -2,7 +2,6 @@ package useless.dragonfly.registries;
 
 import net.minecraft.core.Global;
 import net.minecraft.core.block.Block;
-import net.minecraft.core.net.packet.Packet;
 import turniplabs.halplibe.helper.TextureHelper;
 
 import java.util.HashMap;
