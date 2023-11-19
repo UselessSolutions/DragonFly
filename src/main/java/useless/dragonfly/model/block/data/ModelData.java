@@ -2,7 +2,6 @@ package useless.dragonfly.model.block.data;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.core.util.helper.Side;
-import useless.dragonfly.DragonFly;
 import useless.dragonfly.utilities.Utilities;
 
 import java.util.HashMap;

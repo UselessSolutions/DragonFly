@@ -1,7 +1,6 @@
 package useless.dragonfly.model.block.data;
 
 import com.google.gson.annotations.SerializedName;
-import useless.dragonfly.DragonFly;
 import useless.dragonfly.utilities.Utilities;
 
 import java.util.Arrays;
