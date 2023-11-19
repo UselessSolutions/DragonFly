@@ -14,7 +14,7 @@ public class DragonFly implements ModInitializer, PreLaunchEntrypoint {
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final Gson GSON = new Gson();
 	public static final Side[] sides = new Side[]{Side.BOTTOM, Side.TOP, Side.NORTH, Side.SOUTH, Side.WEST, Side.EAST};
-	public static boolean isDev = FabricLoader.getInstance().isDevelopmentEnvironment();
+	public static boolean isDev = FabricLoader.getInstance().getModContainer(MOD_ID).get().getMetadata().getVersion().getFriendlyString().equals("${version}");
     @Override
     public void onInitialize() {
 		if (isDev){
