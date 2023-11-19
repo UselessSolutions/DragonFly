@@ -13,6 +13,6 @@ public class DebugMain {
 			builder.append(string);
 			builder.append(Utilities.tabBlock(ModelHelper.modelDataFiles.get(string).toString(), 1));
 		}
-		DragonFly.LOGGER.info(builder.toString());
+		//DragonFly.LOGGER.info(builder.toString());
 	}
 }

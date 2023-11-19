@@ -1,15 +1,19 @@
 package useless.dragonfly.model.block.processed;
 
 import net.minecraft.core.util.helper.Side;
+import useless.dragonfly.DragonFly;
 import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.registries.TextureRegistry;
+
+import java.util.HashMap;
 
 public class BlockModel {
 	public boolean[] hasFaceToRenderOnSide;
 	public BlockCube[] blockCubes;
 	protected ModelData modelData;
 	protected BlockModel parentModel;
+	protected HashMap<String, String> textureMap = new HashMap<>();
 	public boolean hasFaceToRender(Side side){
 		return hasFaceToRenderOnSide[side.getId()];
 	}
@@ -27,9 +31,11 @@ public class BlockModel {
 				modelName = modelData.parent;
 			}
 			parentModel = ModelHelper.getOrCreateBlockModel(namespace, modelName );
+
+			textureMap.putAll(parentModel.textureMap);
 		}
 
-
+		textureMap.putAll(modelData.textures);
 
 		loadModel();
 	}
@@ -73,7 +79,11 @@ public class BlockModel {
 		}
 	}
 	public String getTexture(String faceTexKey){
-		return modelData.textures.get(faceTexKey.substring(1));
+		String result = textureMap.get(faceTexKey.substring(1));
+		if (result != null && result.contains("#")){
+			return getTexture(result);
+		}
+		return result;
 	}
 	public boolean getAO(){
 		return modelData.ambientocclusion;
