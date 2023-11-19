@@ -27,4 +27,7 @@ ivy {
 ```
 - Implement mod in "build.gradle" `modImplementation "DragonFly:dragonfly:${project.dragonfly_version}"`
 
-Credit : 0999312 https://github.com/0999312/MMLib/tree/3e87210c9305a5724e06c492be503533a1ebcd59
+Credits:
+- UselessBullets
+- baguchan
+- 0999312 [MMLib](https://github.com/0999312/MMLib/tree/3e87210c9305a5724e06c492be503533a1ebcd59) (Tremendously helpful for Entity Model support)
