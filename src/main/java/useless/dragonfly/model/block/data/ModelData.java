@@ -3,6 +3,7 @@ package useless.dragonfly.model.block.data;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.core.util.helper.Side;
 import useless.dragonfly.DragonFly;
+import useless.dragonfly.utilities.Utilities;
 
 import java.util.HashMap;
 
@@ -39,7 +40,7 @@ public class ModelData {
 		builder.append("display: ").append("\n");
 		for (String key: display.keySet()) {
 			builder.append("\t").append(key).append("\n");;
-			builder.append(DragonFly.tabBlock(display.get(key).toString(), 2));
+			builder.append(Utilities.tabBlock(display.get(key).toString(), 2));
 		}
 		builder.append("textures: ").append("\n");
 		for (String key: textures.keySet()) {
@@ -48,7 +49,7 @@ public class ModelData {
 		builder.append("elements: ").append("\n");
 		for (CubeData cube: elements) {
 			builder.append("\t{\n");
-			builder.append(DragonFly.tabBlock(cube.toString(),1));
+			builder.append(Utilities.tabBlock(cube.toString(),1));
 			builder.append("\t}\n");
 		}
 		return builder.toString();

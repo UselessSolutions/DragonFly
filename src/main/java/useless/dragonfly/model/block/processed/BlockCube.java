@@ -6,6 +6,7 @@ import net.minecraft.core.util.helper.Side;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.model.block.data.CubeData;
 import useless.dragonfly.model.block.data.ModelData;
+import useless.dragonfly.utilities.Utilities;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -39,7 +40,7 @@ public class BlockCube {
 			faces.put(key, face);
 		}
 		for (int i = 0; i < outerFace.length; i++) {
-			outerFace[i] = DragonFly.equalFloats(getAxisPosition(Side.getSideById(i)), 0f) || DragonFly.equalFloats(getAxisPosition(Side.getSideById(i)), 1f);
+			outerFace[i] = Utilities.equalFloats(getAxisPosition(Side.getSideById(i)), 0f) || Utilities.equalFloats(getAxisPosition(Side.getSideById(i)), 1f);
 		}
 	}
 	public void processVisibleFaces(BlockModel model){
@@ -48,7 +49,7 @@ public class BlockCube {
 			for (BlockFace thisFace: faces.values()) {
 				BlockFace otherFace = otherCube.getFaceFromSide(thisFace.side.getOpposite());
 				if (otherFace == null) continue;
-				if (!DragonFly.equalFloats(this.getAxisPosition(thisFace.side), otherCube.getAxisPosition(otherFace.side))) continue;
+				if (!Utilities.equalFloats(this.getAxisPosition(thisFace.side), otherCube.getAxisPosition(otherFace.side))) continue;
 				float[] thisFaceDim = this.faceDimensions(thisFace.side);
 				float[] otherFaceDim = otherCube.faceDimensions(otherFace.side);
 				faceVisible[thisFace.side.getId()] &= face1Visible(thisFaceDim, otherFaceDim);
