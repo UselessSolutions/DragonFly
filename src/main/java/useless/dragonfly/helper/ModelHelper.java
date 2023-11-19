@@ -25,16 +25,20 @@ public class ModelHelper {
 		if (registeredModels.containsKey(modelKey)){
 			return registeredModels.get(modelKey);
 		}
-		BlockModel model = new BlockModel(loadBlockModel(modelKey));
+		BlockModel model = new BlockModel(loadBlockModel(modId, modelSource));
 		registeredModels.put(modelKey, model);
 		return model;
 	}
 
-	public static ModelData loadBlockModel(String modelKey){
+	public static ModelData loadBlockModel(String modId, String modelSource){
+		String modelKey = getModelLocation(modId, modelSource);
 		if (modelDataFiles.containsKey(modelKey)){
 			return modelDataFiles.get(modelKey);
 		}
 		InputStream inputStream = BlockModel.class.getResourceAsStream(modelKey);
+		if (inputStream == null){
+			throw new NullPointerException("resource " + modelKey + " returns null! Does this file exist?");
+		}
 		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(inputStream)));
 		ModelData modelData = DragonFly.GSON.fromJson(reader, ModelData.class);
 		modelDataFiles.put(modelKey, modelData);
@@ -56,6 +60,9 @@ public class ModelHelper {
 		}
 	}
 	public static String getModelLocation(String modID, String modelSource){
+		if (!modelSource.contains(".json")){
+			modelSource += ".json";
+		}
 		return "/assets/" + modID + "/model/" + modelSource;
 	}
 }

@@ -1,4 +1,4 @@
-package useless.dragonfly.mixininterfaces;
+package useless.dragonfly.mixins.mixininterfaces;
 
 import net.minecraft.core.block.Block;
 import useless.dragonfly.model.block.processed.BlockModel;

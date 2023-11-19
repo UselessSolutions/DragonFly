@@ -3,7 +3,7 @@ package useless.dragonfly.model.block;
 import net.minecraft.client.render.RenderBlocks;
 import net.minecraft.client.render.block.model.BlockModelRenderBlocks;
 import net.minecraft.core.block.Block;
-import useless.dragonfly.mixininterfaces.ExtraRendering;
+import useless.dragonfly.mixins.mixininterfaces.ExtraRendering;
 import useless.dragonfly.model.block.processed.BlockModel;
 
 import java.lang.reflect.Field;

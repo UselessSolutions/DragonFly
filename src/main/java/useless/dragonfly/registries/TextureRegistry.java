@@ -7,6 +7,7 @@ import turniplabs.halplibe.helper.TextureHelper;
 import java.util.HashMap;
 
 public class TextureRegistry {
+	public static final String coreNamepaceId = "minecraft";
 	protected static HashMap<String, Integer> textureNameToIndex = new HashMap<>();
 	protected static HashMap<Integer, String> textureIndexToName = new HashMap<>();
 	public static void init(){}
@@ -27,11 +28,14 @@ public class TextureRegistry {
 	public static void registerTexture(String namespace, String textureName, int texX, int texY){
 		registerTexture(namespace, textureName, Block.texCoordToIndex(texX, texY));
 	}
-	public static void registerModTexture(String modId, String textureName){
-		int[] texCoords = TextureHelper.getOrCreateBlockTexture(modId, textureName);
-		registerTexture(modId, textureName, texCoords[0], texCoords[1]);
+	public static void registerModBlockTexture(String modId, String textureName){
+		int[] texCoords = TextureHelper.getOrCreateBlockTexture(modId, textureName + ".png");
+		registerTexture(modId, "block/" + textureName, texCoords[0], texCoords[1]);
 	}
-
+	public static void registerModItemTexture(String modId, String textureName){
+		int[] texCoords = TextureHelper.getOrCreateItemTexture(modId, textureName + ".png");
+		registerTexture(modId,"item/" +  textureName, texCoords[0], texCoords[1]);
+	}
 	public static String getTextureKey(String namespace, String texturename){
 		return namespace + ":" + texturename;
 	}
@@ -47,8 +51,11 @@ public class TextureRegistry {
 	public static String getKey(int x, int y){
 		return getKey(Block.texCoordToIndex(x,y));
 	}
+	public static boolean containsTexture(String key){
+		return textureNameToIndex.containsKey(key);
+	}
 	private static void registerVanillaTexture(String texturename, int texX, int texY){
-		registerTexture("minecraft", texturename, texX, texY);
+		registerTexture(coreNamepaceId, texturename, texX, texY);
 	}
 	private static void registerVanillaBlockTexture(String texturename, int texX, int texY){
 		registerVanillaTexture("block/"+texturename, texX, texY);

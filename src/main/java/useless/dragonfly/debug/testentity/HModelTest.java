@@ -1,6 +1,5 @@
-package useless.dragonfly.testentity;
+package useless.dragonfly.debug.testentity;
 
-import net.minecraft.core.util.helper.MathHelper;
 import useless.dragonfly.model.entity.BenchEntityModel;
 
 public class HModelTest extends BenchEntityModel {

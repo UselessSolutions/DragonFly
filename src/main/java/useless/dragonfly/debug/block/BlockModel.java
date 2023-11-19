@@ -1,4 +1,4 @@
-package useless.dragonfly.block;
+package useless.dragonfly.debug.block;
 
 import net.minecraft.core.block.BlockTransparent;
 import net.minecraft.core.block.material.Material;
