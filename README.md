@@ -1,4 +1,7 @@
 # DragonFly BTA Model Library
+<p align="center">
+  <img width="256" height="209" src="https://github.com/UselessBullets/DragonFly/assets/80850784/646a4d77-06c1-40cb-a070-c86dcfda55c1">
+</p>
 
 ### Currently Available Features
 - ModelHelper, Helper class for creating block and entity models
