@@ -1,0 +1,10 @@
+{
+  "parent": "minecraft:block/template_sculk_shrieker",
+  "textures": {
+    "bottom": "dragonfly:block/sculk_shrieker_bottom",
+    "inner_top": "dragonfly:block/sculk_shrieker_inner_top",
+    "particle": "dragonfly:block/sculk_shrieker_bottom",
+    "side": "dragonfly:block/sculk_shrieker_side",
+    "top": "dragonfly:block/sculk_shrieker_top"
+  }
+}
