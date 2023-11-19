@@ -47,5 +47,13 @@ public class DebugBlocks {
 		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/anvil.json")))
 		.setTextures(0,0)
 		.build(new BlockModel("anvilTest", 1009, Material.dirt, ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/anvil.json")));
+	public static final Block shriek = new BlockBuilder(MOD_ID)
+		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/sculk_shrieker.json")))
+		.setTextures(0,0)
+		.build(new BlockModel("shrieker", 1010, Material.dirt, ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/sculk_shrieker.json")));
+	public static final Block hopper = new BlockBuilder(MOD_ID)
+		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/hopper.json")))
+		.setTextures(0,0)
+		.build(new BlockModel("hopper", 1011, Material.dirt, ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/hopper.json")));
 	public static void init() {}
 }
