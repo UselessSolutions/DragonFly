@@ -2,13 +2,12 @@ package useless.dragonfly.model.block.data;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.core.util.helper.Side;
-import useless.dragonfly.model.block.processed.BlockCube;
 
 import java.util.HashMap;
 
 public class ModelData {
 	@SerializedName("parent")
-	public String parent = null;
+	public String parent = null; // Currently unused
 	@SerializedName("ambientocclusion")
 	public boolean ambientocclusion = true;
 	@SerializedName("elements")
