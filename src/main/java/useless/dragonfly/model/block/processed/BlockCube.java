@@ -43,6 +43,14 @@ public class BlockCube {
 		vertices.put("--+", new Vector3f(xMin(), yMin(), zMax()));
 		vertices.put("---", new Vector3f(xMin(), yMin(), zMin()));
 
+		if (cubeData.rotation != null){
+			vertices.replaceAll((k, v) -> Utilities.rotatePoint(
+				vertices.get(k),
+				new Vector3f(cubeData.rotation.origin[0]/TextureFX.tileWidthTerrain, cubeData.rotation.origin[1]/TextureFX.tileWidthTerrain, cubeData.rotation.origin[2]/TextureFX.tileWidthTerrain),
+				cubeData.rotation.axis,
+				cubeData.rotation.angle));
+		}
+
 		for (String key: cubeData.faces.keySet()) {
 			faces.put(key, new BlockFace(this, key));
 		}

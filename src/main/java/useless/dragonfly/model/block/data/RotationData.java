@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public class RotationData {
 	@SerializedName("origin")
-	public double[] origin = new double[3];
+	public float[] origin = new float[3];
 	@SerializedName("axis")
 	public String axis = null;
 	@SerializedName("angle")
