@@ -1,4 +1,4 @@
-package useless.dragonfly.debug.testentity;
+package useless.dragonfly.debug.testentity.Warden;
 
 import net.minecraft.core.util.helper.MathHelper;
 import useless.dragonfly.model.entity.BenchEntityModel;

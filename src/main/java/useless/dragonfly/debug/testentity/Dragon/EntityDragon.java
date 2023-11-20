@@ -1,4 +1,4 @@
-package useless.dragonfly.debug.testentity;
+package useless.dragonfly.debug.testentity.Dragon;
 
 import net.minecraft.core.entity.monster.EntityGhast;
 import net.minecraft.core.world.World;

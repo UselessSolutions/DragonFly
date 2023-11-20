@@ -1,4 +1,4 @@
-package useless.dragonfly.debug.testentity;
+package useless.dragonfly.debug.testentity.Warden;
 
 import net.minecraft.client.render.entity.LivingRenderer;
 import net.minecraft.client.render.model.ModelBase;

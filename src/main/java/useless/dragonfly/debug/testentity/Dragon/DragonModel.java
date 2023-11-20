@@ -1,4 +1,4 @@
-package useless.dragonfly.debug.testentity;
+package useless.dragonfly.debug.testentity.Dragon;
 
 import useless.dragonfly.model.entity.BenchEntityModel;
 
