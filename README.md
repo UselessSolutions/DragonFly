@@ -28,6 +28,6 @@ ivy {
 - Implement mod in "build.gradle" `modImplementation "DragonFly:dragonfly:${project.dragonfly_version}"`
 
 ### Credits:
-- UselessBullets
-- baguchan
+- UselessBullets - Block Model Support
+- baguchan - Entity Model Support
 - 0999312 [MMLib](https://github.com/0999312/MMLib/tree/3e87210c9305a5724e06c492be503533a1ebcd59) (Tremendously helpful for Entity Model support)
