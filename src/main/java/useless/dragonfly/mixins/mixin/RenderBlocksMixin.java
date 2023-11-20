@@ -277,41 +277,44 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 		int texX = texture % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
 		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		double renderU2 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double renderU4 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
-		double renderV2 = ((double)texY + (1 - face.vMin()) * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double renderV4 = ((double)texY + (1 - face.vMax()) * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
-		if (face.uMin() < 0.0 || face.uMax() > 1.0) {
-			renderU2 = ((float)texX + 0.0f) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU4 = ((float)texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+		double atlasUMin = (texX + face.uMin() * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double atlasUMax = (texX + face.uMax() * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
+		double atlasVMin = (texY + (1 - face.vMin()) * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double atlasVMax = (texY + (1 - face.vMax()) * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
+		if (face.uMin() < 0.0 || face.uMax() > 1.0) { // Cap U value
+			atlasUMin = texX / terrainAtlasWidth;
+			atlasUMax = (texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
 		}
-		if (face.vMin() < 0.0 || face.vMax() > 1.0) {
-			renderV2 = ((float)texY + 0.0f) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV4 = ((float)texY + ((float)TextureFX.tileWidthTerrain - 0.01f)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+		if (face.vMin() < 0.0 || face.vMax() > 1.0) { // Cap V value
+			atlasVMin = texY / terrainAtlasWidth;
+			atlasVMax = (texY + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
 		}
-		double renderU3 = renderU4;
-		double renderU1 = renderU2;
-		double renderV3 = renderV2;
-		double renderV1 = renderV4;
 		double renderMinX = x + cube.xMin();
 		double renderMaxX = x + cube.xMax();
 		double renderY = y + cube.yMin();
 		double renderMinZ = z + cube.zMin();
 		double renderMaxZ = z + cube.zMax();
 		if (this.enableAO) {
+			// Top Left
 			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
-			tessellator.addVertexWithUV(renderMinX, renderY, renderMaxZ, renderU1, renderV1);
+			tessellator.addVertexWithUV(renderMinX, renderY, renderMaxZ, atlasUMin, atlasVMax);
+
+			// Bottom Left
 			tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
-			tessellator.addVertexWithUV(renderMinX, renderY, renderMinZ, renderU2, renderV2);
+			tessellator.addVertexWithUV(renderMinX, renderY, renderMinZ, atlasUMin, atlasVMin);
+
+			// Bottom Right
 			tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
-			tessellator.addVertexWithUV(renderMaxX, renderY, renderMinZ, renderU3, renderV3);
+			tessellator.addVertexWithUV(renderMaxX, renderY, renderMinZ, atlasUMax, atlasVMin);
+
+			// Top Right
 			tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
-			tessellator.addVertexWithUV(renderMaxX, renderY, renderMaxZ, renderU4, renderV4);
+			tessellator.addVertexWithUV(renderMaxX, renderY, renderMaxZ, atlasUMax, atlasVMax);
 		} else {
-			tessellator.addVertexWithUV(renderMinX, renderY, renderMaxZ, renderU1, renderV1);
-			tessellator.addVertexWithUV(renderMinX, renderY, renderMinZ, renderU2, renderV2);
-			tessellator.addVertexWithUV(renderMaxX, renderY, renderMinZ, renderU3, renderV3);
-			tessellator.addVertexWithUV(renderMaxX, renderY, renderMaxZ, renderU4, renderV4);
+			tessellator.addVertexWithUV(renderMinX, renderY, renderMaxZ, atlasUMin, atlasVMax); // Top Left
+			tessellator.addVertexWithUV(renderMinX, renderY, renderMinZ, atlasUMin, atlasVMin); // Bottom Left
+			tessellator.addVertexWithUV(renderMaxX, renderY, renderMinZ, atlasUMax, atlasVMin); // Bottom Right
+			tessellator.addVertexWithUV(renderMaxX, renderY, renderMaxZ, atlasUMax, atlasVMax); // Top Right
 		}
 	}
 	@Unique
@@ -324,41 +327,44 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		int texX = texture % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
 		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
 
-		double renderU3 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double renderU1 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
-		double renderV3 = ((double)texY + (1 - face.vMin()) * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double renderV1 = ((double)texY + (1 - face.vMax()) * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
-		if (face.uMin() < 0.0 || face.uMax() > 1.0) {
-			renderU3 = ((float)texX + 0.0f) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU1 = ((float)texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+		double atlasUMin = (texX + face.uMin() * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double atlasUMax = (texX + face.uMax() * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
+		double atlasVMin = (texY + (1 - face.vMin()) * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double atlasVMax = (texY + (1 - face.vMax()) * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
+		if (face.uMin() < 0.0 || face.uMax() > 1.0) { // Cap U value
+			atlasUMin = texX / terrainAtlasWidth;
+			atlasUMax = (texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
 		}
-		if (face.vMin() < 0.0 || face.vMax() > 1.0) {
-			renderV3 = ((float)texY + 0.0f) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV1 = ((float)texY + ((float)TextureFX.tileWidthTerrain - 0.01f)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+		if (face.vMin() < 0.0 || face.vMax() > 1.0) { // Cap V value
+			atlasVMin = texY / terrainAtlasWidth;
+			atlasVMax = (texY + (TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
 		}
-		double renderU2 = renderU1;
-		double renderU4 = renderU3;
-		double renderV2 = renderV3;
-		double renderV4 = renderV1;
 		double renderMinX = x + cube.xMin();
 		double renderMaxX = x + cube.xMax();
 		double renderY = y + cube.yMax();
 		double renderMinZ = z + cube.zMin();
 		double renderMaxZ = z + cube.zMax();
 		if (this.enableAO) {
+			// Top Left
 			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
-			tessellator.addVertexWithUV(renderMaxX, renderY, renderMaxZ, renderU1, renderV1);
+			tessellator.addVertexWithUV(renderMaxX, renderY, renderMaxZ, atlasUMax, atlasVMax);
+
+			// Bottom Left
 			tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
-			tessellator.addVertexWithUV(renderMaxX, renderY, renderMinZ, renderU2, renderV2);
+			tessellator.addVertexWithUV(renderMaxX, renderY, renderMinZ, atlasUMax, atlasVMin);
+
+			// Bottom Right
 			tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
-			tessellator.addVertexWithUV(renderMinX, renderY, renderMinZ, renderU3, renderV3);
+			tessellator.addVertexWithUV(renderMinX, renderY, renderMinZ, atlasUMin, atlasVMin);
+
+			// Top Right
 			tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
-			tessellator.addVertexWithUV(renderMinX, renderY, renderMaxZ, renderU4, renderV4);
+			tessellator.addVertexWithUV(renderMinX, renderY, renderMaxZ, atlasUMin, atlasVMax);
 		} else {
-			tessellator.addVertexWithUV(renderMaxX, renderY, renderMaxZ, renderU1, renderV1);
-			tessellator.addVertexWithUV(renderMaxX, renderY, renderMinZ, renderU2, renderV2);
-			tessellator.addVertexWithUV(renderMinX, renderY, renderMinZ, renderU3, renderV3);
-			tessellator.addVertexWithUV(renderMinX, renderY, renderMaxZ, renderU4, renderV4);
+			tessellator.addVertexWithUV(renderMaxX, renderY, renderMaxZ, atlasUMax, atlasVMax); // Top Left
+			tessellator.addVertexWithUV(renderMaxX, renderY, renderMinZ, atlasUMax, atlasVMin); // Bottom Left
+			tessellator.addVertexWithUV(renderMinX, renderY, renderMinZ, atlasUMin, atlasVMin); // Bottom Right
+			tessellator.addVertexWithUV(renderMinX, renderY, renderMaxZ, atlasUMin, atlasVMax); // Top Right
 		}
 	}
 	@Unique
@@ -370,46 +376,49 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 		int texX = texture % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
 		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		double renderU2 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double renderU4 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
-		double renderV2 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double renderV4 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
+		double atlasUMin = (texX + face.uMin() * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double atlasUMax = (texX + face.uMax() * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
+		double atlasVMin = (texY + (1 - face.vMin()) * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double atlasVMax = (texY + (1 - face.vMax()) * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
 		if (this.flipTexture) {
-			double d7 = renderU2;
-			renderU2 = renderU4;
-			renderU4 = d7;
+			double d7 = atlasUMin;
+			atlasUMin = atlasUMax;
+			atlasUMax = d7;
 		}
-		if (face.uMin() < 0.0 || face.uMax() > 1.0) {
-			renderU2 = ((float)texX + 0.0f) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU4 = ((float)texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+		if (face.uMin() < 0.0 || face.uMax() > 1.0) { // Cap U value
+			atlasUMin = ((float)texX + 0.0f) / terrainAtlasWidth;
+			atlasUMax = ((float)texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
 		}
-		if (face.vMin() < 0.0 || face.vMax() > 1.0) {
-			renderV2 = ((float)texY + 0.0f) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV4 = ((float)texY + ((float)TextureFX.tileWidthTerrain - 0.01f)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+		if (face.vMin() < 0.0 || face.vMax() > 1.0) { // Cap V value
+			atlasVMin = ((float)texY + 0.0f) / terrainAtlasWidth;
+			atlasVMax = ((float)texY + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
 		}
-		double renderU1 = renderU4;
-		double renderU3 = renderU2;
-		double renderV1 = renderV2;
-		double renderV3 = renderV4;
 		double renderXMin = x + cube.xMin();
 		double renderXMax = x + cube.xMax();
 		double renderYMin = y + cube.yMin();
 		double renderYMax = y + cube.yMax();
 		double renderZ = z + cube.zMin();
 		if (this.enableAO) {
+			// Top Left
 			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
-			tessellator.addVertexWithUV(renderXMin, renderYMax, renderZ, renderU1, renderV1);
+			tessellator.addVertexWithUV(renderXMin, renderYMax, renderZ, atlasUMax, atlasVMin);
+
+			// Bottom Left
 			tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
-			tessellator.addVertexWithUV(renderXMax, renderYMax, renderZ, renderU2, renderV2);
+			tessellator.addVertexWithUV(renderXMax, renderYMax, renderZ, atlasUMin, atlasVMin);
+
+			// Bottom Right
 			tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
-			tessellator.addVertexWithUV(renderXMax, renderYMin, renderZ, renderU3, renderV3);
+			tessellator.addVertexWithUV(renderXMax, renderYMin, renderZ, atlasUMin, atlasVMax);
+
+			// Top Right
 			tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
-			tessellator.addVertexWithUV(renderXMin, renderYMin, renderZ, renderU4, renderV4);
+			tessellator.addVertexWithUV(renderXMin, renderYMin, renderZ, atlasUMax, atlasVMax);
 		} else {
-			tessellator.addVertexWithUV(renderXMin, renderYMax, renderZ, renderU1, renderV1);
-			tessellator.addVertexWithUV(renderXMax, renderYMax, renderZ, renderU2, renderV2);
-			tessellator.addVertexWithUV(renderXMax, renderYMin, renderZ, renderU3, renderV3);
-			tessellator.addVertexWithUV(renderXMin, renderYMin, renderZ, renderU4, renderV4);
+			tessellator.addVertexWithUV(renderXMin, renderYMax, renderZ, atlasUMax, atlasVMin); // Top Left
+			tessellator.addVertexWithUV(renderXMax, renderYMax, renderZ, atlasUMin, atlasVMin); // Bottom Left
+			tessellator.addVertexWithUV(renderXMax, renderYMin, renderZ, atlasUMin, atlasVMax); // Bottom Right
+			tessellator.addVertexWithUV(renderXMin, renderYMin, renderZ, atlasUMax, atlasVMax); // Top Right
 		}
 	}
 	@Unique
@@ -421,46 +430,49 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 		int texX = texture % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
 		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		double renderU1 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double renderU3 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
-		double renderV1 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double renderV3 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
+		double atlasUMin = (texX + face.uMin() * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double atlasUMax = (texX + face.uMax() * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
+		double atlasVMin = (texY + (1 - face.vMin()) * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double atlasVMax = (texY + (1 - face.vMax()) * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
 		if (this.flipTexture) {
-			double d7 = renderU1;
-			renderU1 = renderU3;
-			renderU3 = d7;
+			double d7 = atlasUMin;
+			atlasUMin = atlasUMax;
+			atlasUMax = d7;
 		}
 		if (face.uMin() < 0.0 || face.uMax() > 1.0) {
-			renderU1 = ((float)texX + 0.0f) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU3 = ((float)texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+			atlasUMin = ((float)texX + 0.0f) / terrainAtlasWidth;
+			atlasUMax = ((float)texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
 		}
 		if (face.vMin() < 0.0 || face.vMax() > 1.0) {
-			renderV1 = ((float)texY + 0.0f) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV3 = ((float)texY + ((float)TextureFX.tileWidthTerrain - 0.01f)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+			atlasVMin = ((float)texY + 0.0f) / terrainAtlasWidth;
+			atlasVMax = ((float)texY + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
 		}
-		double renderU4 = renderU3;
-		double renderU2 = renderU1;
-		double renderV4 = renderV1;
-		double renderV2 = renderV3;
 		double renderXMin = x + cube.xMin();
 		double renderXMax = x + cube.xMax();
 		double renderYMin = y + cube.yMin();
 		double renderYMax = y + cube.yMax();
 		double renderZ = z + cube.zMax();
 		if (this.enableAO) {
+			// Top Left
 			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
-			tessellator.addVertexWithUV(renderXMin, renderYMax, renderZ, renderU1, renderV1);
+			tessellator.addVertexWithUV(renderXMin, renderYMax, renderZ, atlasUMin, atlasVMin);
+
+			// Bottom Left
 			tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
-			tessellator.addVertexWithUV(renderXMin, renderYMin, renderZ, renderU2, renderV2);
+			tessellator.addVertexWithUV(renderXMin, renderYMin, renderZ, atlasUMin, atlasVMax);
+
+			// Bottom Right
 			tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
-			tessellator.addVertexWithUV(renderXMax, renderYMin, renderZ, renderU3, renderV3);
+			tessellator.addVertexWithUV(renderXMax, renderYMin, renderZ, atlasUMax, atlasVMax);
+
+			// Top Right
 			tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
-			tessellator.addVertexWithUV(renderXMax, renderYMax, renderZ, renderU4, renderV4);
+			tessellator.addVertexWithUV(renderXMax, renderYMax, renderZ, atlasUMax, atlasVMin);
 		} else {
-			tessellator.addVertexWithUV(renderXMin, renderYMax, renderZ, renderU1, renderV1);
-			tessellator.addVertexWithUV(renderXMin, renderYMin, renderZ, renderU2, renderV2);
-			tessellator.addVertexWithUV(renderXMax, renderYMin, renderZ, renderU3, renderV3);
-			tessellator.addVertexWithUV(renderXMax, renderYMax, renderZ, renderU4, renderV4);
+			tessellator.addVertexWithUV(renderXMin, renderYMax, renderZ, atlasUMin, atlasVMin); // Top Left
+			tessellator.addVertexWithUV(renderXMin, renderYMin, renderZ, atlasUMin, atlasVMax); // Bottom Left
+			tessellator.addVertexWithUV(renderXMax, renderYMin, renderZ, atlasUMax, atlasVMax); // Bottom Right
+			tessellator.addVertexWithUV(renderXMax, renderYMax, renderZ, atlasUMax, atlasVMin); // Top Right
 		}
 	}
 	@Unique
@@ -472,46 +484,49 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 		int texX = texture % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
 		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		double renderU2 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double renderU4 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
-		double renderV2 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double renderV4 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
+		double atlasUMin = (texX + face.uMin() * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double atlasUMax = (texX + face.uMax() * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
+		double atlasVMin = (texY + (1 - face.vMin()) * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double atlasVMax = (texY + (1 - face.vMax()) * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
 		if (this.flipTexture) {
-			double d7 = renderU2;
-			renderU2 = renderU4;
-			renderU4 = d7;
+			double d7 = atlasUMin;
+			atlasUMin = atlasUMax;
+			atlasUMax = d7;
 		}
 		if (face.uMin() < 0.0 || face.uMax() > 1.0) {
-			renderU2 = ((float)texX + 0.0f) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU4 = ((float)texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+			atlasUMin = ((float)texX + 0.0f) / terrainAtlasWidth;
+			atlasUMax = ((float)texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
 		}
 		if (face.vMin() < 0.0 || face.vMax() > 1.0) {
-			renderV2 = ((float)texY + 0.0f) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV4 = ((float)texY + ((float)TextureFX.tileWidthTerrain - 0.01f)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+			atlasVMin = ((float)texY + 0.0f) / terrainAtlasWidth;
+			atlasVMax = ((float)texY + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
 		}
-		double renderU1 = renderU4;
-		double renderU3 = renderU2;
-		double renderV1 = renderV2;
-		double renderV3 = renderV4;
 		double renderX = x + cube.xMin();
 		double renderYMin = y + cube.yMin();
 		double renderYMax = y + cube.yMax();
 		double renderZMin = z + cube.zMin();
 		double renderZMax = z + cube.zMax();
 		if (this.enableAO) {
+			// Top Left
 			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
-			tessellator.addVertexWithUV(renderX, renderYMax, renderZMax, renderU1, renderV1);
+			tessellator.addVertexWithUV(renderX, renderYMax, renderZMax, atlasUMax, atlasVMin);
+
+			// Bottom Left
 			tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
-			tessellator.addVertexWithUV(renderX, renderYMax, renderZMin, renderU2, renderV2);
+			tessellator.addVertexWithUV(renderX, renderYMax, renderZMin, atlasUMin, atlasVMin);
+
+			// Bottom Right
 			tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
-			tessellator.addVertexWithUV(renderX, renderYMin, renderZMin, renderU3, renderV3);
+			tessellator.addVertexWithUV(renderX, renderYMin, renderZMin, atlasUMin, atlasVMax);
+
+			// Top Right
 			tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
-			tessellator.addVertexWithUV(renderX, renderYMin, renderZMax, renderU4, renderV4);
+			tessellator.addVertexWithUV(renderX, renderYMin, renderZMax, atlasUMax, atlasVMax);
 		} else {
-			tessellator.addVertexWithUV(renderX, renderYMax, renderZMax, renderU1, renderV1);
-			tessellator.addVertexWithUV(renderX, renderYMax, renderZMin, renderU2, renderV2);
-			tessellator.addVertexWithUV(renderX, renderYMin, renderZMin, renderU3, renderV3);
-			tessellator.addVertexWithUV(renderX, renderYMin, renderZMax, renderU4, renderV4);
+			tessellator.addVertexWithUV(renderX, renderYMax, renderZMax, atlasUMax, atlasVMin); // Top Left
+			tessellator.addVertexWithUV(renderX, renderYMax, renderZMin, atlasUMin, atlasVMin); // Bottom Left
+			tessellator.addVertexWithUV(renderX, renderYMin, renderZMin, atlasUMin, atlasVMax); // Bottom Right
+			tessellator.addVertexWithUV(renderX, renderYMin, renderZMax, atlasUMax, atlasVMax); // Top Right
 		}
 	}
 	@Unique
@@ -523,46 +538,49 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 		int texX = texture % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
 		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		double renderU4 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double renderU2 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
-		double renderV4 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double renderV2 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
+		double atlasUMin = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double atlasUMax = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
+		double atlasVMin = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double atlasVMax = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
 		if (this.flipTexture) {
-			double d7 = renderU4;
-			renderU4 = renderU2;
-			renderU2 = d7;
+			double d7 = atlasUMin;
+			atlasUMin = atlasUMax;
+			atlasUMax = d7;
 		}
 		if (face.uMin() < 0.0 || face.uMax() > 1.0) {
-			renderU4 = ((float)texX + 0.0f) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU2 = ((float)texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+			atlasUMin = ((float)texX + 0.0f) / terrainAtlasWidth;
+			atlasUMax = ((float)texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
 		}
 		if (face.vMin() < 0.0 || face.vMax() > 1.0) {
-			renderV4 = ((float)texY + 0.0f) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV2 = ((float)texY + ((float)TextureFX.tileWidthTerrain - 0.01f)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+			atlasVMin = ((float)texY + 0.0f) / terrainAtlasWidth;
+			atlasVMax = ((float)texY + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
 		}
-		double renderU3 = renderU2;
-		double renderU1 = renderU4;
-		double renderV3 = renderV4;
-		double renderV1 = renderV2;
 		double renderX = x + cube.xMax();
 		double renderYMin = y + cube.yMin();
 		double renderYMax = y + cube.yMax();
 		double renderZMin = z + cube.zMin();
 		double renderZMax = z + cube.zMax();
 		if (this.enableAO) {
+			// Top Left
 			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
-			tessellator.addVertexWithUV(renderX, renderYMin, renderZMax, renderU1, renderV1);
+			tessellator.addVertexWithUV(renderX, renderYMin, renderZMax, atlasUMin, atlasVMax);
+
+			// Bottom Left
 			tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
-			tessellator.addVertexWithUV(renderX, renderYMin, renderZMin, renderU2, renderV2);
+			tessellator.addVertexWithUV(renderX, renderYMin, renderZMin, atlasUMax, atlasVMax);
+
+			// Bottom Right
 			tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
-			tessellator.addVertexWithUV(renderX, renderYMax, renderZMin, renderU3, renderV3);
+			tessellator.addVertexWithUV(renderX, renderYMax, renderZMin, atlasUMax, atlasVMin);
+
+			// Top Right
 			tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
-			tessellator.addVertexWithUV(renderX, renderYMax, renderZMax, renderU4, renderV4);
+			tessellator.addVertexWithUV(renderX, renderYMax, renderZMax, atlasUMin, atlasVMin);
 		} else {
-			tessellator.addVertexWithUV(renderX, renderYMin, renderZMax, renderU1, renderV1);
-			tessellator.addVertexWithUV(renderX, renderYMin, renderZMin, renderU2, renderV2);
-			tessellator.addVertexWithUV(renderX, renderYMax, renderZMin, renderU3, renderV3);
-			tessellator.addVertexWithUV(renderX, renderYMax, renderZMax, renderU4, renderV4);
+			tessellator.addVertexWithUV(renderX, renderYMin, renderZMax, atlasUMin, atlasVMax); // Top Left
+			tessellator.addVertexWithUV(renderX, renderYMin, renderZMin, atlasUMax, atlasVMax); // Bottom Left
+			tessellator.addVertexWithUV(renderX, renderYMax, renderZMin, atlasUMax, atlasVMin); // Bottom Right
+			tessellator.addVertexWithUV(renderX, renderYMax, renderZMax, atlasUMin, atlasVMin); // Top Right
 		}
 	}
 	@Unique
