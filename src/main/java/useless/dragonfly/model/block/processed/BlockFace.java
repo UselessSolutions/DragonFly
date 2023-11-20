@@ -47,15 +47,20 @@ public class BlockFace {
 		}
 
 		for (int i = 0; i < _uvs.length; i++) {
-			uvScaled[i] = (TextureFX.tileWidthTerrain - _uvs[i]) / TextureFX.tileWidthTerrain;
+			if (i == 0 || i == 2){ // u
+				uvScaled[i] = (_uvs[i]) / TextureFX.tileWidthTerrain;
+			} else { // v
+				uvScaled[i] = (TextureFX.tileWidthTerrain - _uvs[i]) / TextureFX.tileWidthTerrain;
+			}
+
 		}
 	}
 	public float uMin(){
-		return uvScaled[2];
+		return uvScaled[0];
 	}
 	public float vMin(){ return uvScaled[3];}
 	public float uMax(){
-		return uvScaled[0];
+		return uvScaled[2];
 	}
 	public float vMax(){
 		return uvScaled[1];
