@@ -12,7 +12,7 @@ public class CubeData {
 	@SerializedName("to")
 	public float[] to = new float[3];
 	@SerializedName("rotation")
-	public RotationData rotation = new RotationData();
+	public RotationData rotation;
 	@SerializedName("shade")
 	public boolean shade = true;
 	@SerializedName("faces")

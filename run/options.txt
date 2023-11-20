@@ -1,9 +1,9 @@
 windowWidth:854
 windowHeight:480
 sound.master:1.0
-sound.music:1.0
+sound.music:0.0
 sound.world:1.0
-sound.entity:1.0
+sound.entity:0.29347825
 sound.cave:1.0
 sound.gui:1.0
 sound.weather:1.0
