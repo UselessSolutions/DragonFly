@@ -326,8 +326,8 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
 		double renderU2 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
 		double renderU4 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderV2 = ((double)texY + face.vMin() * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderV4 = ((double)texY + face.vMax() * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+		double renderV2 = ((double)texY + (1 - face.vMax()) * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+		double renderV4 = ((double)texY + (1 - face.vMin()) * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
 		if (face.uMin() < 0.0 || face.uMax() > 1.0) {
 			renderU2 = ((float)texX + 0.0f) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
 			renderU4 = ((float)texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
@@ -404,8 +404,8 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
 		double renderU3 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
 		double renderU1 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderV3 = ((double)texY + face.vMin() * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderV1 = ((double)texY + face.vMax() * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+		double renderV3 = ((double)texY + (1 - face.vMax()) * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+		double renderV1 = ((double)texY + (1 - face.vMin()) * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
 		if (face.uMin() < 0.0 || face.uMax() > 1.0) {
 			renderU3 = ((float)texX + 0.0f) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
 			renderU1 = ((float)texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);

@@ -4,3 +4,5 @@ build/
 out/
 run/
 run-server/
+/src/main/resources/assets/minecraft/
+/src/main/resources/assets/dragonfly/
