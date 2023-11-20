@@ -2,6 +2,7 @@ package useless.dragonfly.model.block.processed;
 
 import net.minecraft.client.render.TextureFX;
 import net.minecraft.core.util.helper.Side;
+import org.lwjgl.util.vector.Vector3f;
 import useless.dragonfly.model.block.data.FaceData;
 import useless.dragonfly.model.block.data.ModelData;
 
@@ -9,16 +10,44 @@ public class BlockFace {
 	protected FaceData faceData;
 	protected float[] uvScaled;
 	protected Side side;
-	public BlockFace(FaceData faceData){
-		this.faceData = faceData;
-	}
-	public void process(BlockCube cube, String key){
+	public final Vector3f[] vertices;
+	public final String[] vertexUVs;
+	public BlockCube parentCube;
+	public BlockFace(BlockCube cube, String key){
+		this.faceData = cube.cubeData.faces.get(key);
 		this.side = ModelData.keyToSide.get(key);
+		this.parentCube = cube;
 		generateUVs(cube);
-
-
-
-
+		String[] vertexKeyMap = new String[4];
+		switch (side){ // TODO replace this whole string key system with something better
+			case NORTH:
+				vertexKeyMap = new String[]{"-+-", "++-", "+--", "---"};
+				vertexUVs = new String[]{"+-", "--", "-+", "++"};
+				break;
+			case SOUTH:
+				vertexKeyMap = new String[]{"-++", "--+", "+-+", "+++"};
+				vertexUVs = new String[]{"--", "-+", "++", "+-"};
+				break;
+			case EAST:
+				vertexKeyMap = new String[]{"+-+", "+--", "++-", "+++"};
+				vertexUVs = new String[]{"-+", "++", "+-", "--"};
+				break;
+			case WEST:
+				vertexKeyMap = new String[]{"-++", "-+-", "---", "--+"};
+				vertexUVs = new String[]{"+-", "--", "-+", "++"};
+				break;
+			case TOP:
+				vertexKeyMap = new String[]{"+++", "++-", "-+-", "-++"};
+				vertexUVs = new String[]{"++", "+-", "--", "-+"};
+				break;
+			case BOTTOM:
+				vertexKeyMap = new String[]{"--+", "---", "+--", "+-+"};
+				vertexUVs = new String[]{"-+", "--", "+-", "++"};
+				break;
+			default:
+				vertexUVs = null;
+		}
+		vertices = new Vector3f[]{parentCube.vertices.get(vertexKeyMap[0]), parentCube.vertices.get(vertexKeyMap[1]), parentCube.vertices.get(vertexKeyMap[2]), parentCube.vertices.get(vertexKeyMap[3])};
 	}
 	protected void generateUVs(BlockCube cube){
 		uvScaled = new float[4];
@@ -68,5 +97,11 @@ public class BlockFace {
 	public Side getSide(){ return side;}
 	public String getTexture(){
 		return faceData.texture;
+	}
+	public double[] getVertexUV(double uMin, double vMin, double uMax, double vMax, int point){
+		String uvKey = vertexUVs[point];
+		double u = uvKey.charAt(0) == '-' ? uMin : uMax;
+		double v = uvKey.charAt(1) == '-' ? vMin : vMax;
+		return new double[]{u, v};
 	}
 }

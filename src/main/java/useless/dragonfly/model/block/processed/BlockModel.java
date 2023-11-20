@@ -1,7 +1,6 @@
 package useless.dragonfly.model.block.processed;
 
 import net.minecraft.core.util.helper.Side;
-import useless.dragonfly.DragonFly;
 import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.registries.TextureRegistry;
