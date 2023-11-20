@@ -58,12 +58,12 @@ public class BlockFace {
 	public float uMin(){
 		return uvScaled[0];
 	}
-	public float vMin(){ return uvScaled[3];}
+	public float vMin(){ return uvScaled[1];}
 	public float uMax(){
 		return uvScaled[2];
 	}
 	public float vMax(){
-		return uvScaled[1];
+		return uvScaled[3];
 	}
 	public Side getSide(){ return side;}
 	public String getTexture(){
