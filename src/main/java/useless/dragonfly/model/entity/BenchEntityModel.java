@@ -1,19 +1,13 @@
 package useless.dragonfly.model.entity;
 
 import com.google.gson.annotations.SerializedName;
-import com.google.gson.stream.JsonReader;
 import net.minecraft.client.render.model.ModelBase;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
-import useless.dragonfly.DragonFly;
-import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.model.entity.processor.BenchEntityBones;
 import useless.dragonfly.model.entity.processor.BenchEntityCube;
 import useless.dragonfly.model.entity.processor.BenchEntityGeometry;
 
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
 
@@ -80,6 +74,15 @@ public class BenchEntityModel extends ModelBase {
 					cube.compileDisplayList(scale);
 				}
 				GL11.glPushMatrix();
+
+
+				//parent time before rotate it self
+				if (parent != null) {
+					BenchEntityBones parentBone = this.getIndexBones().get(parent);
+
+					convertWithMoreParent(parentBone, scale);
+				}
+
 				GL11.glTranslatef(convertPivot(bones, 0) * scale, convertPivot(bones, 1) * scale, convertPivot(bones, 2) * scale);
 
 				if (bones.rotationPointX != 0.0f || bones.rotationPointY != 0.0f || bones.rotationPointZ != 0.0f) {
@@ -101,49 +104,47 @@ public class BenchEntityModel extends ModelBase {
 					GL11.glRotatef((float) (Math.toDegrees(bones.rotateAngleX)), 1.0f, 0.0f, 0.0f);
 				}
 
+
 				GL11.glCallList(cube.getDisplayList());
 
 
 				GL11.glPopMatrix();
 			}
 
-			if (parent != null) {
-				if (this.getIndexBones().get(parent).getChildren().contains(bones)) {
-					for (BenchEntityBones child : this.getIndexBones().get(parent).getChildren()) {
-						for (BenchEntityCube cube2 : bones.getCubes()) {
-							cube2.addBox(texWidth, texHeight, convertOrigin(child, cube2, 0), convertOrigin(child, cube2, 1), convertOrigin(child, cube2, 2), false);
-							if (!cube2.isCompiled()) {
-								cube2.compileDisplayList(scale);
-							}
-							GL11.glPushMatrix();
-							GL11.glTranslatef(convertPivot(child, 0) * scale, convertPivot(child, 1) * scale, convertPivot(child, 2) * scale);
-							if (child.rotationPointX != 0.0f || child.rotationPointY != 0.0f || child.rotationPointZ != 0.0f) {
-								GL11.glTranslatef(child.rotationPointX * ((float) Math.PI / 180F), child.rotationPointY * scale, child.rotationPointZ * scale);
-							}
-							GL11.glRotatef((float) (Math.toRadians(convertPivot(child, 0))), 0.0f, 0.0f, 1.0f);
-							GL11.glRotatef((float) Math.toRadians(convertPivot(child, 1)), 0.0f, 1.0f, 0.0f);
 
-							GL11.glRotatef((float) Math.toRadians(convertPivot(child, 2)), 1.0f, 0.0f, 0.0f);
-							if (child.rotateAngleZ != 0.0f) {
-								GL11.glRotatef((float) Math.toDegrees(child.rotateAngleZ), 0.0f, 0.0f, 1.0f);
-							}
-							if (child.rotateAngleY != 0.0f) {
-								GL11.glRotatef((float) Math.toDegrees(child.rotateAngleY), 0.0f, 1.0f, 0.0f);
-							}
-							if (child.rotateAngleX != 0.0f) {
-								GL11.glRotatef((float) Math.toDegrees(child.rotateAngleX), 1.0f, 0.0f, 0.0f);
-							}
-
-							GL11.glCallList(cube2.getDisplayList());
-							GL11.glPopMatrix();
-						}
-					}
-				}
-			}
 		}
 
 
 		this.setRotationAngles(limbSwing, limbYaw, ticksExisted, headYaw, headPitch, scale);
+
+	}
+
+	private void convertWithMoreParent(BenchEntityBones parentBone, float scale) {
+		//don't forget some parent has more parent
+		if (parentBone.getParent() != null) {
+			convertWithMoreParent(this.getIndexBones().get(parentBone.getParent()), scale);
+		}
+		GL11.glTranslatef(convertPivot(parentBone, 0) * scale, convertPivot(parentBone, 1) * scale, convertPivot(parentBone, 2) * scale);
+
+
+		if (parentBone.rotationPointX != 0.0f || parentBone.rotationPointY != 0.0f || parentBone.rotationPointZ != 0.0f) {
+			GL11.glTranslatef(parentBone.rotationPointX * scale, parentBone.rotationPointY * scale, parentBone.rotationPointZ * scale);
+		}
+		if (parentBone.getRotation() != null) {
+			GL11.glRotatef((float) Math.toRadians(parentBone.getRotation().get(0)), 0.0f, 0.0f, 1.0f);
+			GL11.glRotatef((float) Math.toRadians(parentBone.getRotation().get(1)), 0.0f, 1.0f, 0.0f);
+			GL11.glRotatef((float) Math.toRadians(parentBone.getRotation().get(2)), 1.0f, 0.0f, 0.0f);
+		}
+
+		if (parentBone.rotateAngleZ != 0.0f) {
+			GL11.glRotatef((float) (Math.toDegrees(parentBone.rotateAngleZ)), 0.0f, 0.0f, 1.0f);
+		}
+		if (parentBone.rotateAngleY != 0.0f) {
+			GL11.glRotatef((float) (Math.toDegrees(parentBone.rotateAngleY)), 0.0f, 1.0f, 0.0f);
+		}
+		if (parentBone.rotateAngleX != 0.0f) {
+			GL11.glRotatef((float) (Math.toDegrees(parentBone.rotateAngleX)), 1.0f, 0.0f, 0.0f);
+		}
 
 	}
 
