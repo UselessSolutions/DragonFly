@@ -32,94 +32,51 @@ import useless.dragonfly.registries.TextureRegistry;
 public abstract class RenderBlocksMixin implements ExtraRendering {
 	@Shadow
 	private Minecraft mc;
-
 	@Shadow
 	private World world;
-
 	@Shadow
 	private boolean enableAO;
-
 	@Shadow
 	private WorldSource blockAccess;
-
 	@Shadow
 	private RenderBlockCache cache;
-
 	@Shadow
 	public abstract float getBlockBrightness(WorldSource blockAccess, int x, int y, int z);
-
 	@Shadow
 	private boolean renderAllFaces;
-
 	@Shadow
 	private int overrideBlockTexture;
-
 	@Shadow
 	public boolean overbright;
-
-	@Shadow
-	private int field_22352_G;
-
 	@Shadow
 	private float colorRedTopRight;
-
 	@Shadow
 	private float colorRedBottomRight;
-
 	@Shadow
 	private float colorRedBottomLeft;
-
 	@Shadow
 	private float colorGreenTopRight;
-
 	@Shadow
 	private float colorRedTopLeft;
-
 	@Shadow
 	private float colorGreenBottomRight;
-
 	@Shadow
 	private float colorGreenBottomLeft;
-
 	@Shadow
 	private float colorGreenTopLeft;
-
 	@Shadow
 	private float colorBlueTopRight;
-
 	@Shadow
 	private float colorBlueBottomRight;
-
 	@Shadow
 	private float colorBlueBottomLeft;
-
 	@Shadow
 	private float colorBlueTopLeft;
-
 	@Shadow
 	@Final
 	private static float[] SIDE_LIGHT_MULTIPLIER;
-
-	@Shadow
-	private int uvRotateBottom;
-
-	@Shadow
-	private int uvRotateTop;
-
 	@Shadow
 	private boolean flipTexture;
-
-	@Shadow
-	private int uvRotateEast;
-
-	@Shadow
-	private int uvRotateWest;
-
-	@Shadow
-	private int uvRotateNorth;
-
-	@Shadow
-	private int uvRotateSouth;
 	@Inject(method = "renderBlockOnInventory(Lnet/minecraft/core/block/Block;IF)V", at = @At("HEAD"), cancellable = true)
 	public void redirectRenderer(Block block, int metadata, float brightness, CallbackInfo ci){
 		if (BlockModelDispatcher.getInstance().getDispatch(block) instanceof BlockModelDragonFly){
@@ -137,7 +94,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 			for (BlockFace face: cube.faces.values()) {
 				tessellator.startDrawingQuads();
 				tessellator.setNormal(face.getSide().getOffsetX(), face.getSide().getOffsetY(), face.getSide().getOffsetZ());
-				renderModelFaceBySide(modelDragonFly.baseModel, cube, face.getSide(), block, 0, 0, 0, block.getBlockTextureFromSideAndMetadata(face.getSide(), meta));
+				renderModelFaceBySide(cube, face.getSide(), 0, 0, 0, TextureRegistry.getIndexOrDefault(modelDragonFly.baseModel.getTexture(cube.getFaceFromSide(face.getSide()).getTexture()), block.getBlockTextureFromSideAndMetadata(face.getSide(), meta)));
 				tessellator.draw();
 			}
 		}
@@ -211,8 +168,6 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		if (!this.renderAllFaces){
 			if (!renderSide(model, cube, side, renderOuterSide)) return false;
 		}
-
-
 		float lightTL;
 		float lightBL;
 		float lightBR;
@@ -222,10 +177,6 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 			lightBR = 1.0f;
 			lightBL = 1.0f;
 			lightTL = 1.0f;
-		} else if (this.field_22352_G <= 0) {
-			lightBR = lightTR = this.cache.getBrightness(dirX, dirY, dirZ);
-			lightBL = lightTR;
-			lightTL = lightTR;
 		} else {
 			float dirB = this.cache.getBrightness(dirX, dirY, dirZ);
 			boolean lefT = this.cache.getOpacity(dirX + lefX, dirY + lefY, dirZ + lefZ);
@@ -310,13 +261,13 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		this.colorBlueTopRight *= ltr;
 		int tex = this.overbright ? block.getBlockOverbrightTexture(this.blockAccess, x, y, z, side.getId()) : block.getBlockTexture(this.blockAccess, x, y, z, side);
 		if (tex >= 0) {
-			renderModelFaceBySide(model, cube, side, block, x, y, z, tex);
+			renderModelFaceBySide( cube, side, x, y, z, TextureRegistry.getIndexOrDefault(model.getTexture(cube.getFaceFromSide(side).getTexture()),tex));
 			return true;
 		}
 		return false;
 	}
 	@Unique
-	public void renderBottomFace(BlockCube cube, Block block, double x, double y, double z, int texture) {
+	public void renderBottomFace(BlockCube cube, double x, double y, double z, int texture) {
 		BlockFace face = cube.getFaceFromSide(Side.BOTTOM);
 		Tessellator tessellator = Tessellator.instance;
 		if (this.overrideBlockTexture >= 0) {
@@ -340,38 +291,6 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		double renderU1 = renderU2;
 		double renderV3 = renderV2;
 		double renderV1 = renderV4;
-		if (this.uvRotateBottom == 2) {
-			renderU2 = ((double)texX + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV2 = ((double)(texY + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU4 = ((double)texX + block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV4 = ((double)(texY + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV3 = renderV2;
-			renderV1 = renderV4;
-			renderU3 = renderU2;
-			renderU1 = renderU4;
-			renderV2 = renderV4;
-			renderV4 = renderV3;
-		} else if (this.uvRotateBottom == 1) {
-			renderU2 = ((double)(texX + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV2 = ((double)texY + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU4 = ((double)(texX + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV4 = ((double)texY + block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU3 = renderU4;
-			renderU1 = renderU2;
-			renderU2 = renderU3;
-			renderU4 = renderU1;
-			renderV3 = renderV4;
-			renderV1 = renderV2;
-		} else if (this.uvRotateBottom == 3) {
-			renderU2 = ((double)(texX + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU4 = ((double)(texX + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV2 = ((double)(texY + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV4 = ((double)(texY + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU3 = renderU4;
-			renderU1 = renderU2;
-			renderV3 = renderV2;
-			renderV1 = renderV4;
-		}
 		double renderMinX = x + cube.xMin();
 		double renderMaxX = x + cube.xMax();
 		double renderY = y + cube.yMin();
@@ -394,7 +313,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 	}
 	@Unique
-	public void renderTopFace(BlockCube cube, Block block, double x, double y, double z, int texture) {
+	public void renderTopFace(BlockCube cube, double x, double y, double z, int texture) {
 		BlockFace face = cube.getFaceFromSide(Side.TOP);
 		Tessellator tessellator = Tessellator.instance;
 		if (this.overrideBlockTexture >= 0) {
@@ -418,38 +337,6 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		double renderU4 = renderU3;
 		double renderV2 = renderV3;
 		double renderV4 = renderV1;
-		if (this.uvRotateTop == 1) {
-			renderU3 = ((double)texX + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV3 = ((double)(texY + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU1 = ((double)texX + block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV1 = ((double)(texY + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV2 = renderV3;
-			renderV4 = renderV1;
-			renderU2 = renderU3;
-			renderU4 = renderU1;
-			renderV3 = renderV1;
-			renderV1 = renderV2;
-		} else if (this.uvRotateTop == 2) {
-			renderU3 = ((double)(texX + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV3 = ((double)texY + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU1 = ((double)(texX + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV1 = ((double)texY + block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU2 = renderU1;
-			renderU4 = renderU3;
-			renderU3 = renderU2;
-			renderU1 = renderU4;
-			renderV2 = renderV1;
-			renderV4 = renderV3;
-		} else if (this.uvRotateTop == 3) {
-			renderU3 = ((double)(texX + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU1 = ((double)(texX + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV3 = ((double)(texY + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV1 = ((double)(texY + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU2 = renderU1;
-			renderU4 = renderU3;
-			renderV2 = renderV3;
-			renderV4 = renderV1;
-		}
 		double renderMinX = x + cube.xMin();
 		double renderMaxX = x + cube.xMax();
 		double renderY = y + cube.yMax();
@@ -472,7 +359,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 	}
 	@Unique
-	public void renderNorthFace(BlockCube cube, Block block, double x, double y, double z, int texture) {
+	public void renderNorthFace(BlockCube cube, double x, double y, double z, int texture) {
 		BlockFace face = cube.getFaceFromSide(Side.NORTH);
 		Tessellator tessellator = Tessellator.instance;
 		if (this.overrideBlockTexture >= 0) {
@@ -501,38 +388,6 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		double renderU3 = renderU2;
 		double renderV1 = renderV2;
 		double renderV3 = renderV4;
-		if (this.uvRotateEast == 2) {
-			renderU2 = ((double)texX + block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV2 = ((double)(texY + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU4 = ((double)texX + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV4 = ((double)(texY + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV1 = renderV2;
-			renderV3 = renderV4;
-			renderU1 = renderU2;
-			renderU3 = renderU4;
-			renderV2 = renderV4;
-			renderV4 = renderV1;
-		} else if (this.uvRotateEast == 1) {
-			renderU2 = ((double)(texX + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV2 = ((double)texY + block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU4 = ((double)(texX + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV4 = ((double)texY + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU1 = renderU4;
-			renderU3 = renderU2;
-			renderU2 = renderU1;
-			renderU4 = renderU3;
-			renderV1 = renderV4;
-			renderV3 = renderV2;
-		} else if (this.uvRotateEast == 3) {
-			renderU2 = ((double)(texX + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU4 = ((double)(texX + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV2 = ((double)texY + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV4 = ((double)texY + block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU1 = renderU4;
-			renderU3 = renderU2;
-			renderV1 = renderV2;
-			renderV3 = renderV4;
-		}
 		double renderXMin = x + cube.xMin();
 		double renderXMax = x + cube.xMax();
 		double renderYMin = y + cube.yMin();
@@ -555,7 +410,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 	}
 	@Unique
-	public void renderSouthFace(BlockCube cube, Block block, double x, double y, double z, int texture) {
+	public void renderSouthFace(BlockCube cube, double x, double y, double z, int texture) {
 		BlockFace face = cube.getFaceFromSide(Side.SOUTH);
 		Tessellator tessellator = Tessellator.instance;
 		if (this.overrideBlockTexture >= 0) {
@@ -584,38 +439,6 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		double renderU2 = renderU1;
 		double renderV4 = renderV1;
 		double renderV2 = renderV3;
-		if (this.uvRotateWest == 1) {
-			renderU1 = ((double)texX + block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV3 = ((double)(texY + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU3 = ((double)texX + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV1 = ((double)(texY + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV4 = renderV1;
-			renderV2 = renderV3;
-			renderU4 = renderU1;
-			renderU2 = renderU3;
-			renderV1 = renderV3;
-			renderV3 = renderV4;
-		} else if (this.uvRotateWest == 2) {
-			renderU1 = ((double)(texX + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV1 = ((double)texY + block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU3 = ((double)(texX + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV3 = ((double)texY + block.maxX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU4 = renderU3;
-			renderU2 = renderU1;
-			renderU1 = renderU4;
-			renderU3 = renderU2;
-			renderV4 = renderV3;
-			renderV2 = renderV1;
-		} else if (this.uvRotateWest == 3) {
-			renderU1 = ((double)(texX + TextureFX.tileWidthTerrain) - block.minX * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU3 = ((double)(texX + TextureFX.tileWidthTerrain) - block.maxX * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV1 = ((double)texY + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV3 = ((double)texY + block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU4 = renderU3;
-			renderU2 = renderU1;
-			renderV4 = renderV1;
-			renderV2 = renderV3;
-		}
 		double renderXMin = x + cube.xMin();
 		double renderXMax = x + cube.xMax();
 		double renderYMin = y + cube.yMin();
@@ -638,7 +461,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 	}
 	@Unique
-	public void renderWestFace(BlockCube cube, Block block, double x, double y, double z, int texture) {
+	public void renderWestFace(BlockCube cube, double x, double y, double z, int texture) {
 		BlockFace face = cube.getFaceFromSide(Side.WEST);
 		Tessellator tessellator = Tessellator.instance;
 		if (this.overrideBlockTexture >= 0) {
@@ -667,38 +490,6 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		double renderU3 = renderU2;
 		double renderV1 = renderV2;
 		double renderV3 = renderV4;
-		if (this.uvRotateNorth == 1) {
-			renderU2 = ((double)texX + block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV2 = ((double)(texY + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU4 = ((double)texX + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV4 = ((double)(texY + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV1 = renderV2;
-			renderV3 = renderV4;
-			renderU1 = renderU2;
-			renderU3 = renderU4;
-			renderV2 = renderV4;
-			renderV4 = renderV1;
-		} else if (this.uvRotateNorth == 2) {
-			renderU2 = ((double)(texX + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV2 = ((double)texY + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU4 = ((double)(texX + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV4 = ((double)texY + block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU1 = renderU4;
-			renderU3 = renderU2;
-			renderU2 = renderU1;
-			renderU4 = renderU3;
-			renderV1 = renderV4;
-			renderV3 = renderV2;
-		} else if (this.uvRotateNorth == 3) {
-			renderU2 = ((double)(texX + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU4 = ((double)(texX + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV2 = ((double)texY + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV4 = ((double)texY + block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU1 = renderU4;
-			renderU3 = renderU2;
-			renderV1 = renderV2;
-			renderV3 = renderV4;
-		}
 		double renderX = x + cube.xMin();
 		double renderYMin = y + cube.yMin();
 		double renderYMax = y + cube.yMax();
@@ -721,7 +512,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 	}
 	@Unique
-	public void renderEastFace(BlockCube cube, Block block, double x, double y, double z, int texture) {
+	public void renderEastFace(BlockCube cube, double x, double y, double z, int texture) {
 		BlockFace face = cube.getFaceFromSide(Side.EAST);
 		Tessellator tessellator = Tessellator.instance;
 		if (this.overrideBlockTexture >= 0) {
@@ -750,38 +541,6 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		double renderU1 = renderU4;
 		double renderV3 = renderV4;
 		double renderV1 = renderV2;
-		if (this.uvRotateSouth == 2) {
-			renderU4 = ((double)texX + block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV4 = ((double)(texY + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU2 = ((double)texX + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV2 = ((double)(texY + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV3 = renderV4;
-			renderV1 = renderV2;
-			renderU3 = renderU4;
-			renderU1 = renderU2;
-			renderV4 = renderV2;
-			renderV2 = renderV3;
-		} else if (this.uvRotateSouth == 1) {
-			renderU4 = ((double)(texX + TextureFX.tileWidthTerrain) - block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV4 = ((double)texY + block.maxZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU2 = ((double)(texX + TextureFX.tileWidthTerrain) - block.minY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV2 = ((double)texY + block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU3 = renderU2;
-			renderU1 = renderU4;
-			renderU4 = renderU3;
-			renderU2 = renderU1;
-			renderV3 = renderV2;
-			renderV1 = renderV4;
-		} else if (this.uvRotateSouth == 3) {
-			renderU4 = ((double)(texX + TextureFX.tileWidthTerrain) - block.minZ * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU2 = ((double)(texX + TextureFX.tileWidthTerrain) - block.maxZ * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV4 = ((double)texY + block.maxY * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderV2 = ((double)texY + block.minY * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-			renderU3 = renderU2;
-			renderU1 = renderU4;
-			renderV3 = renderV4;
-			renderV1 = renderV2;
-		}
 		double renderX = x + cube.xMax();
 		double renderYMin = y + cube.yMin();
 		double renderYMax = y + cube.yMax();
@@ -884,33 +643,32 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 						throw new RuntimeException("Specified side does not exist on a cube!!!");
 				}
 				tessellator.setColorOpaque_F(red * sideBrightness, green * sideBrightness, blue * sideBrightness);
-				renderModelFaceBySide(model, cube, side, block, x, y, z, block.getBlockTexture(this.blockAccess, x, y, z, side));
+				renderModelFaceBySide(cube, side, x, y, z, TextureRegistry.getIndexOrDefault(model.getTexture(cube.getFaceFromSide(side).getTexture()), block.getBlockTexture(this.blockAccess, x, y, z, side)));
 				renderedSomething = true;
 			}
 		}
 		return renderedSomething;
 	}
 	@Unique
-	public void renderModelFaceBySide(BlockModel model, BlockCube cube, Side side, Block block, double x, double y, double z, int texture){
-		texture = TextureRegistry.getIndexOrDefault(model.getTexture(cube.getFaceFromSide(side).getTexture()), texture);
+	public void renderModelFaceBySide(BlockCube cube, Side side, double x, double y, double z, int texture){
 		switch (side){
 			case TOP:
-				renderTopFace(cube, block, x, y, z, texture);
+				renderTopFace(cube,x,y, z, texture);
 				break;
 			case BOTTOM:
-				renderBottomFace(cube, block, x, y, z, texture);
+				renderBottomFace(cube,x,y, z, texture);
 				break;
 			case NORTH:
-				renderNorthFace(cube, block, x, y, z, texture);
+				renderNorthFace(cube,x,y, z, texture);
 				break;
 			case SOUTH:
-				renderSouthFace(cube, block, x, y, z, texture);
+				renderSouthFace(cube,x,y, z, texture);
 				break;
 			case WEST:
-				renderWestFace(cube, block, x, y, z, texture);
+				renderWestFace(cube,x,y, z, texture);
 				break;
 			case EAST:
-				renderEastFace(cube, block, x, y, z, texture);
+				renderEastFace(cube,x,y, z, texture);
 				break;
 			default:
 				throw new RuntimeException("Specified side does not exist on a cube!!!");
