@@ -96,7 +96,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 			for (BlockFace face: cube.faces.values()) {
 				tessellator.startDrawingQuads();
 				tessellator.setNormal(face.getSide().getOffsetX(), face.getSide().getOffsetY(), face.getSide().getOffsetZ());
-				renderModelFaceBySide(cube, face.getSide(), 0, 0, 0, TextureRegistry.getIndexOrDefault(modelDragonFly.baseModel.getTexture(cube.getFaceFromSide(face.getSide()).getTexture()), block.getBlockTextureFromSideAndMetadata(face.getSide(), meta)));
+				renderModelFace(cube, face.getSide(), 0, 0, 0, TextureRegistry.getIndexOrDefault(modelDragonFly.baseModel.getTexture(cube.getFaceFromSide(face.getSide()).getTexture()), block.getBlockTextureFromSideAndMetadata(face.getSide(), meta)));
 				tessellator.draw();
 			}
 		}
@@ -263,14 +263,14 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		this.colorBlueTopRight *= ltr;
 		int tex = this.overbright ? block.getBlockOverbrightTexture(this.blockAccess, x, y, z, side.getId()) : block.getBlockTexture(this.blockAccess, x, y, z, side);
 		if (tex >= 0) {
-			renderModelFaceBySide( cube, side, x, y, z, TextureRegistry.getIndexOrDefault(model.getTexture(cube.getFaceFromSide(side).getTexture()),tex));
+			renderModelFace( cube, side, x, y, z, TextureRegistry.getIndexOrDefault(model.getTexture(cube.getFaceFromSide(side).getTexture()),tex));
 			return true;
 		}
 		return false;
 	}
 	@Unique
-	public void renderBottomFace(BlockCube cube, double x, double y, double z, int texture) {
-		BlockFace face = cube.getFaceFromSide(Side.BOTTOM);
+	public void renderModelFace(BlockCube cube, Side side, double x, double y, double z, int texture) {
+		BlockFace face = cube.getFaceFromSide(side);
 		Tessellator tessellator = Tessellator.instance;
 		if (this.overrideBlockTexture >= 0) {
 			texture = this.overrideBlockTexture;
@@ -283,304 +283,37 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		double atlasVMax = (texY + (1 - face.vMax()) * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
 		if (face.uMin() < 0.0 || face.uMax() > 1.0) { // Cap U value
 			atlasUMin = texX / terrainAtlasWidth;
-			atlasUMax = (texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
-		}
-		if (face.vMin() < 0.0 || face.vMax() > 1.0) { // Cap V value
-			atlasVMin = texY / terrainAtlasWidth;
-			atlasVMax = (texY + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
-		}
-		double renderMinX = x + cube.xMin();
-		double renderMaxX = x + cube.xMax();
-		double renderY = y + cube.yMin();
-		double renderMinZ = z + cube.zMin();
-		double renderMaxZ = z + cube.zMax();
-		if (this.enableAO) {
-			// Top Left
-			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
-			tessellator.addVertexWithUV(renderMinX, renderY, renderMaxZ, atlasUMin, atlasVMax);
-
-			// Bottom Left
-			tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
-			tessellator.addVertexWithUV(renderMinX, renderY, renderMinZ, atlasUMin, atlasVMin);
-
-			// Bottom Right
-			tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
-			tessellator.addVertexWithUV(renderMaxX, renderY, renderMinZ, atlasUMax, atlasVMin);
-
-			// Top Right
-			tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
-			tessellator.addVertexWithUV(renderMaxX, renderY, renderMaxZ, atlasUMax, atlasVMax);
-		} else {
-			tessellator.addVertexWithUV(renderMinX, renderY, renderMaxZ, atlasUMin, atlasVMax); // Top Left
-			tessellator.addVertexWithUV(renderMinX, renderY, renderMinZ, atlasUMin, atlasVMin); // Bottom Left
-			tessellator.addVertexWithUV(renderMaxX, renderY, renderMinZ, atlasUMax, atlasVMin); // Bottom Right
-			tessellator.addVertexWithUV(renderMaxX, renderY, renderMaxZ, atlasUMax, atlasVMax); // Top Right
-		}
-	}
-	@Unique
-	public void renderTopFace(BlockCube cube, double x, double y, double z, int texture) {
-		BlockFace face = cube.getFaceFromSide(Side.TOP);
-		Tessellator tessellator = Tessellator.instance;
-		if (this.overrideBlockTexture >= 0) {
-			texture = this.overrideBlockTexture;
-		}
-		int texX = texture % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-
-		double atlasUMin = (texX + face.uMin() * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double atlasUMax = (texX + face.uMax() * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
-		double atlasVMin = (texY + (1 - face.vMin()) * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double atlasVMax = (texY + (1 - face.vMax()) * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
-		if (face.uMin() < 0.0 || face.uMax() > 1.0) { // Cap U value
-			atlasUMin = texX / terrainAtlasWidth;
-			atlasUMax = (texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
+			atlasUMax = (texX + (TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
 		}
 		if (face.vMin() < 0.0 || face.vMax() > 1.0) { // Cap V value
 			atlasVMin = texY / terrainAtlasWidth;
 			atlasVMax = (texY + (TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
 		}
-		double renderMinX = x + cube.xMin();
-		double renderMaxX = x + cube.xMax();
-		double renderY = y + cube.yMax();
-		double renderMinZ = z + cube.zMin();
-		double renderMaxZ = z + cube.zMax();
+		double[] uvTL = face.getVertexUV(atlasUMin, atlasVMin, atlasUMax, atlasVMax, 0);
+		double[] uvBL = face.getVertexUV(atlasUMin, atlasVMin, atlasUMax, atlasVMax, 1);
+		double[] uvBR = face.getVertexUV(atlasUMin, atlasVMin, atlasUMax, atlasVMax, 2);
+		double[] uvTR = face.getVertexUV(atlasUMin, atlasVMin, atlasUMax, atlasVMax, 3);
 		if (this.enableAO) {
 			// Top Left
 			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
-			tessellator.addVertexWithUV(renderMaxX, renderY, renderMaxZ, atlasUMax, atlasVMax);
+			tessellator.addVertexWithUV(x + face.vertices[0].x, y + face.vertices[0].y, z + face.vertices[0].z, uvTL[0], uvTL[1]);
 
 			// Bottom Left
 			tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
-			tessellator.addVertexWithUV(renderMaxX, renderY, renderMinZ, atlasUMax, atlasVMin);
+			tessellator.addVertexWithUV(x + face.vertices[1].x, y + face.vertices[1].y, z + face.vertices[1].z, uvBL[0], uvBL[1]);
 
 			// Bottom Right
 			tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
-			tessellator.addVertexWithUV(renderMinX, renderY, renderMinZ, atlasUMin, atlasVMin);
+			tessellator.addVertexWithUV(x + face.vertices[2].x, y + face.vertices[2].y, z + face.vertices[2].z, uvBR[0], uvBR[1]);
 
 			// Top Right
 			tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
-			tessellator.addVertexWithUV(renderMinX, renderY, renderMaxZ, atlasUMin, atlasVMax);
+			tessellator.addVertexWithUV(x + face.vertices[3].x, y + face.vertices[3].y, z + face.vertices[3].z, uvTR[0], uvTR[1]);
 		} else {
-			tessellator.addVertexWithUV(renderMaxX, renderY, renderMaxZ, atlasUMax, atlasVMax); // Top Left
-			tessellator.addVertexWithUV(renderMaxX, renderY, renderMinZ, atlasUMax, atlasVMin); // Bottom Left
-			tessellator.addVertexWithUV(renderMinX, renderY, renderMinZ, atlasUMin, atlasVMin); // Bottom Right
-			tessellator.addVertexWithUV(renderMinX, renderY, renderMaxZ, atlasUMin, atlasVMax); // Top Right
-		}
-	}
-	@Unique
-	public void renderNorthFace(BlockCube cube, double x, double y, double z, int texture) {
-		BlockFace face = cube.getFaceFromSide(Side.NORTH);
-		Tessellator tessellator = Tessellator.instance;
-		if (this.overrideBlockTexture >= 0) {
-			texture = this.overrideBlockTexture;
-		}
-		int texX = texture % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		double atlasUMin = (texX + face.uMin() * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double atlasUMax = (texX + face.uMax() * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
-		double atlasVMin = (texY + (1 - face.vMin()) * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double atlasVMax = (texY + (1 - face.vMax()) * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
-		if (this.flipTexture) {
-			double d7 = atlasUMin;
-			atlasUMin = atlasUMax;
-			atlasUMax = d7;
-		}
-		if (face.uMin() < 0.0 || face.uMax() > 1.0) { // Cap U value
-			atlasUMin = ((float)texX + 0.0f) / terrainAtlasWidth;
-			atlasUMax = ((float)texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
-		}
-		if (face.vMin() < 0.0 || face.vMax() > 1.0) { // Cap V value
-			atlasVMin = ((float)texY + 0.0f) / terrainAtlasWidth;
-			atlasVMax = ((float)texY + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
-		}
-		double renderXMin = x + cube.xMin();
-		double renderXMax = x + cube.xMax();
-		double renderYMin = y + cube.yMin();
-		double renderYMax = y + cube.yMax();
-		double renderZ = z + cube.zMin();
-		if (this.enableAO) {
-			// Top Left
-			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
-			tessellator.addVertexWithUV(renderXMin, renderYMax, renderZ, atlasUMax, atlasVMin);
-
-			// Bottom Left
-			tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
-			tessellator.addVertexWithUV(renderXMax, renderYMax, renderZ, atlasUMin, atlasVMin);
-
-			// Bottom Right
-			tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
-			tessellator.addVertexWithUV(renderXMax, renderYMin, renderZ, atlasUMin, atlasVMax);
-
-			// Top Right
-			tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
-			tessellator.addVertexWithUV(renderXMin, renderYMin, renderZ, atlasUMax, atlasVMax);
-		} else {
-			tessellator.addVertexWithUV(renderXMin, renderYMax, renderZ, atlasUMax, atlasVMin); // Top Left
-			tessellator.addVertexWithUV(renderXMax, renderYMax, renderZ, atlasUMin, atlasVMin); // Bottom Left
-			tessellator.addVertexWithUV(renderXMax, renderYMin, renderZ, atlasUMin, atlasVMax); // Bottom Right
-			tessellator.addVertexWithUV(renderXMin, renderYMin, renderZ, atlasUMax, atlasVMax); // Top Right
-		}
-	}
-	@Unique
-	public void renderSouthFace(BlockCube cube, double x, double y, double z, int texture) {
-		BlockFace face = cube.getFaceFromSide(Side.SOUTH);
-		Tessellator tessellator = Tessellator.instance;
-		if (this.overrideBlockTexture >= 0) {
-			texture = this.overrideBlockTexture;
-		}
-		int texX = texture % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		double atlasUMin = (texX + face.uMin() * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double atlasUMax = (texX + face.uMax() * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
-		double atlasVMin = (texY + (1 - face.vMin()) * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double atlasVMax = (texY + (1 - face.vMax()) * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
-		if (this.flipTexture) {
-			double d7 = atlasUMin;
-			atlasUMin = atlasUMax;
-			atlasUMax = d7;
-		}
-		if (face.uMin() < 0.0 || face.uMax() > 1.0) {
-			atlasUMin = ((float)texX + 0.0f) / terrainAtlasWidth;
-			atlasUMax = ((float)texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
-		}
-		if (face.vMin() < 0.0 || face.vMax() > 1.0) {
-			atlasVMin = ((float)texY + 0.0f) / terrainAtlasWidth;
-			atlasVMax = ((float)texY + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
-		}
-		double renderXMin = x + cube.xMin();
-		double renderXMax = x + cube.xMax();
-		double renderYMin = y + cube.yMin();
-		double renderYMax = y + cube.yMax();
-		double renderZ = z + cube.zMax();
-		if (this.enableAO) {
-			// Top Left
-			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
-			tessellator.addVertexWithUV(renderXMin, renderYMax, renderZ, atlasUMin, atlasVMin);
-
-			// Bottom Left
-			tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
-			tessellator.addVertexWithUV(renderXMin, renderYMin, renderZ, atlasUMin, atlasVMax);
-
-			// Bottom Right
-			tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
-			tessellator.addVertexWithUV(renderXMax, renderYMin, renderZ, atlasUMax, atlasVMax);
-
-			// Top Right
-			tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
-			tessellator.addVertexWithUV(renderXMax, renderYMax, renderZ, atlasUMax, atlasVMin);
-		} else {
-			tessellator.addVertexWithUV(renderXMin, renderYMax, renderZ, atlasUMin, atlasVMin); // Top Left
-			tessellator.addVertexWithUV(renderXMin, renderYMin, renderZ, atlasUMin, atlasVMax); // Bottom Left
-			tessellator.addVertexWithUV(renderXMax, renderYMin, renderZ, atlasUMax, atlasVMax); // Bottom Right
-			tessellator.addVertexWithUV(renderXMax, renderYMax, renderZ, atlasUMax, atlasVMin); // Top Right
-		}
-	}
-	@Unique
-	public void renderWestFace(BlockCube cube, double x, double y, double z, int texture) {
-		BlockFace face = cube.getFaceFromSide(Side.WEST);
-		Tessellator tessellator = Tessellator.instance;
-		if (this.overrideBlockTexture >= 0) {
-			texture = this.overrideBlockTexture;
-		}
-		int texX = texture % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		double atlasUMin = (texX + face.uMin() * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double atlasUMax = (texX + face.uMax() * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
-		double atlasVMin = (texY + (1 - face.vMin()) * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double atlasVMax = (texY + (1 - face.vMax()) * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
-		if (this.flipTexture) {
-			double d7 = atlasUMin;
-			atlasUMin = atlasUMax;
-			atlasUMax = d7;
-		}
-		if (face.uMin() < 0.0 || face.uMax() > 1.0) {
-			atlasUMin = ((float)texX + 0.0f) / terrainAtlasWidth;
-			atlasUMax = ((float)texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
-		}
-		if (face.vMin() < 0.0 || face.vMax() > 1.0) {
-			atlasVMin = ((float)texY + 0.0f) / terrainAtlasWidth;
-			atlasVMax = ((float)texY + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
-		}
-		double renderX = x + cube.xMin();
-		double renderYMin = y + cube.yMin();
-		double renderYMax = y + cube.yMax();
-		double renderZMin = z + cube.zMin();
-		double renderZMax = z + cube.zMax();
-		if (this.enableAO) {
-			// Top Left
-			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
-			tessellator.addVertexWithUV(renderX, renderYMax, renderZMax, atlasUMax, atlasVMin);
-
-			// Bottom Left
-			tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
-			tessellator.addVertexWithUV(renderX, renderYMax, renderZMin, atlasUMin, atlasVMin);
-
-			// Bottom Right
-			tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
-			tessellator.addVertexWithUV(renderX, renderYMin, renderZMin, atlasUMin, atlasVMax);
-
-			// Top Right
-			tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
-			tessellator.addVertexWithUV(renderX, renderYMin, renderZMax, atlasUMax, atlasVMax);
-		} else {
-			tessellator.addVertexWithUV(renderX, renderYMax, renderZMax, atlasUMax, atlasVMin); // Top Left
-			tessellator.addVertexWithUV(renderX, renderYMax, renderZMin, atlasUMin, atlasVMin); // Bottom Left
-			tessellator.addVertexWithUV(renderX, renderYMin, renderZMin, atlasUMin, atlasVMax); // Bottom Right
-			tessellator.addVertexWithUV(renderX, renderYMin, renderZMax, atlasUMax, atlasVMax); // Top Right
-		}
-	}
-	@Unique
-	public void renderEastFace(BlockCube cube, double x, double y, double z, int texture) {
-		BlockFace face = cube.getFaceFromSide(Side.EAST);
-		Tessellator tessellator = Tessellator.instance;
-		if (this.overrideBlockTexture >= 0) {
-			texture = this.overrideBlockTexture;
-		}
-		int texX = texture % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		double atlasUMin = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double atlasUMax = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
-		double atlasVMin = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double atlasVMax = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
-		if (this.flipTexture) {
-			double d7 = atlasUMin;
-			atlasUMin = atlasUMax;
-			atlasUMax = d7;
-		}
-		if (face.uMin() < 0.0 || face.uMax() > 1.0) {
-			atlasUMin = ((float)texX + 0.0f) / terrainAtlasWidth;
-			atlasUMax = ((float)texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
-		}
-		if (face.vMin() < 0.0 || face.vMax() > 1.0) {
-			atlasVMin = ((float)texY + 0.0f) / terrainAtlasWidth;
-			atlasVMax = ((float)texY + ((float)TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
-		}
-		double renderX = x + cube.xMax();
-		double renderYMin = y + cube.yMin();
-		double renderYMax = y + cube.yMax();
-		double renderZMin = z + cube.zMin();
-		double renderZMax = z + cube.zMax();
-		if (this.enableAO) {
-			// Top Left
-			tessellator.setColorOpaque_F(this.colorRedTopLeft, this.colorGreenTopLeft, this.colorBlueTopLeft);
-			tessellator.addVertexWithUV(renderX, renderYMin, renderZMax, atlasUMin, atlasVMax);
-
-			// Bottom Left
-			tessellator.setColorOpaque_F(this.colorRedBottomLeft, this.colorGreenBottomLeft, this.colorBlueBottomLeft);
-			tessellator.addVertexWithUV(renderX, renderYMin, renderZMin, atlasUMax, atlasVMax);
-
-			// Bottom Right
-			tessellator.setColorOpaque_F(this.colorRedBottomRight, this.colorGreenBottomRight, this.colorBlueBottomRight);
-			tessellator.addVertexWithUV(renderX, renderYMax, renderZMin, atlasUMax, atlasVMin);
-
-			// Top Right
-			tessellator.setColorOpaque_F(this.colorRedTopRight, this.colorGreenTopRight, this.colorBlueTopRight);
-			tessellator.addVertexWithUV(renderX, renderYMax, renderZMax, atlasUMin, atlasVMin);
-		} else {
-			tessellator.addVertexWithUV(renderX, renderYMin, renderZMax, atlasUMin, atlasVMax); // Top Left
-			tessellator.addVertexWithUV(renderX, renderYMin, renderZMin, atlasUMax, atlasVMax); // Bottom Left
-			tessellator.addVertexWithUV(renderX, renderYMax, renderZMin, atlasUMax, atlasVMin); // Bottom Right
-			tessellator.addVertexWithUV(renderX, renderYMax, renderZMax, atlasUMin, atlasVMin); // Top Right
+			tessellator.addVertexWithUV(x + face.vertices[0].x, y + face.vertices[0].y, z + face.vertices[0].z, uvTL[0], uvTL[1]); // Top Left
+			tessellator.addVertexWithUV(x + face.vertices[1].x, y + face.vertices[1].y, z + face.vertices[1].z, uvBL[0], uvBL[1]); // Bottom Left
+			tessellator.addVertexWithUV(x + face.vertices[2].x, y + face.vertices[2].y, z + face.vertices[2].z, uvBR[0], uvBR[1]); // Bottom Right
+			tessellator.addVertexWithUV(x + face.vertices[3].x, y + face.vertices[3].y, z + face.vertices[3].z, uvTR[0], uvTR[1]); // Top Right
 		}
 	}
 	@Unique
@@ -664,35 +397,10 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 						throw new RuntimeException("Specified side does not exist on a cube!!!");
 				}
 				tessellator.setColorOpaque_F(red * sideBrightness, green * sideBrightness, blue * sideBrightness);
-				renderModelFaceBySide(cube, side, x, y, z, TextureRegistry.getIndexOrDefault(model.getTexture(cube.getFaceFromSide(side).getTexture()), block.getBlockTexture(this.blockAccess, x, y, z, side)));
+				renderModelFace(cube, side, x, y, z, TextureRegistry.getIndexOrDefault(model.getTexture(cube.getFaceFromSide(side).getTexture()), block.getBlockTexture(this.blockAccess, x, y, z, side)));
 				renderedSomething = true;
 			}
 		}
 		return renderedSomething;
-	}
-	@Unique
-	public void renderModelFaceBySide(BlockCube cube, Side side, double x, double y, double z, int texture){
-		switch (side){
-			case TOP:
-				renderTopFace(cube,x,y, z, texture);
-				break;
-			case BOTTOM:
-				renderBottomFace(cube,x,y, z, texture);
-				break;
-			case NORTH:
-				renderNorthFace(cube,x,y, z, texture);
-				break;
-			case SOUTH:
-				renderSouthFace(cube,x,y, z, texture);
-				break;
-			case WEST:
-				renderWestFace(cube,x,y, z, texture);
-				break;
-			case EAST:
-				renderEastFace(cube,x,y, z, texture);
-				break;
-			default:
-				throw new RuntimeException("Specified side does not exist on a cube!!!");
-		}
 	}
 }
