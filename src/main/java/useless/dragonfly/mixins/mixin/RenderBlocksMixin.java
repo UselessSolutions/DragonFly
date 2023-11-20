@@ -28,6 +28,8 @@ import useless.dragonfly.model.block.processed.BlockFace;
 import useless.dragonfly.model.block.processed.BlockModel;
 import useless.dragonfly.registries.TextureRegistry;
 
+import static useless.dragonfly.DragonFly.terrainAtlasWidth;
+
 @Mixin(value = RenderBlocks.class, remap = false)
 public abstract class RenderBlocksMixin implements ExtraRendering {
 	@Shadow
@@ -275,10 +277,10 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 		int texX = texture % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
 		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		double renderU2 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderU4 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderV2 = ((double)texY + (1 - face.vMin()) * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderV4 = ((double)texY + (1 - face.vMax()) * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+		double renderU2 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double renderU4 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
+		double renderV2 = ((double)texY + (1 - face.vMin()) * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double renderV4 = ((double)texY + (1 - face.vMax()) * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
 		if (face.uMin() < 0.0 || face.uMax() > 1.0) {
 			renderU2 = ((float)texX + 0.0f) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
 			renderU4 = ((float)texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
@@ -321,10 +323,11 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 		int texX = texture % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
 		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		double renderU3 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderU1 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderV3 = ((double)texY + (1 - face.vMin()) * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderV1 = ((double)texY + (1 - face.vMax()) * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+
+		double renderU3 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double renderU1 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
+		double renderV3 = ((double)texY + (1 - face.vMin()) * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double renderV1 = ((double)texY + (1 - face.vMax()) * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
 		if (face.uMin() < 0.0 || face.uMax() > 1.0) {
 			renderU3 = ((float)texX + 0.0f) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
 			renderU1 = ((float)texX + ((float)TextureFX.tileWidthTerrain - 0.01f)) / (float)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
@@ -367,10 +370,10 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 		int texX = texture % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
 		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		double renderU2 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderU4 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderV2 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMin() * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderV4 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMax() * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+		double renderU2 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double renderU4 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
+		double renderV2 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double renderV4 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
 		if (this.flipTexture) {
 			double d7 = renderU2;
 			renderU2 = renderU4;
@@ -418,10 +421,10 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 		int texX = texture % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
 		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		double renderU1 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderU3 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderV1 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMin() * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderV3 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMax() * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+		double renderU1 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double renderU3 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
+		double renderV1 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double renderV3 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
 		if (this.flipTexture) {
 			double d7 = renderU1;
 			renderU1 = renderU3;
@@ -469,10 +472,10 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 		int texX = texture % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
 		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		double renderU2 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderU4 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderV2 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMin() * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderV4 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMax() * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+		double renderU2 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double renderU4 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
+		double renderV2 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double renderV4 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
 		if (this.flipTexture) {
 			double d7 = renderU2;
 			renderU2 = renderU4;
@@ -520,10 +523,10 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		}
 		int texX = texture % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
 		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
-		double renderU4 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderU2 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderV4 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMin() * (double)TextureFX.tileWidthTerrain) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
-		double renderV2 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMax() * (double)TextureFX.tileWidthTerrain - 0.01) / (double)(TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES);
+		double renderU4 = ((double)texX + face.uMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double renderU2 = ((double)texX + face.uMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
+		double renderV4 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMin() * (double)TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+		double renderV2 = ((double)(texY + TextureFX.tileWidthTerrain) - face.vMax() * (double)TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
 		if (this.flipTexture) {
 			double d7 = renderU4;
 			renderU4 = renderU2;
