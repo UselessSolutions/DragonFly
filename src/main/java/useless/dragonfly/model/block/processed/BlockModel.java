@@ -8,18 +8,14 @@ import useless.dragonfly.registries.TextureRegistry;
 import java.util.HashMap;
 
 public class BlockModel {
-	public boolean[] hasFaceToRenderOnSide;
 	public BlockCube[] blockCubes;
 	protected ModelData modelData;
 	protected BlockModel parentModel;
 	protected HashMap<String, String> textureMap = new HashMap<>();
-	public boolean hasFaceToRender(Side side){
-		return hasFaceToRenderOnSide[side.getId()];
-	}
 	public BlockModel(ModelData modelData){
 		this.modelData = modelData;
 
-		if (modelData.parent != null && !modelData.parent.equals("block/block")){
+		if (modelData.parent != null && !modelData.parent.equals("block/block")){ // Has parent Model
 			String namespace;
 			String modelName;
 			if (modelData.parent.contains(":")){
@@ -33,13 +29,9 @@ public class BlockModel {
 
 			textureMap.putAll(parentModel.textureMap);
 		}
-
 		textureMap.putAll(modelData.textures);
 
-		loadModel();
-	}
-	protected void loadModel(){
-
+		// Use parent elements if model does not specify its own
 		if (parentModel != null && modelData.elements == null){
 			this.blockCubes = parentModel.blockCubes;
 		} else {
@@ -49,38 +41,17 @@ public class BlockModel {
 			}
 		}
 
-		initializeTextures();
-
-		hasFaceToRenderOnSide = new boolean[6];
-		for (BlockCube cube: blockCubes) {
-			cube.process();
-			for (int i = 0; i < hasFaceToRenderOnSide.length; i++) {
-				hasFaceToRenderOnSide[i] |= cube.isOuterFace(Side.getSideById(i));
-			}
-		}
-		for (BlockCube cube: blockCubes) {
-			cube.processVisibleFaces(this);
-		}
-	}
-	protected void initializeTextures(){
-		for (String texture: modelData.textures.values()) {
-			if (TextureRegistry.containsTexture(texture)) continue;
-			String[] nameSpaceSplit = texture.split(":");
-			if (nameSpaceSplit[0].equals(TextureRegistry.coreNamepaceId) || nameSpaceSplit.length != 2) continue;
-
-			String[] dirSplit = nameSpaceSplit[1].split("/");
-			if (dirSplit[0].equals("block")){
-				TextureRegistry.registerModBlockTexture(nameSpaceSplit[0], nameSpaceSplit[1].replace("block/", ""));
-			}
-			if (dirSplit[0].equals("item")){
-				TextureRegistry.registerModItemTexture(nameSpaceSplit[0], nameSpaceSplit[1].replace("block/", ""));
-			}
+		// Initialize textures
+		for (String texture: textureMap.values()) {
+			TextureRegistry.softRegisterTexture(texture);
 		}
 	}
 	public String getTexture(String faceTexKey){
 		String result = textureMap.get(faceTexKey.substring(1));
 		if (result != null && result.contains("#")){
 			return getTexture(result);
+		} else if (result != null && !result.contains(":")) {
+			result = TextureRegistry.coreNamepaceId + ":" + result;
 		}
 		return result;
 	}

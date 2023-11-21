@@ -3,6 +3,7 @@ package useless.dragonfly.registries;
 import net.minecraft.core.Global;
 import net.minecraft.core.block.Block;
 import turniplabs.halplibe.helper.TextureHelper;
+import useless.dragonfly.DragonFly;
 
 import java.util.HashMap;
 
@@ -53,6 +54,36 @@ public class TextureRegistry {
 	}
 	public static boolean containsTexture(String key){
 		return textureNameToIndex.containsKey(key);
+	}
+	public static void softRegisterTexture(String fullTextureID){
+		DragonFly.LOGGER.info(fullTextureID);
+		if (fullTextureID.charAt(0) == '#'){
+			DragonFly.LOGGER.warn("Improper attempt to register texture variable at: " + fullTextureID);
+			return;
+		}
+
+		String nameSpace;
+		String texture;
+		if (fullTextureID.contains(":")){
+			String[] textureSplit = fullTextureID.split(":");
+			nameSpace =  textureSplit[0];
+			texture = textureSplit[1];
+		} else {
+			nameSpace = coreNamepaceId;
+			texture = fullTextureID;
+		}
+
+		if (TextureRegistry.containsTexture(nameSpace + ":" + texture)) return;
+
+		String[] dirSplit = texture.split("/");
+		if (dirSplit[0].equals("block")){
+			TextureRegistry.registerModBlockTexture(nameSpace, texture.replace("block/", ""));
+			DragonFly.LOGGER.info(fullTextureID + " success");
+		}
+		if (dirSplit[0].equals("item")){
+			TextureRegistry.registerModItemTexture(nameSpace, texture.replace("block/", ""));
+			DragonFly.LOGGER.info(fullTextureID + " success");
+		}
 	}
 	private static void registerVanillaTexture(String texturename, int texX, int texY){
 		registerTexture(coreNamepaceId, texturename, texX, texY);

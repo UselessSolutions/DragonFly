@@ -1,14 +1,12 @@
 package useless.dragonfly.model.block.processed;
 
 import net.minecraft.client.render.TextureFX;
-import net.minecraft.core.util.helper.Axis;
 import net.minecraft.core.util.helper.Side;
 import org.lwjgl.util.vector.Vector3f;
 import useless.dragonfly.model.block.data.CubeData;
 import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.utilities.Utilities;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class BlockCube {
@@ -16,16 +14,11 @@ public class BlockCube {
 	protected float[] fromScaled;
 	protected float[] toScaled;
 	protected boolean[] outerFace;
-	protected boolean[] faceVisible;
 	public HashMap<String, Vector3f> vertices = new HashMap<>();
 	public HashMap<String, BlockFace> faces = new HashMap<>();
 	public BlockCube(CubeData cubeData){
 		this.cubeData = cubeData;
-	}
-	public void process(){
 		outerFace = new boolean[6];
-		faceVisible = new boolean[6];
-		Arrays.fill(faceVisible, true);
 		fromScaled = new float[cubeData.from.length];
 		for (int i = 0; i < cubeData.from.length; i++) {
 			fromScaled[i] = cubeData.from[i]/ TextureFX.tileWidthTerrain;
@@ -57,36 +50,6 @@ public class BlockCube {
 		for (int i = 0; i < outerFace.length; i++) {
 			outerFace[i] = Utilities.equalFloats(getAxisPosition(Side.getSideById(i)), 0f) || Utilities.equalFloats(getAxisPosition(Side.getSideById(i)), 1f);
 		}
-
-
-	}
-	public void processVisibleFaces(BlockModel model){
-		for (BlockCube otherCube: model.blockCubes) {
-			if (this.equals(otherCube)) continue;
-			for (BlockFace thisFace: faces.values()) {
-				BlockFace otherFace = otherCube.getFaceFromSide(thisFace.side.getOpposite());
-				if (otherFace == null) continue;
-				if (!Utilities.equalFloats(this.getAxisPosition(thisFace.side), otherCube.getAxisPosition(otherFace.side))) continue;
-				float[] thisFaceDim = this.faceDimensions(thisFace.side);
-				float[] otherFaceDim = otherCube.faceDimensions(otherFace.side);
-				faceVisible[thisFace.side.getId()] &= face1Visible(thisFaceDim, otherFaceDim);
-			}
-		}
-	}
-	public boolean face1Visible(float[] face1, float[] face2){
-		if (face1[0] < face2[0] || face1[1] < face2[1]){
-			return true;
-		}
-		return face1[2] > face2[2] || face1[3] > face2[3];
-	}
-	public float[] faceDimensions(Side side){
-		if (side.getAxis() == Axis.Y){
-			return new float[]{xMin(), zMin(), xMax(), zMax()};
-		}
-		if (side.getAxis() == Axis.X){
-			return new float[]{yMin(), zMin(), yMax(), zMax()};
-		}
-		return new float[]{xMin(), yMin(), xMax(), yMax()};
 	}
 	public float getAxisPosition(Side side){
 		switch (side){
@@ -108,7 +71,6 @@ public class BlockCube {
 	public boolean isOuterFace(Side side){
 		return outerFace[side.getId()];
 	}
-	public boolean isFaceVisible(Side side) { return faceVisible[side.getId()];}
 
 	public BlockFace getFaceFromSide(Side side){
 		return faces.get(ModelData.sideToKey.get(side));
