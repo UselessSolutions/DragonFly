@@ -92,12 +92,14 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		float yOffset = 0.5f;
 		Tessellator tessellator = Tessellator.instance;
 		GL11.glTranslatef(-0.5f, 0.0f - yOffset, -0.5f);
-		for (BlockCube cube: modelDragonFly.baseModel.blockCubes) {
-			for (BlockFace face: cube.faces.values()) {
-				tessellator.startDrawingQuads();
-				tessellator.setNormal(face.getSide().getOffsetX(), face.getSide().getOffsetY(), face.getSide().getOffsetZ());
-				renderModelFace(cube, face.getSide(), 0, 0, 0, TextureRegistry.getIndexOrDefault(modelDragonFly.baseModel.getTexture(cube.getFaceFromSide(face.getSide()).getTexture()), block.getBlockTextureFromSideAndMetadata(face.getSide(), meta)));
-				tessellator.draw();
+		if (modelDragonFly.baseModel.blockCubes != null){
+			for (BlockCube cube: modelDragonFly.baseModel.blockCubes) {
+				for (BlockFace face: cube.faces.values()) {
+					tessellator.startDrawingQuads();
+					tessellator.setNormal(face.getSide().getOffsetX(), face.getSide().getOffsetY(), face.getSide().getOffsetZ());
+					renderModelFace(cube, face.getSide(), 0, 0, 0, TextureRegistry.getIndexOrDefault(modelDragonFly.baseModel.getTexture(cube.getFaceFromSide(face.getSide()).getTexture()), block.getBlockTextureFromSideAndMetadata(face.getSide(), meta)));
+					tessellator.draw();
+				}
 			}
 		}
 		GL11.glTranslatef(0.5f, 0.5f, 0.5f);
