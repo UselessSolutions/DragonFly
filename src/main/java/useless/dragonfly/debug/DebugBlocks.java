@@ -50,9 +50,6 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 		try {
 			for (String string : getResourceFiles("assets/minecraft/model/block/")) {
 				System.out.println(string);
-				if (string.equals("barrier.json")) continue;
-				if (string.contains("light_0") || string.contains("light_1")) continue;
-				if (string.contains("structure_void.json")) continue;
 				new BlockBuilder(MOD_ID)
 					.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)))
 					.build(new BlockModel(string.replace(".json", ""), blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)));

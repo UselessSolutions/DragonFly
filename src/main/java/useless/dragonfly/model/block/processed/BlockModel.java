@@ -8,7 +8,7 @@ import useless.dragonfly.registries.TextureRegistry;
 import java.util.HashMap;
 
 public class BlockModel {
-	public BlockCube[] blockCubes;
+	public BlockCube[] blockCubes = new BlockCube[0];
 	protected ModelData modelData;
 	protected BlockModel parentModel;
 	protected HashMap<String, String> textureMap = new HashMap<>();
