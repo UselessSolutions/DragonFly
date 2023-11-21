@@ -77,12 +77,12 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 	public void redirectRenderer(Block block, int metadata, float brightness, CallbackInfo ci){
 		if (BlockModelDispatcher.getInstance().getDispatch(block) instanceof BlockModelDragonFly){
 			BlockModelDragonFly blockModelDragonFly = (BlockModelDragonFly) BlockModelDispatcher.getInstance().getDispatch(block);
-			renderModelInventory(blockModelDragonFly, block, metadata, brightness);
+			renderModelInventory(blockModelDragonFly, metadata, brightness);
 			ci.cancel();
 		}
 	}
 	@Unique
-	public void renderModelInventory(BlockModelDragonFly modelDragonFly, Block block, int meta, float brightness){
+	public void renderModelInventory(BlockModelDragonFly modelDragonFly, int meta, float brightness){
 		float yOffset = 0.5f;
 		Tessellator tessellator = Tessellator.instance;
 		GL11.glTranslatef(-0.5f, 0.0f - yOffset, -0.5f);
@@ -91,7 +91,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 				for (BlockFace face: cube.faces.values()) {
 					tessellator.startDrawingQuads();
 					tessellator.setNormal(face.getSide().getOffsetX(), face.getSide().getOffsetY(), face.getSide().getOffsetZ());
-					renderModelFace(cube, face.getSide(), 0, 0, 0, TextureRegistry.getIndexOrDefault(modelDragonFly.baseModel.getTexture(cube.getFaceFromSide(face.getSide()).getTexture()), block.getBlockTextureFromSideAndMetadata(face.getSide(), meta)));
+					renderModelFace(cube, face.getSide(), 0, 0, 0);
 					tessellator.draw();
 				}
 			}
@@ -252,15 +252,11 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		this.colorRedTopRight *= ltr;
 		this.colorGreenTopRight *= ltr;
 		this.colorBlueTopRight *= ltr;
-		int tex = this.overbright ? block.getBlockOverbrightTexture(this.blockAccess, x, y, z, side.getId()) : block.getBlockTexture(this.blockAccess, x, y, z, side);
-		if (tex >= 0) {
-			renderModelFace( cube, side, x, y, z, TextureRegistry.getIndexOrDefault(model.getTexture(cube.getFaceFromSide(side).getTexture()),tex));
-			return true;
-		}
-		return false;
+		renderModelFace( cube, side, x, y, z);
+		return true;
 	}
 	@Unique
-	public void renderModelFace(BlockCube cube, Side side, double x, double y, double z, int texture) {
+	public void renderModelFace(BlockCube cube, Side side, double x, double y, double z) {
 		BlockFace face = cube.getFaceFromSide(side);
 		Tessellator tessellator = Tessellator.instance;
 		double[] uvTL;
@@ -383,7 +379,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 						throw new RuntimeException("Specified side does not exist on a cube!!!");
 				}
 				tessellator.setColorOpaque_F(red * sideBrightness, green * sideBrightness, blue * sideBrightness);
-				renderModelFace(cube, side, x, y, z, TextureRegistry.getIndexOrDefault(model.getTexture(cube.getFaceFromSide(side).getTexture()), block.getBlockTexture(this.blockAccess, x, y, z, side)));
+				renderModelFace(cube, side, x, y, z);
 				renderedSomething = true;
 			}
 		}
