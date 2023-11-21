@@ -31,30 +31,25 @@ public class BlockModel {
 		}
 		textureMap.putAll(modelData.textures);
 
-		// Use parent elements if model does not specify its own
-		if (parentModel != null && modelData.elements == null){
-			this.blockCubes = parentModel.blockCubes;
-		} else if (modelData.elements != null) {
-			this.blockCubes = new BlockCube[modelData.elements.length];
-			for (int i = 0; i < blockCubes.length; i++) {
-				blockCubes[i] = new BlockCube(modelData.elements[i]);
-			}
-		}
-
 		// Initialize textures
 		for (String texture: textureMap.values()) {
 			if (texture == null) continue;
 			TextureRegistry.softRegisterTexture(texture);
 		}
 
-		System.out.println(textureMap);
-		HashMap<String, String> _texMap = new HashMap<>();
-		for (String key: textureMap.keySet()) {
-			String preface = key.contains("#") ? "" : "#";
-			_texMap.put(key, getTexture(preface + key));
+		// Use parent elements if model does not specify its own
+		if (parentModel != null && modelData.elements == null){
+			this.blockCubes = new BlockCube[parentModel.blockCubes.length];
+			for (int i = 0; i < blockCubes.length; i++) {
+				blockCubes[i] = new BlockCube(this, parentModel.blockCubes[i].cubeData);
+			}
+		} else if (modelData.elements != null) {
+			this.blockCubes = new BlockCube[modelData.elements.length];
+			for (int i = 0; i < blockCubes.length; i++) {
+				blockCubes[i] = new BlockCube(this, modelData.elements[i]);
+			}
 		}
-		textureMap = _texMap;
-		System.out.println(textureMap);
+
 	}
 	public String getTexture(String faceTexKey){
 		String result = textureMap.get(faceTexKey.substring(1));

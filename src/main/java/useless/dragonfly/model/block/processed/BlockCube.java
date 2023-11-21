@@ -14,9 +14,11 @@ public class BlockCube {
 	protected float[] fromScaled;
 	protected float[] toScaled;
 	protected boolean[] outerFace;
+	public final BlockModel parentModel;
 	public HashMap<String, Vector3f> vertices = new HashMap<>();
 	public HashMap<String, BlockFace> faces = new HashMap<>();
-	public BlockCube(CubeData cubeData){
+	public BlockCube(BlockModel model, CubeData cubeData){
+		this.parentModel = model;
 		this.cubeData = cubeData;
 		outerFace = new boolean[6];
 		fromScaled = new float[cubeData.from.length];
