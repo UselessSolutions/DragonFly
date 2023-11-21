@@ -52,6 +52,8 @@ public class BlockCube {
 		for (int i = 0; i < outerFace.length; i++) {
 			outerFace[i] = Utilities.equalFloats(getAxisPosition(Side.getSideById(i)), 0f) || Utilities.equalFloats(getAxisPosition(Side.getSideById(i)), 1f);
 		}
+
+
 	}
 	public float getAxisPosition(Side side){
 		switch (side){

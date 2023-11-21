@@ -26,6 +26,8 @@ import useless.dragonfly.model.block.processed.BlockFace;
 import useless.dragonfly.model.block.processed.BlockModel;
 import useless.dragonfly.registries.TextureRegistry;
 
+import static useless.dragonfly.DragonFly.terrainAtlasWidth;
+
 @Mixin(value = RenderBlocks.class, remap = false)
 public abstract class RenderBlocksMixin implements ExtraRendering {
 	@Shadow
