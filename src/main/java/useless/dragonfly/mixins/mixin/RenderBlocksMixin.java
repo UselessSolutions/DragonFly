@@ -158,10 +158,10 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		int dirY = side.getOffsetY();
 		int dirZ = side.getOffsetZ();
 
-		boolean renderOuterSide = block.shouldSideBeRendered(this.blockAccess, x + dirX, y + dirY, z + dirZ, side.getId(), meta);
+
 
 		if (!this.renderAllFaces){
-			if (!renderSide(model, cube, side, renderOuterSide)) return false;
+			if (!renderSide(model, cube, side, x, y, z)) return false;
 		}
 		float lightTL;
 		float lightBL;
@@ -340,7 +340,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 				int _z = z + side.getOffsetZ();
 
 				if (!this.renderAllFaces){
-					if (!renderSide(model, cube, side, block.shouldSideBeRendered(this.blockAccess, _x, _y, _z, side.getId(), meta))) continue;
+					if (!renderSide(model, cube, side, x, y, z)) continue;
 				}
 
 				float sideBrightness;
