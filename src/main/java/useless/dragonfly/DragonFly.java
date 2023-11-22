@@ -44,22 +44,10 @@ public class DragonFly implements ModInitializer, PreLaunchEntrypoint {
 	public void onPreLaunch() {
 		new HalpLibe().onPreLaunch();
 		TextureRegistry.init();
+		
 		// Load every mod's resources
 		List<String> assetDirectories = Utilities.getResourceFiles("/assets/");
-
-
-		int i = 0;
-		while (assetDirectories.size() == 0){
-			if (i >= 10){
-				break;
-			}
-			System.out.println(assetDirectories);
-			assetDirectories = Utilities.getResourceFiles("/assets/");
-			i++;
-		}
-		if (i != 0){
-			throw new RuntimeException("Check Error");
-		}
+		System.out.println(assetDirectories);
 
 		for (String modAssetDir: assetDirectories) { // for each asset directory
 			// Register all block textures

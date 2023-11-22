@@ -4,6 +4,7 @@ import net.minecraft.client.render.block.color.BlockColorWater;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.block.material.Material;
 import turniplabs.halplibe.helper.BlockBuilder;
+import useless.dragonfly.DragonFly;
 import useless.dragonfly.debug.block.BlockModel;
 import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.model.block.BlockModelDragonFly;
