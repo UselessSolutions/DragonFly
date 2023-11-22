@@ -18,7 +18,7 @@ public class BlockFace {
 	protected Side cullFace = null;
 	public final Vector3f[] vertices;
 	protected final String[] vertexUVMap;
-	public double[][] vertexUVs = new double[4][2];
+	public double[][] vertexUVs;
 	public BlockCube parentCube;
 	public BlockFace(BlockCube cube, String key){
 		this.faceData = cube.cubeData.faces.get(key);
@@ -136,5 +136,8 @@ public class BlockFace {
 	public boolean cullFace(int x, int y, int z, WorldSource blockAccess){
 		boolean renderOuterSide = blockAccess.getBlock(x, y, z).shouldSideBeRendered(blockAccess, x + getSide().getOffsetX(), y + getSide().getOffsetY(), z + getSide().getOffsetZ(), side.getId(), blockAccess.getBlockMetadata(x, y, z));
 		return !renderOuterSide && side == cullFace;
+	}
+	public boolean useTint(){
+		return faceData.tintindex >= 0;
 	}
 }
