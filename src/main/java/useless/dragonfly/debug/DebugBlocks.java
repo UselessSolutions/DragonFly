@@ -8,6 +8,7 @@ import useless.dragonfly.debug.block.BlockModel;
 import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.model.block.BlockModelDragonFly;
 import useless.dragonfly.registries.TextureRegistry;
+import useless.dragonfly.utilities.Utilities;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -43,51 +44,17 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 		.build(new BlockModel("testblock" + blockId, blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(MOD_ID, "block/slope.json")));
 
 	public static void init() {
-		try {
-			for (String string : getResourceFiles("assets/minecraft/model/block/")) {
-				System.out.println(string);
-				if (string.contains("cauldron")){
-					new BlockBuilder(MOD_ID)
-						.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)))
-						.setBlockColor(new BlockColorWater())
-						.build(new BlockModel(string.replace(".json", ""), blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)));
-				} else {
-					new BlockBuilder(MOD_ID)
-						.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)))
-						.build(new BlockModel(string.replace(".json", ""), blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)));
-				}
-
-				System.out.println(string + " created");
-			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
-
-	}
-	private static List<String> getResourceFiles(String path) throws IOException {
-		List<String> filenames = new ArrayList<>();
-
-		try (
-			InputStream in = getResourceAsStream(path);
-			BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
-			String resource;
-
-			while ((resource = br.readLine()) != null) {
-				filenames.add(resource);
+		for (String string : Utilities.getResourceFiles("assets/minecraft/model/block/")) {
+			if (string.contains("cauldron")){
+				new BlockBuilder(MOD_ID)
+					.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)))
+					.setBlockColor(new BlockColorWater())
+					.build(new BlockModel(string.replace(".json", ""), blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)));
+			} else {
+				new BlockBuilder(MOD_ID)
+					.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)))
+					.build(new BlockModel(string.replace(".json", ""), blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)));
 			}
 		}
-
-		return filenames;
-	}
-
-	private static InputStream getResourceAsStream(String resource) {
-		final InputStream in
-			= getContextClassLoader().getResourceAsStream(resource);
-
-		return in == null ? DebugBlocks.class.getResourceAsStream(resource) : in;
-	}
-
-	private static ClassLoader getContextClassLoader() {
-		return Thread.currentThread().getContextClassLoader();
 	}
 }
