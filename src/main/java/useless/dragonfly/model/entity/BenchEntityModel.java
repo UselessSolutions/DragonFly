@@ -216,4 +216,9 @@ public class BenchEntityModel extends ModelBase {
 	protected void applyStatic(AnimationData p_288996_) {
 		AnimationHelper.animate(this, p_288996_, 0L, 1.0F, VEC_ANIMATION);
 	}
+
+	protected void animate(AnimationState p_233386_, AnimationData p_233387_, float p_233388_, float p_233389_) {
+		p_233386_.updateTime(p_233388_, p_233389_);
+		p_233386_.ifStarted(p_233392_ -> AnimationHelper.animate(this, p_233387_, p_233392_.getAccumulatedTime(), 1.0F, VEC_ANIMATION));
+	}
 }
