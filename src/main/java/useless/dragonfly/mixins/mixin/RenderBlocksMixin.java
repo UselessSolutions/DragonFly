@@ -143,11 +143,9 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		return somethingRendered;
 	}
 	@Unique
-	public boolean renderSide(BlockModel model, BlockCube cube, Side side, boolean renderOuterSide){
+	public boolean renderSide(BlockModel model, BlockCube cube, Side side, int x, int y, int z){
 		if (cube.isOuterFace(side)){
-			if (!renderOuterSide){
-				return false;
-			}
+			return !cube.getFaceFromSide(side).cullFace(x, y, z, blockAccess);
 		}
 		return true;
 	}
