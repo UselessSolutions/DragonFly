@@ -139,16 +139,15 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 	@Unique
 	public boolean renderStandardModelWithAmbientOcclusion(BlockModel model, Block block, int x, int y, int z) {
 		this.enableAO = true;
-		int meta = this.blockAccess.getBlockMetadata(x, y, z);
 		this.cache.setupCache(block, this.blockAccess, x, y, z);
 		boolean somethingRendered = false;
 		for (BlockCube cube: model.blockCubes) {
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.BOTTOM, meta, cube.yMin(), 0, 0, 1, cube.zMax(), cube.zMin(), -1, 0, 0, 1.0F - cube.xMin(), 1.0F - cube.xMax());
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.TOP, meta, 1.0F - cube.yMax(), 0, 0, 1, cube.zMax(), cube.zMin(), 1, 0, 0, cube.xMax(), cube.xMin());
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.NORTH, meta, cube.zMin(), -1, 0, 0, 1.0F - cube.xMin(), 1.0F - cube.xMax(), 0, 1, 0, cube.yMax(), cube.yMin());
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.SOUTH, meta, 1.0F - cube.zMax(), 0, 1, 0, cube.yMax(), cube.yMin(), -1, 0, 0, 1.0F - cube.xMin(), 1.0F - cube.xMax());
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.WEST, meta, cube.xMin(), 0, 0, 1, cube.zMax(), cube.zMin(), 0, 1, 0, cube.yMax(), cube.yMin());
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.EAST, meta, 1.0F - cube.xMax(), 0, 0, 1, cube.zMax(), cube.zMin(), 0, -1, 0, 1.0F - cube.yMin(), 1.0F - cube.yMax());
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.BOTTOM, cube.yMin(), 0, 0, 1, cube.zMax(), cube.zMin(), -1, 0, 0, 1.0F - cube.xMin(), 1.0F - cube.xMax());
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.TOP, 1.0F - cube.yMax(), 0, 0, 1, cube.zMax(), cube.zMin(), 1, 0, 0, cube.xMax(), cube.xMin());
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.NORTH, cube.zMin(), -1, 0, 0, 1.0F - cube.xMin(), 1.0F - cube.xMax(), 0, 1, 0, cube.yMax(), cube.yMin());
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.SOUTH, 1.0F - cube.zMax(), 0, 1, 0, cube.yMax(), cube.yMin(), -1, 0, 0, 1.0F - cube.xMin(), 1.0F - cube.xMax());
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.WEST, cube.xMin(), 0, 0, 1, cube.zMax(), cube.zMin(), 0, 1, 0, cube.yMax(), cube.yMin());
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.EAST, 1.0F - cube.xMax(), 0, 0, 1, cube.zMax(), cube.zMin(), 0, -1, 0, 1.0F - cube.yMin(), 1.0F - cube.yMax());
 		}
 		this.enableAO = false;
 		return somethingRendered;
@@ -161,7 +160,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		return true;
 	}
 	@Unique
-	public boolean renderModelSide(BlockModel model, BlockCube cube, Block block, int x, int y, int z, Side side, int meta, float depth, int topX, int topY, int topZ, float topP, float botP, int lefX, int lefY, int lefZ, float lefP, float rigP) {
+	public boolean renderModelSide(BlockModel model, BlockCube cube, Block block, int x, int y, int z, Side side, float depth, int topX, int topY, int topZ, float topP, float botP, int lefX, int lefY, int lefZ, float lefP, float rigP) {
 		if (cube.getFaceFromSide(side) == null) return false;
 		int dirX = side.getOffsetX();
 		int dirY = side.getOffsetY();
@@ -179,9 +178,6 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		} else {
 			r = g = b = 1f;
 		}
-
-
-
 
 		if (!this.renderAllFaces){
 			if (!renderSide(model, cube, side, x, y, z)) return false;
