@@ -18,9 +18,9 @@ public class ZombieModelTest extends BenchEntityModel {
 		if (this.getIndexBones().containsKey("Head")) {
 			this.getIndexBones().get("Head").setRotationAngle((float) Math.toRadians(headPitch), (float) Math.toRadians(headYaw), 0);
 		}
-		/*if (this.getIndexBones().containsKey("bone")) {
+		if (this.getIndexBones().containsKey("bone")) {
 			this.getIndexBones().get("bone").setRotationAngle(0, ticksExisted, 0);
-		}*/
+		}
 		if (this.getIndexBones().containsKey("RightArm")) {
 			this.getIndexBones().get("RightArm").setRotationAngle(MathHelper.cos(limbSwing * (2f/3) + MathHelper.PI) * 2.0f * limbYaw * 0.5f, 0, 0);
 		}
