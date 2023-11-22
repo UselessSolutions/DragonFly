@@ -9,7 +9,7 @@ public class BoneData {
 	@SerializedName("rotation")
 	private HashMap<String, List<Float>> rotation = new HashMap<>();
 
-	@SerializedName("postion")
+	@SerializedName("position")
 	private HashMap<String, List<Float>> postion = new HashMap<>();
 
 	public HashMap<String, List<Float>> getPostion() {

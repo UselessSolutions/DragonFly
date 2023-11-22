@@ -10,6 +10,7 @@ import useless.dragonfly.model.entity.processor.BenchEntityGeometry;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 /*
  * Credit by 0999312! Thanks!
@@ -188,5 +189,11 @@ public class BenchEntityModel extends ModelBase {
 		} else {
 			return cube.getOrigin().get(index) - cube.getPivot().get(index);
 		}
+	}
+
+	public Optional<BenchEntityBones> getAnyDescendantWithName(String key) {
+		return this.getIndexBones().values().stream().filter(benchEntityBones -> {
+			return benchEntityBones.getName().equals(key);
+		}).findFirst();
 	}
 }
