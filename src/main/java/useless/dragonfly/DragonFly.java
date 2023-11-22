@@ -12,6 +12,14 @@ import org.slf4j.LoggerFactory;
 import useless.dragonfly.debug.DebugMain;
 import useless.dragonfly.registries.TextureRegistry;
 public class DragonFly implements ModInitializer, PreLaunchEntrypoint {
+	static {
+		// DO NOT TOUCH THIS! It's an error prevention method. Thanks Useless!
+		try {
+			Class.forName("turniplabs.halplibe.HalpLibe");
+			Class.forName("net.minecraft.core.block.Block");
+			Class.forName("net.minecraft.core.item.Item");
+		} catch (ClassNotFoundException ignored) {}
+	}
     public static final String MOD_ID = "dragonfly";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final Gson GSON = new Gson();
