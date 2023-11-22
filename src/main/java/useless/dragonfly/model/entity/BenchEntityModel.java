@@ -4,12 +4,16 @@ import com.google.gson.annotations.SerializedName;
 import net.minecraft.client.render.model.ModelBase;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector3f;
+import useless.dragonfly.helper.AnimationHelper;
+import useless.dragonfly.model.entity.animation.AnimationData;
 import useless.dragonfly.model.entity.processor.BenchEntityBones;
 import useless.dragonfly.model.entity.processor.BenchEntityCube;
 import useless.dragonfly.model.entity.processor.BenchEntityGeometry;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /*
@@ -17,6 +21,7 @@ import java.util.Optional;
  * https://github.com/0999312/MMLib/blob/3e87210c9305a5724e06c492be503533a1ebcd59/src/main/java/cn/mcmod_mmf/mmlib/client/model/bedrock/BedrockModel.java
  */
 public class BenchEntityModel extends ModelBase {
+	public Vector3f VEC_ANIMATION = new Vector3f();
 	private final HashMap<String, BenchEntityBones> indexBones = new HashMap<>();
 	@SerializedName("format_version")
 	private String formatVersion;
@@ -192,8 +197,23 @@ public class BenchEntityModel extends ModelBase {
 	}
 
 	public Optional<BenchEntityBones> getAnyDescendantWithName(String key) {
-		return this.getIndexBones().values().stream().filter(benchEntityBones -> {
-			return benchEntityBones.getName().equals(key);
+		Optional<Map.Entry<String, BenchEntityBones>> bones = this.getIndexBones().entrySet().stream().filter((benchBone) -> {
+			return benchBone.getKey().equals(key);
 		}).findFirst();
+		if (bones.isPresent()) {
+			return Optional.of(bones.get().getValue());
+		} else {
+			return Optional.empty();
+		}
+	}
+
+	protected void animateWalk(AnimationData p_268159_, float p_268057_, float p_268347_, float p_268138_, float p_268165_) {
+		long i = (long) (p_268057_ * 50.0F * p_268138_);
+		float f = Math.min(p_268347_ * p_268165_, 1.0F);
+		AnimationHelper.animate(this, p_268159_, i, f, VEC_ANIMATION);
+	}
+
+	protected void applyStatic(AnimationData p_288996_) {
+		AnimationHelper.animate(this, p_288996_, 0L, 1.0F, VEC_ANIMATION);
 	}
 }

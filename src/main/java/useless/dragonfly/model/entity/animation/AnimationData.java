@@ -9,7 +9,7 @@ public class AnimationData {
 	private boolean loop;
 
 	@SerializedName("animation_length")
-	private int animation_length;
+	private float animation_length;
 
 	@SerializedName("bones")
 	private HashMap<String, BoneData> bones = new HashMap<>();
@@ -18,7 +18,7 @@ public class AnimationData {
 		return loop;
 	}
 
-	public int getAnimationLength() {
+	public float getAnimationLength() {
 		return animation_length;
 	}
 

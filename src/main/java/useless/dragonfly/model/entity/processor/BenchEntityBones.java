@@ -77,6 +77,16 @@ public class BenchEntityBones {
 		this.rotateAngleZ = z;
 	}
 
+	public void resetPose() {
+		this.rotationPointX = 0;
+		this.rotationPointY = 0;
+		this.rotationPointZ = 0;
+		this.rotateAngleX = 0;
+		this.rotateAngleY = 0;
+		this.rotateAngleZ = 0;
+	}
+
+
 	public void addChild(BenchEntityBones benchEntityBones) {
 		children.add(benchEntityBones);
 	}
