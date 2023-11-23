@@ -112,7 +112,7 @@ public class AnimationHelper {
 	}
 
 	private static float catmullrom(float p_216245_, float p_216246_, float p_216247_, float p_216248_, float p_216249_) {
-		return 0.5F
+		return 0.25F
 			* (
 			2.0F * p_216247_
 				+ (p_216248_ - p_216246_) * p_216245_
