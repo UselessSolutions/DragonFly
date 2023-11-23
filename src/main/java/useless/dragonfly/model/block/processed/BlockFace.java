@@ -3,6 +3,7 @@ package useless.dragonfly.model.block.processed;
 import net.minecraft.client.render.TextureFX;
 import net.minecraft.core.Global;
 import net.minecraft.core.util.helper.Side;
+import net.minecraft.core.world.WorldSource;
 import org.lwjgl.util.vector.Vector3f;
 import useless.dragonfly.model.block.data.FaceData;
 import useless.dragonfly.model.block.data.ModelData;
@@ -14,13 +15,17 @@ public class BlockFace {
 	protected FaceData faceData;
 	protected float[] uvScaled;
 	protected Side side;
+	protected Side cullFace = null;
 	public final Vector3f[] vertices;
 	protected final String[] vertexUVMap;
-	public double[][] vertexUVs = new double[4][2];
+	public double[][] vertexUVs;
 	public BlockCube parentCube;
 	public BlockFace(BlockCube cube, String key){
 		this.faceData = cube.cubeData.faces.get(key);
 		this.side = ModelData.keyToSide.get(key);
+		if (faceData.cullface != null){
+			this.cullFace = ModelData.keyToSide.get(faceData.cullface);
+		}
 		this.parentCube = cube;
 		generateUVs(cube);
 		String[] vertexKeyMap = new String[4];
@@ -127,5 +132,12 @@ public class BlockFace {
 		double u = uvKey.charAt(0) == '-' ? atlasUMin : atlasUMax;
 		double v = uvKey.charAt(1) == '-' ? atlasVMin : atlasVMax;
 		return new double[]{u, v};
+	}
+	public boolean cullFace(int x, int y, int z, WorldSource blockAccess){
+		boolean renderOuterSide = blockAccess.getBlock(x, y, z).shouldSideBeRendered(blockAccess, x + getSide().getOffsetX(), y + getSide().getOffsetY(), z + getSide().getOffsetZ(), side.getId(), blockAccess.getBlockMetadata(x, y, z));
+		return !renderOuterSide && side == cullFace;
+	}
+	public boolean useTint(){
+		return faceData.tintindex >= 0;
 	}
 }
