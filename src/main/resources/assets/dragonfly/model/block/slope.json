@@ -1,0 +1,28 @@
+{
+	"credit": "Made with Blockbench",
+  "textures": {
+    "0": "minecraft:block/debug_north",
+    "1": "minecraft:block/debug_east",
+    "2": "minecraft:block/debug_down",
+    "3": "minecraft:block/debug_up",
+    "4": "minecraft:block/debug_south",
+    "5": "minecraft:block/debug_west",
+    "particle": "minecraft:block/debug_north"
+  },
+	"elements": [
+		{
+			"from": [4, 6, 4],
+			"to": [12, 14, 12],
+			"rotation": {"angle": 45, "axis": "x", "origin": [8, 10, 8]},
+			"color": 1,
+			"faces": {
+				"north": {"uv": [0, 0, 8, 8], "texture": "#0"},
+				"east": {"uv": [0, 0, 8, 8], "texture": "#1"},
+				"south": {"uv": [0, 0, 8, 8], "texture": "#4"},
+				"west": {"uv": [0, 0, 8, 8], "texture": "#5"},
+				"up": {"uv": [0, 0, 8, 8], "texture": "#3"},
+				"down": {"uv": [0, 0, 8, 8], "texture": "#2"}
+			}
+		}
+	]
+}

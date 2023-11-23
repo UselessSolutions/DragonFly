@@ -40,11 +40,11 @@ public class AnimationHelper {
 		return "/assets/" + modID + "/animation/" + modelSource;
 	}
 
-	public static void animate(BenchEntityModel p_232320_, AnimationData p_232321_, long p_232322_, float scale, Vector3f p_253861_) {
-		float f = getElapsedSeconds(p_232321_, p_232322_);
+	public static void animate(BenchEntityModel entityModel, AnimationData animationData, long p_232322_, float scale, Vector3f p_253861_) {
+		float f = getElapsedSeconds(animationData, p_232322_);
 
-		for (Map.Entry<String, BoneData> entry : p_232321_.getBones().entrySet()) {
-			Optional<BenchEntityBones> optional = p_232320_.getAnyDescendantWithName(entry.getKey());
+		for (Map.Entry<String, BoneData> entry : animationData.getBones().entrySet()) {
+			Optional<BenchEntityBones> optional = entityModel.getAnyDescendantWithName(entry.getKey());
 			HashMap<String, PostData> postionMap = entry.getValue().getPostion();
 			List<KeyFrame> postionFrame = Lists.newArrayList();
 

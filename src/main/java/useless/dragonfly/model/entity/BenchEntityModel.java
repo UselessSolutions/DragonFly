@@ -207,18 +207,18 @@ public class BenchEntityModel extends ModelBase {
 		}
 	}
 
-	protected void animateWalk(AnimationData p_268159_, float p_268057_, float p_268347_, float p_268138_, float p_268165_) {
+	protected void animateWalk(AnimationData animationData, float p_268057_, float p_268347_, float p_268138_, float p_268165_) {
 		long i = (long) (p_268057_ * 50.0F * p_268138_);
 		float f = Math.min(p_268347_ * p_268165_, 1.0F);
-		AnimationHelper.animate(this, p_268159_, i, f, VEC_ANIMATION);
+		AnimationHelper.animate(this, animationData, i, f, VEC_ANIMATION);
 	}
 
-	protected void applyStatic(AnimationData p_288996_) {
-		AnimationHelper.animate(this, p_288996_, 0L, 1.0F, VEC_ANIMATION);
+	protected void applyStatic(AnimationData animationData) {
+		AnimationHelper.animate(this, animationData, 0L, 1.0F, VEC_ANIMATION);
 	}
 
-	protected void animate(AnimationState p_233386_, AnimationData p_233387_, float p_233388_, float p_233389_) {
-		p_233386_.updateTime(p_233388_, p_233389_);
-		p_233386_.ifStarted(p_233392_ -> AnimationHelper.animate(this, p_233387_, p_233392_.getAccumulatedTime(), 1.0F, VEC_ANIMATION));
+	protected void animate(AnimationState animationState, AnimationData animationData, float p_233388_, float p_233389_) {
+		animationState.updateTime(p_233388_, p_233389_);
+		animationState.ifStarted(p_233392_ -> AnimationHelper.animate(this, animationData, p_233392_.getAccumulatedTime(), 1.0F, VEC_ANIMATION));
 	}
 }
