@@ -13,7 +13,7 @@ import useless.dragonfly.debug.DebugMain;
 import useless.dragonfly.registries.TextureRegistry;
 public class DragonFly implements ModInitializer, PreLaunchEntrypoint {
 	static {
-		// DO NOT TOUCH THIS! It's an error prevention method. Thanks Useless!
+		// Ensure initialization of important static fields in the correct order
 		try {
 			Class.forName("turniplabs.halplibe.HalpLibe");
 			Class.forName("net.minecraft.core.block.Block");
