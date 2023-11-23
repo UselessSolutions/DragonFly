@@ -1,4 +1,4 @@
-package useless.dragonfly.debug.testentity;
+package useless.dragonfly.debug.testentity.Zombie;
 
 import net.minecraft.core.entity.monster.EntityHuman;
 import net.minecraft.core.world.World;

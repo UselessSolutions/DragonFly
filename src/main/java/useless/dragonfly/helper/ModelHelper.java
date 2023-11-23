@@ -5,9 +5,9 @@ import useless.dragonfly.DragonFly;
 import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.model.block.processed.BlockModel;
 import useless.dragonfly.model.entity.BenchEntityModel;
+import useless.dragonfly.utilities.Utilities;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,29 +35,26 @@ public class ModelHelper {
 		if (modelDataFiles.containsKey(modelKey)){
 			return modelDataFiles.get(modelKey);
 		}
-		InputStream inputStream = BlockModel.class.getResourceAsStream(modelKey);
-		if (inputStream == null){
-			throw new NullPointerException("resource " + modelKey + " returns null! Does this file exist?");
-		}
-		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(inputStream)));
+		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(Utilities.getResourceAsStream(modelKey))));
 		ModelData modelData = DragonFly.GSON.fromJson(reader, ModelData.class);
 		modelDataFiles.put(modelKey, modelData);
 		return modelData;
 	}
 
 	/**
-	 * Place mod models in the <i>assets/modid/item/</i> directory for them to be seen.
+	 * Place mod models in the <i>assets/modid/model/</i> directory for them to be seen.
 	 */
 	public static BenchEntityModel getOrCreateEntityModel(String modID, String modelSource, Class<? extends BenchEntityModel> baseModel) {
-		if (!benchEntityModelMap.containsKey(ModelHelper.getModelLocation(modID, modelSource))) {
-			InputStream inputStream = baseModel.getResourceAsStream(ModelHelper.getModelLocation(modID, modelSource));
-			JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(inputStream)));
-			BenchEntityModel model = DragonFly.GSON.fromJson(reader, baseModel);
-			benchEntityModelMap.put(ModelHelper.getModelLocation(modID, modelSource), model);
-			return model;
-		} else {
-			return benchEntityModelMap.get(ModelHelper.getModelLocation(modID, modelSource));
+		String entityModelKey = ModelHelper.getModelLocation(modID, modelSource);
+
+		if (benchEntityModelMap.containsKey(entityModelKey)){
+			return benchEntityModelMap.get(entityModelKey);
 		}
+
+		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(Utilities.getResourceAsStream(entityModelKey))));
+		BenchEntityModel model = DragonFly.GSON.fromJson(reader, baseModel);
+		benchEntityModelMap.put(entityModelKey, model);
+		return model;
 	}
 	public static String getModelLocation(String modID, String modelSource){
 		if (!modelSource.contains(".json")){
