@@ -13,7 +13,7 @@ This is an early pre release version of DragonFly, expect many bugs, and expect 
 See DragonFly Example Mod [Here](https://github.com/UselessBullets/DragonFlyExample)
 
 ### Add to project
-- Add version variable to "gradle.properties" `dragonfly_version=0.3.0`
+- Add version variable to "gradle.properties" `dragonfly_version=0.4.0`
 - Add mod repository to "build.gradle"
 ```
 ivy {
