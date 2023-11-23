@@ -48,6 +48,10 @@ public class BenchEntityModel extends ModelBase {
 				this.getIndexBones().put(bones.getName(), bones);
 			}
 		}
+		if (!this.getIndexBones().isEmpty()) {
+			//DON'T MOVE IT! because the rotation and rotation position of entities of the same model being mixed.
+			this.setRotationAngles(limbSwing, limbYaw, ticksExisted, headYaw, headPitch, scale);
+		}
 
 		for (BenchEntityBones bones : entityGeometry.getBones()) {
 			String name = bones.getName();
@@ -119,9 +123,6 @@ public class BenchEntityModel extends ModelBase {
 
 
 		}
-
-
-		this.setRotationAngles(limbSwing, limbYaw, ticksExisted, headYaw, headPitch, scale);
 
 	}
 
