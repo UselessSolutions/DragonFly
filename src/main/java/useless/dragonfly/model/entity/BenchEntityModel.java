@@ -197,9 +197,7 @@ public class BenchEntityModel extends ModelBase {
 	}
 
 	public Optional<BenchEntityBones> getAnyDescendantWithName(String key) {
-		Optional<Map.Entry<String, BenchEntityBones>> bones = this.getIndexBones().entrySet().stream().filter((benchBone) -> {
-			return benchBone.getKey().equals(key);
-		}).findFirst();
+		Optional<Map.Entry<String, BenchEntityBones>> bones = this.getIndexBones().entrySet().stream().filter((benchBone) -> benchBone.getKey().equals(key)).findFirst();
 		if (bones.isPresent()) {
 			return Optional.of(bones.get().getValue());
 		} else {

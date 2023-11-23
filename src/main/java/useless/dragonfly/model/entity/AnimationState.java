@@ -37,7 +37,7 @@ public class AnimationState {
 
 	public void updateTime(float p_216975_, float p_216976_) {
 		if (this.isStarted()) {
-			long i = lfloor((double) (p_216975_ * 1000.0F / 20.0F));
+			long i = lfloor(p_216975_ * 1000.0F / 20.0F);
 			this.accumulatedTime += (long) ((float) (i - this.lastTime) * p_216976_);
 			this.lastTime = i;
 		}

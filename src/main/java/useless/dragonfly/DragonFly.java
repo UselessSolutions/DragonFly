@@ -25,7 +25,11 @@ public class DragonFly implements ModInitializer, PreLaunchEntrypoint {
 	public static final Gson GSON = new Gson();
 	public static final Side[] sides = new Side[]{Side.BOTTOM, Side.TOP, Side.NORTH, Side.SOUTH, Side.WEST, Side.EAST};
 	public static double terrainAtlasWidth = TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES;
-	public static boolean isDev = FabricLoader.getInstance().getModContainer(MOD_ID).get().getMetadata().getVersion().getFriendlyString().equals("${version}");
+	public static boolean isDev;
+	static {
+		String modVersion = FabricLoader.getInstance().getModContainer(MOD_ID).get().getMetadata().getVersion().getFriendlyString();
+		isDev = modVersion.equals("${version}") || modVersion.contains("dev");
+	}
     @Override
     public void onInitialize() {
 		if (isDev){

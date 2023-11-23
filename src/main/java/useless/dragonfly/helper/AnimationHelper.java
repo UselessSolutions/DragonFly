@@ -11,9 +11,9 @@ import useless.dragonfly.model.entity.animation.AnimationData;
 import useless.dragonfly.model.entity.animation.BoneData;
 import useless.dragonfly.model.entity.animation.PostData;
 import useless.dragonfly.model.entity.processor.BenchEntityBones;
+import useless.dragonfly.utilities.Utilities;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.*;
 import java.util.function.IntPredicate;
@@ -21,23 +21,23 @@ import java.util.function.IntPredicate;
 public class AnimationHelper {
 	public static final Map<String, Animation> registeredAnimations = new HashMap<>();
 
-	public static Animation getOrCreateEntityAnimation(String modID, String modelSource) {
-		if (!registeredAnimations.containsKey(getAnimationLocation(modID, modelSource))) {
-			InputStream inputStream = Animation.class.getResourceAsStream(getAnimationLocation(modID, modelSource));
-			JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(inputStream)));
-			Animation model = DragonFly.GSON.fromJson(reader, Animation.class);
-			registeredAnimations.put(getAnimationLocation(modID, modelSource), model);
-			return model;
-		} else {
-			return registeredAnimations.get(getAnimationLocation(modID, modelSource));
+	public static Animation getOrCreateEntityAnimation(String modID, String animationSource) {
+		String animationKey = getAnimationLocation(modID, animationSource);
+		if (registeredAnimations.containsKey(animationKey)){
+			return registeredAnimations.get(animationKey);
 		}
+
+		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(Utilities.getResourceAsStream(animationKey))));
+		Animation animation = DragonFly.GSON.fromJson(reader, Animation.class);
+		registeredAnimations.put(animationKey, animation);
+		return animation;
 	}
 
-	public static String getAnimationLocation(String modID, String modelSource) {
-		if (!modelSource.contains(".json")) {
-			modelSource += ".json";
+	public static String getAnimationLocation(String modID, String animationSource) {
+		if (!animationSource.endsWith(".json")) {
+			animationSource += ".json";
 		}
-		return "/assets/" + modID + "/animation/" + modelSource;
+		return "/assets/" + modID + "/animation/" + animationSource;
 	}
 
 	public static void animate(BenchEntityModel entityModel, AnimationData animationData, long p_232322_, float scale, Vector3f p_253861_) {
@@ -154,8 +154,8 @@ public class AnimationHelper {
 		return new Vector3f(vector3f.x * (float) (Math.PI / 180.0), vector3f.y * (float) (Math.PI / 180.0), vector3f.z * (float) (Math.PI / 180.0));
 	}
 
-	private static float getElapsedSeconds(AnimationData p_232317_, long p_232318_) {
-		float f = (float) p_232318_ / 1000.0F;
-		return p_232317_.isLoop() ? f % p_232317_.getAnimationLength() : f;
+	private static float getElapsedSeconds(AnimationData animationData, long ms) {
+		float seconds = (float) ms / 1000.0F;
+		return animationData.isLoop() ? seconds % animationData.getAnimationLength() : seconds;
 	}
 }
