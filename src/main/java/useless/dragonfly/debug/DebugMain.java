@@ -1,9 +1,5 @@
 package useless.dragonfly.debug;
 
-import useless.dragonfly.DragonFly;
-import useless.dragonfly.helper.ModelHelper;
-import useless.dragonfly.utilities.Utilities;
-
 public class DebugMain {
 	public static void init(){
 		DebugBlocks.init();

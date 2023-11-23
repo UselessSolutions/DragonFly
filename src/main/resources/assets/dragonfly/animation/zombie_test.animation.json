@@ -98,19 +98,6 @@
 					}
 				}
 			}
-		},
-		"animation.zombie_test.spin": {
-			"loop": true,
-			"animation_length": 1,
-			"bones": {
-				"bone": {
-					"rotation": {
-						"0.0": [0, 0, 0],
-						"0.5": [0, 180, 0],
-						"1.0": [0, 360, 0]
-					}
-				}
-			}
 		}
 	}
 }

@@ -2,16 +2,12 @@ package useless.dragonfly.debug.testentity.Zombie;
 
 import net.minecraft.core.util.helper.MathHelper;
 import useless.dragonfly.helper.AnimationHelper;
-import useless.dragonfly.model.entity.AnimationState;
 import useless.dragonfly.model.entity.BenchEntityModel;
 import useless.dragonfly.model.entity.animation.Animation;
 
 import static useless.dragonfly.DragonFly.MOD_ID;
 
 public class ZombieModelTest extends BenchEntityModel {
-	private AnimationState state;
-
-
 	@Override
 	public void setRotationAngles(float limbSwing, float limbYaw, float ticksExisted, float headYaw, float headPitch, float scale) {
 		// If you need play some animation. you should reset with this
