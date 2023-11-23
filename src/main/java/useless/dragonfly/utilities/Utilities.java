@@ -100,13 +100,14 @@ public class Utilities {
 	public static List<String> getResourceFiles(String path) {
 		List<String> filenames = new ArrayList<>();
 
-		try (InputStream in = Utilities.class.getResourceAsStream(path)) {
+		try (InputStream in = getResourceAsStream(path)) {
 			if (in == null) {
 				System.out.println(path + " failed to load, `in` was null");
 				return new ArrayList<>();
 			}
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			String resource;
+
 			while ((resource = br.readLine()) != null) {
 				filenames.add(resource);
 			}
@@ -116,5 +117,16 @@ public class Utilities {
 		}
 
 		return filenames;
+	}
+
+	public static InputStream getResourceAsStream(String resource) {
+		final InputStream in
+			= getContextClassLoader().getResourceAsStream(resource);
+
+		return in == null ? DebugBlocks.class.getResourceAsStream(resource) : in;
+	}
+
+	public static ClassLoader getContextClassLoader() {
+		return Thread.currentThread().getContextClassLoader();
 	}
 }
