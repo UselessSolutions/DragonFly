@@ -40,8 +40,8 @@ public class AnimationHelper {
 		return "/assets/" + modID + "/animation/" + animationSource;
 	}
 
-	public static void animate(BenchEntityModel entityModel, AnimationData animationData, long p_232322_, float scale, Vector3f p_253861_) {
-		float f = getElapsedSeconds(animationData, p_232322_);
+	public static void animate(BenchEntityModel entityModel, AnimationData animationData, long time, float scale, Vector3f p_253861_) {
+		float seconds = getElapsedSeconds(animationData, time);
 
 		for (Map.Entry<String, BoneData> entry : animationData.getBones().entrySet()) {
 			Optional<BenchEntityBones> optional = entityModel.getAnyDescendantWithName(entry.getKey());
@@ -52,11 +52,11 @@ public class AnimationHelper {
 				postionFrame.add(new KeyFrame(Float.parseFloat(key.getKey()), key.getValue().getPost()));
 			});
 			optional.ifPresent(p_232330_ -> postionFrame.forEach((keyFrame2) -> {
-				int i = Math.max(0, binarySearch(0, postionFrame.size(), p_232315_ -> f <= postionFrame.get(p_232315_).duration) - 1);
+				int i = Math.max(0, binarySearch(0, postionFrame.size(), p_232315_ -> seconds <= postionFrame.get(p_232315_).duration) - 1);
 				int j = Math.min(postionFrame.size() - 1, i + 1);
 				KeyFrame keyframe = postionFrame.get(i);
 				KeyFrame keyframe1 = postionFrame.get(j);
-				float f1 = f - keyframe.duration;
+				float f1 = seconds - keyframe.duration;
 				float f2;
 				if (j != i) {
 					f2 = MathHelper.clamp(f1 / (keyframe1.duration - keyframe.duration), 0.0F, 1.0F);
@@ -84,11 +84,11 @@ public class AnimationHelper {
 				rotationFrame.add(new KeyFrame(Float.parseFloat(key.getKey()), key.getValue().getPost()));
 			});
 			optional.ifPresent(p_232330_ -> rotationFrame.forEach((keyFrame3) -> {
-				int i = Math.max(0, binarySearch(0, rotationFrame.size(), p_232315_ -> f <= rotationFrame.get(p_232315_).duration) - 1);
+				int i = Math.max(0, binarySearch(0, rotationFrame.size(), p_232315_ -> seconds <= rotationFrame.get(p_232315_).duration) - 1);
 				int j = Math.min(rotationFrame.size() - 1, i + 1);
 				KeyFrame keyframe = rotationFrame.get(i);
 				KeyFrame keyframe1 = rotationFrame.get(j);
-				float f1 = f - keyframe.duration;
+				float f1 = seconds - keyframe.duration;
 				float f2;
 				if (j != i) {
 					f2 = MathHelper.clamp(f1 / (keyframe1.duration - keyframe.duration), 0.0F, 1.0F);
@@ -121,29 +121,29 @@ public class AnimationHelper {
 		);
 	}
 
-	private static int binarySearch(int p_14050_, int p_14051_, IntPredicate p_14052_) {
-		int i = p_14051_ - p_14050_;
+	private static int binarySearch(int startIndex, int endIndex, IntPredicate p_14052_) {
+		int searchSize = endIndex - startIndex;
 
-		while (i > 0) {
-			int j = i / 2;
-			int k = p_14050_ + j;
+		while (searchSize > 0) {
+			int j = searchSize / 2;
+			int k = startIndex + j;
 			if (p_14052_.test(k)) {
-				i = j;
+				searchSize = j;
 			} else {
-				p_14050_ = k + 1;
-				i -= j + 1;
+				startIndex = k + 1;
+				searchSize -= j + 1;
 			}
 		}
 
-		return p_14050_;
+		return startIndex;
 	}
 
-	public static Vector3f posVec(float p_253691_, float p_254046_, float p_254461_) {
-		return new Vector3f(p_253691_, -p_254046_, p_254461_);
+	public static Vector3f posVec(float x, float y, float z) {
+		return new Vector3f(x, -y, z);
 	}
 
-	public static Vector3f degreeVec(float p_254402_, float p_253917_, float p_254397_) {
-		return new Vector3f(p_254402_ * (float) (Math.PI / 180.0), p_253917_ * (float) (Math.PI / 180.0), p_254397_ * (float) (Math.PI / 180.0));
+	public static Vector3f degreeVec(float degX, float degY, float degZ) {
+		return new Vector3f(degX * (float) (Math.PI / 180.0), degY * (float) (Math.PI / 180.0), degZ * (float) (Math.PI / 180.0));
 	}
 
 	public static Vector3f posVec(Vector3f vector3f) {

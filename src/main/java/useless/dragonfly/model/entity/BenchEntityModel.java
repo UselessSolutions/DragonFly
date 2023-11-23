@@ -206,9 +206,9 @@ public class BenchEntityModel extends ModelBase {
 	}
 
 	protected void animateWalk(AnimationData animationData, float p_268057_, float p_268347_, float p_268138_, float p_268165_) {
-		long i = (long) (p_268057_ * 50.0F * p_268138_);
-		float f = Math.min(p_268347_ * p_268165_, 1.0F);
-		AnimationHelper.animate(this, animationData, i, f, VEC_ANIMATION);
+		long time = (long) (p_268057_ * 50.0F * p_268138_);
+		float scale = Math.min(p_268347_ * p_268165_, 1.0F);
+		AnimationHelper.animate(this, animationData, time, scale, VEC_ANIMATION);
 	}
 
 	protected void applyStatic(AnimationData animationData) {
