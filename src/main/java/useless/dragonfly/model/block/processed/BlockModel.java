@@ -32,6 +32,10 @@ public class BlockModel {
 		textureMap.putAll(modelData.textures);
 
 		// Initialize textures
+		for (String texture: textureMap.values()) {
+			if (texture == null) continue;
+			TextureRegistry.softRegisterTexture(texture);
+		}
 
 		// Use parent elements if model does not specify its own
 		if (parentModel != null && modelData.elements == null){

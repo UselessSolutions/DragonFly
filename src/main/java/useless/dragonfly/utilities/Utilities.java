@@ -2,16 +2,8 @@ package useless.dragonfly.utilities;
 
 import net.minecraft.core.util.helper.MathHelper;
 import org.lwjgl.util.vector.Vector3f;
-import useless.dragonfly.debug.DebugBlocks;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-
 public class Utilities {
 	public static final float COMPARE_CONST = 0.001f;
 	public static String writeFields(Class clazz){
@@ -96,37 +88,5 @@ public class Utilities {
 		y = newZ + origin.getY();
 		x = newY + origin.getX();
 		return new Vector3f(x, y, point.z);
-	}
-	public static List<String> getResourceFiles(String path) {
-		List<String> filenames = new ArrayList<>();
-
-		try (InputStream in = getResourceAsStream(path)) {
-			if (in == null) {
-				System.out.println(path + " failed to load, `in` was null");
-				return new ArrayList<>();
-			}
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
-			String resource;
-
-			while ((resource = br.readLine()) != null) {
-				filenames.add(resource);
-			}
-		} catch (IOException e) {
-			System.out.println(path + " failed to load\n" + e);
-			return new ArrayList<>();
-		}
-
-		return filenames;
-	}
-
-	public static InputStream getResourceAsStream(String resource) {
-		final InputStream in
-			= getContextClassLoader().getResourceAsStream(resource);
-
-		return in == null ? DebugBlocks.class.getResourceAsStream(resource) : in;
-	}
-
-	public static ClassLoader getContextClassLoader() {
-		return Thread.currentThread().getContextClassLoader();
 	}
 }

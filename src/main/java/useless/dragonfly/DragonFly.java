@@ -9,14 +9,8 @@ import net.minecraft.core.Global;
 import net.minecraft.core.util.helper.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import turniplabs.halplibe.HalpLibe;
 import useless.dragonfly.debug.DebugMain;
 import useless.dragonfly.registries.TextureRegistry;
-import useless.dragonfly.utilities.Utilities;
-
-import java.io.IOException;
-import java.util.List;
-
 public class DragonFly implements ModInitializer, PreLaunchEntrypoint {
 	static {
 		// DO NOT TOUCH THIS! It's an error prevention method. Thanks Useless!
@@ -42,39 +36,6 @@ public class DragonFly implements ModInitializer, PreLaunchEntrypoint {
 
 	@Override
 	public void onPreLaunch() {
-		new HalpLibe().onPreLaunch();
 		TextureRegistry.init();
-		// Load every mod's resources
-		List<String> assetDirectories = Utilities.getResourceFiles("/assets/");
-
-
-		int i = 0;
-		while (assetDirectories.size() == 0){
-			if (i >= 10){
-				break;
-			}
-			System.out.println(assetDirectories);
-			assetDirectories = Utilities.getResourceFiles("/assets/");
-			i++;
-		}
-		if (i != 0){
-			throw new RuntimeException("Check Error");
-		}
-
-		for (String modAssetDir: assetDirectories) { // for each asset directory
-			// Register all block textures
-			for (String blockTextureID: Utilities.getResourceFiles("/assets/" + modAssetDir + "/block/")) {
-				if (blockTextureID.contains(".mcmeta")) continue;
-				TextureRegistry.softRegisterTexture(modAssetDir + ":block/" + blockTextureID.replace(".png", ""));
-			}
-
-			// Register all item textures
-			for (String itemTextureID: Utilities.getResourceFiles("/assets/" + modAssetDir + "/item/")) {
-				if (itemTextureID.contains(".mcmeta")) continue;
-				TextureRegistry.softRegisterTexture(modAssetDir + ":item/" + itemTextureID.replace(".png", ""));
-			}
-		}
-		LOGGER.info("DragonFly pre launch initialized.");
-		//throw new RuntimeException();
 	}
 }
