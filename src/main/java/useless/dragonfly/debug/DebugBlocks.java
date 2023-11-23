@@ -8,6 +8,7 @@ import useless.dragonfly.debug.block.BlockModel;
 import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.model.block.BlockModelDragonFly;
 import useless.dragonfly.registries.TextureRegistry;
+import useless.dragonfly.utilities.Utilities;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -68,7 +69,7 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 		List<String> filenames = new ArrayList<>();
 
 		try (
-			InputStream in = getResourceAsStream(path);
+			InputStream in = Utilities.getResourceAsStream(path);
 			BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
 			String resource;
 
@@ -78,16 +79,5 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 		}
 
 		return filenames;
-	}
-
-	private static InputStream getResourceAsStream(String resource) {
-		final InputStream in
-			= getContextClassLoader().getResourceAsStream(resource);
-
-		return in == null ? DebugBlocks.class.getResourceAsStream(resource) : in;
-	}
-
-	private static ClassLoader getContextClassLoader() {
-		return Thread.currentThread().getContextClassLoader();
 	}
 }

@@ -1,8 +1,10 @@
 package useless.dragonfly.utilities;
 
-import net.minecraft.core.util.helper.MathHelper;
+import net.fabricmc.loader.api.FabricLoader;
 import org.lwjgl.util.vector.Vector3f;
+import useless.dragonfly.DragonFly;
 
+import java.io.InputStream;
 import java.lang.reflect.Field;
 public class Utilities {
 	public static final float COMPARE_CONST = 0.001f;
@@ -88,5 +90,28 @@ public class Utilities {
 		y = newZ + origin.getY();
 		x = newY + origin.getX();
 		return new Vector3f(x, y, point.z);
+	}
+
+	/**
+	 * Tries to load resource from multiple classes, if they all fail it throws an exception
+	 */
+	public static InputStream getResourceAsStream(String path){
+		InputStream in = Utilities.class.getResourceAsStream(path);
+		if (in != null){
+			return in;
+		}
+		in = DragonFly.class.getResourceAsStream(path);
+		if (in != null){
+			return in;
+		}
+		in = FabricLoader.getInstance().getClass().getResourceAsStream(path);
+		if (in != null){
+			return in;
+		}
+		in = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
+		if (in != null){
+			return in;
+		}
+		throw new RuntimeException("Resource at '" + path + "' returned null! Does this file exist?");
 	}
 }
