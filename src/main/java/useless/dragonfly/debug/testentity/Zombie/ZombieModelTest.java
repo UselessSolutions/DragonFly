@@ -1,4 +1,4 @@
-package useless.dragonfly.debug.testentity;
+package useless.dragonfly.debug.testentity.Zombie;
 
 import net.minecraft.core.util.helper.MathHelper;
 import useless.dragonfly.DragonFly;

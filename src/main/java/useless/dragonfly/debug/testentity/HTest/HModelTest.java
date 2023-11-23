@@ -1,4 +1,4 @@
-package useless.dragonfly.debug.testentity;
+package useless.dragonfly.debug.testentity.HTest;
 
 import useless.dragonfly.model.entity.BenchEntityModel;
 

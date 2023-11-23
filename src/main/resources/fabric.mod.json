@@ -6,12 +6,14 @@
   "name": "Dragon Fly",
   "description": "Block and Entity model library.",
   "authors": [
-    "Useless"
+    "Useless",
+		"baguchan"
   ],
   "contact": {
     "homepage": "",
     "sources": ""
   },
+	"icon": "icon.png",
 
   "license": "CC0-1.0",
 

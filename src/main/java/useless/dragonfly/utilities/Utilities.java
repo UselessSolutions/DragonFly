@@ -1,7 +1,9 @@
 package useless.dragonfly.utilities;
 
-import java.lang.reflect.Field;
+import net.minecraft.core.util.helper.MathHelper;
+import org.lwjgl.util.vector.Vector3f;
 
+import java.lang.reflect.Field;
 public class Utilities {
 	public static final float COMPARE_CONST = 0.001f;
 	public static String writeFields(Class clazz){
@@ -32,5 +34,59 @@ public class Utilities {
 	}
 	public static boolean equalFloats(float a, float b){
 		return Math.abs(Float.compare(a, b)) < COMPARE_CONST;
+	}
+	public static Vector3f rotatePoint(Vector3f point, Vector3f origin, String axis, float angle){
+		switch (axis){
+			case "x":
+				return rotateAroundX(point, origin, angle);
+			case "y":
+				return rotateAroundY(point, origin, angle);
+			case "z":
+				return rotateAroundZ(point, origin, angle);
+		}
+		throw new RuntimeException("Axis " + axis + " Is not 'X', 'Y', or 'Z'!");
+	}
+	public static Vector3f rotateAroundX(Vector3f point, Vector3f origin, float angle){
+		angle = (float) ((angle) * (Math.PI/180)); // Convert to radians
+		float y = point.getY();
+		float z = point.getZ();
+		z -= origin.getZ();
+		y -= origin.getY();
+
+		float newZ = (float) (z * Math.cos(angle) - y * Math.sin(angle));
+		float newY = (float) (z * Math.sin(angle) + y * Math.cos(angle));
+
+		z = newZ + origin.getZ();
+		y = newY + origin.getY();
+		return new Vector3f(point.x, y, z);
+	}
+
+	public static Vector3f rotateAroundY(Vector3f point, Vector3f origin, float angle){
+		angle = (float) ((angle) * (Math.PI/180)); // Convert to radians
+		float x = point.getX();
+		float z = point.getZ();
+		z -= origin.getZ();
+		x -= origin.getX();
+
+		float newZ = (float) (z * Math.cos(angle) - x * Math.sin(angle));
+		float newX = (float) (z * Math.sin(angle) + x * Math.cos(angle));
+
+		z = newZ + origin.getZ();
+		x = newX + origin.getX();
+		return new Vector3f(x, point.y, z);
+	}
+	public static Vector3f rotateAroundZ(Vector3f point, Vector3f origin, float angle){
+		angle = (float) ((angle) * (Math.PI/180)); // Convert to radians
+		float x = point.getX();
+		float y = point.getY();
+		y -= origin.getY();
+		x -= origin.getX();
+
+		float newZ = (float) (y * Math.cos(angle) - x * Math.sin(angle));
+		float newY = (float) (y * Math.sin(angle) + x * Math.cos(angle));
+
+		y = newZ + origin.getY();
+		x = newY + origin.getX();
+		return new Vector3f(x, y, point.z);
 	}
 }

@@ -13,21 +13,21 @@ This is an early pre release version of DragonFly, expect many bugs, and expect 
 See DragonFly Example Mod [Here](https://github.com/UselessBullets/DragonFlyExample)
 
 ### Add to project
-- Add version variable to "gradle.properties" `dragonfly_version=0.2.1`
+- Add version variable to "gradle.properties" `dragonfly_version=0.3.0`
 - Add mod repository to "build.gradle"
 ```
 ivy {
-		url = "https://github.com/UselessBullets"
-		patternLayout {
-			artifact "[organisation]/releases/download/v[revision]/[module]-[revision].jar"
-			m2compatible = true
-		}
-		metadataSources { artifact() }
+	url = "https://github.com/UselessBullets"
+	patternLayout {
+		artifact "[organisation]/releases/download/v[revision]/[module]-[revision].jar"
+		m2compatible = true
 	}
+	metadataSources { artifact() }
+}
 ```
 - Implement mod in "build.gradle" `modImplementation "DragonFly:dragonfly:${project.dragonfly_version}"`
 
 ### Credits:
-- UselessBullets
-- baguchan
+- UselessBullets - Block Model Support
+- baguchan - Entity Model Support
 - 0999312 [MMLib](https://github.com/0999312/MMLib/tree/3e87210c9305a5724e06c492be503533a1ebcd59) (Tremendously helpful for Entity Model support)
