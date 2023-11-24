@@ -126,6 +126,9 @@ public class BenchEntityModel extends ModelBase {
 
 	}
 
+	/*
+	 * This method used Translate for item render
+	 */
 	public void postRender(BenchEntityBones bones, float scale) {
 		List<Float> rotation = bones.getRotation();
 		//parent time before rotate it self
