@@ -48,6 +48,10 @@ public class BenchEntityModel extends ModelBase {
 				this.getIndexBones().put(bones.getName(), bones);
 			}
 		}
+		if (!this.getIndexBones().isEmpty()) {
+			//DON'T MOVE IT! because the rotation and rotation position of entities of the same model being mixed.
+			this.setRotationAngles(limbSwing, limbYaw, ticksExisted, headYaw, headPitch, scale);
+		}
 
 		for (BenchEntityBones bones : entityGeometry.getBones()) {
 			String name = bones.getName();
@@ -120,9 +124,40 @@ public class BenchEntityModel extends ModelBase {
 
 		}
 
+	}
 
-		this.setRotationAngles(limbSwing, limbYaw, ticksExisted, headYaw, headPitch, scale);
+	/*
+	 * This method used Translate for item render
+	 */
+	public void postRender(BenchEntityBones bones, float scale) {
+		List<Float> rotation = bones.getRotation();
+		//parent time before rotate it self
+		if (bones.getParent() != null) {
+			BenchEntityBones parentBone = this.getIndexBones().get(bones.getParent());
 
+			convertWithMoreParent(parentBone, scale);
+		}
+
+		GL11.glTranslatef(convertPivot(bones, 0) * scale, convertPivot(bones, 1) * scale, convertPivot(bones, 2) * scale);
+
+		if (bones.rotationPointX != 0.0f || bones.rotationPointY != 0.0f || bones.rotationPointZ != 0.0f) {
+			GL11.glTranslatef(bones.rotationPointX * scale, bones.rotationPointY * scale, bones.rotationPointZ * scale);
+		}
+		if (rotation != null) {
+			GL11.glRotatef((float) Math.toRadians(rotation.get(0)), 0.0f, 0.0f, 1.0f);
+			GL11.glRotatef((float) Math.toRadians(rotation.get(1)), 0.0f, 1.0f, 0.0f);
+			GL11.glRotatef((float) Math.toRadians(rotation.get(2)), 1.0f, 0.0f, 0.0f);
+		}
+
+		if (bones.rotateAngleZ != 0.0f) {
+			GL11.glRotatef((float) (Math.toDegrees(bones.rotateAngleZ)), 0.0f, 0.0f, 1.0f);
+		}
+		if (bones.rotateAngleY != 0.0f) {
+			GL11.glRotatef((float) (Math.toDegrees(bones.rotateAngleY)), 0.0f, 1.0f, 0.0f);
+		}
+		if (bones.rotateAngleX != 0.0f) {
+			GL11.glRotatef((float) (Math.toDegrees(bones.rotateAngleX)), 1.0f, 0.0f, 0.0f);
+		}
 	}
 
 	private void convertWithMoreParent(BenchEntityBones parentBone, float scale) {
