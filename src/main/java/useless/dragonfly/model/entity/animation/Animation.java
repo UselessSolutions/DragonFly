@@ -1,14 +1,15 @@
 package useless.dragonfly.model.entity.animation;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.util.HashMap;
+import java.util.Map;
 
 public class Animation {
-	@SerializedName("animations")
-	private HashMap<String, AnimationData> animations = new HashMap<>();
+	private final Map<String, AnimationData> animations;
 
-	public HashMap<String, AnimationData> getAnimations() {
+	public Map<String, AnimationData> getAnimations() {
 		return animations;
+	}
+
+	public Animation(Map<String, AnimationData> animations) {
+		this.animations = animations;
 	}
 }
