@@ -45,7 +45,7 @@ public class AnimationHelper {
 
 		for (Map.Entry<String, BoneData> entry : animationData.getBones().entrySet()) {
 			Optional<BenchEntityBones> optional = entityModel.getAnyDescendantWithName(entry.getKey());
-			HashMap<String, PostData> postionMap = entry.getValue().getPostion();
+			Map<String, PostData> postionMap = entry.getValue().getPosition();
 			List<KeyFrame> postionFrame = Lists.newArrayList();
 
 			postionMap.entrySet().stream().sorted(Comparator.comparingDouble((test) -> (Float.parseFloat(test.getKey())))).forEach(key -> {
@@ -77,7 +77,7 @@ public class AnimationHelper {
 				p_232330_.setRotationPoint(p_232330_.rotationPointX + p_253861_.x, p_232330_.rotationPointY + p_253861_.y, p_232330_.rotationPointZ + p_253861_.z);
 
 			}));
-			HashMap<String, PostData> rotationMap = entry.getValue().getRotation();
+			Map<String, PostData> rotationMap = entry.getValue().getRotation();
 			List<KeyFrame> rotationFrame = Lists.newArrayList();
 
 			rotationMap.entrySet().stream().sorted(Comparator.comparingDouble((test) -> (Float.parseFloat(test.getKey())))).forEach(key -> {
