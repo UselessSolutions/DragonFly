@@ -1,21 +1,22 @@
 package useless.dragonfly.model.entity.animation;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.util.HashMap;
+import java.util.Map;
 
 public class BoneData {
-	@SerializedName("rotation")
-	private HashMap<String, PostData> rotation = new HashMap<>();
+	private final Map<String, PostData> rotation;
 
-	@SerializedName("position")
-	private HashMap<String, PostData> postion = new HashMap<>();
+	private final Map<String, PostData> position;
 
-	public HashMap<String, PostData> getPostion() {
-		return postion;
+	public BoneData(Map<String, PostData> rotation, Map<String, PostData> position) {
+		this.rotation = rotation;
+		this.position = position;
 	}
 
-	public HashMap<String, PostData> getRotation() {
+	public Map<String, PostData> getPosition() {
+		return position;
+	}
+
+	public Map<String, PostData> getRotation() {
 		return rotation;
 	}
 }
