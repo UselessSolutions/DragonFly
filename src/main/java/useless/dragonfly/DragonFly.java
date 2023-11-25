@@ -10,7 +10,6 @@ import net.minecraft.core.Global;
 import net.minecraft.core.util.helper.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import useless.dragonfly.debug.DebugEntities;
 import useless.dragonfly.debug.DebugMain;
 import useless.dragonfly.model.entity.animation.Animation;
 import useless.dragonfly.model.entity.animation.AnimationDeserializer;
@@ -39,7 +38,6 @@ public class DragonFly implements ModInitializer, PreLaunchEntrypoint {
 		if (isDev){
 			DebugMain.init();
 		}
-		DebugEntities.init();
         LOGGER.info("DragonFly initialized.");
     }
 
