@@ -1,0 +1,23 @@
+{
+  "variants": {
+    "facing=north,half=bottom": {
+      "model": "minecraft:block/cut_copper_stairs",
+      "uvlock": true
+    },
+    "facing=east,half=bottom": {
+      "model": "minecraft:block/cut_copper_stairs",
+      "uvlock": true,
+      "y": 90
+    },
+    "facing=south,half=bottom": {
+      "model": "minecraft:block/cut_copper_stairs",
+      "uvlock": true,
+      "y": 180
+    },
+    "facing=west,half=bottom": {
+      "model": "minecraft:block/cut_copper_stairs",
+      "uvlock": true,
+      "y": 270
+    }
+  }
+}

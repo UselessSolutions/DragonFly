@@ -35,7 +35,7 @@ public class ModelHelper {
 	 * Place mod models in the <i>assets/modid/blockstates/</i> directory for them to be seen.
 	 */
 	public static BlockstateData getOrCreateBlockState(String modId, String blockStateSource) {
-		String modelKey = ModelHelper.getModelLocation(modId, blockStateSource);
+		String modelKey = ModelHelper.getBlockStateLocation(modId, blockStateSource);
 		if (registeredBlockStates.containsKey(modelKey)){
 			return registeredBlockStates.get(modelKey);
 		}
@@ -76,5 +76,11 @@ public class ModelHelper {
 			modelSource += ".json";
 		}
 		return "/assets/" + modID + "/model/" + modelSource;
+	}
+	public static String getBlockStateLocation(String modID, String modelSource){
+		if (!modelSource.contains(".json")){
+			modelSource += ".json";
+		}
+		return "/assets/" + modID + "/blockstates/" + modelSource;
 	}
 }

@@ -1,7 +1,7 @@
 package useless.dragonfly.debug;
 
-import net.minecraft.client.render.block.color.BlockColorWater;
 import net.minecraft.core.block.Block;
+import net.minecraft.core.block.BlockStairs;
 import net.minecraft.core.block.material.Material;
 import turniplabs.halplibe.helper.BlockBuilder;
 import useless.dragonfly.debug.block.BlockModel;
@@ -42,27 +42,40 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 	public static final Block slope = new BlockBuilder(MOD_ID)
 		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(MOD_ID, "block/slope.json")))
 		.build(new BlockModel("testblock" + blockId, blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(MOD_ID, "block/slope.json")));
+	public static final Block stairs = new BlockBuilder(MOD_ID)
+		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/cut_copper_stairs.json"),
+			ModelHelper.getOrCreateBlockState(MOD_ID, "test_stairs.json"), null, true, 0.25f))
+		.build(new BlockStairs(Block.dirt,blockId++));
 
 	public static void init() {
-		try {
-			for (String string : getResourceFiles("assets/minecraft/model/block/")) {
-				System.out.println(string);
-				if (string.contains("cauldron")){
-					new BlockBuilder(MOD_ID)
-						.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)))
-						.setBlockColor(new BlockColorWater())
-						.build(new BlockModel(string.replace(".json", ""), blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)));
-				} else {
-					new BlockBuilder(MOD_ID)
-						.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)))
-						.build(new BlockModel(string.replace(".json", ""), blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)));
-				}
-
-				System.out.println(string + " created");
-			}
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+//		try {
+//			for (String string : getResourceFiles("assets/minecraft/model/block/")) {
+//				System.out.println(string);
+//				if (string.contains("cauldron")){
+//					new BlockBuilder(MOD_ID)
+//						.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)))
+//						.setBlockColor(new BlockColorWater())
+//						.build(new BlockModel(string.replace(".json", ""), blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)));
+//				} else {
+//					new BlockBuilder(MOD_ID)
+//						.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)))
+//						.build(new BlockModel(string.replace(".json", ""), blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)));
+//				}
+//
+//				System.out.println(string + " created");
+//			}
+//			for (String string : getResourceFiles("assets/minecraft/blockstates/")) {
+//				System.out.println(string);
+//				try {
+//					System.out.println(ModelHelper.getOrCreateBlockState(TextureRegistry.coreNamepaceId, string));
+//				}
+//				catch (Exception e){
+//					System.out.println(e);
+//				}
+//			}
+//		} catch (IOException e) {
+//			throw new RuntimeException(e);
+//		}
 
 	}
 	private static List<String> getResourceFiles(String path) throws IOException {

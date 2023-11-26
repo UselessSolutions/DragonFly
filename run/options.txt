@@ -47,7 +47,7 @@ armorDurabilityOverlay:false
 armorProtectionOverlay:true
 heldItemCountOverlay:false
 pauseOnLostFocus:true
-showDebugScreen:false
+showDebugScreen:true
 showFrameTimes:false
 showItemDebugInfo:true
 showChunkBorders:false
