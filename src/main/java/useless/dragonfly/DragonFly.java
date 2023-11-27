@@ -35,7 +35,7 @@ public class DragonFly implements ModInitializer, PreLaunchEntrypoint {
 	}
     @Override
     public void onInitialize() {
-		if (isDev){
+		if (isDev && false){
 			DebugMain.init();
 		}
         LOGGER.info("DragonFly initialized.");
