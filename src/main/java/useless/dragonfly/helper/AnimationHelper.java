@@ -3,7 +3,6 @@ package useless.dragonfly.helper;
 import com.google.common.collect.Lists;
 import com.google.gson.stream.JsonReader;
 import net.minecraft.core.util.helper.MathHelper;
-import org.lwjgl.util.vector.Vector3f;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.model.entity.BenchEntityModel;
 import useless.dragonfly.model.entity.animation.Animation;
@@ -12,6 +11,7 @@ import useless.dragonfly.model.entity.animation.BoneData;
 import useless.dragonfly.model.entity.animation.PostData;
 import useless.dragonfly.model.entity.processor.BenchEntityBones;
 import useless.dragonfly.utilities.Utilities;
+import useless.dragonfly.utilities.vector.Vector3f;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

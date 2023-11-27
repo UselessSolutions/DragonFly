@@ -1,8 +1,8 @@
 package useless.dragonfly.utilities;
 
 import net.fabricmc.loader.api.FabricLoader;
-import org.lwjgl.util.vector.Vector3f;
 import useless.dragonfly.DragonFly;
+import useless.dragonfly.utilities.vector.Vector3f;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;

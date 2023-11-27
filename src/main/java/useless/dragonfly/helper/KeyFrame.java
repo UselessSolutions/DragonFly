@@ -1,6 +1,7 @@
 package useless.dragonfly.helper;
 
-import org.lwjgl.util.vector.Vector3f;
+
+import useless.dragonfly.utilities.vector.Vector3f;
 
 import java.util.List;
 

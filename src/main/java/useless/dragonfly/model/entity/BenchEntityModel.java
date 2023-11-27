@@ -4,12 +4,12 @@ import com.google.gson.annotations.SerializedName;
 import net.minecraft.client.render.model.ModelBase;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector3f;
 import useless.dragonfly.helper.AnimationHelper;
 import useless.dragonfly.model.entity.animation.AnimationData;
 import useless.dragonfly.model.entity.processor.BenchEntityBones;
 import useless.dragonfly.model.entity.processor.BenchEntityCube;
 import useless.dragonfly.model.entity.processor.BenchEntityGeometry;
+import useless.dragonfly.utilities.vector.Vector3f;
 
 import java.util.HashMap;
 import java.util.List;

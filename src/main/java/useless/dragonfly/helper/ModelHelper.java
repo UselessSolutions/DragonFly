@@ -4,6 +4,7 @@ import com.google.gson.stream.JsonReader;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.model.block.processed.BlockModel;
+import useless.dragonfly.model.blockstates.data.BlockstateData;
 import useless.dragonfly.model.entity.BenchEntityModel;
 import useless.dragonfly.utilities.Utilities;
 
@@ -15,10 +16,11 @@ import java.util.Map;
 public class ModelHelper {
 	public static final Map<String, ModelData> modelDataFiles = new HashMap<>();
 	public static final Map<String, BlockModel> registeredModels = new HashMap<>();
+	public static final Map<String, BlockstateData> registeredBlockStates = new HashMap<>();
 	public static HashMap<String, BenchEntityModel> benchEntityModelMap = new HashMap<>();
 
 	/**
-	 * Place mod models in the <i>assets/modid/item/</i> directory for them to be seen.
+	 * Place mod models in the <i>assets/modid/model/block/</i> directory for them to be seen.
 	 */
 	public static BlockModel getOrCreateBlockModel(String modId, String modelSource) {
 		String modelKey = ModelHelper.getModelLocation(modId, modelSource);
@@ -28,6 +30,19 @@ public class ModelHelper {
 		BlockModel model = new BlockModel(loadBlockModel(modId, modelSource));
 		registeredModels.put(modelKey, model);
 		return model;
+	}
+	/**
+	 * Place mod models in the <i>assets/modid/blockstates/</i> directory for them to be seen.
+	 */
+	public static BlockstateData getOrCreateBlockState(String modId, String blockStateSource) {
+		String modelKey = ModelHelper.getBlockStateLocation(modId, blockStateSource);
+		if (registeredBlockStates.containsKey(modelKey)){
+			return registeredBlockStates.get(modelKey);
+		}
+		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(Utilities.getResourceAsStream(modelKey))));
+		BlockstateData blockstateData = DragonFly.GSON.fromJson(reader, BlockstateData.class);
+		registeredBlockStates.put(modelKey, blockstateData);
+		return blockstateData;
 	}
 
 	public static ModelData loadBlockModel(String modId, String modelSource){
@@ -61,5 +76,11 @@ public class ModelHelper {
 			modelSource += ".json";
 		}
 		return "/assets/" + modID + "/model/" + modelSource;
+	}
+	public static String getBlockStateLocation(String modID, String modelSource){
+		if (!modelSource.contains(".json")){
+			modelSource += ".json";
+		}
+		return "/assets/" + modID + "/blockstates/" + modelSource;
 	}
 }
