@@ -4,12 +4,12 @@ import com.google.gson.annotations.SerializedName;
 import net.minecraft.client.render.model.ModelBase;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector3f;
 import useless.dragonfly.helper.AnimationHelper;
 import useless.dragonfly.model.entity.animation.AnimationData;
 import useless.dragonfly.model.entity.processor.BenchEntityBones;
 import useless.dragonfly.model.entity.processor.BenchEntityCube;
 import useless.dragonfly.model.entity.processor.BenchEntityGeometry;
+import useless.dragonfly.utilities.vector.Vector3f;
 
 import java.util.HashMap;
 import java.util.List;
@@ -114,6 +114,10 @@ public class BenchEntityModel extends ModelBase {
 					GL11.glRotatef((float) (Math.toDegrees(bones.rotateAngleX)), 1.0f, 0.0f, 0.0f);
 				}
 
+				if (bones.scaleX != 0.0f || bones.scaleY != 0.0f || bones.scaleZ != 0.0f) {
+					GL11.glScalef(bones.scaleX, bones.scaleY, bones.scaleZ);
+				}
+
 
 				GL11.glCallList(cube.getDisplayList());
 
@@ -158,6 +162,10 @@ public class BenchEntityModel extends ModelBase {
 		if (bones.rotateAngleX != 0.0f) {
 			GL11.glRotatef((float) (Math.toDegrees(bones.rotateAngleX)), 1.0f, 0.0f, 0.0f);
 		}
+
+		if (bones.scaleX != 0.0f || bones.scaleY != 0.0f || bones.scaleZ != 0.0f) {
+			GL11.glScalef(bones.scaleX, bones.scaleY, bones.scaleZ);
+		}
 	}
 
 	private void convertWithMoreParent(BenchEntityBones parentBone, float scale) {
@@ -187,6 +195,9 @@ public class BenchEntityModel extends ModelBase {
 			GL11.glRotatef((float) (Math.toDegrees(parentBone.rotateAngleX)), 1.0f, 0.0f, 0.0f);
 		}
 
+		if (parentBone.scaleX != 0.0f || parentBone.scaleY != 0.0f || parentBone.scaleZ != 0.0f) {
+			GL11.glScalef(parentBone.scaleX, parentBone.scaleY, parentBone.scaleZ);
+		}
 	}
 
 	public float convertPivot(BenchEntityBones bones, int index) {

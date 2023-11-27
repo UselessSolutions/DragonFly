@@ -4,10 +4,11 @@
   "package": "useless.dragonfly.mixins.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MinecraftMixin",
-    "RenderBlocksMixin"
   ],
   "client": [
+    "MinecraftMixin",
+    "RenderBlocksMixin",
+    "accessor.RenderBlocksAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

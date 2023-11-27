@@ -1,15 +1,21 @@
 package useless.dragonfly.model.entity.animation;
 
-import com.google.gson.annotations.SerializedName;
-import org.spongepowered.include.com.google.common.collect.Lists;
-
 import java.util.List;
 
 public class PostData {
-	@SerializedName("post")
-	private List<Float> post = Lists.newArrayList();
+	private final List<Float> post;
+	private final String lerp_mode;
+
+	public PostData(List<Float> post, String lerp_mode) {
+		this.post = post;
+		this.lerp_mode = lerp_mode;
+	}
 
 	public List<Float> getPost() {
 		return post;
+	}
+
+	public String getLerpMode() {
+		return lerp_mode;
 	}
 }
