@@ -5,7 +5,9 @@ import useless.dragonfly.DragonFly;
 import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.model.block.processed.BlockModel;
 import useless.dragonfly.model.blockstates.data.BlockstateData;
+import useless.dragonfly.model.blockstates.data.VariantData;
 import useless.dragonfly.model.entity.BenchEntityModel;
+import useless.dragonfly.registries.TextureRegistry;
 import useless.dragonfly.utilities.Utilities;
 
 import java.io.BufferedReader;
@@ -42,6 +44,19 @@ public class ModelHelper {
 		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(Utilities.getResourceAsStream(modelKey))));
 		BlockstateData blockstateData = DragonFly.GSON.fromJson(reader, BlockstateData.class);
 		registeredBlockStates.put(modelKey, blockstateData);
+		for (VariantData variant : blockstateData.variants.values()) {
+			String[] modelID = variant.model.split(":");
+			String namespace;
+			String model;
+			if (modelID.length < 2){
+				namespace = TextureRegistry.coreNamepaceId;
+				model = modelID[0];
+			} else {
+				namespace = modelID[0];
+				model = modelID[1];
+			}
+			getOrCreateBlockModel(namespace, model);
+		}
 		return blockstateData;
 	}
 

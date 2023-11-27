@@ -4,7 +4,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.RenderBlockCache;
 import net.minecraft.client.render.RenderBlocks;
 import net.minecraft.client.render.Tessellator;
-import net.minecraft.client.render.block.color.BlockColor;
 import net.minecraft.client.render.block.color.BlockColorDispatcher;
 import net.minecraft.client.render.block.model.BlockModelDispatcher;
 import net.minecraft.core.block.Block;
@@ -19,15 +18,12 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import useless.dragonfly.model.block.BlockModelDragonFly;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.mixins.mixininterfaces.ExtraRendering;
+import useless.dragonfly.model.block.BlockModelDragonFly;
 import useless.dragonfly.model.block.processed.BlockCube;
 import useless.dragonfly.model.block.processed.BlockFace;
 import useless.dragonfly.model.block.processed.BlockModel;
-import useless.dragonfly.registries.TextureRegistry;
-
-import static useless.dragonfly.DragonFly.terrainAtlasWidth;
 
 @Mixin(value = RenderBlocks.class, remap = false)
 public abstract class RenderBlocksMixin implements ExtraRendering {
@@ -94,6 +90,7 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		if (modelDragonFly.baseModel.blockCubes != null){
 			for (BlockCube cube: modelDragonFly.baseModel.blockCubes) {
 				for (BlockFace face: cube.faces.values()) {
+					GL11.glColor4f(brightness, brightness, brightness, 1);
 					tessellator.startDrawingQuads();
 					tessellator.setNormal(face.getSide().getOffsetX(), face.getSide().getOffsetY(), face.getSide().getOffsetZ());
 					if (face.useTint()){
@@ -101,11 +98,10 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 						float r = (float)(color >> 16 & 0xFF) / 255.0f;
 						float g = (float)(color >> 8 & 0xFF) / 255.0f;
 						float b = (float)(color & 0xFF) / 255.0f;
-						GL11.glColor4f(r, g, b, 1);
+						GL11.glColor4f(r * brightness, g * brightness, b * brightness, 1);
 					}
 					renderModelFace(cube, face.getSide(), 0, 0, 0);
 					tessellator.draw();
-					GL11.glColor4f(1, 1, 1, 1);
 				}
 			}
 		}
@@ -113,10 +109,6 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 	}
 	@Unique
 	public boolean renderModelNormal(BlockModel model, Block block, int x, int y, int z) {
-//		int color = BlockColorDispatcher.getInstance().getDispatch(block).getWorldColor(this.world, x, y, z);
-//		float red = (float)(color >> 16 & 0xFF) / 255.0f;
-//		float green = (float)(color >> 8 & 0xFF) / 255.0f;
-//		float blue = (float)(color & 0xFF) / 255.0f;
 		if (mc.isAmbientOcclusionEnabled() && model.getAO()) {
 			return this.renderStandardModelWithAmbientOcclusion(model, block, x, y, z);
 		}
@@ -142,12 +134,12 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		this.cache.setupCache(block, this.blockAccess, x, y, z);
 		boolean somethingRendered = false;
 		for (BlockCube cube: model.blockCubes) {
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.BOTTOM, cube.yMin(), 0, 0, 1, cube.zMax(), cube.zMin(), -1, 0, 0, 1.0F - cube.xMin(), 1.0F - cube.xMax());
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.TOP, 1.0F - cube.yMax(), 0, 0, 1, cube.zMax(), cube.zMin(), 1, 0, 0, cube.xMax(), cube.xMin());
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.NORTH, cube.zMin(), -1, 0, 0, 1.0F - cube.xMin(), 1.0F - cube.xMax(), 0, 1, 0, cube.yMax(), cube.yMin());
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.SOUTH, 1.0F - cube.zMax(), 0, 1, 0, cube.yMax(), cube.yMin(), -1, 0, 0, 1.0F - cube.xMin(), 1.0F - cube.xMax());
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.WEST, cube.xMin(), 0, 0, 1, cube.zMax(), cube.zMin(), 0, 1, 0, cube.yMax(), cube.yMin());
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.EAST, 1.0F - cube.xMax(), 0, 0, 1, cube.zMax(), cube.zMin(), 0, -1, 0, 1.0F - cube.yMin(), 1.0F - cube.yMax());
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.BOTTOM, 	cube.yMin(), 			0, 	0, 1, cube.zMax(), 			cube.zMin(), 			-1, 	0, 	0, 1.0F - cube.xMin(), 	1.0F - cube.xMax());
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.TOP, 		1.0F - cube.yMax(), 	0, 	0, 1, cube.zMax(), 			cube.zMin(), 			1, 	0, 	0, cube.xMax(), 			cube.xMin());
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.NORTH, 	cube.zMin(), 			-1, 	0, 0, 1.0F - cube.xMin(), 	1.0F - cube.xMax(), 	0, 	1, 	0, cube.yMax(), 			cube.yMin());
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.SOUTH, 	1.0F - cube.zMax(), 	0, 	1, 0, cube.yMax(), 			cube.yMin(), 			-1, 	0, 	0, 1.0F - cube.xMin(), 	1.0F - cube.xMax());
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.WEST, 		cube.xMin(), 			0, 	0, 1, cube.zMax(), 			cube.zMin(), 			0, 	1, 	0, cube.yMax(), 			cube.yMin());
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.EAST, 		1.0F - cube.xMax(), 	0, 	0, 1, cube.zMax(), 			cube.zMin(), 			0, 	-1, 	0, 1.0F - cube.yMin(), 	1.0F - cube.yMax());
 		}
 		this.enableAO = false;
 		return somethingRendered;
@@ -167,16 +159,22 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 		int dirZ = side.getOffsetZ();
 
 		int color;
-		float r;
-		float g;
-		float b;
+		float r = 1f;
+		float g = 1f;
+		float b = 1f;
 		if (cube.getFaceFromSide(side).useTint()){
 			color = BlockColorDispatcher.getInstance().getDispatch(block).getWorldColor(this.world, x, y, z);
 			r = (float)(color >> 16 & 0xFF) / 255.0f;
 			g = (float)(color >> 8 & 0xFF) / 255.0f;
 			b = (float)(color & 0xFF) / 255.0f;
-		} else {
+		}
+
+		if (overbright){
 			r = g = b = 1f;
+		} else {
+			r *= SIDE_LIGHT_MULTIPLIER[side.getId()];
+			g *= SIDE_LIGHT_MULTIPLIER[side.getId()];
+			b *= SIDE_LIGHT_MULTIPLIER[side.getId()];
 		}
 
 		if (!this.renderAllFaces){
@@ -229,30 +227,11 @@ public abstract class RenderBlocksMixin implements ExtraRendering {
 				lightBL = (lB + blB + dirB + bB) / 4.0f * depth + lightBL * (1.0f - depth);
 			}
 		}
-		if (this.overbright) {
-			this.colorRedTopRight = r;
-			this.colorRedBottomRight = r;
-			this.colorRedBottomLeft = r;
-			this.colorRedTopLeft = r;
-			this.colorGreenTopRight = g;
-			this.colorGreenBottomRight = g;
-			this.colorGreenBottomLeft = g;
-			this.colorGreenTopLeft = g;
-			this.colorBlueTopRight = b;
-			this.colorBlueBottomRight = b;
-			this.colorBlueBottomLeft = b;
-			this.colorBlueTopLeft = b;
-		} else {
-			this.colorRedBottomRight = this.colorRedTopRight = r * SIDE_LIGHT_MULTIPLIER[side.getId()];
-			this.colorRedBottomLeft = this.colorRedTopRight;
-			this.colorRedTopLeft = this.colorRedTopRight;
-			this.colorGreenBottomRight = this.colorGreenTopRight = g * SIDE_LIGHT_MULTIPLIER[side.getId()];
-			this.colorGreenBottomLeft = this.colorGreenTopRight;
-			this.colorGreenTopLeft = this.colorGreenTopRight;
-			this.colorBlueBottomRight = this.colorBlueTopRight = b * SIDE_LIGHT_MULTIPLIER[side.getId()];
-			this.colorBlueBottomLeft = this.colorBlueTopRight;
-			this.colorBlueTopLeft = this.colorBlueTopRight;
-		}
+
+		this.colorRedTopLeft = this.colorRedBottomLeft = this.colorRedBottomRight = this.colorRedTopRight = r;
+		this.colorGreenTopLeft = this.colorGreenBottomLeft = this.colorGreenBottomRight = this.colorGreenTopRight = g;
+		this.colorBlueTopLeft = this.colorBlueBottomLeft = this.colorBlueBottomRight = this.colorBlueTopRight = b;
+
 		float tl = topP * lightTL + (1.0f - topP) * lightBL;
 		float tr = topP * lightTR + (1.0f - topP) * lightBR;
 		float bl2 = botP * lightTL + (1.0f - botP) * lightBL;

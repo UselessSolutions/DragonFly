@@ -3,13 +3,17 @@ package useless.dragonfly.model.block;
 import net.minecraft.client.render.RenderBlocks;
 import net.minecraft.client.render.block.model.BlockModelRenderBlocks;
 import net.minecraft.core.block.Block;
+import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.mixins.mixin.accessor.RenderBlocksAccessor;
 import useless.dragonfly.mixins.mixininterfaces.ExtraRendering;
 import useless.dragonfly.model.block.processed.BlockModel;
 import useless.dragonfly.model.blockstates.data.BlockstateData;
+import useless.dragonfly.model.blockstates.data.VariantData;
 import useless.dragonfly.model.blockstates.processed.MetaStateInterpreter;
+import useless.dragonfly.registries.TextureRegistry;
 
 import java.lang.reflect.Field;
+import java.util.HashMap;
 
 public class BlockModelDragonFly extends BlockModelRenderBlocks {
 	public BlockModel baseModel;
@@ -57,6 +61,42 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 	public float getItemRenderScale() {
 		return renderScale;
 	}
+	public BlockModel getModelFromState(Block block, int x, int y, int z){
+		if (blockstateData == null || metaStateInterpreter == null){
+			return baseModel;
+		}
+		RenderBlocksAccessor blocksAccessor = (RenderBlocksAccessor)getRenderBlock();
+		int meta = blocksAccessor.getBlockAccess().getBlockMetadata(x,y,z);
+		HashMap<String, String> blockStateList = metaStateInterpreter.getStateMap(blocksAccessor.getBlockAccess(), x, y, z, block, meta);
+		VariantData variantData = null;
+
+		for (String stateString: blockstateData.variants.keySet()) {
+			String[] conditions = stateString.split(",");
+			boolean stateMet = true;
+			for (String condition : conditions) {
+				String s1 = condition.split("=")[0];
+				String s2 = condition.split("=")[1];
+				stateMet &= blockStateList.get(s1).equals(s2);
+			}
+			if (stateMet){
+				variantData = blockstateData.variants.get(stateString);
+				break;
+			}
+		}
+		if (variantData == null) return baseModel;
+
+		String[] modelID = variantData.model.split(":");
+		String namespace;
+		String model;
+		if (modelID.length < 2){
+			namespace = TextureRegistry.coreNamepaceId;
+			model = modelID[0];
+		} else {
+			namespace = modelID[0];
+			model = modelID[1];
+		}
+		return ModelHelper.getOrCreateBlockModel(namespace, model);
+	}
 	public static RenderBlocks getRenderBlock(){
 		try {
 			Field f = BlockModelRenderBlocks.class.getDeclaredField("renderBlocks");
@@ -67,13 +107,5 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 		} catch (NoSuchFieldException | IllegalAccessException e) {
 			throw new RuntimeException(e);
 		}
-	}
-	public BlockModel getModelFromState(Block block, int x, int y, int z){
-		if (blockstateData == null || metaStateInterpreter == null){
-			return baseModel;
-		}
-		RenderBlocksAccessor blocksAccessor = (RenderBlocksAccessor)getRenderBlock();
-		int meta = blocksAccessor.getBlockAccess().getBlockMetadata(x,y,z);
-		return baseModel;
 	}
 }
