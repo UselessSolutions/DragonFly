@@ -7,9 +7,12 @@ public class BoneData {
 
 	private final Map<String, PostData> position;
 
-	public BoneData(Map<String, PostData> rotation, Map<String, PostData> position) {
+	private final Map<String, PostData> scale;
+
+	public BoneData(Map<String, PostData> rotation, Map<String, PostData> position, Map<String, PostData> scale) {
 		this.rotation = rotation;
 		this.position = position;
+		this.scale = scale;
 	}
 
 	public Map<String, PostData> getPosition() {
@@ -18,5 +21,9 @@ public class BoneData {
 
 	public Map<String, PostData> getRotation() {
 		return rotation;
+	}
+
+	public Map<String, PostData> getScale() {
+		return scale;
 	}
 }

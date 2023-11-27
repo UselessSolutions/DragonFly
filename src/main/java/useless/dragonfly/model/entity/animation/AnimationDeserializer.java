@@ -46,8 +46,9 @@ public class AnimationDeserializer implements JsonDeserializer<Animation> {
 	private BoneData makeBone(JsonObject object) {
 		Map<String, PostData> rotateMap = object.has("rotation") ? makePostMap(object.get("rotation")) : Maps.newHashMap();
 		Map<String, PostData> positionMap = object.has("position") ? makePostMap(object.get("position")) : Maps.newHashMap();
+		Map<String, PostData> scaleMap = object.has("scale") ? makePostMap(object.get("scale")) : Maps.newHashMap();
 
-		return new BoneData(rotateMap, positionMap);
+		return new BoneData(rotateMap, positionMap, scaleMap);
 	}
 
 	private Map<String, PostData> makePostMap(JsonElement element) {
