@@ -1,18 +1,20 @@
 package useless.dragonfly.model.entity.animation;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.util.HashMap;
+import java.util.Map;
 
 public class AnimationData {
-	@SerializedName("loop")
-	private boolean loop;
+	private final boolean loop;
 
-	@SerializedName("animation_length")
-	private float animation_length;
+	private final float animation_length;
 
-	@SerializedName("bones")
-	private HashMap<String, BoneData> bones = new HashMap<>();
+	private final Map<String, BoneData> bones;
+
+	public AnimationData(boolean loop, float animationLength, Map<String, BoneData> bones) {
+		this.loop = loop;
+
+		this.animation_length = animationLength;
+		this.bones = bones;
+	}
 
 	public boolean isLoop() {
 		return loop;
@@ -22,7 +24,7 @@ public class AnimationData {
 		return animation_length;
 	}
 
-	public HashMap<String, BoneData> getBones() {
+	public Map<String, BoneData> getBones() {
 		return bones;
 	}
 }

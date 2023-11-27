@@ -38,6 +38,10 @@ public class BenchEntityBones {
 	public float rotateAngleY;
 	public float rotateAngleZ;
 
+	public float scaleX = 1;
+	public float scaleY = 1;
+	public float scaleZ = 1;
+
 
 	@Nullable
 	public List<BenchEntityCube> getCubes() {
@@ -77,6 +81,12 @@ public class BenchEntityBones {
 		this.rotateAngleZ = z;
 	}
 
+	public void setScale(float x, float y, float z) {
+		this.scaleX = x;
+		this.scaleY = y;
+		this.scaleZ = z;
+	}
+
 	public void resetPose() {
 		this.rotationPointX = 0;
 		this.rotationPointY = 0;
@@ -84,6 +94,9 @@ public class BenchEntityBones {
 		this.rotateAngleX = 0;
 		this.rotateAngleY = 0;
 		this.rotateAngleZ = 0;
+		this.scaleX = 1;
+		this.scaleY = 1;
+		this.scaleZ = 1;
 	}
 
 

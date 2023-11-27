@@ -4,10 +4,10 @@ import net.minecraft.client.render.TextureFX;
 import net.minecraft.core.Global;
 import net.minecraft.core.util.helper.Side;
 import net.minecraft.core.world.WorldSource;
-import org.lwjgl.util.vector.Vector3f;
 import useless.dragonfly.model.block.data.FaceData;
 import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.registries.TextureRegistry;
+import useless.dragonfly.utilities.vector.Vector3f;
 
 import static useless.dragonfly.DragonFly.terrainAtlasWidth;
 

@@ -14,4 +14,13 @@ public class VariantData {
 	public int y;
 	@SerializedName("uvlock")
 	public boolean uvlock = false;
+	@Override
+	public String toString() {
+		String builder =
+			"model: " + model + "\n" +
+			"x: " + x + "\n" +
+			"y: " + y + "\n" +
+			"uvlock: " + uvlock + "\n";
+		return builder;
+	}
 }

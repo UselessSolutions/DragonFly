@@ -2,7 +2,6 @@
   "format_version": "1.8.0",
   "animations": {
     "animation.warden.emerge": {
-      "loop": false,
       "animation_length": 6.64,
       "bones": {
         "body": {
@@ -1644,7 +1643,7 @@
       }
     },
     "animation.warden.dig": {
-      "loop": false,
+      "loop": "hold_on_last_frame",
       "animation_length": 5,
       "bones": {
         "body": {
@@ -1793,14 +1792,11 @@
               ],
               "lerp_mode": "catmullrom"
             },
-            "4.5": {
-              "post": [
-                147.5,
-                0,
-                0
-              ],
-              "lerp_mode": "catmullrom"
-            }
+            "4.5": [
+              147.5,
+              0,
+              0
+            ]
           },
           "position": {
             "0.0": {
@@ -1883,13 +1879,11 @@
               ],
               "lerp_mode": "catmullrom"
             },
-            "4.5": {
-              "post": [
-                0,
-                -40,
-                -8
-              ]
-            }
+            "4.5": [
+              0,
+              -40,
+              -8
+            ]
           }
         },
         "head": {
@@ -1950,6 +1944,21 @@
               ],
               "lerp_mode": "catmullrom"
             }
+          },
+          "position": {
+            "0.0": {
+              "post": [
+                0,
+                0,
+                0
+              ],
+              "lerp_mode": "catmullrom"
+            },
+            "4.375": [
+              0,
+              0,
+              0
+            ]
           }
         },
         "right_arm": {
@@ -2168,13 +2177,11 @@
               ],
               "lerp_mode": "catmullrom"
             },
-            "4.375": {
-              "post": [
-                -120,
-                0,
-                0
-              ]
-            }
+            "4.375": [
+              -120,
+              0,
+              0
+            ]
           },
           "position": {
             "0.0": {
@@ -2233,14 +2240,11 @@
               ],
               "lerp_mode": "catmullrom"
             },
-            "4.375": {
-              "post": [
-                0,
-                0,
-                4
-              ],
-              "lerp_mode": "catmullrom"
-            }
+            "4.375": [
+              0,
+              0,
+              4
+            ]
           }
         },
         "right_leg": {
@@ -2309,14 +2313,11 @@
               ],
               "lerp_mode": "catmullrom"
             },
-            "4.5": {
-              "post": [
-                90,
-                0,
-                0
-              ],
-              "lerp_mode": "catmullrom"
-            }
+            "4.5": [
+              90,
+              0,
+              0
+            ]
           },
           "position": {
             "0.0": {
@@ -2375,14 +2376,11 @@
               ],
               "lerp_mode": "catmullrom"
             },
-            "4.2917": {
-              "post": [
-                0,
-                -28,
-                -5
-              ],
-              "lerp_mode": "catmullrom"
-            }
+            "4.2917": [
+              0,
+              -28,
+              -5
+            ]
           }
         },
         "left_leg": {
@@ -2451,14 +2449,11 @@
               ],
               "lerp_mode": "catmullrom"
             },
-            "4.5": {
-              "post": [
-                90,
-                0,
-                0
-              ],
-              "lerp_mode": "catmullrom"
-            }
+            "4.5": [
+              90,
+              0,
+              0
+            ]
           },
           "position": {
             "0.0": {
@@ -2517,13 +2512,11 @@
               ],
               "lerp_mode": "catmullrom"
             },
-            "4.2917": {
-              "post": [
-                0,
-                -28,
-                -5
-              ]
-            }
+            "4.2917": [
+              0,
+              -28,
+              -5
+            ]
           }
         }
       }
@@ -3099,11 +3092,6 @@
             }
           }
         }
-      },
-      "sound_effects": {
-        "1.25": {
-          "effect": "roar"
-        }
       }
     },
     "animation.warden.sniff": {
@@ -3332,11 +3320,6 @@
               "lerp_mode": "catmullrom"
             }
           }
-        }
-      },
-      "sound_effects": {
-        "0.0": {
-          "effect": "sniff"
         }
       }
     },

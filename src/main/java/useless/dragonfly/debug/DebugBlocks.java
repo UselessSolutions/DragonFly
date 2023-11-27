@@ -2,9 +2,11 @@ package useless.dragonfly.debug;
 
 import net.minecraft.client.render.block.color.BlockColorWater;
 import net.minecraft.core.block.Block;
+import net.minecraft.core.block.BlockStairs;
 import net.minecraft.core.block.material.Material;
 import turniplabs.halplibe.helper.BlockBuilder;
 import useless.dragonfly.debug.block.BlockModel;
+import useless.dragonfly.debug.block.metastates.StairsMetaStateInterpreter;
 import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.model.block.BlockModelDragonFly;
 import useless.dragonfly.registries.TextureRegistry;
@@ -42,6 +44,10 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 	public static final Block slope = new BlockBuilder(MOD_ID)
 		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(MOD_ID, "block/slope.json")))
 		.build(new BlockModel("testblock" + blockId, blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(MOD_ID, "block/slope.json")));
+	public static final Block stairs = new BlockBuilder(MOD_ID)
+		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/cut_copper_stairs.json"),
+			ModelHelper.getOrCreateBlockState(MOD_ID, "test_stairs.json"), new StairsMetaStateInterpreter(), true, 0.25f))
+		.build(new BlockStairs(Block.dirt,blockId++));
 
 	public static void init() {
 		try {
@@ -59,6 +65,15 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 				}
 
 				System.out.println(string + " created");
+			}
+			for (String string : getResourceFiles("assets/minecraft/blockstates/")) {
+				System.out.println(string);
+				try {
+					System.out.println(ModelHelper.getOrCreateBlockState(TextureRegistry.coreNamepaceId, string));
+				}
+				catch (Exception e){
+					System.out.println(e);
+				}
 			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);

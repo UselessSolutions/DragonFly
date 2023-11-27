@@ -2,10 +2,10 @@ package useless.dragonfly.model.block.processed;
 
 import net.minecraft.client.render.TextureFX;
 import net.minecraft.core.util.helper.Side;
-import org.lwjgl.util.vector.Vector3f;
 import useless.dragonfly.model.block.data.CubeData;
 import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.utilities.Utilities;
+import useless.dragonfly.utilities.vector.Vector3f;
 
 import java.util.HashMap;
 
