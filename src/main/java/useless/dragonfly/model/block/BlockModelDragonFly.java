@@ -89,7 +89,7 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 		String namespace;
 		String model;
 		if (modelID.length < 2){
-			namespace = NamespaceId.coreNamepaceId;
+			namespace = NamespaceId.coreNamespaceId;
 			model = modelID[0];
 		} else {
 			namespace = modelID[0];

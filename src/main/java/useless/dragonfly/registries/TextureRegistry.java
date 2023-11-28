@@ -8,37 +8,37 @@ import useless.dragonfly.utilities.NamespaceId;
 import java.util.HashMap;
 
 public class TextureRegistry {
-	protected static HashMap<String, Integer> blockTextureNameToIndex = new HashMap<>();
-	protected static HashMap<Integer, String> blockTextureIndexToName = new HashMap<>();
-	protected static HashMap<String, Integer> itemTextureNameToIndex = new HashMap<>();
-	protected static HashMap<Integer, String> itemTextureIndexToName = new HashMap<>();
+	protected static HashMap<NamespaceId, Integer> blockTextureNameToIndex = new HashMap<>();
+	protected static HashMap<Integer, NamespaceId> blockTextureIndexToName = new HashMap<>();
+	protected static HashMap<NamespaceId, Integer> itemTextureNameToIndex = new HashMap<>();
+	protected static HashMap<Integer, NamespaceId> itemTextureIndexToName = new HashMap<>();
 
 	public static void init(){}
 	protected static void registerBlockTexture(NamespaceId namespaceId, int index){
 		if (index < 0 || index > Global.TEXTURE_ATLAS_WIDTH_TILES * Global.TEXTURE_ATLAS_WIDTH_TILES){
 			throw new RuntimeException("Texture index: " + index + " is outside the texture atlas!");
 		}
-		if (blockTextureNameToIndex.containsKey(namespaceId.toString())){
+		if (blockTextureNameToIndex.containsKey(namespaceId)){
 			throw new RuntimeException("There is already a texture with the identifier: " + namespaceId + " all textures must be assigned unique identifiers");
 		}
 		if (blockTextureIndexToName.containsKey(index)){
 			throw new RuntimeException("There is already an identifier for texture: " + index + " called: " + blockTextureIndexToName.get(index));
 		}
-		blockTextureNameToIndex.put(namespaceId.toString(), index);
-		blockTextureIndexToName.put(index, namespaceId.toString());
+		blockTextureNameToIndex.put(namespaceId, index);
+		blockTextureIndexToName.put(index, namespaceId);
 	}
 	protected static void registerItemTexture(NamespaceId namespaceId, int index){
 		if (index < 0 || index > Global.TEXTURE_ATLAS_WIDTH_TILES * Global.TEXTURE_ATLAS_WIDTH_TILES){
 			throw new RuntimeException("Texture index: " + index + " is outside the texture atlas!");
 		}
-		if (itemTextureNameToIndex.containsKey(namespaceId.toString())){
+		if (itemTextureNameToIndex.containsKey(namespaceId)){
 			throw new RuntimeException("There is already a texture with the identifier: " + namespaceId + " all textures must be assigned unique identifiers");
 		}
 		if (itemTextureIndexToName.containsKey(index)){
 			throw new RuntimeException("There is already an identifier for texture: " + index + " called: " + itemTextureIndexToName.get(index));
 		}
-		itemTextureNameToIndex.put(namespaceId.toString(), index);
-		itemTextureIndexToName.put(index, namespaceId.toString());
+		itemTextureNameToIndex.put(namespaceId, index);
+		itemTextureIndexToName.put(index, namespaceId);
 	}
 	protected static void registerTexture(NamespaceId namespaceId, int index){
 		int atlasID = getAtlasID(namespaceId);
@@ -62,22 +62,22 @@ public class TextureRegistry {
 	public static int getIndex(NamespaceId namespaceId){
 		int atlasID = getAtlasID(namespaceId);
 		if (atlasID == 0){
-			return blockTextureNameToIndex.getOrDefault(namespaceId.toString(), 0);
+			return blockTextureNameToIndex.getOrDefault(namespaceId, 0);
 		} else if (atlasID == 1) {
-			return itemTextureNameToIndex.getOrDefault(namespaceId.toString(), 0);
+			return itemTextureNameToIndex.getOrDefault(namespaceId, 0);
 		}
 		throw new RuntimeException("Invalid atlas id of: " + atlasID);
 	}
 	public static int getIndexOrDefault(NamespaceId namespaceId, int defaultIndex){
 		int atlasID = getAtlasID(namespaceId);
 		if (atlasID == 0){
-			return blockTextureNameToIndex.getOrDefault(namespaceId.toString(), defaultIndex);
+			return blockTextureNameToIndex.getOrDefault(namespaceId, defaultIndex);
 		} else if (atlasID == 1) {
-			return itemTextureNameToIndex.getOrDefault(namespaceId.toString(), defaultIndex);
+			return itemTextureNameToIndex.getOrDefault(namespaceId, defaultIndex);
 		}
 		throw new RuntimeException("Invalid atlas id of: " + atlasID);
 	}
-	public static String getKey(int atlasID, int index){
+	public static NamespaceId getNamespaceId(int atlasID, int index){
 		if (atlasID == 0){
 			return blockTextureIndexToName.get(index);
 		} else if (atlasID == 1) {
@@ -85,15 +85,15 @@ public class TextureRegistry {
 		}
 		throw new RuntimeException("Invalid atlas id of: " + atlasID);
 	}
-	public static String getKey(int atlasID, int x, int y){
-		return getKey(atlasID, Block.texCoordToIndex(x,y));
+	public static NamespaceId getNamespaceId(int atlasID, int x, int y){
+		return getNamespaceId(atlasID, Block.texCoordToIndex(x,y));
 	}
 	public static boolean containsTexture(NamespaceId namespaceId){
 		int atlasID = getAtlasID(namespaceId);
 		if (atlasID == 0){
-			return blockTextureNameToIndex.containsKey(namespaceId.toString());
+			return blockTextureNameToIndex.containsKey(namespaceId);
 		} else if (atlasID == 1) {
-			return itemTextureNameToIndex.containsKey(namespaceId.toString());
+			return itemTextureNameToIndex.containsKey(namespaceId);
 		}
 		throw new RuntimeException("Invalid atlas id of: " + atlasID);
 	}
@@ -101,7 +101,9 @@ public class TextureRegistry {
 		if (fullTextureID.charAt(0) == '#'){
 			return;
 		}
-		NamespaceId namespaceId = NamespaceId.namespaceFromFormattedString(fullTextureID);
+		NamespaceId namespaceId = NamespaceId.idFromString(fullTextureID);
+		System.out.println(namespaceId);
+		System.out.println(blockTextureNameToIndex.get(namespaceId));
 		if (TextureRegistry.containsTexture(namespaceId)) return;
 
 		String[] dirSplit = namespaceId.getId().split("/");
@@ -123,7 +125,7 @@ public class TextureRegistry {
 		throw new RuntimeException("Atlas " + texAtlas + " is not supported!");
 	}
 	private static void registerVanillaTexture(String texturename, int texX, int texY){
-		registerTexture(NamespaceId.namespaceFromFormattedString(texturename), texX, texY);
+		registerTexture(NamespaceId.idFromString(texturename), texX, texY);
 	}
 	private static void registerVanillaBlockTexture(String texturename, int texX, int texY){
 		registerVanillaTexture("block/"+texturename, texX, texY);

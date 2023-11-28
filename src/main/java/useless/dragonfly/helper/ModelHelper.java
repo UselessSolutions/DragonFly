@@ -47,7 +47,7 @@ public class ModelHelper {
 		BlockstateData blockstateData = DragonFly.GSON.fromJson(reader, BlockstateData.class);
 		registeredBlockStates.put(modelKey, blockstateData);
 		for (VariantData variant : blockstateData.variants.values()) {
-			NamespaceId variantNamespaceId = NamespaceId.namespaceFromFormattedString(variant.model);
+			NamespaceId variantNamespaceId = NamespaceId.idFromString(variant.model);
 			getOrCreateBlockModel(variantNamespaceId.getNamespace(), variantNamespaceId.getId());
 		}
 		return blockstateData;

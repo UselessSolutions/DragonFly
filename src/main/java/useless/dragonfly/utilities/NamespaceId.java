@@ -1,7 +1,7 @@
 package useless.dragonfly.utilities;
 
 public class NamespaceId {
-	public static final String coreNamepaceId = "minecraft";
+	public static final String coreNamespaceId = "minecraft"; // This is also used as the default namespace if one is not provided
 	private String namespace;
 	private String id;
 	public NamespaceId(String namespace, String id){
@@ -28,10 +28,15 @@ public class NamespaceId {
 		}
 		return super.equals(obj);
 	}
+	@Override
+	public int hashCode()
+	{
+		return toString().hashCode();
+	}
 
-	public static NamespaceId namespaceFromFormattedString(String formattedString){
+	public static NamespaceId idFromString(String formattedString){
 		formattedString = formattedString.toLowerCase();
-		String namespace = coreNamepaceId;
+		String namespace = coreNamespaceId;
 		String id;
 		if (formattedString.contains(":")){
 			namespace = formattedString.split(":")[0];

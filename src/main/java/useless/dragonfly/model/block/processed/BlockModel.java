@@ -22,7 +22,7 @@ public class BlockModel {
 				namespace = modelData.parent.split(":")[0];
 				modelName = modelData.parent.split(":")[1];
 			} else {
-				namespace = NamespaceId.coreNamepaceId;
+				namespace = NamespaceId.coreNamespaceId;
 				modelName = modelData.parent;
 			}
 			parentModel = ModelHelper.getOrCreateBlockModel(namespace, modelName );
@@ -51,15 +51,15 @@ public class BlockModel {
 		}
 
 	}
-	public String getTexture(String faceTexKey){
+	public NamespaceId getTexture(String faceTexKey){
 		String result = textureMap.get(faceTexKey.substring(1));
-		if (result == null || result.equals(faceTexKey)) return TextureRegistry.getKey(0,0);
+		if (result == null || result.equals(faceTexKey)) return TextureRegistry.getNamespaceId(0,0);
 		if (result.contains("#")){
 			return getTexture(result);
 		} else if (!result.contains(":")) {
-			result = NamespaceId.coreNamepaceId + ":" + result;
+			result = NamespaceId.coreNamespaceId + ":" + result;
 		}
-		return result;
+		return NamespaceId.idFromString(result);
 	}
 	public boolean getAO(){
 		return modelData.ambientocclusion;
