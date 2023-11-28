@@ -24,7 +24,9 @@ public class BlockModel extends BlockTransparent {
 	public boolean canPlaceOnSurface() {
 		return true;
 	}
-
+	public int getRenderBlockPass() {
+		return 1;
+	}
 
 	public void getCollidingBoundingBoxes(World world, int x, int y, int z, AABB aabb, ArrayList aabbList) {
 		for (BlockCube cube: model.blockCubes) {

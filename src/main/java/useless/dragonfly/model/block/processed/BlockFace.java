@@ -7,6 +7,7 @@ import net.minecraft.core.world.WorldSource;
 import useless.dragonfly.model.block.data.FaceData;
 import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.registries.TextureRegistry;
+import useless.dragonfly.utilities.NamespaceId;
 import useless.dragonfly.utilities.vector.Vector3f;
 
 import static useless.dragonfly.DragonFly.terrainAtlasWidth;
@@ -59,7 +60,7 @@ public class BlockFace {
 		}
 		System.out.println(getTexture());
 		System.out.println(parentCube.parentModel.getTexture(getTexture()));
-		int texture = TextureRegistry.getIndexOrDefault(parentCube.parentModel.getTexture(getTexture()), 0);
+		int texture = TextureRegistry.getIndexOrDefault(NamespaceId.namespaceFromFormattedString(parentCube.parentModel.getTexture(getTexture())), 0);
 		vertices = new Vector3f[]{parentCube.vertices.get(vertexKeyMap[0]), parentCube.vertices.get(vertexKeyMap[1]), parentCube.vertices.get(vertexKeyMap[2]), parentCube.vertices.get(vertexKeyMap[3])};
 		vertexUVs = new double[][]{generateVertexUV(texture, 0), generateVertexUV(texture, 1), generateVertexUV(texture, 2), generateVertexUV(texture, 3)};
 	}
