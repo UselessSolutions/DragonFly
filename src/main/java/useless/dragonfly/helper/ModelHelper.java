@@ -7,7 +7,7 @@ import useless.dragonfly.model.block.processed.BlockModel;
 import useless.dragonfly.model.blockstates.data.BlockstateData;
 import useless.dragonfly.model.blockstates.data.VariantData;
 import useless.dragonfly.model.entity.BenchEntityModel;
-import useless.dragonfly.registries.TextureRegistry;
+import useless.dragonfly.utilities.NamespaceId;
 import useless.dragonfly.utilities.Utilities;
 
 import java.io.BufferedReader;
@@ -25,11 +25,12 @@ public class ModelHelper {
 	 * Place mod models in the <i>assets/modid/model/block/</i> directory for them to be seen.
 	 */
 	public static BlockModel getOrCreateBlockModel(String modId, String modelSource) {
-		String modelKey = ModelHelper.getModelLocation(modId, modelSource);
+		NamespaceId namespaceId = new NamespaceId(modId, modelSource);
+		String modelKey = ModelHelper.getModelLocation(namespaceId);
 		if (registeredModels.containsKey(modelKey)){
 			return registeredModels.get(modelKey);
 		}
-		BlockModel model = new BlockModel(loadBlockModel(modId, modelSource));
+		BlockModel model = new BlockModel(loadBlockModel(namespaceId));
 		registeredModels.put(modelKey, model);
 		return model;
 	}
@@ -37,7 +38,8 @@ public class ModelHelper {
 	 * Place mod models in the <i>assets/modid/blockstates/</i> directory for them to be seen.
 	 */
 	public static BlockstateData getOrCreateBlockState(String modId, String blockStateSource) {
-		String modelKey = ModelHelper.getBlockStateLocation(modId, blockStateSource);
+		NamespaceId namespaceId = new NamespaceId(modId, blockStateSource);
+		String modelKey = ModelHelper.getBlockStateLocation(namespaceId);
 		if (registeredBlockStates.containsKey(modelKey)){
 			return registeredBlockStates.get(modelKey);
 		}
@@ -45,23 +47,14 @@ public class ModelHelper {
 		BlockstateData blockstateData = DragonFly.GSON.fromJson(reader, BlockstateData.class);
 		registeredBlockStates.put(modelKey, blockstateData);
 		for (VariantData variant : blockstateData.variants.values()) {
-			String[] modelID = variant.model.split(":");
-			String namespace;
-			String model;
-			if (modelID.length < 2){
-				namespace = TextureRegistry.coreNamepaceId;
-				model = modelID[0];
-			} else {
-				namespace = modelID[0];
-				model = modelID[1];
-			}
-			getOrCreateBlockModel(namespace, model);
+			NamespaceId variantNamespaceId = NamespaceId.idFromString(variant.model);
+			getOrCreateBlockModel(variantNamespaceId.getNamespace(), variantNamespaceId.getId());
 		}
 		return blockstateData;
 	}
 
-	public static ModelData loadBlockModel(String modId, String modelSource){
-		String modelKey = getModelLocation(modId, modelSource);
+	public static ModelData loadBlockModel(NamespaceId namespaceId){
+		String modelKey = getModelLocation(namespaceId);
 		if (modelDataFiles.containsKey(modelKey)){
 			return modelDataFiles.get(modelKey);
 		}
@@ -75,7 +68,7 @@ public class ModelHelper {
 	 * Place mod models in the <i>assets/modid/model/</i> directory for them to be seen.
 	 */
 	public static BenchEntityModel getOrCreateEntityModel(String modID, String modelSource, Class<? extends BenchEntityModel> baseModel) {
-		String entityModelKey = ModelHelper.getModelLocation(modID, modelSource);
+		String entityModelKey = ModelHelper.getModelLocation(new NamespaceId(modID, modelSource));
 
 		if (benchEntityModelMap.containsKey(entityModelKey)){
 			return benchEntityModelMap.get(entityModelKey);
@@ -86,16 +79,18 @@ public class ModelHelper {
 		benchEntityModelMap.put(entityModelKey, model);
 		return model;
 	}
-	public static String getModelLocation(String modID, String modelSource){
+	public static String getModelLocation(NamespaceId namespaceId){
+		String modelSource = namespaceId.getId();
 		if (!modelSource.contains(".json")){
 			modelSource += ".json";
 		}
-		return "/assets/" + modID + "/model/" + modelSource;
+		return "/assets/" + namespaceId.getNamespace() + "/model/" + modelSource;
 	}
-	public static String getBlockStateLocation(String modID, String modelSource){
+	public static String getBlockStateLocation(NamespaceId namespaceId){
+		String modelSource = namespaceId.getId();
 		if (!modelSource.contains(".json")){
 			modelSource += ".json";
 		}
-		return "/assets/" + modID + "/blockstates/" + modelSource;
+		return "/assets/" + namespaceId.getNamespace() + "/blockstates/" + modelSource;
 	}
 }

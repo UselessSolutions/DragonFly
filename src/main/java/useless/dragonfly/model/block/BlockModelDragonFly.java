@@ -10,7 +10,7 @@ import useless.dragonfly.model.block.processed.BlockModel;
 import useless.dragonfly.model.blockstates.data.BlockstateData;
 import useless.dragonfly.model.blockstates.data.VariantData;
 import useless.dragonfly.model.blockstates.processed.MetaStateInterpreter;
-import useless.dragonfly.registries.TextureRegistry;
+import useless.dragonfly.utilities.NamespaceId;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -89,7 +89,7 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 		String namespace;
 		String model;
 		if (modelID.length < 2){
-			namespace = TextureRegistry.coreNamepaceId;
+			namespace = NamespaceId.coreNamespaceId;
 			model = modelID[0];
 		} else {
 			namespace = modelID[0];

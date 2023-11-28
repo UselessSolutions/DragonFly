@@ -1,9 +1,9 @@
 package useless.dragonfly.model.block.processed;
 
-import net.minecraft.core.util.helper.Side;
 import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.registries.TextureRegistry;
+import useless.dragonfly.utilities.NamespaceId;
 
 import java.util.HashMap;
 
@@ -22,7 +22,7 @@ public class BlockModel {
 				namespace = modelData.parent.split(":")[0];
 				modelName = modelData.parent.split(":")[1];
 			} else {
-				namespace = TextureRegistry.coreNamepaceId;
+				namespace = NamespaceId.coreNamespaceId;
 				modelName = modelData.parent;
 			}
 			parentModel = ModelHelper.getOrCreateBlockModel(namespace, modelName );
@@ -51,16 +51,15 @@ public class BlockModel {
 		}
 
 	}
-	public String getTexture(String faceTexKey){
+	public NamespaceId getTexture(String faceTexKey){
 		String result = textureMap.get(faceTexKey.substring(1));
-		if (result == null) return result;
-		if (result.equals(faceTexKey)) return TextureRegistry.getKey(0,0);
+		if (result == null || result.equals(faceTexKey)) return TextureRegistry.getNamespaceId(0,0);
 		if (result.contains("#")){
 			return getTexture(result);
 		} else if (!result.contains(":")) {
-			result = TextureRegistry.coreNamepaceId + ":" + result;
+			result = NamespaceId.coreNamespaceId + ":" + result;
 		}
-		return result;
+		return NamespaceId.idFromString(result);
 	}
 	public boolean getAO(){
 		return modelData.ambientocclusion;
