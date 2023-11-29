@@ -134,7 +134,7 @@ public class BlockFace {
 		return new double[]{u, v};
 	}
 	public boolean cullFace(int x, int y, int z, WorldSource blockAccess){
-		boolean renderOuterSide = blockAccess.getBlock(x, y, z).shouldSideBeRendered(blockAccess, x + getSide().getOffsetX(), y + getSide().getOffsetY(), z + getSide().getOffsetZ(), side.getId(), blockAccess.getBlockMetadata(x, y, z));
+		boolean renderOuterSide = blockAccess.getBlock(x, y, z).shouldSideBeRendered(blockAccess, x + getSide().getOffsetX(), y + getSide().getOffsetY(), z + getSide().getOffsetZ(), side.getId(), blockAccess.getBlockMetadata(x + getSide().getOffsetX(), y + getSide().getOffsetY(), z + getSide().getOffsetZ()));
 		return !renderOuterSide && side == cullFace;
 	}
 	public boolean useTint(){
