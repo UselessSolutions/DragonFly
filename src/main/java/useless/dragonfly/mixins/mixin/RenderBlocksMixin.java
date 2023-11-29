@@ -8,12 +8,11 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import useless.dragonfly.mixins.mixininterfaces.ExtraRendering;
 import useless.dragonfly.model.block.BlockModelDragonFly;
 import useless.dragonfly.model.block.BlockModelRenderer;
 
 @Mixin(value = RenderBlocks.class, remap = false)
-public abstract class RenderBlocksMixin implements ExtraRendering {
+public abstract class RenderBlocksMixin {
 
 	@Inject(method = "renderBlockOnInventory(Lnet/minecraft/core/block/Block;IF)V", at = @At("HEAD"), cancellable = true)
 	public void redirectRenderer(Block block, int metadata, float brightness, CallbackInfo ci){
