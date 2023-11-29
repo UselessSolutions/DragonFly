@@ -66,10 +66,15 @@ public class BlockModelRenderer {
 		BlockModelRenderer.rotationX = rotationX;
 		BlockModelRenderer.rotationY = rotationY;
 		if (rotationX % 90 != 0 || rotationY % 90 != 0) throw new IllegalArgumentException("Rotation must be a multiple of 90!!");
+		boolean didRender = false;
 		if (mc.isAmbientOcclusionEnabled() && model.getAO()) {
-			return renderStandardModelWithAmbientOcclusion(model, block, x, y, z);
+			didRender = renderStandardModelWithAmbientOcclusion(model, block, x, y, z);
+		} else {
+			didRender = renderStandardModelWithColorMultiplier(model, block, x, y, z, 1, 1, 1);
 		}
-		return renderStandardModelWithColorMultiplier(model, block, x, y, z, 1, 1, 1);
+		BlockModelRenderer.rotationX = 0;
+		BlockModelRenderer.rotationY = 0;
+		return didRender;
 	}
 
 	public static boolean renderModelNoCulling(BlockModel model, Block block, int x, int y, int z, int rotationX, int rotationY) {
