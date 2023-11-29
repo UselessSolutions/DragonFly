@@ -324,4 +324,52 @@ public class Vector3f extends Vector implements Serializable {
 
 		return false;
 	}
+
+	// =================================================================
+	// Below this line is additional methods made for DragonFly
+	// =================================================================
+	public Vector3f rotateAroundX(Vector3f origin, float angle){
+		angle = (float) ((angle) * (Math.PI/180)); // Convert to radians
+		float y = getY();
+		float z = getZ();
+		z -= origin.getZ();
+		y -= origin.getY();
+
+		float newZ = (float) (z * Math.cos(angle) - y * Math.sin(angle));
+		float newY = (float) (z * Math.sin(angle) + y * Math.cos(angle));
+
+		z = newZ + origin.getZ();
+		y = newY + origin.getY();
+		return new Vector3f(getX(), y, z);
+	}
+
+	public Vector3f rotateAroundY(Vector3f origin, float angle){
+		angle = (float) ((angle) * (Math.PI/180)); // Convert to radians
+		float x = getX();
+		float z = getZ();
+		z -= origin.getZ();
+		x -= origin.getX();
+
+		float newZ = (float) (z * Math.cos(angle) - x * Math.sin(angle));
+		float newX = (float) (z * Math.sin(angle) + x * Math.cos(angle));
+
+		z = newZ + origin.getZ();
+		x = newX + origin.getX();
+		return new Vector3f(x, getY(), z);
+	}
+	public Vector3f rotateAroundZ(Vector3f origin, float angle){
+		angle = (float) ((angle) * (Math.PI/180)); // Convert to radians
+		float x = getX();
+		float y = getY();
+		y -= origin.getY();
+		x -= origin.getX();
+
+		float newZ = (float) (y * Math.cos(angle) - x * Math.sin(angle));
+		float newY = (float) (y * Math.sin(angle) + x * Math.cos(angle));
+
+		y = newZ + origin.getY();
+		x = newY + origin.getX();
+		return new Vector3f(x, y, getZ());
+	}
+
 }

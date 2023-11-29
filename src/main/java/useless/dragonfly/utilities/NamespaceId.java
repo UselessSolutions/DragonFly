@@ -2,8 +2,8 @@ package useless.dragonfly.utilities;
 
 public class NamespaceId {
 	public static final String coreNamespaceId = "minecraft"; // This is also used as the default namespace if one is not provided
-	private String namespace;
-	private String id;
+	private final String namespace;
+	private final String id;
 	public NamespaceId(String namespace, String id){
 		this.namespace = namespace.toLowerCase();
 		this.id = id.toLowerCase();

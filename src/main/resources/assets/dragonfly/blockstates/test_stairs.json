@@ -1,23 +1,45 @@
 {
   "variants": {
-    "facing=north,half=bottom": {
-      "model": "minecraft:block/cut_copper_stairs",
+    "facing=east,half=bottom,shape=straight": {
+      "model": "minecraft:block/acacia_stairs"
+    },
+    "facing=east,half=top,shape=straight": {
+      "model": "minecraft:block/acacia_stairs",
+      "uvlock": true,
+      "x": 180
+    },
+    "facing=north,half=bottom,shape=straight": {
+      "model": "minecraft:block/acacia_stairs",
       "uvlock": true,
       "y": 270
     },
-    "facing=east,half=bottom": {
-      "model": "minecraft:block/exposed_cut_copper_stairs",
+    "facing=north,half=top,shape=straight": {
+      "model": "minecraft:block/acacia_stairs",
       "uvlock": true,
-      "y": 180
+      "x": 180,
+      "y": 270
     },
-    "facing=south,half=bottom": {
-      "model": "minecraft:block/oxidized_cut_copper_stairs",
+    "facing=south,half=bottom,shape=straight": {
+      "model": "minecraft:block/acacia_stairs",
       "uvlock": true,
       "y": 90
     },
-    "facing=west,half=bottom": {
-      "model": "minecraft:block/weathered_cut_copper_stairs",
-      "uvlock": true
+    "facing=south,half=top,shape=straight": {
+      "model": "minecraft:block/acacia_stairs",
+      "uvlock": true,
+      "x": 180,
+      "y": 90
+    },
+    "facing=west,half=bottom,shape=straight": {
+      "model": "minecraft:block/acacia_stairs",
+      "uvlock": true,
+      "y": 180
+    },
+    "facing=west,half=top,shape=straight": {
+      "model": "minecraft:block/acacia_stairs",
+      "uvlock": true,
+      "x": 180,
+      "y": 180
     }
   }
 }

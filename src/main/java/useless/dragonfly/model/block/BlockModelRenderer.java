@@ -13,6 +13,7 @@ import useless.dragonfly.mixins.mixin.accessor.RenderBlocksAccessor;
 import useless.dragonfly.model.block.processed.BlockCube;
 import useless.dragonfly.model.block.processed.BlockFace;
 import useless.dragonfly.model.block.processed.BlockModel;
+import useless.dragonfly.utilities.vector.Vector3f;
 
 import java.lang.reflect.Field;
 
@@ -33,6 +34,8 @@ public class BlockModelRenderer {
 	private static float colorBlueBottomLeft;
 	private static float colorBlueTopLeft;
 	private static int overrideBlockTexture = -1;
+	private static int rotationX = 0;
+	private static int rotationY = 0;
 	public static void renderModelInventory(BlockModelDragonFly modelDragonFly, Block block, int meta, float brightness){
 		float xOffset = 0.5f;
 		float yOffset = 0.5f;
@@ -59,23 +62,26 @@ public class BlockModelRenderer {
 		}
 		GL11.glTranslatef(xOffset, yOffset, zOffset);
 	}
-	public static boolean renderModelNormal(BlockModel model, Block block, int x, int y, int z) {
+	public static boolean renderModelNormal(BlockModel model, Block block, int x, int y, int z, int rotationX, int rotationY) {
+		BlockModelRenderer.rotationX = rotationX;
+		BlockModelRenderer.rotationY = rotationY;
+		if (rotationX % 90 != 0 || rotationY % 90 != 0) throw new IllegalArgumentException("Rotation must be a multiple of 90!!");
 		if (mc.isAmbientOcclusionEnabled() && model.getAO()) {
 			return renderStandardModelWithAmbientOcclusion(model, block, x, y, z);
 		}
 		return renderStandardModelWithColorMultiplier(model, block, x, y, z, 1, 1, 1);
 	}
 
-	public static boolean renderModelNoCulling(BlockModel model, Block block, int x, int y, int z) {
+	public static boolean renderModelNoCulling(BlockModel model, Block block, int x, int y, int z, int rotationX, int rotationY) {
 		renderAllFaces = true;
-		boolean result = renderModelNormal(model, block, x, y, z);
+		boolean result = renderModelNormal(model, block, x, y, z, rotationX, rotationY);
 		renderAllFaces = false;
 		return result;
 	}
 
-	public static boolean renderModelBlockUsingTexture(BlockModel model, Block block, int x, int y, int z, int textureIndex) {
+	public static boolean renderModelBlockUsingTexture(BlockModel model, Block block, int x, int y, int z, int textureIndex, int rotationX, int rotationY) {
 		overrideBlockTexture = textureIndex;
-		boolean result = renderModelNormal(model, block, x, y, z);
+		boolean result = renderModelNormal(model, block, x, y, z, rotationX, rotationY);
 		overrideBlockTexture = -1;
 		return result;
 	}
@@ -205,27 +211,38 @@ public class BlockModelRenderer {
 			uvTR = face.vertexUVs[3];
 		}
 
+
+		Vector3f[] faceVertices = new Vector3f[4];
+		for (int i = 0; i < faceVertices.length; i++) {
+			Vector3f origin = new Vector3f(0.5f, 0.5f, 0.5f);
+			faceVertices[i] = face.vertices[i].rotateAroundX(origin, rotationX).rotateAroundY(origin, rotationY + 180);
+		}
+		Vector3f vtl = faceVertices[0];
+		Vector3f vbl = faceVertices[1];
+		Vector3f vbr = faceVertices[2];
+		Vector3f vtr = faceVertices[3];
+
 		if (enableAO) {
 			// Top Left
 			tessellator.setColorOpaque_F(colorRedTopLeft, colorGreenTopLeft, colorBlueTopLeft);
-			tessellator.addVertexWithUV(x + face.vertices[0].x, y + face.vertices[0].y, z + face.vertices[0].z, uvTL[0], uvTL[1]);
+			tessellator.addVertexWithUV(x + vtl.x, y + vtl.y, z + vtl.z, uvTL[0], uvTL[1]);
 
 			// Bottom Left
 			tessellator.setColorOpaque_F(colorRedBottomLeft, colorGreenBottomLeft, colorBlueBottomLeft);
-			tessellator.addVertexWithUV(x + face.vertices[1].x, y + face.vertices[1].y, z + face.vertices[1].z, uvBL[0], uvBL[1]);
+			tessellator.addVertexWithUV(x + vbl.x, y + vbl.y, z + vbl.z, uvBL[0], uvBL[1]);
 
 			// Bottom Right
 			tessellator.setColorOpaque_F(colorRedBottomRight, colorGreenBottomRight, colorBlueBottomRight);
-			tessellator.addVertexWithUV(x + face.vertices[2].x, y + face.vertices[2].y, z + face.vertices[2].z, uvBR[0], uvBR[1]);
+			tessellator.addVertexWithUV(x + vbr.x, y + vbr.y, z + vbr.z, uvBR[0], uvBR[1]);
 
 			// Top Right
 			tessellator.setColorOpaque_F(colorRedTopRight, colorGreenTopRight, colorBlueTopRight);
-			tessellator.addVertexWithUV(x + face.vertices[3].x, y + face.vertices[3].y, z + face.vertices[3].z, uvTR[0], uvTR[1]);
+			tessellator.addVertexWithUV(x + vtr.x, y + vtr.y, z + vtr.z, uvTR[0], uvTR[1]);
 		} else {
-			tessellator.addVertexWithUV(x + face.vertices[0].x, y + face.vertices[0].y, z + face.vertices[0].z, uvTL[0], uvTL[1]); // Top Left
-			tessellator.addVertexWithUV(x + face.vertices[1].x, y + face.vertices[1].y, z + face.vertices[1].z, uvBL[0], uvBL[1]); // Bottom Left
-			tessellator.addVertexWithUV(x + face.vertices[2].x, y + face.vertices[2].y, z + face.vertices[2].z, uvBR[0], uvBR[1]); // Bottom Right
-			tessellator.addVertexWithUV(x + face.vertices[3].x, y + face.vertices[3].y, z + face.vertices[3].z, uvTR[0], uvTR[1]); // Top Right
+			tessellator.addVertexWithUV(x + vtl.x, y + vtl.y, z + vtl.z, uvTL[0], uvTL[1]); // Top Left
+			tessellator.addVertexWithUV(x + vbl.x, y + vbl.y, z + vbl.z, uvBL[0], uvBL[1]); // Bottom Left
+			tessellator.addVertexWithUV(x + vbr.x, y + vbr.y, z + vbr.z, uvBR[0], uvBR[1]); // Bottom Right
+			tessellator.addVertexWithUV(x + vtr.x, y + vtr.y, z + vtr.z, uvTR[0], uvTR[1]); // Top Right
 		}
 	}
 	public static boolean renderStandardModelWithColorMultiplier(BlockModel model, Block block, int x, int y, int z, float r, float g, float b) {
