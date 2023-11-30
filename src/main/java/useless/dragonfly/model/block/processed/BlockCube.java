@@ -68,14 +68,14 @@ public class BlockCube {
 		}
 		throw new RuntimeException("Specified side does not exist on a cube!!!");
 	}
-	public boolean isOuterFace(Side side){
-		return outerFace[side.getId()];
+	public boolean isOuterFace(Side side, int rotationX, int rotationY){
+		return outerFace[rotateSide(side, rotationX, rotationY).getId()];
 	}
-
-	public BlockFace getFaceFromSide(Side side, int rotationX, int rotationY){
+	public Side rotateSide(Side side, int rotationX, int rotationY){
 		Side keySide = side;
 		Side[] yRot = new Side[]{Side.EAST, Side.SOUTH, Side.WEST, Side.NORTH};
 		Side[] xRot = new Side[]{Side.TOP, Side.NORTH, Side.BOTTOM, Side.SOUTH};
+
 		int indexY = -1;
 		for (int i = 0; i < yRot.length; i++) {
 			if (keySide == yRot[i]){
@@ -85,6 +85,7 @@ public class BlockCube {
 		if (indexY != -1){
 			keySide = yRot[(indexY + rotationY/90) % yRot.length];
 		}
+
 		int indexX = -1;
 		for (int i = 0; i < xRot.length; i++) {
 			if (keySide == xRot[i]){
@@ -94,11 +95,11 @@ public class BlockCube {
 		if (indexX != -1){
 			keySide = xRot[(indexX + (rotationX)/90) % xRot.length];
 		}
+		return keySide;
+	}
 
-//		if (indexY != -1 && indexX != -1 && (keySide == Side.NORTH || keySide == Side.SOUTH)){
-//			return faces.get(ModelData.sideToKey.get(keySide.getOpposite()));
-//		}
-		return faces.get(ModelData.sideToKey.get(keySide));
+	public BlockFace getFaceFromSide(Side side, int rotationX, int rotationY){
+		return faces.get(ModelData.sideToKey.get(rotateSide(side, rotationX, rotationY)));
 	}
 	public float xMin(){
 		return fromScaled.getX();

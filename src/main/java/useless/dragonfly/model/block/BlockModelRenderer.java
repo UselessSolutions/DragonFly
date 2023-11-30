@@ -67,7 +67,7 @@ public class BlockModelRenderer {
 		BlockModelRenderer.rotationX = rotationX;
 		BlockModelRenderer.rotationY = rotationY;
 		if (rotationX % 90 != 0 || rotationY % 90 != 0) throw new IllegalArgumentException("Rotation must be a multiple of 90!!");
-		boolean didRender = false;
+		boolean didRender;
 		if (mc.isAmbientOcclusionEnabled() && model.getAO()) {
 			didRender = renderStandardModelWithAmbientOcclusion(model, block, x, y, z);
 		} else {
@@ -308,6 +308,7 @@ public class BlockModelRenderer {
 				} else {
 					sideBrightness = rba().invokeGetBlockBrightness(rba().getBlockAccess(), _x, _y, _z);
 				}
+
 
 				float red;
 				float green;
