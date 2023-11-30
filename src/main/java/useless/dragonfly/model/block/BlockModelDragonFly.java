@@ -1,18 +1,15 @@
 package useless.dragonfly.model.block;
 
-import net.minecraft.client.render.RenderBlocks;
 import net.minecraft.client.render.block.model.BlockModelRenderBlocks;
 import net.minecraft.core.block.Block;
 import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.mixins.mixin.accessor.RenderBlocksAccessor;
-import useless.dragonfly.mixins.mixininterfaces.ExtraRendering;
 import useless.dragonfly.model.block.processed.BlockModel;
 import useless.dragonfly.model.blockstates.data.BlockstateData;
 import useless.dragonfly.model.blockstates.data.VariantData;
 import useless.dragonfly.model.blockstates.processed.MetaStateInterpreter;
 import useless.dragonfly.utilities.NamespaceId;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 
 public class BlockModelDragonFly extends BlockModelRenderBlocks {
@@ -21,6 +18,8 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 	public float renderScale;
 	public BlockstateData blockstateData;
 	public MetaStateInterpreter metaStateInterpreter;
+	private int rotationX = 0;
+	private int rotationY = 0;
 	public BlockModelDragonFly(BlockModel model) {
 		this(model, null, null,true, 0.25f);
 	}
@@ -36,20 +35,26 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 
 	@Override
 	public boolean render(Block block, int x, int y, int z) {
+		rotationX = 0;
+		rotationY = 0;
 		BlockModel model = getModelFromState(block, x, y, z);
-		return ((ExtraRendering)getRenderBlock()).renderModelNormal(model, block, x, y, z);
+		return BlockModelRenderer.renderModelNormal(model, block, x, y, z, rotationX, rotationY);
 	}
 
 	@Override
 	public boolean renderNoCulling(Block block, int x, int y, int z) {
+		rotationX = 0;
+		rotationY = 0;
 		BlockModel model = getModelFromState(block, x, y, z);
-		return ((ExtraRendering)getRenderBlock()).renderModelNoCulling(model, block, x, y, z);
+		return BlockModelRenderer.renderModelNoCulling(model, block, x, y, z, rotationX, rotationY);
 	}
 
 	@Override
 	public boolean renderWithOverrideTexture(Block block, int x, int y, int z, int textureIndex) {
+		rotationX = 0;
+		rotationY = 0;
 		BlockModel model = getModelFromState(block, x, y, z);
-		return ((ExtraRendering)getRenderBlock()).renderModelBlockUsingTexture(model, block, x, y, z, textureIndex);
+		return BlockModelRenderer.renderModelBlockUsingTexture(model, block, x, y, z, textureIndex, rotationX, rotationY);
 	}
 
 	@Override
@@ -65,7 +70,7 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 		if (blockstateData == null || metaStateInterpreter == null){
 			return baseModel;
 		}
-		RenderBlocksAccessor blocksAccessor = (RenderBlocksAccessor)getRenderBlock();
+		RenderBlocksAccessor blocksAccessor = (RenderBlocksAccessor) BlockModelRenderer.getRenderBlocks();
 		int meta = blocksAccessor.getBlockAccess().getBlockMetadata(x,y,z);
 		HashMap<String, String> blockStateList = metaStateInterpreter.getStateMap(blocksAccessor.getBlockAccess(), x, y, z, block, meta);
 		VariantData variantData = null;
@@ -95,17 +100,9 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 			namespace = modelID[0];
 			model = modelID[1];
 		}
+		rotationX = variantData.x;
+		rotationY = variantData.y;
 		return ModelHelper.getOrCreateBlockModel(namespace, model);
 	}
-	public static RenderBlocks getRenderBlock(){
-		try {
-			Field f = BlockModelRenderBlocks.class.getDeclaredField("renderBlocks");
-			f.setAccessible(true);
-			RenderBlocks rb = (RenderBlocks) f.get(null);
-			f.setAccessible(false);
-			return rb;
-		} catch (NoSuchFieldException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-	}
+
 }
