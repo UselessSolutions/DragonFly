@@ -125,5 +125,6 @@ public class BlockCube {
 	public Vector3f getMax(){
 		return toScaled;
 	}
+	public boolean shade() {return cubeData.shade;}
 
 }

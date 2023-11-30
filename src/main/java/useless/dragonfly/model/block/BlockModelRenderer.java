@@ -11,6 +11,7 @@ import net.minecraft.core.world.WorldSource;
 import org.lwjgl.opengl.GL11;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.mixins.mixin.accessor.RenderBlocksAccessor;
+import useless.dragonfly.model.block.data.PositionData;
 import useless.dragonfly.model.block.processed.BlockCube;
 import useless.dragonfly.model.block.processed.BlockFace;
 import useless.dragonfly.model.block.processed.BlockModel;
@@ -41,8 +42,27 @@ public class BlockModelRenderer {
 		float xOffset = 0.5f;
 		float yOffset = 0.5f;
 		float zOffset = 0.5f;
+		float xScale = 1f;
+		float yScale = 1f;
+		float zScale = 1f;
+		PositionData displayData = modelDragonFly.baseModel.getDisplayPosition("firstperson_righthand");
+		if (displayData != null){
+			xOffset -= (float) displayData.translation[0]/16f;
+			yOffset -= (float) displayData.translation[1]/16f;
+			zOffset -= (float) displayData.translation[2]/16f;
+
+			xScale = (float) displayData.scale[0];
+			yScale = (float) displayData.scale[1];
+			zScale = (float) displayData.scale[2];
+
+			GL11.glRotatef((float) displayData.rotation[0], 1, 0 ,0);
+			GL11.glRotatef((float) displayData.rotation[1], 0, 1 ,0);
+			GL11.glRotatef((float) displayData.rotation[2], 0, 0 ,1);
+		}
 		Tessellator tessellator = Tessellator.instance;
-		GL11.glTranslatef(-xOffset, -yOffset, -zOffset); // TODO get hand model transformations from the model data
+		GL11.glRotatef(90f, 0, 1, 0);
+		GL11.glTranslatef(-xOffset, -yOffset, -zOffset);
+		GL11.glScalef(xScale, yScale, zScale);
 		if (modelDragonFly.baseModel.blockCubes != null){
 			for (BlockCube cube: modelDragonFly.baseModel.blockCubes) {
 				for (BlockFace face: cube.faces.values()) {
@@ -139,7 +159,7 @@ public class BlockModelRenderer {
 		float lightBR = 1.0f;
 		float lightBL = 1.0f;
 		float lightTL = 1.0f;
-		if (!rba().getOverbright()) {
+		if (!(rba().getOverbright() || !cube.shade())) {
 			r *= rba().getSIDE_LIGHT_MULTIPLIER()[side.getId()];
 			g *= rba().getSIDE_LIGHT_MULTIPLIER()[side.getId()];
 			b *= rba().getSIDE_LIGHT_MULTIPLIER()[side.getId()];
@@ -340,7 +360,7 @@ public class BlockModelRenderer {
 					default:
 						throw new RuntimeException("Specified side does not exist on a cube!!!");
 				}
-				tessellator.setColorOpaque_F(red * sideBrightness, green * sideBrightness, blue * sideBrightness);
+				tessellator.setColorOpaque_F(red * (cube.shade() ? sideBrightness : 1f), green * (cube.shade() ? sideBrightness : 1f), blue * (cube.shade() ? sideBrightness : 1f));
 				renderModelFace(face, x, y, z);
 				renderedSomething = true;
 			}
