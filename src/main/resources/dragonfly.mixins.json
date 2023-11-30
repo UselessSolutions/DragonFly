@@ -8,6 +8,7 @@
   "client": [
     "MinecraftMixin",
     "RenderBlocksMixin",
+    "EntityDiggingFXMixin",
     "accessor.RenderBlocksAccessor"
   ],
   "injectors": {

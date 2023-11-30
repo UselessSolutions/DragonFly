@@ -12,7 +12,7 @@ public class BlockModel {
 	public BlockCube[] blockCubes = new BlockCube[0];
 	protected ModelData modelData;
 	protected BlockModel parentModel;
-	protected HashMap<String, String> textureMap = new HashMap<>();
+	public HashMap<String, String> textureMap = new HashMap<>();
 	public BlockModel(ModelData modelData){
 		this.modelData = modelData;
 
@@ -52,9 +52,15 @@ public class BlockModel {
 		}
 
 	}
-	public NamespaceId getTexture(String faceTexKey){
-		String result = textureMap.get(faceTexKey.substring(1));
-		if (result == null || result.equals(faceTexKey)) return TextureRegistry.getNamespaceId(0,0);
+	public NamespaceId getTexture(String textureKey){
+		String result;
+		if (textureKey.contains("#")){
+			result = textureMap.get(textureKey.substring(1));
+		} else {
+			result =textureMap.get(textureKey);
+		}
+
+		if (result == null || result.equals(textureKey)) return TextureRegistry.getNamespaceId(0,0);
 		if (result.contains("#")){
 			return getTexture(result);
 		} else if (!result.contains(":")) {
