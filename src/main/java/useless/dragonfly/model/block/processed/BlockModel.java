@@ -2,6 +2,7 @@ package useless.dragonfly.model.block.processed;
 
 import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.model.block.data.ModelData;
+import useless.dragonfly.model.block.data.PositionData;
 import useless.dragonfly.registries.TextureRegistry;
 import useless.dragonfly.utilities.NamespaceId;
 
@@ -63,5 +64,8 @@ public class BlockModel {
 	}
 	public boolean getAO(){
 		return modelData.ambientocclusion;
+	}
+	public PositionData getDisplayPosition(String key){
+		return modelData.display.get(key);
 	}
 }

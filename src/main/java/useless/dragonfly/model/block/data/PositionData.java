@@ -6,11 +6,11 @@ import java.util.Arrays;
 
 public class PositionData {
 	@SerializedName("rotation")
-	public double[] rotation;
+	public double[] rotation = new double[3];
 	@SerializedName("translation")
-	public double[] translation;
+	public double[] translation = new double[3];
 	@SerializedName("scale")
-	public double[] scale;
+	public double[] scale = new double[3];
 	public String toString(){
 		return
 			"rotation: " + Arrays.toString(rotation) + "\n" +
