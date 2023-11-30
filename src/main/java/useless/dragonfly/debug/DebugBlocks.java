@@ -9,7 +9,7 @@ import useless.dragonfly.debug.block.BlockModel;
 import useless.dragonfly.debug.block.metastates.StairsMetaStateInterpreter;
 import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.model.block.BlockModelDragonFly;
-import useless.dragonfly.registries.TextureRegistry;
+import useless.dragonfly.utilities.NamespaceId;
 import useless.dragonfly.utilities.Utilities;
 
 import java.io.BufferedReader;
@@ -45,9 +45,9 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(MOD_ID, "block/slope.json")))
 		.build(new BlockModel("testblock" + blockId, blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(MOD_ID, "block/slope.json")));
 	public static final Block stairs = new BlockBuilder(MOD_ID)
-		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/cut_copper_stairs.json"),
+		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/cut_copper_stairs.json"),
 			ModelHelper.getOrCreateBlockState(MOD_ID, "test_stairs.json"), new StairsMetaStateInterpreter(), true, 0.25f))
-		.build(new BlockStairs(Block.dirt,blockId++));
+		.build(new BlockStairs(Block.dirt,blockId++)).withLitInteriorSurface(true);
 
 	public static void init() {
 		try {
@@ -55,13 +55,14 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 				System.out.println(string);
 				if (string.contains("cauldron")){
 					new BlockBuilder(MOD_ID)
-						.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)))
+						.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/" + string)))
 						.setBlockColor(new BlockColorWater())
-						.build(new BlockModel(string.replace(".json", ""), blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)));
+						.build(new BlockModel(string.replace(".json", ""), blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/" + string)));
 				} else {
 					new BlockBuilder(MOD_ID)
-						.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)))
-						.build(new BlockModel(string.replace(".json", ""), blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(TextureRegistry.coreNamepaceId, "block/" + string)));
+						.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/" + string)))
+						.setHardness(1)
+						.build(new BlockModel(string.replace(".json", ""), blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/" + string)));
 				}
 
 				System.out.println(string + " created");
@@ -69,7 +70,7 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 			for (String string : getResourceFiles("assets/minecraft/blockstates/")) {
 				System.out.println(string);
 				try {
-					System.out.println(ModelHelper.getOrCreateBlockState(TextureRegistry.coreNamepaceId, string));
+					System.out.println(ModelHelper.getOrCreateBlockState(NamespaceId.coreNamespaceId, string));
 				}
 				catch (Exception e){
 					System.out.println(e);

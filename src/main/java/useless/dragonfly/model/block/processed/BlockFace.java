@@ -3,7 +3,6 @@ package useless.dragonfly.model.block.processed;
 import net.minecraft.client.render.TextureFX;
 import net.minecraft.core.Global;
 import net.minecraft.core.util.helper.Side;
-import net.minecraft.core.world.WorldSource;
 import useless.dragonfly.model.block.data.FaceData;
 import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.registries.TextureRegistry;
@@ -133,8 +132,7 @@ public class BlockFace {
 		double v = uvKey.charAt(1) == '-' ? atlasVMin : atlasVMax;
 		return new double[]{u, v};
 	}
-	public boolean cullFace(int x, int y, int z, WorldSource blockAccess){
-		boolean renderOuterSide = blockAccess.getBlock(x, y, z).shouldSideBeRendered(blockAccess, x + getSide().getOffsetX(), y + getSide().getOffsetY(), z + getSide().getOffsetZ(), side.getId(), blockAccess.getBlockMetadata(x, y, z));
+	public boolean cullFace(int x, int y, int z, boolean renderOuterSide){
 		return !renderOuterSide && side == cullFace;
 	}
 	public boolean useTint(){
