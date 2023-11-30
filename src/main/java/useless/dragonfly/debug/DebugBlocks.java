@@ -47,7 +47,7 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 	public static final Block stairs = new BlockBuilder(MOD_ID)
 		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/cut_copper_stairs.json"),
 			ModelHelper.getOrCreateBlockState(MOD_ID, "test_stairs.json"), new StairsMetaStateInterpreter(), true, 0.25f))
-		.build(new BlockStairs(Block.dirt,blockId++));
+		.build(new BlockStairs(Block.dirt,blockId++)).withLitInteriorSurface(true);
 
 	public static void init() {
 		try {

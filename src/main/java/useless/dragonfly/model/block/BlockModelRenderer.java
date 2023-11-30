@@ -303,7 +303,7 @@ public class BlockModelRenderer {
 				}
 
 				float sideBrightness;
-				if (!cube.isOuterFace(side) && !block.blockMaterial.isLiquid()){
+				if (!cube.isOuterFace(side, rotationX, rotationY) && !block.blockMaterial.isLiquid()){
 					sideBrightness = blockBrightness;
 				} else {
 					sideBrightness = rba().invokeGetBlockBrightness(rba().getBlockAccess(), _x, _y, _z);

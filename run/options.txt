@@ -24,7 +24,7 @@ bobView:true
 advancedOpengl:false
 fancyGraphics:1
 treeShadows:true
-ambientOcclusion:false
+ambientOcclusion:true
 chunkLoading:false
 3Ditems:false
 smoothCamera:false
@@ -47,7 +47,7 @@ armorDurabilityOverlay:false
 armorProtectionOverlay:true
 heldItemCountOverlay:false
 pauseOnLostFocus:true
-showDebugScreen:true
+showDebugScreen:false
 showFrameTimes:false
 showItemDebugInfo:true
 showChunkBorders:false
