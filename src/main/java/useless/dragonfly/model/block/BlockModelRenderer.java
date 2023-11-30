@@ -159,7 +159,7 @@ public class BlockModelRenderer {
 		float lightBR = 1.0f;
 		float lightBL = 1.0f;
 		float lightTL = 1.0f;
-		if (!rba().getOverbright()) {
+		if (!(rba().getOverbright() || !cube.shade())) {
 			r *= rba().getSIDE_LIGHT_MULTIPLIER()[side.getId()];
 			g *= rba().getSIDE_LIGHT_MULTIPLIER()[side.getId()];
 			b *= rba().getSIDE_LIGHT_MULTIPLIER()[side.getId()];
@@ -360,7 +360,7 @@ public class BlockModelRenderer {
 					default:
 						throw new RuntimeException("Specified side does not exist on a cube!!!");
 				}
-				tessellator.setColorOpaque_F(red * sideBrightness, green * sideBrightness, blue * sideBrightness);
+				tessellator.setColorOpaque_F(red * (cube.shade() ? sideBrightness : 1f), green * (cube.shade() ? sideBrightness : 1f), blue * (cube.shade() ? sideBrightness : 1f));
 				renderModelFace(face, x, y, z);
 				renderedSomething = true;
 			}
