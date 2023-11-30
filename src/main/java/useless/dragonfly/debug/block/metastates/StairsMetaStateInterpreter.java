@@ -13,7 +13,7 @@ public class StairsMetaStateInterpreter extends MetaStateInterpreter {
 		int hRotation = meta & 3;
 		int vRotation = meta & 8;
 		HashMap<String, String> result = new HashMap<>();
-		result.put("facing", new String[]{"west", "east", "south", "north"}[hRotation]);
+		result.put("facing", new String[]{"east", "west", "north", "south"}[hRotation]);
 		result.put("half",vRotation == 0 ? "bottom" : "top");
 		result.put("shape", "straight");
 		return result;

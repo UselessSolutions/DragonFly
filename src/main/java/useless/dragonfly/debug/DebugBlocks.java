@@ -61,6 +61,7 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 				} else {
 					new BlockBuilder(MOD_ID)
 						.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/" + string)))
+						.setHardness(1)
 						.build(new BlockModel(string.replace(".json", ""), blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/" + string)));
 				}
 

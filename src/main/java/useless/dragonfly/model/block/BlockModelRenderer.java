@@ -7,6 +7,7 @@ import net.minecraft.client.render.block.color.BlockColorDispatcher;
 import net.minecraft.client.render.block.model.BlockModelRenderBlocks;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.util.helper.Side;
+import net.minecraft.core.world.WorldSource;
 import org.lwjgl.opengl.GL11;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.mixins.mixin.accessor.RenderBlocksAccessor;
@@ -55,7 +56,7 @@ public class BlockModelRenderer {
 						float b = (float)(color & 0xFF) / 255.0f;
 						GL11.glColor4f(r * brightness, g * brightness, b * brightness, 1);
 					}
-					renderModelFace(cube, face.getSide(), 0, 0, 0);
+					renderModelFace(face, 0, 0, 0);
 					tessellator.draw();
 				}
 			}
@@ -94,19 +95,29 @@ public class BlockModelRenderer {
 		enableAO = true;
 		rba().getCache().setupCache(block, rba().getBlockAccess(), x, y, z);
 		boolean somethingRendered = false;
+		Vector3f origin = new Vector3f(0.5f, 0.5f, 0.5f);
 		for (BlockCube cube: model.blockCubes) {
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.BOTTOM, 	cube.yMin(), 			0, 	0, 1, cube.zMax(), 			cube.zMin(), 			-1, 	0, 	0, 1.0F - cube.xMin(), 	1.0F - cube.xMax());
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.TOP, 		1.0F - cube.yMax(), 	0, 	0, 1, cube.zMax(), 			cube.zMin(), 			1, 	0, 	0, cube.xMax(), 			cube.xMin());
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.NORTH, 	cube.zMin(), 			-1, 	0, 0, 1.0F - cube.xMin(), 	1.0F - cube.xMax(), 	0, 	1, 	0, cube.yMax(), 			cube.yMin());
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.SOUTH, 	1.0F - cube.zMax(), 	0, 	1, 0, cube.yMax(), 			cube.yMin(), 			-1, 	0, 	0, 1.0F - cube.xMin(), 	1.0F - cube.xMax());
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.WEST, 		cube.xMin(), 			0, 	0, 1, cube.zMax(), 			cube.zMin(), 			0, 	1, 	0, cube.yMax(), 			cube.yMin());
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.EAST, 		1.0F - cube.xMax(), 	0, 	0, 1, cube.zMax(), 			cube.zMin(), 			0, 	-1, 	0, 1.0F - cube.yMin(), 	1.0F - cube.yMax());
+			Vector3f vMin = cube.getMin().rotateAroundX(origin, rotationX).rotateAroundY(origin, rotationY);
+			Vector3f vMax = cube.getMax().rotateAroundX(origin, rotationX).rotateAroundY(origin, rotationY);
+			float minX = Math.min(vMin.x, vMax.x);
+			float minY = Math.min(vMin.y, vMax.y);
+			float minZ = Math.min(vMin.z, vMax.z);
+			float maxX = Math.max(vMin.x, vMax.x);
+			float maxY = Math.max(vMin.y, vMax.y);
+			float maxZ = Math.max(vMin.z, vMax.z);
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.BOTTOM, minY, 0, 0, 1, maxZ, minZ, -1, 0, 0, 1.0F - minX, 1.0F - maxX);
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.TOP, 1.0F - maxY, 0, 0, 1, maxZ, minZ, 1, 0, 0, maxX, minX);
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.NORTH, minZ, -1, 0, 0, 1.0F - minX, 1.0F - maxX, 0, 1, 0, maxY, minY);
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.SOUTH, 1.0F - maxZ, 0, 1, 0, maxY, minY, -1, 0, 0, 1.0F - minX, 1.0F - maxX);
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.WEST, minX, 0, 0, 1, maxZ, minZ, 0, 1, 0, maxY, minY);
+			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.EAST, 1.0F - maxX, 0, 0, 1, maxZ, minZ, 0, -1, 0, 1.0F - minY, 1.0F - maxY);
 		}
 		enableAO = false;
 		return somethingRendered;
 	}
 	public static boolean renderModelSide(BlockModel model, BlockCube cube, Block block, int x, int y, int z, Side side, float depth, int topX, int topY, int topZ, float topP, float botP, int lefX, int lefY, int lefZ, float lefP, float rigP) {
-		if (cube.getFaceFromSide(side) == null) return false;
+		BlockFace blockFace = cube.getFaceFromSide(side, rotationX, rotationY);
+		if (blockFace == null) return false;
 		int directionX = side.getOffsetX();
 		int directionY = side.getOffsetY();
 		int directionZ = side.getOffsetZ();
@@ -114,7 +125,7 @@ public class BlockModelRenderer {
 		float r = 1f;
 		float g = 1f;
 		float b = 1f;
-		if (cube.getFaceFromSide(side).useTint()){
+		if (blockFace.useTint()){
 			int color;
 			color = BlockColorDispatcher.getInstance().getDispatch(block).getWorldColor(mc.theWorld, x, y, z);
 			r = (float)(color >> 16 & 0xFF) / 255.0f;
@@ -194,11 +205,10 @@ public class BlockModelRenderer {
 		colorRedTopRight *= topRightBrightness;
 		colorGreenTopRight *= topRightBrightness;
 		colorBlueTopRight *= topRightBrightness;
-		renderModelFace( cube, side, x, y, z);
+		renderModelFace(blockFace, x, y, z);
 		return true;
 	}
-	public static void renderModelFace(BlockCube cube, Side side, double x, double y, double z) {
-		BlockFace face = cube.getFaceFromSide(side);
+	public static void renderModelFace(BlockFace face, double x, double y, double z) {
 		Tessellator tessellator = Tessellator.instance;
 		double[] uvTL;
 		double[] uvBL;
@@ -218,9 +228,9 @@ public class BlockModelRenderer {
 
 
 		Vector3f[] faceVertices = new Vector3f[4];
+		Vector3f origin = new Vector3f(0.5f, 0.5f, 0.5f);
 		for (int i = 0; i < faceVertices.length; i++) {
-			Vector3f origin = new Vector3f(0.5f, 0.5f, 0.5f);
-			faceVertices[i] = face.vertices[i].rotateAroundX(origin, rotationX).rotateAroundY(origin, rotationY + 180);
+			faceVertices[i] = face.vertices[i].rotateAroundX(origin, rotationX).rotateAroundY(origin, rotationY);
 		}
 		Vector3f vtl = faceVertices[0];
 		Vector3f vbl = faceVertices[1];
@@ -282,7 +292,8 @@ public class BlockModelRenderer {
 		float blockBrightness = rba().invokeGetBlockBrightness(rba().getBlockAccess(), x, y, z);
 		for (BlockCube cube: model.blockCubes) {
 			for (Side side: DragonFly.sides) {
-				if (cube.getFaceFromSide(side) == null) continue;
+				BlockFace face = cube.getFaceFromSide(side, rotationX, rotationY);
+				if (face == null) continue;
 				int _x = x + side.getOffsetX();
 				int _y = y + side.getOffsetY();
 				int _z = z + side.getOffsetZ();
@@ -329,14 +340,16 @@ public class BlockModelRenderer {
 						throw new RuntimeException("Specified side does not exist on a cube!!!");
 				}
 				tessellator.setColorOpaque_F(red * sideBrightness, green * sideBrightness, blue * sideBrightness);
-				renderModelFace(cube, side, x, y, z);
+				renderModelFace(face, x, y, z);
 				renderedSomething = true;
 			}
 		}
 		return renderedSomething;
 	}
 	public static boolean renderSide(BlockModel model, BlockCube cube, Side side, int x, int y, int z){
-		return !cube.getFaceFromSide(side).cullFace(x, y, z, rba().getBlockAccess());
+		WorldSource blockAccess = rba().getBlockAccess();
+		boolean renderOuterSide = blockAccess.getBlock(x, y, z).shouldSideBeRendered(blockAccess, x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ(), side.getId(), blockAccess.getBlockMetadata(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ()));
+		return !cube.getFaceFromSide(side, rotationX, rotationY).cullFace(x, y, z, renderOuterSide);
 	}
 	public static RenderBlocks getRenderBlocks(){
 		try {

@@ -11,8 +11,8 @@ import java.util.HashMap;
 
 public class BlockCube {
 	protected CubeData cubeData;
-	protected float[] fromScaled;
-	protected float[] toScaled;
+	protected Vector3f fromScaled;
+	protected Vector3f toScaled;
 	protected boolean[] outerFace;
 	public final BlockModel parentModel;
 	public HashMap<String, Vector3f> vertices = new HashMap<>();
@@ -21,14 +21,10 @@ public class BlockCube {
 		this.parentModel = model;
 		this.cubeData = cubeData;
 		outerFace = new boolean[6];
-		fromScaled = new float[cubeData.from.length];
-		for (int i = 0; i < cubeData.from.length; i++) {
-			fromScaled[i] = cubeData.from[i]/ TextureFX.tileWidthTerrain;
-		}
-		toScaled = new float[cubeData.to.length];
-		for (int i = 0; i < cubeData.to.length; i++) {
-			toScaled[i] = cubeData.to[i]/TextureFX.tileWidthTerrain;
-		}
+
+		fromScaled = new Vector3f(cubeData.from[0] / 16f, cubeData.from[1] / 16f, cubeData.from[2] / 16f);
+		toScaled = new Vector3f(cubeData.to[0] / 16f, cubeData.to[1] / 16f, cubeData.to[2] / 16f);
+
 		vertices.put("+++", new Vector3f(xMax(), yMax(), zMax()));
 		vertices.put("++-", new Vector3f(xMax(), yMax(), zMin()));
 		vertices.put("+-+", new Vector3f(xMax(), yMin(), zMax()));
@@ -76,26 +72,57 @@ public class BlockCube {
 		return outerFace[side.getId()];
 	}
 
-	public BlockFace getFaceFromSide(Side side){
-		return faces.get(ModelData.sideToKey.get(side));
+	public BlockFace getFaceFromSide(Side side, int rotationX, int rotationY){
+		Side keySide = side;
+		Side[] yRot = new Side[]{Side.EAST, Side.SOUTH, Side.WEST, Side.NORTH};
+		Side[] xRot = new Side[]{Side.TOP, Side.NORTH, Side.BOTTOM, Side.SOUTH};
+		int indexY = -1;
+		for (int i = 0; i < yRot.length; i++) {
+			if (keySide == yRot[i]){
+				indexY = i;
+			}
+		}
+		if (indexY != -1){
+			keySide = yRot[(indexY + rotationY/90) % yRot.length];
+		}
+		int indexX = -1;
+		for (int i = 0; i < xRot.length; i++) {
+			if (keySide == xRot[i]){
+				indexX = i;
+			}
+		}
+		if (indexX != -1){
+			keySide = xRot[(indexX + (rotationX)/90) % xRot.length];
+		}
+
+//		if (indexY != -1 && indexX != -1 && (keySide == Side.NORTH || keySide == Side.SOUTH)){
+//			return faces.get(ModelData.sideToKey.get(keySide.getOpposite()));
+//		}
+		return faces.get(ModelData.sideToKey.get(keySide));
 	}
 	public float xMin(){
-		return fromScaled[0];
+		return fromScaled.getX();
 	}
 	public float yMin(){
-		return fromScaled[1];
+		return fromScaled.getY();
 	}
 	public float zMin(){
-		return fromScaled[2];
+		return fromScaled.getZ();
 	}
 	public float xMax(){
-		return toScaled[0];
+		return toScaled.getX();
 	}
 	public float yMax(){
-		return toScaled[1];
+		return toScaled.getY();
 	}
 	public float zMax(){
-		return toScaled[2];
+		return toScaled.getZ();
+	}
+	public Vector3f getMin(){
+		return fromScaled;
+	}
+	public Vector3f getMax(){
+		return toScaled;
 	}
 
 }
