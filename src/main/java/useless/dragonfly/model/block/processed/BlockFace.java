@@ -17,6 +17,7 @@ public class BlockFace {
 	protected Side cullFace = null;
 	public final Vector3f[] vertices;
 	protected final String[] vertexUVMap;
+	public String[] vertexKeyMap = new String[4];
 	public double[][] vertexUVs;
 	public BlockCube parentCube;
 	public BlockFace(BlockCube cube, String key){
@@ -27,7 +28,6 @@ public class BlockFace {
 		}
 		this.parentCube = cube;
 		generateUVs(cube);
-		String[] vertexKeyMap = new String[4];
 		switch (side){ // TODO replace this whole string key system with something better
 			case NORTH:
 				vertexKeyMap = new String[]{"-+-", "++-", "+--", "---"};

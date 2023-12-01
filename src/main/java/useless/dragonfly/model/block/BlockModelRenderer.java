@@ -115,32 +115,128 @@ public class BlockModelRenderer {
 		enableAO = true;
 		rba().getCache().setupCache(block, rba().getBlockAccess(), x, y, z);
 		boolean somethingRendered = false;
-		Vector3f origin = new Vector3f(0.5f, 0.5f, 0.5f);
 		for (BlockCube cube: model.blockCubes) {
-			Vector3f vMin = cube.getMin().rotateAroundX(origin, rotationX).rotateAroundY(origin, rotationY);
-			Vector3f vMax = cube.getMax().rotateAroundX(origin, rotationX).rotateAroundY(origin, rotationY);
-			float minX = Math.min(vMin.x, vMax.x);
-			float minY = Math.min(vMin.y, vMax.y);
-			float minZ = Math.min(vMin.z, vMax.z);
-			float maxX = Math.max(vMin.x, vMax.x);
-			float maxY = Math.max(vMin.y, vMax.y);
-			float maxZ = Math.max(vMin.z, vMax.z);
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.BOTTOM, minY, 0, 0, 1, maxZ, minZ, -1, 0, 0, 1.0F - minX, 1.0F - maxX);
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.TOP, 1.0F - maxY, 0, 0, 1, maxZ, minZ, 1, 0, 0, maxX, minX);
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.NORTH, minZ, -1, 0, 0, 1.0F - minX, 1.0F - maxX, 0, 1, 0, maxY, minY);
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.SOUTH, 1.0F - maxZ, 0, 1, 0, maxY, minY, -1, 0, 0, 1.0F - minX, 1.0F - maxX);
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.WEST, minX, 0, 0, 1, maxZ, minZ, 0, 1, 0, maxY, minY);
-			somethingRendered |= renderModelSide(model, cube, block, x, y, z, Side.EAST, 1.0F - maxX, 0, 0, 1, maxZ, minZ, 0, -1, 0, 1.0F - minY, 1.0F - maxY);
+			for (Side side: DragonFly.sides) {
+				somethingRendered |= renderModelSide(model, cube, block, x, y, z, side);
+			}
 		}
 		enableAO = false;
 		return somethingRendered;
 	}
-	public static boolean renderModelSide(BlockModel model, BlockCube cube, Block block, int x, int y, int z, Side side, float depth, int topX, int topY, int topZ, float topP, float botP, int lefX, int lefY, int lefZ, float lefP, float rigP) {
+	public static boolean renderModelSide(BlockModel model, BlockCube cube, Block block, int x, int y, int z, Side side) {
 		BlockFace blockFace = cube.getFaceFromSide(side, rotationX, rotationY);
 		if (blockFace == null) return false;
+		if (!renderAllFaces){
+			if (!renderSide(model, cube, side, x, y, z)) return false;
+		}
 		int directionX = side.getOffsetX();
 		int directionY = side.getOffsetY();
 		int directionZ = side.getOffsetZ();
+
+		Vector3f origin = new Vector3f(0.5f, 0.5f, 0.5f);
+		Vector3f vMin = cube.getMin().rotateAroundX(origin, rotationX).rotateAroundY(origin, rotationY);
+		Vector3f vMax = cube.getMax().rotateAroundX(origin, rotationX).rotateAroundY(origin, rotationY);
+		float minX = vMin.x;
+		float minY = vMin.y;
+		float minZ = vMin.z;
+		float maxX = vMax.x;
+		float maxY = vMax.y;
+		float maxZ = vMax.z;
+
+		float depth;
+		int topX;
+		int topY;
+		int topZ;
+		float topP;
+		float botP;
+		int lefX;
+		int lefY;
+		int lefZ;
+		float lefP;
+		float rigP;
+
+		switch (side){
+			case BOTTOM:
+				depth = minY;
+				topX = 0;
+				topY = 0;
+				topZ = 1;
+				topP = maxZ;
+				botP = minZ;
+				lefX = -1;
+				lefY = 0;
+				lefZ = 0;
+				lefP = 1.0F - minX;
+				rigP = 1.0F - maxX;
+				break;
+			case TOP:
+				depth = 1f - maxY;
+				topX = 0;
+				topY = 0;
+				topZ = 1;
+				topP = maxZ;
+				botP = minZ;
+				lefX = 1;
+				lefY = 0;
+				lefZ = 0;
+				lefP = maxX;
+				rigP = minX;
+				break;
+			case NORTH:
+				depth = minZ;
+				topX = -1;
+				topY = 0;
+				topZ = 0;
+				topP = 1.0F - minX;
+				botP = 1.0F - maxX;
+				lefX = 0;
+				lefY = 1;
+				lefZ = 0;
+				lefP = maxY;
+				rigP = minY;
+				break;
+			case SOUTH:
+				depth = 1f - maxZ;
+				topX = 0;
+				topY = 1;
+				topZ = 0;
+				topP = maxY;
+				botP = minY;
+				lefX = -1;
+				lefY = 0;
+				lefZ = 0;
+				lefP = 1.0F - minX;
+				rigP = 1.0F - maxX;
+				break;
+			case WEST:
+				depth = minX;
+				topX = 0;
+				topY = 0;
+				topZ = 1;
+				topP = maxZ;
+				botP = minZ;
+				lefX = 0;
+				lefY = 1;
+				lefZ = 0;
+				lefP = maxY;
+				rigP = minY;
+				break;
+			case EAST:
+				depth = 1f - maxX;
+				topX = 0;
+				topY = 0;
+				topZ = 1;
+				topP = maxZ;
+				botP = minZ;
+				lefX = 0;
+				lefY = -1;
+				lefZ = 0;
+				lefP = 1.0F - minY;
+				rigP = 1.0F - maxY;
+				break;
+			default:
+				throw new IllegalArgumentException("Side " + side + " is not a valid side to render!");
+		}
 
 		float r = 1f;
 		float g = 1f;
@@ -151,9 +247,6 @@ public class BlockModelRenderer {
 			r = (float)(color >> 16 & 0xFF) / 255.0f;
 			g = (float)(color >> 8 & 0xFF) / 255.0f;
 			b = (float)(color & 0xFF) / 255.0f;
-		}
-		if (!renderAllFaces){
-			if (!renderSide(model, cube, side, x, y, z)) return false;
 		}
 		float lightTR = 1.0f;
 		float lightBR = 1.0f;
