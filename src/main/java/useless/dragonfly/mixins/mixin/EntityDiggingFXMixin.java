@@ -1,10 +1,10 @@
 package useless.dragonfly.mixins.mixin;
 
+import net.minecraft.client.entity.fx.EntityDiggingFX;
+import net.minecraft.client.entity.fx.EntityFX;
 import net.minecraft.client.render.block.model.BlockModel;
 import net.minecraft.client.render.block.model.BlockModelDispatcher;
 import net.minecraft.core.block.Block;
-import net.minecraft.core.entity.fx.EntityDiggingFX;
-import net.minecraft.core.entity.fx.EntityFX;
 import net.minecraft.core.util.helper.Side;
 import net.minecraft.core.world.World;
 import org.spongepowered.asm.mixin.Mixin;

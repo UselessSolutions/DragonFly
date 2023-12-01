@@ -4,11 +4,13 @@
   "package": "useless.dragonfly.mixins.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "StatMixin",
+    "accessor.StatListAccessor"
   ],
   "client": [
+    "EntityDiggingFXMixin",
     "MinecraftMixin",
     "RenderBlocksMixin",
-    "EntityDiggingFXMixin",
     "accessor.RenderBlocksAccessor"
   ],
   "injectors": {

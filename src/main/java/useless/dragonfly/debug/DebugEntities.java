@@ -1,5 +1,6 @@
 package useless.dragonfly.debug;
 
+import net.minecraft.client.gui.guidebook.mobs.MobInfoRegistry;
 import turniplabs.halplibe.helper.EntityHelper;
 import useless.dragonfly.debug.testentity.Dragon.DragonModel;
 import useless.dragonfly.debug.testentity.Dragon.DragonRenderer;
@@ -25,5 +26,6 @@ public class DebugEntities {
 		AnimationHelper.getOrCreateEntityAnimation(MOD_ID, "zombie_test.animation");
 		EntityHelper.createEntity(EntityDragon.class, new DragonRenderer(ModelHelper.getOrCreateEntityModel(MOD_ID, "mod_dragon.json", DragonModel.class), 0.5f), 1001, "dragon");
 		EntityHelper.createEntity(EntityWarden.class, new WardenRenderer(ModelHelper.getOrCreateEntityModel(MOD_ID, "warden.json", WardenModel.class), 0.5f), 1002, "warden");
+		MobInfoRegistry.register(EntityWarden.class, "df.warden.name", "df.warden.desc", 20, 0, null);
 	}
 }

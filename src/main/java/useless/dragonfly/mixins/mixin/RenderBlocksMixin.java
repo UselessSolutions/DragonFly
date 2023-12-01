@@ -13,8 +13,8 @@ import useless.dragonfly.model.block.BlockModelRenderer;
 @Mixin(value = RenderBlocks.class, remap = false)
 public abstract class RenderBlocksMixin {
 
-	@Inject(method = "renderBlockOnInventory(Lnet/minecraft/core/block/Block;IF)V", at = @At("HEAD"), cancellable = true)
-	public void redirectRenderer(Block block, int metadata, float brightness, CallbackInfo ci){
+	@Inject(method = "renderBlockOnInventory(Lnet/minecraft/core/block/Block;IFF)V", at = @At("HEAD"), cancellable = true)
+	public void redirectRenderer(Block block, int metadata, float brightness, float alpha, CallbackInfo ci){
 		if (BlockModelDispatcher.getInstance().getDispatch(block) instanceof BlockModelDragonFly){
 			BlockModelDragonFly blockModelDragonFly = (BlockModelDragonFly) BlockModelDispatcher.getInstance().getDispatch(block);
 			BlockModelRenderer.renderModelInventory(blockModelDragonFly, block, metadata, brightness);

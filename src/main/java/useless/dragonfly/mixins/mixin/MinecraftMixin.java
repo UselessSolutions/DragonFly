@@ -10,10 +10,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = Minecraft.class, remap = false)
 public class MinecraftMixin {
 	@Shadow
-	private static Minecraft theMinecraft;
+	private static Minecraft INSTANCE;
 
 	@Inject(method = "getMinecraft(Ljava/lang/Class;)Lnet/minecraft/client/Minecraft;", at = @At("HEAD"), cancellable = true)
 	private static void returnMinecraft(Class<?> caller, CallbackInfoReturnable<Minecraft> cir){
-		cir.setReturnValue(theMinecraft);
+		cir.setReturnValue(INSTANCE);
 	}
 }
