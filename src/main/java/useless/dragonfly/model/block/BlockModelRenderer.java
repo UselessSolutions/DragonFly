@@ -133,17 +133,17 @@ public class BlockModelRenderer {
 			if (!renderSide(model, cube, side, x, y, z)) return false;
 		}
 		RenderBlockCache cache = rba().getCache();
-		int directionX;
-		int directionY;
-		int directionZ;
+		int sideOffX;
+		int sideOffY;
+		int sideOffZ;
 		if (cube.shade()){
-			directionX = side.getOffsetX();
-			directionY = side.getOffsetY();
-			directionZ = side.getOffsetZ();
+			sideOffX = side.getOffsetX();
+			sideOffY = side.getOffsetY();
+			sideOffZ = side.getOffsetZ();
 		} else {
-			directionX = 0;
-			directionY = 0;
-			directionZ = 0;
+			sideOffX = 0;
+			sideOffY = 0;
+			sideOffZ = 0;
 		}
 
 
@@ -274,27 +274,28 @@ public class BlockModelRenderer {
 			lightBL = 1.0f;
 			lightTL = 1.0f;
 		} else {
-			r *= rba().getSIDE_LIGHT_MULTIPLIER()[side.getId()];
-			g *= rba().getSIDE_LIGHT_MULTIPLIER()[side.getId()];
-			b *= rba().getSIDE_LIGHT_MULTIPLIER()[side.getId()];
-			float directionBrightness = cache.getBrightness(directionX, directionY, directionZ);
-			boolean lefT = cache.getOpacity(directionX + lefX, directionY + lefY, directionZ + lefZ);
-			boolean botT = cache.getOpacity(directionX - topX, directionY - topY, directionZ - topZ);
-			boolean topT = cache.getOpacity(directionX + topX, directionY + topY, directionZ + topZ);
-			boolean rigT = cache.getOpacity(directionX - lefX, directionY - lefY, directionZ - lefZ);
-			float leftBrightness = cache.getBrightness(directionX + lefX, directionY + lefY, directionZ + lefZ);
-			float bottomBrightness = cache.getBrightness(directionX - topX, directionY - topY, directionZ - topZ);
-			float topBrightness = cache.getBrightness(directionX + topX, directionY + topY, directionZ + topZ);
-			float rightBrightness = cache.getBrightness(directionX - lefX, directionY - lefY, directionZ - lefZ);
-			float bottomLeftBrightness = botT && lefT ? leftBrightness : cache.getBrightness(directionX + lefX - topX, directionY + lefY - topY, directionZ + lefZ - topZ);
-			float topLeftBrightness = topT && lefT ? leftBrightness : cache.getBrightness(directionX + lefX + topX, directionY + lefY + topY, directionZ + lefZ + topZ);
-			float bottomRightBrightness = botT && rigT ? rightBrightness : cache.getBrightness(directionX - lefX - topX, directionY - lefY - topY, directionZ - lefZ - topZ);
-			float topRightBrightness = topT && rigT ? rightBrightness : cache.getBrightness(directionX - lefX + topX, directionY - lefY + topY, directionZ - lefZ + topZ);
+			float sideLightMultiplier = rba().getSIDE_LIGHT_MULTIPLIER()[side.getId()];
+			r *= sideLightMultiplier;
+			g *= sideLightMultiplier;
+			b *= sideLightMultiplier;
+			float directionBrightness = cache.getBrightness(sideOffX, sideOffY, sideOffZ);
+			boolean lefT = cache.getOpacity(sideOffX + lefX, sideOffY + lefY, sideOffZ + lefZ);
+			boolean botT = cache.getOpacity(sideOffX - topX, sideOffY - topY, sideOffZ - topZ);
+			boolean topT = cache.getOpacity(sideOffX + topX, sideOffY + topY, sideOffZ + topZ);
+			boolean rigT = cache.getOpacity(sideOffX - lefX, sideOffY - lefY, sideOffZ - lefZ);
+			float leftBrightness = cache.getBrightness(sideOffX + lefX, sideOffY + lefY, sideOffZ + lefZ);
+			float bottomBrightness = cache.getBrightness(sideOffX - topX, sideOffY - topY, sideOffZ - topZ);
+			float topBrightness = cache.getBrightness(sideOffX + topX, sideOffY + topY, sideOffZ + topZ);
+			float rightBrightness = cache.getBrightness(sideOffX - lefX, sideOffY - lefY, sideOffZ - lefZ);
+			float bottomLeftBrightness = botT && lefT ? leftBrightness : cache.getBrightness(sideOffX + lefX - topX, sideOffY + lefY - topY, sideOffZ + lefZ - topZ);
+			float topLeftBrightness = topT && lefT ? leftBrightness : cache.getBrightness(sideOffX + lefX + topX, sideOffY + lefY + topY, sideOffZ + lefZ + topZ);
+			float bottomRightBrightness = botT && rigT ? rightBrightness : cache.getBrightness(sideOffX - lefX - topX, sideOffY - lefY - topY, sideOffZ - lefZ - topZ);
+			float topRightBrightness = topT && rigT ? rightBrightness : cache.getBrightness(sideOffX - lefX + topX, sideOffY - lefY + topY, sideOffZ - lefZ + topZ);
 			lightTL = (topLeftBrightness + leftBrightness + topBrightness + directionBrightness) / 4.0f;
 			lightTR = (topBrightness + directionBrightness + topRightBrightness + rightBrightness) / 4.0f;
 			lightBR = (directionBrightness + bottomBrightness + rightBrightness + bottomRightBrightness) / 4.0f;
 			lightBL = (leftBrightness + bottomLeftBrightness + directionBrightness + bottomBrightness) / 4.0f;
-			if (depth > 0.01) {
+			if (depth > 0.01) { // The non-external faces of the block use the central block's brightness
 				directionBrightness = cache.getBrightness(0, 0, 0);
 				lefT = cache.getOpacity(lefX, lefY, lefZ);
 				botT = cache.getOpacity(-topX, -topY, -topZ);
