@@ -19,10 +19,10 @@ public class TextureRegistry {
 			throw new RuntimeException("Texture index: " + index + " is outside the texture atlas!");
 		}
 		if (blockTextureNameToIndex.containsKey(namespaceId)){
-			throw new RuntimeException("There is already a texture with the identifier: " + namespaceId + " all textures must be assigned unique identifiers");
+			throw new RuntimeException(index + ":There is already a texture with the identifier: " + namespaceId + " all textures must be assigned unique identifiers");
 		}
 		if (blockTextureIndexToName.containsKey(index)){
-			throw new RuntimeException("There is already an identifier for texture: " + index + " called: " + blockTextureIndexToName.get(index));
+			throw new RuntimeException(namespaceId + ":There is already an identifier for texture: " + index + " called: " + blockTextureIndexToName.get(index));
 		}
 		blockTextureNameToIndex.put(namespaceId, index);
 		blockTextureIndexToName.put(index, namespaceId);
@@ -168,7 +168,7 @@ public class TextureRegistry {
 		registerVanillaBlockTexture("mobspawner", 1, 4);
 		registerVanillaBlockTexture("door_planks_oak_top", 1, 5);
 		registerVanillaBlockTexture("door_planks_oak_bottom", 1, 6);
-		registerVanillaBlockTexture("debug_trommel_front", 1, 7);
+		registerVanillaBlockTexture("trommel_front", 1, 7);
 		registerVanillaBlockTexture("trommel_idle_west", 1, 8);
 		registerVanillaBlockTexture("trommel_front_base", 1, 9); // Unsure on this one
 		registerVanillaBlockTexture("trommel_top", 1, 10);
@@ -192,7 +192,7 @@ public class TextureRegistry {
 		registerVanillaBlockTexture("snow", 2, 4);
 		registerVanillaBlockTexture("door_iron_top", 2, 5);
 		registerVanillaBlockTexture("door_iron_bottom", 2, 6);
-		registerVanillaBlockTexture("debug_trommel_back", 2, 7);
+		registerVanillaBlockTexture("trommel_back", 2, 7);
 		registerVanillaBlockTexture("trommel_east", 2, 8);
 		registerVanillaBlockTexture("trommel_front_overlay", 2, 9); // not sure on this one
 		registerVanillaBlockTexture("trommel_idle_front", 2, 10);
@@ -203,6 +203,8 @@ public class TextureRegistry {
 		registerVanillaBlockTexture("animation_breaking_2", 2, 15);
 		registerVanillaBlockTexture("netherrack_igneous_overlay", 2, 16);
 		registerVanillaBlockTexture("chest_planks_oak_painted_single_front_overlay", 2, 17);
+		registerVanillaBlockTexture("leaves_cacao_bean_stage_0", 2, 18);
+		registerVanillaBlockTexture("leaves_cherry_flowering_overlay", 2, 19);
 		registerVanillaBlockTexture("leaves_oak_fancy", 2, 20);
 		registerVanillaBlockTexture("leaves_oak_mossy_fancy", 2, 21);
 		registerVanillaBlockTexture("leaves_oak_retro_fancy", 2, 22);
@@ -211,6 +213,7 @@ public class TextureRegistry {
 		registerVanillaBlockTexture("leaves_cherry_fancy", 2, 25);
 		registerVanillaBlockTexture("leaves_eucalyptus_fancy", 2, 26);
 		registerVanillaBlockTexture("leaves_shrub_fancy", 2, 27);
+		registerVanillaBlockTexture("leaves_cacao_fancy", 2, 28);
 		registerVanillaBlockTexture("debug_red", 2, 31);
 
 		registerVanillaBlockTexture("grass_side", 3, 0);
@@ -231,6 +234,7 @@ public class TextureRegistry {
 		registerVanillaBlockTexture("animation_breaking_3", 3, 15);
 		registerVanillaBlockTexture("ore_nethercoal_netherrack_overlay", 3, 16);
 		registerVanillaBlockTexture("leaves_cherry_overlay", 3, 17);
+		registerVanillaBlockTexture("leaves_cacao_bean_stage_1", 3, 18);
 		registerVanillaBlockTexture("leaves_oak_fast", 3, 20);
 		registerVanillaBlockTexture("leaves_oak_mossy_fast", 3, 21);
 		registerVanillaBlockTexture("leaves_oak_retro_fast", 3, 22);
@@ -239,6 +243,7 @@ public class TextureRegistry {
 		registerVanillaBlockTexture("leaves_cherry_fast", 3, 25);
 		registerVanillaBlockTexture("leaves_eucalyptus_fast", 3, 26);
 		registerVanillaBlockTexture("leaves_shrub_fast", 3, 27);
+		registerVanillaBlockTexture("leaves_cacao_fast", 3, 28);
 		registerVanillaBlockTexture("debug_green", 3, 31);
 
 		registerVanillaBlockTexture("planks_oak", 4, 0);
@@ -252,12 +257,13 @@ public class TextureRegistry {
 		registerVanillaBlockTexture("basket_bottom", 4, 9);
 		registerVanillaBlockTexture("wire_redstone_cross", 4, 10);
 		registerVanillaBlockTexture("debug_transparent", 4, 11); // Unused??
-		registerVanillaBlockTexture("lamp_idle", 4, 12);
+		//registerVanillaBlockTexture("lamp_idle", 4, 12); removed in 7.1
 		registerVanillaBlockTexture("carved_granite_top", 4, 13);
 		registerVanillaBlockTexture("carved_granite_side", 4, 14);
 		registerVanillaBlockTexture("animation_breaking_4", 4, 15);
 		registerVanillaBlockTexture("ore_redstone_overlay", 4, 16);
-		registerVanillaBlockTexture("leaves_cocoa_overlay", 4, 17);
+		registerVanillaBlockTexture("leaves_cacao_bean_stage_3", 4, 17);
+		registerVanillaBlockTexture("leaves_cacao_bean_stage_2", 4, 18);
 		registerVanillaBlockTexture("sapling_oak", 4, 20);
 		registerVanillaBlockTexture("sapling_oak_retro", 4, 22);
 		registerVanillaBlockTexture("sapling_pine", 4, 23);
@@ -265,6 +271,7 @@ public class TextureRegistry {
 		registerVanillaBlockTexture("sapling_cherry", 4, 25);
 		registerVanillaBlockTexture("sapling_eucalyptus", 4, 26);
 		registerVanillaBlockTexture("sapling_shrub", 4, 27);
+		registerVanillaBlockTexture("sapling_cacao", 4, 28);
 		registerVanillaBlockTexture("debug_blue", 4, 31);
 
 		registerVanillaBlockTexture("carved_stone_side", 5, 0);
@@ -279,7 +286,7 @@ public class TextureRegistry {
 		registerVanillaBlockTexture("bed_bottom_front", 5, 9);
 		registerVanillaBlockTexture("wire_redstone_line", 5, 10);
 		registerVanillaBlockTexture("debug_transparent2", 5, 11); // Unused?
-		registerVanillaBlockTexture("lamp_active", 5, 12);
+		//registerVanillaBlockTexture("lamp_active", 5, 12); removed in 7.1
 		registerVanillaBlockTexture("carved_basalt_top", 5, 13);
 		registerVanillaBlockTexture("carved_basalt_side", 5, 14);
 		registerVanillaBlockTexture("animation_breaking_5", 5, 15);
@@ -312,7 +319,7 @@ public class TextureRegistry {
 		registerVanillaBlockTexture("wool_grey", 6, 17);
 		registerVanillaBlockTexture("wool_pink", 6, 18);
 		registerVanillaBlockTexture("wool_lime", 6, 19);
-		registerVanillaBlockTexture("wool_yellow", 6, 29);
+		registerVanillaBlockTexture("wool_yellow", 6, 20);
 		registerVanillaBlockTexture("wool_light_blue", 6, 21);
 		registerVanillaBlockTexture("wool_magenta", 6, 22);
 		registerVanillaBlockTexture("wool_orange", 6, 23);
@@ -436,7 +443,7 @@ public class TextureRegistry {
 		registerVanillaBlockTexture("piston_back", 13,6);
 		registerVanillaBlockTexture("furnace_blast_idle_front", 13,7);
 		registerVanillaBlockTexture("dirt_scorched", 13,8);
-		registerVanillaBlockTexture("debug_transparent3", 13,9);
+		registerVanillaBlockTexture("jar_empty", 13,9);
 		registerVanillaBlockTexture("lantern_firefly_blue", 13,10);
 		registerVanillaBlockTexture("lantern_firefly_green", 13,11);
 		registerVanillaBlockTexture("water0", 13,12);
@@ -444,7 +451,7 @@ public class TextureRegistry {
 		registerVanillaBlockTexture("lava0", 13,14);
 		registerVanillaBlockTexture("brick_permafrost", 13,15);
 
-		registerVanillaBlockTexture("debug_blue2", 14,0);
+		registerVanillaBlockTexture("portal_nether", 14,0);
 		registerVanillaBlockTexture("dispenser_cobble_stone_front", 14,2);
 		registerVanillaBlockTexture("furnace_stone_top", 14,3);
 		registerVanillaBlockTexture("netherrack_bloody", 14,4);
@@ -460,12 +467,14 @@ public class TextureRegistry {
 		registerVanillaBlockTexture("lava1", 14,14);
 		registerVanillaBlockTexture("lava2", 14,15);
 
-		registerVanillaBlockTexture("debug_fire", 15,1);
-		registerVanillaBlockTexture("debug_fire2", 15,2);
+		registerVanillaBlockTexture("fire1", 15,1);
+		registerVanillaBlockTexture("fire2", 15,2);
 		registerVanillaBlockTexture("crops_wheat_stage7", 15,5);
 		registerVanillaBlockTexture("block_green_diamond", 15,6);
 		registerVanillaBlockTexture("block_charcoal", 15,7);
 		registerVanillaBlockTexture("furnace_blast_top", 15,8);
+		registerVanillaBlockTexture("block_sugarcane_side", 15,9);
+		registerVanillaBlockTexture("block_sugarcane_baked_side", 15,10);
 		registerVanillaBlockTexture("lantern_inside", 15,11);
 		registerVanillaBlockTexture("water3", 15,12);
 		registerVanillaBlockTexture("water4", 15,13);
@@ -483,7 +492,13 @@ public class TextureRegistry {
 		registerVanillaBlockTexture("block_coal", 16,7);
 		registerVanillaBlockTexture("debug_north", 16,8);
 		registerVanillaBlockTexture("debug_east", 16,9);
+		registerVanillaBlockTexture("block_sugarcane_top", 16,10);
 		registerVanillaBlockTexture("grass_scorched_top", 16,11);
+		registerVanillaBlockTexture("crops_pumpkin_stage4_top", 16,12);
+		registerVanillaBlockTexture("crops_pumpkin_stage3_top", 16,13);
+		registerVanillaBlockTexture("crops_pumpkin_stage2_top", 16,14);
+		registerVanillaBlockTexture("crops_pumpkin_stage1_top", 16,15);
+		registerVanillaBlockTexture("crops_pumpkin_stage0", 16,16);
 
 		registerVanillaBlockTexture("ore_iron_stone", 17,0);
 		registerVanillaBlockTexture("ore_iron_basalt", 17,1);
@@ -495,7 +510,12 @@ public class TextureRegistry {
 		registerVanillaBlockTexture("block_nethercoal", 17,7);
 		registerVanillaBlockTexture("debug_south", 17,8);
 		registerVanillaBlockTexture("debug_west", 17,9);
+		registerVanillaBlockTexture("block_sugarcane_baked_top", 17,10);
 		registerVanillaBlockTexture("grass_scorched_side", 17,11);
+		registerVanillaBlockTexture("crops_pumpkin_stage4_side", 17,12);
+		registerVanillaBlockTexture("crops_pumpkin_stage3_side", 17,13);
+		registerVanillaBlockTexture("crops_pumpkin_stage2_side", 17,14);
+		registerVanillaBlockTexture("crops_pumpkin_stage1_side", 17,15);
 
 		registerVanillaBlockTexture("ore_coal_stone", 18,0);
 		registerVanillaBlockTexture("ore_coal_basalt", 18,1);
@@ -506,6 +526,7 @@ public class TextureRegistry {
 		registerVanillaBlockTexture("block_diamond_bottom", 18,6);
 		registerVanillaBlockTexture("debug_down", 18,8);
 		registerVanillaBlockTexture("debug_up", 18,9);
+		registerVanillaBlockTexture("jar_filled", 18,10);
 
 		registerVanillaBlockTexture("ore_lapis_stone", 19,0);
 		registerVanillaBlockTexture("ore_lapis_basalt", 19,1);
@@ -527,5 +548,183 @@ public class TextureRegistry {
 
 		registerVanillaBlockTexture("mud", 22,0);
 		registerVanillaBlockTexture("mud_dry", 23,0);
+
+		registerVanillaBlockTexture("lamp_black_idle", 		16, 24);
+		registerVanillaBlockTexture("lamp_red_idle", 		16, 25);
+		registerVanillaBlockTexture("lamp_green_idle", 		16, 26);
+		registerVanillaBlockTexture("lamp_brown_idle", 		16, 27);
+		registerVanillaBlockTexture("lamp_blue_idle", 		16, 28);
+		registerVanillaBlockTexture("lamp_purple_idle", 	16, 29);
+		registerVanillaBlockTexture("lamp_cyan_idle", 		16, 30);
+		registerVanillaBlockTexture("lamp_light_grey_idle",	16, 31);
+		registerVanillaBlockTexture("lamp_grey_idle", 		17, 24);
+		registerVanillaBlockTexture("lamp_magenta_idle", 	17, 25);
+		registerVanillaBlockTexture("lamp_lime_idle", 		17, 26);
+		registerVanillaBlockTexture("lamp_yellow_idle", 	17, 27);
+		registerVanillaBlockTexture("lamp_light_blue_idle", 17, 28);
+		registerVanillaBlockTexture("lamp_pink_idle", 		17, 29);
+		registerVanillaBlockTexture("lamp_orange_idle", 	17, 30);
+		registerVanillaBlockTexture("lamp_white_idle",		17, 31);
+
+		registerVanillaBlockTexture("lamp_black_active", 		18, 24);
+		registerVanillaBlockTexture("lamp_red_active", 			18, 25);
+		registerVanillaBlockTexture("lamp_green_active", 		18, 26);
+		registerVanillaBlockTexture("lamp_brown_active", 		18, 27);
+		registerVanillaBlockTexture("lamp_blue_active", 		18, 28);
+		registerVanillaBlockTexture("lamp_purple_active", 		18, 29);
+		registerVanillaBlockTexture("lamp_cyan_active", 		18, 30);
+		registerVanillaBlockTexture("lamp_light_grey_active",	18, 31);
+		registerVanillaBlockTexture("lamp_grey_active", 		19, 24);
+		registerVanillaBlockTexture("lamp_magenta_active", 		19, 25);
+		registerVanillaBlockTexture("lamp_lime_active", 		19, 26);
+		registerVanillaBlockTexture("lamp_yellow_active", 		19, 27);
+		registerVanillaBlockTexture("lamp_light_blue_active",	19, 28);
+		registerVanillaBlockTexture("lamp_pink_active", 		19, 29);
+		registerVanillaBlockTexture("lamp_orange_active", 		19, 30);
+		registerVanillaBlockTexture("lamp_white_active",		19, 31);
+
+		registerVanillaBlockTexture("chest_planks_oak_painted_black_top", 					20, 20);
+		registerVanillaBlockTexture("chest_planks_oak_painted_black_single_side", 			21, 20);
+		registerVanillaBlockTexture("chest_planks_oak_painted_black_single_front", 			22, 20);
+		registerVanillaBlockTexture("chest_planks_oak_painted_black_double_front_left", 	20, 21);
+		registerVanillaBlockTexture("chest_planks_oak_painted_black_double_front_right", 	21, 21);
+		registerVanillaBlockTexture("planks_oak_painted_black", 							22, 21);
+		registerVanillaBlockTexture("chest_planks_oak_painted_black_double_back_left", 		20, 22);
+		registerVanillaBlockTexture("chest_planks_oak_painted_black_double_back_right", 	21, 22);
+
+		registerVanillaBlockTexture("chest_planks_oak_painted_red_top", 					20, 23);
+		registerVanillaBlockTexture("chest_planks_oak_painted_red_single_side", 			21, 23);
+		registerVanillaBlockTexture("chest_planks_oak_painted_red_single_front", 			22, 23);
+		registerVanillaBlockTexture("chest_planks_oak_painted_red_double_front_left", 		20, 24);
+		registerVanillaBlockTexture("chest_planks_oak_painted_red_double_front_right", 		21, 24);
+		registerVanillaBlockTexture("planks_oak_painted_red", 								22, 24);
+		registerVanillaBlockTexture("chest_planks_oak_painted_red_double_back_left", 		20, 25);
+		registerVanillaBlockTexture("chest_planks_oak_painted_red_double_back_right", 		21, 25);
+
+		registerVanillaBlockTexture("chest_planks_oak_painted_green_top", 					20, 26);
+		registerVanillaBlockTexture("chest_planks_oak_painted_green_single_side", 			21, 26);
+		registerVanillaBlockTexture("chest_planks_oak_painted_green_single_front", 			22, 26);
+		registerVanillaBlockTexture("chest_planks_oak_painted_green_double_front_left", 	20, 27);
+		registerVanillaBlockTexture("chest_planks_oak_painted_green_double_front_right", 	21, 27);
+		registerVanillaBlockTexture("planks_oak_painted_green", 							22, 27);
+		registerVanillaBlockTexture("chest_planks_oak_painted_green_double_back_left", 		20, 28);
+		registerVanillaBlockTexture("chest_planks_oak_painted_green_double_back_right", 	21, 28);
+
+		registerVanillaBlockTexture("chest_planks_oak_painted_brown_top", 					20, 29);
+		registerVanillaBlockTexture("chest_planks_oak_painted_brown_single_side", 			21, 29);
+		registerVanillaBlockTexture("chest_planks_oak_painted_brown_single_front", 			22, 29);
+		registerVanillaBlockTexture("chest_planks_oak_painted_brown_double_front_left", 	20, 30);
+		registerVanillaBlockTexture("chest_planks_oak_painted_brown_double_front_right", 	21, 30);
+		registerVanillaBlockTexture("planks_oak_painted_brown", 							22, 30);
+		registerVanillaBlockTexture("chest_planks_oak_painted_brown_double_back_left", 		20, 31);
+		registerVanillaBlockTexture("chest_planks_oak_painted_brown_double_back_right", 	21, 31);
+
+		registerVanillaBlockTexture("chest_planks_oak_painted_blue_top", 					23, 20);
+		registerVanillaBlockTexture("chest_planks_oak_painted_blue_single_side", 			24, 20);
+		registerVanillaBlockTexture("chest_planks_oak_painted_blue_single_front", 			25, 20);
+		registerVanillaBlockTexture("chest_planks_oak_painted_blue_double_front_left", 		23, 21);
+		registerVanillaBlockTexture("chest_planks_oak_painted_blue_double_front_right", 	24, 21);
+		registerVanillaBlockTexture("planks_oak_painted_blue", 								25, 21);
+		registerVanillaBlockTexture("chest_planks_oak_painted_blue_double_back_left", 		23, 22);
+		registerVanillaBlockTexture("chest_planks_oak_painted_blue_double_back_right", 		24, 22);
+
+		registerVanillaBlockTexture("chest_planks_oak_painted_purple_top", 					23, 23);
+		registerVanillaBlockTexture("chest_planks_oak_painted_purple_single_side", 			24, 23);
+		registerVanillaBlockTexture("chest_planks_oak_painted_purple_single_front", 		25, 23);
+		registerVanillaBlockTexture("chest_planks_oak_painted_purple_double_front_left", 	23, 24);
+		registerVanillaBlockTexture("chest_planks_oak_painted_purple_double_front_right", 	24, 24);
+		registerVanillaBlockTexture("planks_oak_painted_purple", 							25, 24);
+		registerVanillaBlockTexture("chest_planks_oak_painted_purple_double_back_left", 	23, 25);
+		registerVanillaBlockTexture("chest_planks_oak_painted_purple_double_back_right", 	24, 25);
+
+		registerVanillaBlockTexture("chest_planks_oak_painted_cyan_top", 					23, 26);
+		registerVanillaBlockTexture("chest_planks_oak_painted_cyan_single_side", 			24, 26);
+		registerVanillaBlockTexture("chest_planks_oak_painted_cyan_single_front", 			25, 26);
+		registerVanillaBlockTexture("chest_planks_oak_painted_cyan_double_front_left", 		23, 27);
+		registerVanillaBlockTexture("chest_planks_oak_painted_cyan_double_front_right", 	24, 27);
+		registerVanillaBlockTexture("planks_oak_painted_cyan", 								25, 27);
+		registerVanillaBlockTexture("chest_planks_oak_painted_cyan_double_back_left", 		23, 28);
+		registerVanillaBlockTexture("chest_planks_oak_painted_cyan_double_back_right", 		24, 28);
+
+		registerVanillaBlockTexture("chest_planks_oak_painted_light_grey_top", 					23, 29);
+		registerVanillaBlockTexture("chest_planks_oak_painted_light_grey_single_side", 			24, 29);
+		registerVanillaBlockTexture("chest_planks_oak_painted_light_grey_single_front", 		25, 29);
+		registerVanillaBlockTexture("chest_planks_oak_painted_light_grey_double_front_left", 	23, 30);
+		registerVanillaBlockTexture("chest_planks_oak_painted_light_grey_double_front_right", 	24, 30);
+		registerVanillaBlockTexture("planks_oak_painted_light_grey", 							25, 30);
+		registerVanillaBlockTexture("chest_planks_oak_painted_light_grey_double_back_left", 	23, 31);
+		registerVanillaBlockTexture("chest_planks_oak_painted_light_grey_double_back_right", 	24, 31);
+
+		registerVanillaBlockTexture("chest_planks_oak_painted_grey_top", 					26, 20);
+		registerVanillaBlockTexture("chest_planks_oak_painted_grey_single_side", 			27, 20);
+		registerVanillaBlockTexture("chest_planks_oak_painted_grey_single_front", 			28, 20);
+		registerVanillaBlockTexture("chest_planks_oak_painted_grey_double_front_left", 		26, 21);
+		registerVanillaBlockTexture("chest_planks_oak_painted_grey_double_front_right", 	27, 21);
+		registerVanillaBlockTexture("planks_oak_painted_grey", 								28, 21);
+		registerVanillaBlockTexture("chest_planks_oak_painted_grey_double_back_left", 		26, 22);
+		registerVanillaBlockTexture("chest_planks_oak_painted_grey_double_back_right", 		27, 22);
+
+		registerVanillaBlockTexture("chest_planks_oak_painted_pink_top", 					26, 23);
+		registerVanillaBlockTexture("chest_planks_oak_painted_pink_single_side", 			27, 23);
+		registerVanillaBlockTexture("chest_planks_oak_painted_pink_single_front", 			28, 23);
+		registerVanillaBlockTexture("chest_planks_oak_painted_pink_double_front_left", 		26, 24);
+		registerVanillaBlockTexture("chest_planks_oak_painted_pink_double_front_right", 	27, 24);
+		registerVanillaBlockTexture("planks_oak_painted_pink", 								28, 24);
+		registerVanillaBlockTexture("chest_planks_oak_painted_pink_double_back_left", 		26, 25);
+		registerVanillaBlockTexture("chest_planks_oak_painted_pink_double_back_right", 		27, 25);
+
+		registerVanillaBlockTexture("chest_planks_oak_painted_lime_top", 					26, 26);
+		registerVanillaBlockTexture("chest_planks_oak_painted_lime_single_side", 			27, 26);
+		registerVanillaBlockTexture("chest_planks_oak_painted_lime_single_front", 			28, 26);
+		registerVanillaBlockTexture("chest_planks_oak_painted_lime_double_front_left", 		26, 27);
+		registerVanillaBlockTexture("chest_planks_oak_painted_lime_double_front_right", 	27, 27);
+		registerVanillaBlockTexture("planks_oak_painted_lime", 								28, 27);
+		registerVanillaBlockTexture("chest_planks_oak_painted_lime_double_back_left", 		26, 28);
+		registerVanillaBlockTexture("chest_planks_oak_painted_lime_double_back_right", 		27, 28);
+
+		registerVanillaBlockTexture("chest_planks_oak_painted_yellow_top", 					26, 29);
+		registerVanillaBlockTexture("chest_planks_oak_painted_yellow_single_side", 			27, 29);
+		registerVanillaBlockTexture("chest_planks_oak_painted_yellow_single_front", 		28, 29);
+		registerVanillaBlockTexture("chest_planks_oak_painted_yellow_double_front_left", 	26, 30);
+		registerVanillaBlockTexture("chest_planks_oak_painted_yellow_double_front_right", 	27, 30);
+		registerVanillaBlockTexture("planks_oak_painted_yellow", 							28, 30);
+		registerVanillaBlockTexture("chest_planks_oak_painted_yellow_double_back_left", 	26, 31);
+		registerVanillaBlockTexture("chest_planks_oak_painted_yellow_double_back_right", 	27, 31);
+
+		registerVanillaBlockTexture("chest_planks_oak_painted_light_blue_top", 					29, 20);
+		registerVanillaBlockTexture("chest_planks_oak_painted_light_blue_single_side", 			30, 20);
+		registerVanillaBlockTexture("chest_planks_oak_painted_light_blue_single_front", 		31, 20);
+		registerVanillaBlockTexture("chest_planks_oak_painted_light_blue_double_front_left", 	29, 21);
+		registerVanillaBlockTexture("chest_planks_oak_painted_light_blue_double_front_right", 	30, 21);
+		registerVanillaBlockTexture("planks_oak_painted_light_blue", 							31, 21);
+		registerVanillaBlockTexture("chest_planks_oak_painted_light_blue_double_back_left", 	29, 22);
+		registerVanillaBlockTexture("chest_planks_oak_painted_light_blue_double_back_right", 	30, 22);
+
+		registerVanillaBlockTexture("chest_planks_oak_painted_magenta_top", 				29, 23);
+		registerVanillaBlockTexture("chest_planks_oak_painted_magenta_single_side", 		30, 23);
+		registerVanillaBlockTexture("chest_planks_oak_painted_magenta_single_front", 		31, 23);
+		registerVanillaBlockTexture("chest_planks_oak_painted_magenta_double_front_left", 	29, 24);
+		registerVanillaBlockTexture("chest_planks_oak_painted_magenta_double_front_right", 	30, 24);
+		registerVanillaBlockTexture("planks_oak_painted_magenta", 							31, 24);
+		registerVanillaBlockTexture("chest_planks_oak_painted_magenta_double_back_left", 	29, 25);
+		registerVanillaBlockTexture("chest_planks_oak_painted_magenta_double_back_right", 	30, 25);
+
+		registerVanillaBlockTexture("chest_planks_oak_painted_orange_top", 					29, 26);
+		registerVanillaBlockTexture("chest_planks_oak_painted_orange_single_side", 			30, 26);
+		registerVanillaBlockTexture("chest_planks_oak_painted_orange_single_front", 		31, 26);
+		registerVanillaBlockTexture("chest_planks_oak_painted_orange_double_front_left", 	29, 27);
+		registerVanillaBlockTexture("chest_planks_oak_painted_orange_double_front_right", 	30, 27);
+		registerVanillaBlockTexture("planks_oak_painted_orange", 							31, 27);
+		registerVanillaBlockTexture("chest_planks_oak_painted_orange_double_back_left", 	29, 28);
+		registerVanillaBlockTexture("chest_planks_oak_painted_orange_double_back_right", 	30, 28);
+
+		registerVanillaBlockTexture("chest_planks_oak_painted_white_top", 					29, 29);
+		registerVanillaBlockTexture("chest_planks_oak_painted_white_single_side", 			30, 29);
+		registerVanillaBlockTexture("chest_planks_oak_painted_white_single_front", 			31, 29);
+		registerVanillaBlockTexture("chest_planks_oak_painted_white_double_front_left", 	29, 30);
+		registerVanillaBlockTexture("chest_planks_oak_painted_white_double_front_right", 	30, 30);
+		registerVanillaBlockTexture("planks_oak_painted_white", 							31, 30);
+		registerVanillaBlockTexture("chest_planks_oak_painted_white_double_back_left", 		29, 31);
+		registerVanillaBlockTexture("chest_planks_oak_painted_white_double_back_right", 	30, 31);
 	}
 }

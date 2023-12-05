@@ -50,13 +50,8 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 		.build(new BlockStairs(Block.dirt,blockId++)).withLitInteriorSurface(true);
 
 	public static void init() {
-		int i = 0;
 		try {
 			for (String string : getResourceFiles("assets/minecraft/model/block/")) {
-				if (i > 500){
-					break;
-				}
-				i++;
 				System.out.println(string);
 				if (string.contains("cauldron")){
 					new BlockBuilder(MOD_ID)
