@@ -17,8 +17,8 @@ public class BlockFace {
 	protected Side cullFace = null;
 	public final Vector3f[] vertices;
 	protected final String[] vertexUVMap;
-	public String[] vertexKeyMap = new String[4];
-	public double[][] vertexUVs;
+	protected String[] vertexKeyMap = new String[4];
+	protected double[][] vertexUVs;
 	public BlockCube parentCube;
 	public BlockFace(BlockCube cube, String key){
 		this.faceData = cube.cubeData.faces.get(key);
@@ -137,5 +137,11 @@ public class BlockFace {
 	}
 	public boolean useTint(){
 		return faceData.tintindex >= 0;
+	}
+	public double[][] getVertexUVs(){
+		return vertexUVs;
+	}
+	public boolean getFullBright(){
+		return faceData.fullbright;
 	}
 }

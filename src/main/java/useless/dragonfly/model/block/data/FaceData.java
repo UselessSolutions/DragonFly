@@ -15,6 +15,8 @@ public class FaceData {
 	public int rotation = 0; // can only be values 0, 90, 180, or 270
 	@SerializedName("tintindex")
 	public int tintindex = -1; // Should mean white tint, unsure how to handle other values seems to pass it into BlockColor to get a color from there in vanilla
+	@SerializedName("fullbright")
+	public boolean fullbright = false; // True if face should always render at full brightness
 
 	public String toString(){
 		return
@@ -22,6 +24,7 @@ public class FaceData {
 			"texture: " + texture + "\n" +
 			"cullface: " + cullface + "\n" +
 			"rotation: " + rotation + "\n" +
-			"tintindex: " + tintindex;
+			"tintindex: " + tintindex + "\n" +
+			"fullbright: " + fullbright;
 	}
 }

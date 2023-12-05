@@ -1,6 +1,7 @@
 package useless.dragonfly.model.block;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.render.RenderBlockCache;
 import net.minecraft.client.render.RenderBlocks;
 import net.minecraft.client.render.Tessellator;
 import net.minecraft.client.render.block.color.BlockColorDispatcher;
@@ -17,6 +18,7 @@ import useless.dragonfly.model.block.processed.BlockFace;
 import useless.dragonfly.model.block.processed.BlockModel;
 import useless.dragonfly.utilities.vector.Vector3f;
 
+import java.awt.*;
 import java.lang.reflect.Field;
 
 public class BlockModelRenderer {
@@ -38,6 +40,7 @@ public class BlockModelRenderer {
 	private static int overrideBlockTexture = -1;
 	private static int rotationX = 0;
 	private static int rotationY = 0;
+	private static Vector3f origin = new Vector3f(0.5f, 0.5f, 0.5f);
 	public static void renderModelInventory(BlockModelDragonFly modelDragonFly, Block block, int meta, float brightness){
 		float xOffset = 0.5f;
 		float yOffset = 0.5f;
@@ -65,7 +68,7 @@ public class BlockModelRenderer {
 		GL11.glScalef(xScale, yScale, zScale);
 		if (modelDragonFly.baseModel.blockCubes != null){
 			for (BlockCube cube: modelDragonFly.baseModel.blockCubes) {
-				for (BlockFace face: cube.faces.values()) {
+				for (BlockFace face: cube.getFaces().values()) {
 					GL11.glColor4f(brightness, brightness, brightness, 1);
 					tessellator.startDrawingQuads();
 					tessellator.setNormal(face.getSide().getOffsetX(), face.getSide().getOffsetY(), face.getSide().getOffsetZ());
@@ -129,11 +132,21 @@ public class BlockModelRenderer {
 		if (!renderAllFaces){
 			if (!renderSide(model, cube, side, x, y, z)) return false;
 		}
-		int directionX = side.getOffsetX();
-		int directionY = side.getOffsetY();
-		int directionZ = side.getOffsetZ();
+		RenderBlockCache cache = rba().getCache();
+		int directionX;
+		int directionY;
+		int directionZ;
+		if (cube.shade()){
+			directionX = side.getOffsetX();
+			directionY = side.getOffsetY();
+			directionZ = side.getOffsetZ();
+		} else {
+			directionX = 0;
+			directionY = 0;
+			directionZ = 0;
+		}
 
-		Vector3f origin = new Vector3f(0.5f, 0.5f, 0.5f);
+
 		Vector3f vMin = cube.getMin().rotateAroundX(origin, rotationX).rotateAroundY(origin, rotationY);
 		Vector3f vMax = cube.getMax().rotateAroundX(origin, rotationX).rotateAroundY(origin, rotationY);
 		float minX = vMin.x;
@@ -238,55 +251,63 @@ public class BlockModelRenderer {
 				throw new IllegalArgumentException("Side " + side + " is not a valid side to render!");
 		}
 
-		float r = 1f;
-		float g = 1f;
-		float b = 1f;
+		float r;
+		float g;
+		float b;
 		if (blockFace.useTint()){
-			int color;
-			color = BlockColorDispatcher.getInstance().getDispatch(block).getWorldColor(mc.theWorld, x, y, z);
-			r = (float)(color >> 16 & 0xFF) / 255.0f;
-			g = (float)(color >> 8 & 0xFF) / 255.0f;
-			b = (float)(color & 0xFF) / 255.0f;
+			Color color = new Color(BlockColorDispatcher.getInstance().getDispatch(block).getWorldColor(mc.theWorld, x, y, z));
+			r = color.getRed() / 255.0f;
+			g = color.getGreen() / 255.0f;
+			b = color.getBlue() / 255.0f;
+		} else {
+			r = 1f;
+			g = 1f;
+			b = 1f;
 		}
-		float lightTR = 1.0f;
-		float lightBR = 1.0f;
-		float lightBL = 1.0f;
-		float lightTL = 1.0f;
-		if (!(rba().getOverbright() || !cube.shade())) {
+		float lightTR;
+		float lightBR;
+		float lightBL;
+		float lightTL;
+		if (rba().getOverbright() || blockFace.getFullBright()){
+			lightTR = 1.0f;
+			lightBR = 1.0f;
+			lightBL = 1.0f;
+			lightTL = 1.0f;
+		} else {
 			r *= rba().getSIDE_LIGHT_MULTIPLIER()[side.getId()];
 			g *= rba().getSIDE_LIGHT_MULTIPLIER()[side.getId()];
 			b *= rba().getSIDE_LIGHT_MULTIPLIER()[side.getId()];
-			float directionBrightness = rba().getCache().getBrightness(directionX, directionY, directionZ);
-			boolean lefT = rba().getCache().getOpacity(directionX + lefX, directionY + lefY, directionZ + lefZ);
-			boolean botT = rba().getCache().getOpacity(directionX - topX, directionY - topY, directionZ - topZ);
-			boolean topT = rba().getCache().getOpacity(directionX + topX, directionY + topY, directionZ + topZ);
-			boolean rigT = rba().getCache().getOpacity(directionX - lefX, directionY - lefY, directionZ - lefZ);
-			float leftBrightness = rba().getCache().getBrightness(directionX + lefX, directionY + lefY, directionZ + lefZ);
-			float bottomBrightness = rba().getCache().getBrightness(directionX - topX, directionY - topY, directionZ - topZ);
-			float topBrightness = rba().getCache().getBrightness(directionX + topX, directionY + topY, directionZ + topZ);
-			float rightBrightness = rba().getCache().getBrightness(directionX - lefX, directionY - lefY, directionZ - lefZ);
-			float bottomLeftBrightness = botT && lefT ? leftBrightness : rba().getCache().getBrightness(directionX + lefX - topX, directionY + lefY - topY, directionZ + lefZ - topZ);
-			float topLeftBrightness = topT && lefT ? leftBrightness : rba().getCache().getBrightness(directionX + lefX + topX, directionY + lefY + topY, directionZ + lefZ + topZ);
-			float bottomRightBrightness = botT && rigT ? rightBrightness : rba().getCache().getBrightness(directionX - lefX - topX, directionY - lefY - topY, directionZ - lefZ - topZ);
-			float topRightBrightness = topT && rigT ? rightBrightness : rba().getCache().getBrightness(directionX - lefX + topX, directionY - lefY + topY, directionZ - lefZ + topZ);
+			float directionBrightness = cache.getBrightness(directionX, directionY, directionZ);
+			boolean lefT = cache.getOpacity(directionX + lefX, directionY + lefY, directionZ + lefZ);
+			boolean botT = cache.getOpacity(directionX - topX, directionY - topY, directionZ - topZ);
+			boolean topT = cache.getOpacity(directionX + topX, directionY + topY, directionZ + topZ);
+			boolean rigT = cache.getOpacity(directionX - lefX, directionY - lefY, directionZ - lefZ);
+			float leftBrightness = cache.getBrightness(directionX + lefX, directionY + lefY, directionZ + lefZ);
+			float bottomBrightness = cache.getBrightness(directionX - topX, directionY - topY, directionZ - topZ);
+			float topBrightness = cache.getBrightness(directionX + topX, directionY + topY, directionZ + topZ);
+			float rightBrightness = cache.getBrightness(directionX - lefX, directionY - lefY, directionZ - lefZ);
+			float bottomLeftBrightness = botT && lefT ? leftBrightness : cache.getBrightness(directionX + lefX - topX, directionY + lefY - topY, directionZ + lefZ - topZ);
+			float topLeftBrightness = topT && lefT ? leftBrightness : cache.getBrightness(directionX + lefX + topX, directionY + lefY + topY, directionZ + lefZ + topZ);
+			float bottomRightBrightness = botT && rigT ? rightBrightness : cache.getBrightness(directionX - lefX - topX, directionY - lefY - topY, directionZ - lefZ - topZ);
+			float topRightBrightness = topT && rigT ? rightBrightness : cache.getBrightness(directionX - lefX + topX, directionY - lefY + topY, directionZ - lefZ + topZ);
 			lightTL = (topLeftBrightness + leftBrightness + topBrightness + directionBrightness) / 4.0f;
 			lightTR = (topBrightness + directionBrightness + topRightBrightness + rightBrightness) / 4.0f;
 			lightBR = (directionBrightness + bottomBrightness + rightBrightness + bottomRightBrightness) / 4.0f;
 			lightBL = (leftBrightness + bottomLeftBrightness + directionBrightness + bottomBrightness) / 4.0f;
 			if (depth > 0.01) {
-				directionBrightness = rba().getCache().getBrightness(0, 0, 0);
-				lefT = rba().getCache().getOpacity(lefX, lefY, lefZ);
-				botT = rba().getCache().getOpacity(-topX, -topY, -topZ);
-				topT = rba().getCache().getOpacity(topX, topY, topZ);
-				rigT = rba().getCache().getOpacity(-lefX, -lefY, -lefZ);
-				leftBrightness = rba().getCache().getBrightness(lefX, lefY, lefZ);
-				bottomBrightness = rba().getCache().getBrightness(-topX, -topY, -topZ);
-				topBrightness = rba().getCache().getBrightness(topX, topY, topZ);
-				rightBrightness = rba().getCache().getBrightness(-lefX, -lefY, -lefZ);
-				bottomLeftBrightness = botT && lefT ? leftBrightness : rba().getCache().getBrightness(lefX - topX, lefY - topY, lefZ - topZ);
-				topLeftBrightness = topT && lefT ? leftBrightness : rba().getCache().getBrightness(lefX + topX, lefY + topY, lefZ + topZ);
-				bottomRightBrightness = botT && rigT ? rightBrightness : rba().getCache().getBrightness(-lefX - topX, -lefY - topY, -lefZ - topZ);
-				topRightBrightness = topT && rigT ? rightBrightness : rba().getCache().getBrightness(-lefX + topX, -lefY + topY, -lefZ + topZ);
+				directionBrightness = cache.getBrightness(0, 0, 0);
+				lefT = cache.getOpacity(lefX, lefY, lefZ);
+				botT = cache.getOpacity(-topX, -topY, -topZ);
+				topT = cache.getOpacity(topX, topY, topZ);
+				rigT = cache.getOpacity(-lefX, -lefY, -lefZ);
+				leftBrightness = cache.getBrightness(lefX, lefY, lefZ);
+				bottomBrightness = cache.getBrightness(-topX, -topY, -topZ);
+				topBrightness = cache.getBrightness(topX, topY, topZ);
+				rightBrightness = cache.getBrightness(-lefX, -lefY, -lefZ);
+				bottomLeftBrightness = botT && lefT ? leftBrightness : cache.getBrightness(lefX - topX, lefY - topY, lefZ - topZ);
+				topLeftBrightness = topT && lefT ? leftBrightness : cache.getBrightness(lefX + topX, lefY + topY, lefZ + topZ);
+				bottomRightBrightness = botT && rigT ? rightBrightness : cache.getBrightness(-lefX - topX, -lefY - topY, -lefZ - topZ);
+				topRightBrightness = topT && rigT ? rightBrightness : cache.getBrightness(-lefX + topX, -lefY + topY, -lefZ + topZ);
 				lightTL = (topLeftBrightness + leftBrightness + topBrightness + directionBrightness) / 4.0f * depth + lightTL * (1.0f - depth);
 				lightTR = (topBrightness + directionBrightness + topRightBrightness + rightBrightness) / 4.0f * depth + lightTR * (1.0f - depth);
 				lightBR = (directionBrightness + bottomBrightness + rightBrightness + bottomRightBrightness) / 4.0f * depth + lightBR * (1.0f - depth);
@@ -300,11 +321,11 @@ public class BlockModelRenderer {
 
 		float tl = topP * lightTL + (1.0f - topP) * lightBL;
 		float tr = topP * lightTR + (1.0f - topP) * lightBR;
-		float bl2 = botP * lightTL + (1.0f - botP) * lightBL;
+		float bl = botP * lightTL + (1.0f - botP) * lightBL;
 		float br = botP * lightTR + (1.0f - botP) * lightBR;
 		float brightnessTopRight = lefP * tl + (1.0f - lefP) * tr;
-		float brightnessBottomLeft = lefP * bl2 + (1.0f - lefP) * br;
-		float bottomRightBrightness = rigP * bl2 + (1.0f - rigP) * br;
+		float brightnessBottomLeft = lefP * bl + (1.0f - lefP) * br;
+		float bottomRightBrightness = rigP * bl + (1.0f - rigP) * br;
 		float topRightBrightness = rigP * tl + (1.0f - rigP) * tr;
 		colorRedTopLeft *= brightnessTopRight;
 		colorGreenTopLeft *= brightnessTopRight;
@@ -333,15 +354,14 @@ public class BlockModelRenderer {
 			uvBR = face.generateVertexUV(overrideBlockTexture, 2);
 			uvTR = face.generateVertexUV(overrideBlockTexture, 3);
 		} else {
-			uvTL = face.vertexUVs[0];
-			uvBL = face.vertexUVs[1];
-			uvBR = face.vertexUVs[2];
-			uvTR = face.vertexUVs[3];
+			uvTL = face.getVertexUVs()[0];
+			uvBL = face.getVertexUVs()[1];
+			uvBR = face.getVertexUVs()[2];
+			uvTR = face.getVertexUVs()[3];
 		}
 
 
 		Vector3f[] faceVertices = new Vector3f[4];
-		Vector3f origin = new Vector3f(0.5f, 0.5f, 0.5f);
 		for (int i = 0; i < faceVertices.length; i++) {
 			faceVertices[i] = face.vertices[i].rotateAroundX(origin, rotationX).rotateAroundY(origin, rotationY);
 		}
@@ -453,7 +473,7 @@ public class BlockModelRenderer {
 					default:
 						throw new RuntimeException("Specified side does not exist on a cube!!!");
 				}
-				tessellator.setColorOpaque_F(red * (cube.shade() ? sideBrightness : 1f), green * (cube.shade() ? sideBrightness : 1f), blue * (cube.shade() ? sideBrightness : 1f));
+				tessellator.setColorOpaque_F(!face.getFullBright() ? red * sideBrightness : 1f, !face.getFullBright() ? green * sideBrightness : 1f, !face.getFullBright() ? blue * sideBrightness : 1f);
 				renderModelFace(face, x, y, z);
 				renderedSomething = true;
 			}

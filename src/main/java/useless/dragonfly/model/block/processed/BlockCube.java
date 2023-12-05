@@ -15,8 +15,8 @@ public class BlockCube {
 	protected Vector3f toScaled;
 	protected boolean[] outerFace;
 	public final BlockModel parentModel;
-	public HashMap<String, Vector3f> vertices = new HashMap<>();
-	public HashMap<String, BlockFace> faces = new HashMap<>();
+	protected HashMap<String, Vector3f> vertices = new HashMap<>();
+	protected HashMap<String, BlockFace> faces = new HashMap<>();
 	public BlockCube(BlockModel model, CubeData cubeData){
 		this.parentModel = model;
 		this.cubeData = cubeData;
@@ -100,6 +100,9 @@ public class BlockCube {
 
 	public BlockFace getFaceFromSide(Side side, int rotationX, int rotationY){
 		return faces.get(ModelData.sideToKey.get(rotateSide(side, rotationX, rotationY)));
+	}
+	public HashMap<String, BlockFace> getFaces(){
+		return faces;
 	}
 	public float xMin(){
 		return fromScaled.getX();
