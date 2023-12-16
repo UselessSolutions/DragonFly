@@ -17,6 +17,8 @@ controllerMenuSensitivity:0.5
 controllerDeadzoneL:0.25
 controllerDeadzoneR:0.25
 blockOutlineWidth:0.25
+flightSpeed:0.5
+flightSmoothness:0.5
 invertYMouse:false
 rawMouseInput:false
 bobView:true
@@ -44,7 +46,7 @@ armorDurabilityOverlay:false
 armorProtectionOverlay:true
 heldItemCountOverlay:false
 pauseOnLostFocus:true
-showDebugScreen:true
+showDebugScreen:false
 showFrameTimes:false
 showItemDebugInfo:true
 showChunkBorders:false
