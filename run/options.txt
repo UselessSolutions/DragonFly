@@ -68,6 +68,7 @@ guiScale:0
 overlayMode:0
 rotationOverlayMode:0
 animations:2
+customAnimations:true
 playerListPosition:2
 heldItemTooltips:true
 colorCorrection:1.0
@@ -81,6 +82,7 @@ heatHaze:false
 old:false
 enableItemClumping:false
 alwaysShowDescriptions:false
+turnWithVehicle:true
 downloadSoundfiles:true
 allowSoundOverrides:false
 loadAllSounds:false
