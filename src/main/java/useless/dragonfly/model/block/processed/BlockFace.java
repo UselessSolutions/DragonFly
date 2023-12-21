@@ -51,7 +51,7 @@ public class BlockFace {
 				break;
 			case BOTTOM:
 				vertexKeyMap = new String[]{"--+", "---", "+--", "+-+"};
-				vertexUVMap = new String[]{"-+", "--", "+-", "++"};
+				vertexUVMap = new String[]{ "+-", "++", "-+", "--"};
 				break;
 			default:
 				vertexUVMap = null;
@@ -140,6 +140,11 @@ public class BlockFace {
 	}
 	public double[][] getVertexUVs(){
 		return vertexUVs;
+	}
+	public double[] getVertexUV(int index){
+		int val = index + faceData.rotation/90;
+		if (val < 0) val += 4;
+		return vertexUVs[val%4];
 	}
 	public boolean getFullBright(){
 		return faceData.fullbright;

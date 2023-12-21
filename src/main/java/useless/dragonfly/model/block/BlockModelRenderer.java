@@ -352,10 +352,10 @@ public class BlockModelRenderer {
 			uvBR = face.generateVertexUV(overrideBlockTexture, 2);
 			uvTR = face.generateVertexUV(overrideBlockTexture, 3);
 		} else {
-			uvTL = face.getVertexUVs()[0];
-			uvBL = face.getVertexUVs()[1];
-			uvBR = face.getVertexUVs()[2];
-			uvTR = face.getVertexUVs()[3];
+			uvTL = face.getVertexUV(0);
+			uvBL = face.getVertexUV(1);
+			uvBR = face.getVertexUV(2);
+			uvTR = face.getVertexUV(3);
 		}
 
 
