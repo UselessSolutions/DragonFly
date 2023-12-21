@@ -40,11 +40,11 @@ public class Utilities {
 	public static Vector3f rotatePoint(Vector3f point, Vector3f origin, String axis, float angle){
 		switch (axis){
 			case "x":
-				return point.rotateAroundX(origin, -angle);
+				return point.rotateAroundX(origin, angle);
 			case "y":
 				return point.rotateAroundY(origin, angle);
 			case "z":
-				return point.rotateAroundZ(origin, -angle);
+				return point.rotateAroundZ(origin, angle);
 		}
 		throw new RuntimeException("Axis " + axis + " Is not 'X', 'Y', or 'Z'!");
 	}

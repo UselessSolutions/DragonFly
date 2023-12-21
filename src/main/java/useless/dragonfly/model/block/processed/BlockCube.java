@@ -26,11 +26,8 @@ public class BlockCube {
 		toScaled = new Vector3f(cubeData.to[0] / 16f, cubeData.to[1] / 16f, cubeData.to[2] / 16f);
 
 		if (cubeData.rotation != null && cubeData.rotation.rescale){
-			float angle = cubeData.rotation.angle;
+			float angle = -cubeData.rotation.angle;
 			String axis = cubeData.rotation.axis;
-			if (axis.equals("x") || axis.equals("z")){
-				angle = -angle;
-			}
 			final float modRange = 90;
 			float x = Math.abs(((angle - modRange/2) % modRange) - modRange/2);
 			float slope = (float) Math.tan(Math.toRadians(x));
@@ -77,7 +74,7 @@ public class BlockCube {
 				vertices.get(k),
 				new Vector3f(cubeData.rotation.origin[0]/TextureFX.tileWidthTerrain, cubeData.rotation.origin[1]/TextureFX.tileWidthTerrain, cubeData.rotation.origin[2]/TextureFX.tileWidthTerrain),
 				cubeData.rotation.axis,
-				cubeData.rotation.angle));
+				-cubeData.rotation.angle));
 		}
 
 		for (String key: cubeData.faces.keySet()) {
