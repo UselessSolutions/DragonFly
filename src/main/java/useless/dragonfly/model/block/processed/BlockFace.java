@@ -12,7 +12,7 @@ import static useless.dragonfly.DragonFly.terrainAtlasWidth;
 
 public class BlockFace {
 	protected FaceData faceData;
-	protected float[] uvScaled;
+	protected double[] uvScaled;
 	protected Side side;
 	protected Side cullFace = null;
 	public final Vector3f[] vertices;
@@ -63,8 +63,8 @@ public class BlockFace {
 		vertexUVs = new double[][]{generateVertexUV(texture, 0), generateVertexUV(texture, 1), generateVertexUV(texture, 2), generateVertexUV(texture, 3)};
 	}
 	protected void generateUVs(BlockCube cube){
-		uvScaled = new float[4];
-		float[] _uvs = new float[0];
+		uvScaled = new double[4];
+		double[] _uvs = new double[0];
 		if (faceData.uv == null){
 			float xDif = cube.cubeData.to[0] - cube.cubeData.from[0];
 			float yDif = cube.cubeData.to[1] - cube.cubeData.from[1];
@@ -72,15 +72,15 @@ public class BlockFace {
 			switch (side){ // TODO replace with actual port of vanilla's uv generation
 				case NORTH:
 				case SOUTH:
-					_uvs = new float[]{cube.cubeData.from[0], TextureFX.tileWidthTerrain - cube.cubeData.to[1], cube.cubeData.from[0] + xDif, TextureFX.tileWidthTerrain - cube.cubeData.to[1] + yDif};
+					_uvs = new double[]{cube.cubeData.from[0], TextureFX.tileWidthTerrain - cube.cubeData.to[1], cube.cubeData.from[0] + xDif, TextureFX.tileWidthTerrain - cube.cubeData.to[1] + yDif};
 					break;
 				case EAST:
 				case WEST:
-					_uvs = new float[]{cube.cubeData.from[2], TextureFX.tileWidthTerrain - cube.cubeData.to[1], cube.cubeData.from[2] + zDif, TextureFX.tileWidthTerrain - cube.cubeData.to[1] + yDif};
+					_uvs = new double[]{cube.cubeData.from[2], TextureFX.tileWidthTerrain - cube.cubeData.to[1], cube.cubeData.from[2] + zDif, TextureFX.tileWidthTerrain - cube.cubeData.to[1] + yDif};
 					break;
 				case TOP:
 				case BOTTOM:
-					_uvs = new float[]{cube.cubeData.from[0], TextureFX.tileWidthTerrain - cube.cubeData.to[2], cube.cubeData.from[0] + xDif, TextureFX.tileWidthTerrain - cube.cubeData.to[2] + zDif};
+					_uvs = new double[]{cube.cubeData.from[0], TextureFX.tileWidthTerrain - cube.cubeData.to[2], cube.cubeData.from[0] + xDif, TextureFX.tileWidthTerrain - cube.cubeData.to[2] + zDif};
 					break;
 			}
 
@@ -90,21 +90,21 @@ public class BlockFace {
 
 		for (int i = 0; i < _uvs.length; i++) {
 			if (i == 0 || i == 2){ // u
-				uvScaled[i] = (_uvs[i]) / TextureFX.tileWidthTerrain;
+				uvScaled[i] = Math.max(Math.min((_uvs[i]) / TextureFX.tileWidthTerrain, .999d),0.001d);
 			} else { // v
-				uvScaled[i] = (TextureFX.tileWidthTerrain - _uvs[i]) / TextureFX.tileWidthTerrain;
+				uvScaled[i] = Math.max(Math.min(((TextureFX.tileWidthTerrain - _uvs[i]) / TextureFX.tileWidthTerrain), .999d),0.001d);
 			}
 
 		}
 	}
-	public float uMin(){
+	public double uMin(){
 		return uvScaled[0];
 	}
-	public float vMin(){ return uvScaled[1];}
-	public float uMax(){
+	public double vMin(){ return uvScaled[1];}
+	public double uMax(){
 		return uvScaled[2];
 	}
-	public float vMax(){
+	public double vMax(){
 		return uvScaled[3];
 	}
 	public Side getSide(){ return side;}

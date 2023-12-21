@@ -6,7 +6,7 @@ import java.util.Arrays;
 
 public class FaceData {
 	@SerializedName("uv")
-	public float[] uv = null;
+	public double[] uv = null;
 	@SerializedName("texture")
 	public String texture = null;
 	@SerializedName("cullface")
