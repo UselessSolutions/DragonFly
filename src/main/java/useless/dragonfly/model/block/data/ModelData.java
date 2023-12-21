@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class ModelData {
 	@SerializedName("parent")
-	public String parent = null; // Currently unused
+	public String parent = null;
 	@SerializedName("ambientocclusion")
 	public boolean ambientocclusion = true;
 	@SerializedName("display")
