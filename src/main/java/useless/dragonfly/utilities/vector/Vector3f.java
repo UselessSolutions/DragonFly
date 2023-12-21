@@ -328,6 +328,7 @@ public class Vector3f extends Vector implements Serializable {
 	// =================================================================
 	// Below this line is additional methods made for DragonFly
 	// =================================================================
+	public static Vector3f origin = new Vector3f(0.5f, 0.5f, 0.5f);
 	public Vector3f rotateAroundX(Vector3f origin, float angle){
 		angle = (float) ((angle) * (Math.PI/180)); // Convert to radians
 		float y = getY();

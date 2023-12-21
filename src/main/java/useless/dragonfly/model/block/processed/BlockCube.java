@@ -25,6 +25,41 @@ public class BlockCube {
 		fromScaled = new Vector3f(cubeData.from[0] / 16f, cubeData.from[1] / 16f, cubeData.from[2] / 16f);
 		toScaled = new Vector3f(cubeData.to[0] / 16f, cubeData.to[1] / 16f, cubeData.to[2] / 16f);
 
+		if (cubeData.rotation != null && cubeData.rotation.rescale){
+			float angle = cubeData.rotation.angle;
+			String axis = cubeData.rotation.axis;
+			final float modRange = 90;
+			float x = Math.abs(((angle - modRange/2) % modRange) - modRange/2);
+			float slope = (float) Math.tan(Math.toRadians(x));
+			float scalar = (float) (Math.sqrt(Math.pow((-0.5 * slope + 0.5), 2) + Math.pow((0.5 * slope + 0.5), 2)) * Math.sqrt(2));
+			float xf = fromScaled.getX();
+			float xt = toScaled.getX();
+			float yf = fromScaled.getY();
+			float yt = toScaled.getY();
+			float zf = fromScaled.getZ();
+			float zt = toScaled.getZ();
+			Vector3f fromOrigin = (Vector3f) Vector3f.sub(fromScaled, Vector3f.origin, null).scale(scalar);
+			Vector3f toOrigin = (Vector3f) Vector3f.sub(toScaled, Vector3f.origin, null).scale(scalar);
+			Vector3f.add(fromOrigin, Vector3f.origin, fromOrigin);
+			Vector3f.add(toOrigin, Vector3f.origin, toOrigin);
+			fromScaled = fromOrigin;
+			toScaled = toOrigin;
+			switch (axis){
+				case "x":
+					fromScaled.setX(xf);
+					toScaled.setX(xt);
+					break;
+				case "y":
+					fromScaled.setY(yf);
+					toScaled.setY(yt);
+					break;
+				case "z":
+					fromScaled.setZ(zf);
+					toScaled.setZ(zt);
+					break;
+			}
+		}
+
 		vertices.put("+++", new Vector3f(xMax(), yMax(), zMax()));
 		vertices.put("++-", new Vector3f(xMax(), yMax(), zMin()));
 		vertices.put("+-+", new Vector3f(xMax(), yMin(), zMax()));

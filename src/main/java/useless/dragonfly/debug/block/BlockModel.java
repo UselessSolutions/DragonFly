@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class BlockModel extends BlockTransparent {
 	public useless.dragonfly.model.block.processed.BlockModel model;
 	public BlockModel(String key, int id, Material material, useless.dragonfly.model.block.processed.BlockModel model) {
-		super(key, id, material, false);
+		super(key, id, material, true);
 		this.model = model;
 	}
 

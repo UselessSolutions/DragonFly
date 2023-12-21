@@ -21,6 +21,8 @@ import useless.dragonfly.utilities.vector.Vector3f;
 import java.awt.*;
 import java.lang.reflect.Field;
 
+import static useless.dragonfly.utilities.vector.Vector3f.origin;
+
 public class BlockModelRenderer {
 	public static Minecraft mc = Minecraft.getMinecraft(Minecraft.class);
 	private static boolean enableAO = false;
@@ -40,7 +42,6 @@ public class BlockModelRenderer {
 	private static int overrideBlockTexture = -1;
 	private static int rotationX = 0;
 	private static int rotationY = 0;
-	private static Vector3f origin = new Vector3f(0.5f, 0.5f, 0.5f);
 	public static void renderModelInventory(BlockModelDragonFly modelDragonFly, Block block, int meta, float brightness){
 		float xOffset = 0.5f;
 		float yOffset = 0.5f;
