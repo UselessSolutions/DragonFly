@@ -28,6 +28,9 @@ public class BlockCube {
 		if (cubeData.rotation != null && cubeData.rotation.rescale){
 			float angle = cubeData.rotation.angle;
 			String axis = cubeData.rotation.axis;
+			if (axis.equals("x") || axis.equals("z")){
+				angle = -angle;
+			}
 			final float modRange = 90;
 			float x = Math.abs(((angle - modRange/2) % modRange) - modRange/2);
 			float slope = (float) Math.tan(Math.toRadians(x));
