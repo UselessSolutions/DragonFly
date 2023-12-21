@@ -134,19 +134,9 @@ public class BlockModelRenderer {
 			if (!renderSide(model, cube, side, x, y, z)) return false;
 		}
 		RenderBlockCache cache = rba().getCache();
-		int sideOffX;
-		int sideOffY;
-		int sideOffZ;
-		if (cube.shade()){
-			sideOffX = side.getOffsetX();
-			sideOffY = side.getOffsetY();
-			sideOffZ = side.getOffsetZ();
-		} else {
-			sideOffX = 0;
-			sideOffY = 0;
-			sideOffZ = 0;
-		}
-
+		int sideOffX = side.getOffsetX();
+		int sideOffY = side.getOffsetY();
+		int sideOffZ = side.getOffsetZ();
 
 		Vector3f vMin = cube.getMin().rotateAroundX(origin, rotationX).rotateAroundY(origin, rotationY);
 		Vector3f vMax = cube.getMax().rotateAroundX(origin, rotationX).rotateAroundY(origin, rotationY);
@@ -274,6 +264,12 @@ public class BlockModelRenderer {
 			lightBR = 1.0f;
 			lightBL = 1.0f;
 			lightTL = 1.0f;
+		} else if (!cube.shade()) {
+			float brightness = cache.getBrightness(0, 0, 0);;
+			lightTR = brightness;
+			lightBR = brightness;
+			lightBL = brightness;
+			lightTL = brightness;
 		} else {
 			float sideLightMultiplier = rba().getSIDE_LIGHT_MULTIPLIER()[side.getId()];
 			r *= sideLightMultiplier;
@@ -445,35 +441,37 @@ public class BlockModelRenderer {
 				}
 
 
-				float red;
-				float green;
-				float blue;
+				float red = 1f;
+				float green = 1f;
+				float blue = 1f;
 
-				switch (side){
-					case TOP:
-						red = rTop;
-						green = gTop;
-						blue = bTop;
-						break;
-					case BOTTOM:
-						red = rBottom;
-						green = gBottom;
-						blue = bBottom;
-						break;
-					case NORTH:
-					case SOUTH:
-						red = rNorthSouth;
-						green = gNorthSouth;
-						blue = bNorthSouth;
-						break;
-					case WEST:
-					case EAST:
-						red = rEastWest;
-						green = gEastWest;
-						blue = bEastWest;
-						break;
-					default:
-						throw new RuntimeException("Specified side does not exist on a cube!!!");
+				if (cube.shade()){
+					switch (side){
+						case TOP:
+							red = rTop;
+							green = gTop;
+							blue = bTop;
+							break;
+						case BOTTOM:
+							red = rBottom;
+							green = gBottom;
+							blue = bBottom;
+							break;
+						case NORTH:
+						case SOUTH:
+							red = rNorthSouth;
+							green = gNorthSouth;
+							blue = bNorthSouth;
+							break;
+						case WEST:
+						case EAST:
+							red = rEastWest;
+							green = gEastWest;
+							blue = bEastWest;
+							break;
+						default:
+							throw new RuntimeException("Specified side does not exist on a cube!!!");
+					}
 				}
 				tessellator.setColorOpaque_F(!face.getFullBright() ? red * sideBrightness : 1f, !face.getFullBright() ? green * sideBrightness : 1f, !face.getFullBright() ? blue * sideBrightness : 1f);
 				renderModelFace(face, x, y, z);
