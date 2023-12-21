@@ -26,7 +26,7 @@ public class BlockCube {
 		toScaled = new Vector3f(cubeData.to[0] / 16f, cubeData.to[1] / 16f, cubeData.to[2] / 16f);
 
 		if (cubeData.rotation != null && cubeData.rotation.rescale){
-			float angle = -cubeData.rotation.angle;
+			float angle = cubeData.rotation.angle;
 			String axis = cubeData.rotation.axis;
 			final float modRange = 90;
 			float x = Math.abs(((angle - modRange/2) % modRange) - modRange/2);
