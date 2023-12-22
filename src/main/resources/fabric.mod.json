@@ -21,9 +21,7 @@
   "entrypoints": {
     "main": [
         "useless.dragonfly.DragonFly"
-    ],"preLaunch": [
-			"useless.dragonfly.DragonFly"
-		]
+    ]
   },
   "mixins": [
     "dragonfly.mixins.json"

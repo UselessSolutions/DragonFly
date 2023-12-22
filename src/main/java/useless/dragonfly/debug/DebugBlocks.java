@@ -48,6 +48,15 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/cut_copper_stairs.json"),
 			ModelHelper.getOrCreateBlockState(MOD_ID, "test_stairs.json"), new StairsMetaStateInterpreter(), true, 0.25f))
 		.build(new BlockStairs(Block.dirt,blockId++)).withLitInteriorSurface(true);
+	public static final Block trel = new BlockBuilder(MOD_ID)
+		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(MOD_ID, "block/bean_trellis_bottom_0.json")))
+		.build(new BlockModel("trel" + blockId, blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(MOD_ID, "block/bean_trellis_bottom_0.json")));
+	public static final Block trel1 = new BlockBuilder(MOD_ID)
+		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(MOD_ID, "block/bean_trellis_bottom_1.json")))
+		.build(new BlockModel("trel" + blockId, blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(MOD_ID, "block/bean_trellis_bottom_1.json")));
+	public static final Block trel2 = new BlockBuilder(MOD_ID)
+		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(MOD_ID, "block/bean_trellis_bottom_2.json")))
+		.build(new BlockModel("trel" + blockId, blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(MOD_ID, "block/bean_trellis_bottom_2.json")));
 
 	public static void init() {
 		try {
