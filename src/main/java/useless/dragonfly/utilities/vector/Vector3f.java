@@ -330,6 +330,7 @@ public class Vector3f extends Vector implements Serializable {
 	// =================================================================
 	public static Vector3f origin = new Vector3f(0.5f, 0.5f, 0.5f);
 	public Vector3f rotateAroundX(Vector3f origin, float angle){
+		if (angle == 0) return this;
 		angle = (float) ((angle) * (Math.PI/180)); // Convert to radians
 		float y = getY();
 		float z = getZ();
@@ -345,6 +346,7 @@ public class Vector3f extends Vector implements Serializable {
 	}
 
 	public Vector3f rotateAroundY(Vector3f origin, float angle){
+		if (angle == 0) return this;
 		angle = (float) ((angle) * (Math.PI/180)); // Convert to radians
 		float x = getX();
 		float z = getZ();
@@ -359,6 +361,7 @@ public class Vector3f extends Vector implements Serializable {
 		return new Vector3f(x, getY(), z);
 	}
 	public Vector3f rotateAroundZ(Vector3f origin, float angle){
+		if (angle == 0) return this;
 		angle = (float) ((angle) * (Math.PI/180)); // Convert to radians
 		float x = getX();
 		float y = getY();

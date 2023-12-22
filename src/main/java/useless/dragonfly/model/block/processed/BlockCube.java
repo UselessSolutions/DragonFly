@@ -1,6 +1,5 @@
 package useless.dragonfly.model.block.processed;
 
-import net.minecraft.client.render.TextureFX;
 import net.minecraft.core.util.helper.Side;
 import useless.dragonfly.model.block.data.CubeData;
 import useless.dragonfly.model.block.data.ModelData;
@@ -17,6 +16,20 @@ public class BlockCube {
 	public final BlockModel parentModel;
 	protected HashMap<String, Vector3f> vertices = new HashMap<>();
 	protected HashMap<String, BlockFace> faces = new HashMap<>();
+	private float getScalar(float angle){
+		final float modRange = 90f;
+		float v = (Math.abs(angle) - (modRange/2));
+		if (v < 0) {
+			v += modRange;
+		}
+		float x = (v % modRange) - (modRange/2);
+		float slope = (float) Math.tan(Math.toRadians(x));
+		float scalar = (float) (Math.sqrt(Math.pow((-0.5 * slope + 0.5), 2) + Math.pow((0.5 * slope + 0.5), 2)) * Math.sqrt(2));
+		if (scalar > Math.sqrt(2)){
+			throw new IllegalArgumentException(String.valueOf(scalar));
+		}
+		return scalar;
+	}
 	public BlockCube(BlockModel model, CubeData cubeData){
 		this.parentModel = model;
 		this.cubeData = cubeData;
@@ -27,21 +40,22 @@ public class BlockCube {
 
 		if (cubeData.rotation != null && cubeData.rotation.rescale){
 			float angle = cubeData.rotation.angle;
+
 			String axis = cubeData.rotation.axis;
-			final float modRange = 90;
-			float x = Math.abs(((angle - modRange/2) % modRange) - modRange/2);
-			float slope = (float) Math.tan(Math.toRadians(x));
-			float scalar = (float) (Math.sqrt(Math.pow((-0.5 * slope + 0.5), 2) + Math.pow((0.5 * slope + 0.5), 2)) * Math.sqrt(2));
+			Vector3f re = new Vector3f(cubeData.rotation.origin[0]/ 16f, cubeData.rotation.origin[1]/16f, cubeData.rotation.origin[2]/16f);
+
+			float scalar = getScalar(angle);
+
 			float xf = fromScaled.getX();
 			float xt = toScaled.getX();
 			float yf = fromScaled.getY();
 			float yt = toScaled.getY();
 			float zf = fromScaled.getZ();
 			float zt = toScaled.getZ();
-			Vector3f fromOrigin = (Vector3f) Vector3f.sub(fromScaled, Vector3f.origin, null).scale(scalar);
-			Vector3f toOrigin = (Vector3f) Vector3f.sub(toScaled, Vector3f.origin, null).scale(scalar);
-			Vector3f.add(fromOrigin, Vector3f.origin, fromOrigin);
-			Vector3f.add(toOrigin, Vector3f.origin, toOrigin);
+			Vector3f fromOrigin = (Vector3f) Vector3f.sub(fromScaled, re, null).scale(scalar);
+			Vector3f toOrigin = (Vector3f) Vector3f.sub(toScaled, re, null).scale(scalar);
+			Vector3f.add(fromOrigin, re, fromOrigin);
+			Vector3f.add(toOrigin, re, toOrigin);
 			fromScaled = fromOrigin;
 			toScaled = toOrigin;
 			switch (axis){
@@ -50,14 +64,14 @@ public class BlockCube {
 					toScaled.setX(xt);
 					break;
 				case "y":
-					fromScaled.setY(yf);
-					toScaled.setY(yt);
 					break;
 				case "z":
 					fromScaled.setZ(zf);
 					toScaled.setZ(zt);
 					break;
 			}
+			fromScaled.setY(yf);
+			toScaled.setY(yt);
 		}
 
 		vertices.put("+++", new Vector3f(xMax(), yMax(), zMax()));
@@ -72,9 +86,9 @@ public class BlockCube {
 		if (cubeData.rotation != null){
 			vertices.replaceAll((k, v) -> Utilities.rotatePoint(
 				vertices.get(k),
-				new Vector3f(cubeData.rotation.origin[0]/TextureFX.tileWidthTerrain, cubeData.rotation.origin[1]/TextureFX.tileWidthTerrain, cubeData.rotation.origin[2]/TextureFX.tileWidthTerrain),
+				new Vector3f(cubeData.rotation.origin[0]/ 16f, cubeData.rotation.origin[1]/16f, cubeData.rotation.origin[2]/16f),
 				cubeData.rotation.axis,
-				-cubeData.rotation.angle));
+				cubeData.rotation.angle));
 		}
 
 		for (String key: cubeData.faces.keySet()) {
