@@ -14,6 +14,10 @@ public class PlayerRendererMixin {
 	private void setRenderState(EntityPlayer entity, float f, CallbackInfo ci){
 		DragonFly.renderState = "head";
 	}
+	@Inject(method = "renderSpecials(Lnet/minecraft/core/entity/player/EntityPlayer;F)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/render/ItemRenderer;renderItem(Lnet/minecraft/core/entity/EntityLiving;Lnet/minecraft/core/item/ItemStack;)V", ordinal = 1))
+	private void setRenderStateThirdPerson(EntityPlayer entity, float f, CallbackInfo ci){
+		DragonFly.renderState = "thirdperson_righthand";
+	}
 	@Inject(method = "renderSpecials(Lnet/minecraft/core/entity/player/EntityPlayer;F)V", at = @At("TAIL"))
 	private void unsetRenderState(EntityPlayer entity, float f, CallbackInfo ci){
 		DragonFly.renderState = "gui";

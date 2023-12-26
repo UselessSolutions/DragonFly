@@ -94,6 +94,20 @@ public class BlockModelRenderer {
 				yRot = (float) displayData.rotation[1] + 45;
 				zRot = (float) displayData.rotation[2];
                 break;
+			case "thirdperson_righthand":
+				float scale = 8f/3;
+				xOffset -= (float) displayData.translation[2] / 16f;
+				yOffset -= (float) displayData.translation[1] / 16f;
+				zOffset -= (float) displayData.translation[0] / 16f;
+
+				xScale = (float) displayData.scale[2] * scale;
+				yScale = (float) displayData.scale[1] * scale;
+				zScale = (float) displayData.scale[0] * scale;
+
+				xRot = (float) -displayData.rotation[2] + 180;
+				yRot = (float) displayData.rotation[1] + 45;
+				zRot = (float) -displayData.rotation[0] - 100;
+				break;
             case "gui":
             default:
                 xOffset -= (float) displayData.translation[2] / 16f;

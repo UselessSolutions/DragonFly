@@ -13,7 +13,7 @@ import useless.dragonfly.DragonFly;
 public class ItemRendererMixin {
 	@Inject(method = "renderItem(Lnet/minecraft/core/entity/Entity;Lnet/minecraft/core/item/ItemStack;Z)V", at = @At("HEAD"))
 	private void setRenderState(Entity entity, ItemStack itemstack, boolean handheldTransform, CallbackInfo ci){
-		if (!DragonFly.renderState.equals("head")){
+		if (!DragonFly.renderState.equals("head") && !DragonFly.renderState.equals("thirdperson_righthand")){
 			if (handheldTransform){
 				DragonFly.renderState = "firstperson_righthand";
 			} else {
