@@ -44,9 +44,9 @@ public class BlockModelRenderer {
 	private static int rotationY = 0;
 	public static void renderModelInventory(BlockModelDragonFly modelDragonFly, Block block, int meta, float brightness){
 		int off = (int) ((System.currentTimeMillis()/20) % 360);
-		float xOffset = 0.5f;
-		float yOffset = 0.5f;
-		float zOffset = 0.5f;
+		float xOffset;
+		float yOffset;
+		float zOffset;
 		float xScale;
 		float yScale;
 		float zScale;
@@ -56,39 +56,51 @@ public class BlockModelRenderer {
 		PositionData displayData = modelDragonFly.baseModel.getDisplayPosition(DragonFly.renderState);
         switch (DragonFly.renderState) {
 			case "ground":
-				xOffset -= (float) displayData.translation[2] / 16f;
-				yOffset -= (float) displayData.translation[1] / 16f;
-				zOffset -= (float) displayData.translation[0] / 16f;
-
 				xScale = (float) displayData.scale[2] * 4;
 				yScale = (float) displayData.scale[1] * 4;
 				zScale = (float) displayData.scale[0] * 4;
+
+				xOffset = 0.5f * xScale;
+				yOffset = 0.5f * yScale;
+				zOffset = 0.5f * zScale;
+
+				xOffset -= (float) displayData.translation[2] / 16f;
+				yOffset -= (float) displayData.translation[1] / 16f;
+				zOffset -= (float) displayData.translation[0] / 16f;
 
 				xRot = (float) displayData.rotation[0];
 				yRot = (float) displayData.rotation[1];
 				zRot = (float) displayData.rotation[2];
 				break;
             case "head":
-                xOffset -= (float) displayData.translation[2] / 16f;
-                yOffset -= (float) displayData.translation[1] / 16f;
-                zOffset -= (float) displayData.translation[0] / 16f;
+				xScale = (float) displayData.scale[0];
+				yScale = (float) displayData.scale[1];
+				zScale = (float) displayData.scale[2];
 
-                xScale = (float) displayData.scale[2];
-                yScale = (float) displayData.scale[1];
-                zScale = (float) displayData.scale[0];
+				xOffset = 0.5f * xScale;
+				yOffset = 0.5f * yScale;
+				zOffset = 0.5f * zScale;
+
+                xOffset -= (float) displayData.translation[0] / 16f;
+                yOffset -= (float) displayData.translation[1] / 16f;
+                zOffset -= (float) displayData.translation[2] / 16f;
 
                 xRot = (float) displayData.rotation[0];
 				yRot = (float) displayData.rotation[1] + 180;
 				zRot = (float) displayData.rotation[2];
                 break;
             case "firstperson_righthand":
+				xScale = (float) displayData.scale[2] * 2.5f;
+				yScale = (float) displayData.scale[1] * 2.5f;
+				zScale = (float) displayData.scale[0] * 2.5f;
+
+				xOffset = 0.5f * xScale;
+				yOffset = 0.5f * yScale;
+				zOffset = 0.5f * zScale;
+
                 xOffset -= (float) displayData.translation[2] / 8f;
                 yOffset -= (float) displayData.translation[1] / 8f;
                 zOffset -= (float) displayData.translation[0] / 8f;
-
-                xScale = (float) displayData.scale[2] * 2.5f;
-                yScale = (float) displayData.scale[1] * 2.5f;
-                zScale = (float) displayData.scale[0] * 2.5f;
 
 				xRot = (float) displayData.rotation[0];
 				yRot = (float) displayData.rotation[1] + 45;
@@ -96,13 +108,17 @@ public class BlockModelRenderer {
                 break;
 			case "thirdperson_righthand":
 				float scale = 8f/3;
-				xOffset -= (float) displayData.translation[2] / 16f;
-				yOffset -= (float) displayData.translation[1] / 16f;
-				zOffset -= (float) displayData.translation[0] / 16f;
-
 				xScale = (float) displayData.scale[2] * scale;
 				yScale = (float) displayData.scale[1] * scale;
 				zScale = (float) displayData.scale[0] * scale;
+
+				xOffset = 0.5f * xScale;
+				yOffset = 0.5f * yScale;
+				zOffset = 0.5f * zScale;
+
+				xOffset -= (float) displayData.translation[2] / 16f;
+				yOffset -= (float) displayData.translation[1] / 16f;
+				zOffset -= (float) displayData.translation[0] / 16f;
 
 				xRot = (float) -displayData.rotation[2] + 180;
 				yRot = (float) displayData.rotation[1] + 45;
@@ -110,13 +126,17 @@ public class BlockModelRenderer {
 				break;
             case "gui":
             default:
+				xScale = (float) displayData.scale[2] * 1.6f;
+				yScale = (float) displayData.scale[1] * 1.6f;
+				zScale = (float) displayData.scale[0] * 1.6f;
+
+				xOffset = 0.5f * xScale;
+				yOffset = 0.5f * yScale;
+				zOffset = 0.5f * zScale;
+
                 xOffset -= (float) displayData.translation[2] / 16f;
                 yOffset -= (float) displayData.translation[1] / 16f;
                 zOffset -= (float) displayData.translation[0] / 16f;
-
-                xScale = (float) displayData.scale[2] * 1.6f;
-                yScale = (float) displayData.scale[1] * 1.6f;
-                zScale = (float) displayData.scale[0] * 1.6f;
 
 				xRot = (float) displayData.rotation[0] - 30;
 				yRot = (float) displayData.rotation[1] + 45;
