@@ -4,6 +4,8 @@
   "package": "useless.dragonfly.mixins.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "ItemRendererMixin",
+    "PlayerRendererMixin",
     "StatMixin",
     "accessor.StatListAccessor"
   ],

@@ -20,6 +20,7 @@ public class DragonFly implements ModInitializer {
 	public static double terrainAtlasWidth = TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES;
 	public static String  version;
 	public static boolean isDev;
+	public static String renderState = "gui";
 	static {
 		version = FabricLoader.getInstance().getModContainer(MOD_ID).get().getMetadata().getVersion().getFriendlyString();
 		isDev = version.equals("${version}") || version.contains("dev");

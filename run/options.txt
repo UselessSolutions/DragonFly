@@ -7,7 +7,7 @@ sound.entity:0.29347825
 sound.cave:1.0
 sound.gui:1.0
 sound.weather:1.0
-fov:0.8043478
+fov:0.8035714
 mouseSensitivity:0.5
 screenPadding:0.0
 gamma:0.5
