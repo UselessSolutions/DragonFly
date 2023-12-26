@@ -10,7 +10,7 @@ public class PositionData {
 	@SerializedName("translation")
 	public double[] translation = new double[3];
 	@SerializedName("scale")
-	public double[] scale = new double[3];
+	public double[] scale = new double[]{1,1,1};
 	public String toString(){
 		return
 			"rotation: " + Arrays.toString(rotation) + "\n" +
