@@ -43,28 +43,110 @@ public class BlockModelRenderer {
 	private static int rotationX = 0;
 	private static int rotationY = 0;
 	public static void renderModelInventory(BlockModelDragonFly modelDragonFly, Block block, int meta, float brightness){
-		float xOffset = 0.5f;
-		float yOffset = 0.5f;
-		float zOffset = 0.5f;
-		float xScale = 1f;
-		float yScale = 1f;
-		float zScale = 1f;
-		PositionData displayData = modelDragonFly.baseModel.getDisplayPosition("firstperson_righthand");
-		if (displayData != null){
-			xOffset -= (float) displayData.translation[0]/16f;
-			yOffset -= (float) displayData.translation[1]/16f;
-			zOffset -= (float) displayData.translation[2]/16f;
+		int off = (int) ((System.currentTimeMillis()/20) % 360);
+		float xOffset;
+		float yOffset;
+		float zOffset;
+		float xScale;
+		float yScale;
+		float zScale;
+		float xRot;
+		float yRot;
+		float zRot;
+		PositionData displayData = modelDragonFly.baseModel.getDisplayPosition(DragonFly.renderState);
+        switch (DragonFly.renderState) {
+			case "ground":
+				xScale = (float) displayData.scale[2] * 4;
+				yScale = (float) displayData.scale[1] * 4;
+				zScale = (float) displayData.scale[0] * 4;
 
-			xScale = (float) displayData.scale[0];
-			yScale = (float) displayData.scale[1];
-			zScale = (float) displayData.scale[2];
+				xOffset = 0.5f * xScale;
+				yOffset = 0.5f * yScale;
+				zOffset = 0.5f * zScale;
 
-			GL11.glRotatef((float) displayData.rotation[0], 1, 0 ,0);
-			GL11.glRotatef((float) displayData.rotation[1], 0, 1 ,0);
-			GL11.glRotatef((float) displayData.rotation[2], 0, 0 ,1);
-		}
-		Tessellator tessellator = Tessellator.instance;
-		GL11.glRotatef(90f, 0, 1, 0);
+				xOffset -= (float) displayData.translation[2] / 16f;
+				yOffset -= (float) displayData.translation[1] / 16f;
+				zOffset -= (float) displayData.translation[0] / 16f;
+
+				xRot = (float) displayData.rotation[0];
+				yRot = (float) displayData.rotation[1];
+				zRot = (float) displayData.rotation[2];
+				break;
+            case "head":
+				xScale = (float) displayData.scale[0];
+				yScale = (float) displayData.scale[1];
+				zScale = (float) displayData.scale[2];
+
+				xOffset = 0.5f * xScale;
+				yOffset = 0.5f * yScale;
+				zOffset = 0.5f * zScale;
+
+                xOffset -= (float) displayData.translation[0] / 16f;
+                yOffset -= (float) displayData.translation[1] / 16f;
+                zOffset -= (float) displayData.translation[2] / 16f;
+
+                xRot = (float) displayData.rotation[0];
+				yRot = (float) displayData.rotation[1] + 180;
+				zRot = (float) displayData.rotation[2];
+                break;
+            case "firstperson_righthand":
+				xScale = (float) displayData.scale[2] * 2.5f;
+				yScale = (float) displayData.scale[1] * 2.5f;
+				zScale = (float) displayData.scale[0] * 2.5f;
+
+				xOffset = 0.5f * xScale;
+				yOffset = 0.5f * yScale;
+				zOffset = 0.5f * zScale;
+
+                xOffset -= (float) displayData.translation[2] / 8f;
+                yOffset -= (float) displayData.translation[1] / 8f;
+                zOffset -= (float) displayData.translation[0] / 8f;
+
+				xRot = (float) displayData.rotation[0];
+				yRot = (float) displayData.rotation[1] + 45;
+				zRot = (float) displayData.rotation[2];
+                break;
+			case "thirdperson_righthand":
+				float scale = 8f/3;
+				xScale = (float) displayData.scale[2] * scale;
+				yScale = (float) displayData.scale[1] * scale;
+				zScale = (float) displayData.scale[0] * scale;
+
+				xOffset = 0.5f * xScale;
+				yOffset = 0.5f * yScale;
+				zOffset = 0.5f * zScale;
+
+				xOffset -= (float) displayData.translation[2] / 16f;
+				yOffset -= (float) displayData.translation[1] / 16f;
+				zOffset -= (float) displayData.translation[0] / 16f;
+
+				xRot = (float) -displayData.rotation[2] + 180;
+				yRot = (float) displayData.rotation[1] + 45;
+				zRot = (float) -displayData.rotation[0] - 100;
+				break;
+            case "gui":
+            default:
+				xScale = (float) displayData.scale[2] * 1.6f;
+				yScale = (float) displayData.scale[1] * 1.6f;
+				zScale = (float) displayData.scale[0] * 1.6f;
+
+				xOffset = 0.5f * xScale;
+				yOffset = 0.5f * yScale;
+				zOffset = 0.5f * zScale;
+
+                xOffset -= (float) displayData.translation[2] / 16f;
+                yOffset -= (float) displayData.translation[1] / 16f;
+                zOffset -= (float) displayData.translation[0] / 16f;
+
+				xRot = (float) displayData.rotation[0] - 30;
+				yRot = (float) displayData.rotation[1] + 45;
+				zRot = (float) displayData.rotation[2];
+        }
+        Tessellator tessellator = Tessellator.instance;
+
+		GL11.glRotatef(yRot, 0, 1, 0);
+		GL11.glRotatef(xRot, 1, 0, 0);
+		GL11.glRotatef(zRot, 0, 0, 1);
 		GL11.glTranslatef(-xOffset, -yOffset, -zOffset);
 		GL11.glScalef(xScale, yScale, zScale);
 		if (modelDragonFly.baseModel.blockCubes != null){
