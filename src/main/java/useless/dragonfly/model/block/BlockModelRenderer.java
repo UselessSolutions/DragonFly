@@ -47,35 +47,48 @@ public class BlockModelRenderer {
 		float xOffset = 0.5f;
 		float yOffset = 0.5f;
 		float zOffset = 0.5f;
-		float xScale = 1f;
-		float yScale = 1f;
-		float zScale = 1f;
-		float xRot = 0;
-		float yRot = 0;
-		float zRot = 0;
+		float xScale;
+		float yScale;
+		float zScale;
+		float xRot;
+		float yRot;
+		float zRot;
 		PositionData displayData = modelDragonFly.baseModel.getDisplayPosition(DragonFly.renderState);
         switch (DragonFly.renderState) {
-            case "head":
-                xOffset -= (float) displayData.translation[0] / 16f;
-                yOffset -= (float) displayData.translation[1] / 16f;
-                zOffset -= (float) displayData.translation[2] / 16f;
+			case "ground":
+				xOffset -= (float) displayData.translation[2] / 16f;
+				yOffset -= (float) displayData.translation[1] / 16f;
+				zOffset -= (float) displayData.translation[0] / 16f;
 
-                xScale = (float) displayData.scale[0];
+				xScale = (float) displayData.scale[2] * 4;
+				yScale = (float) displayData.scale[1] * 4;
+				zScale = (float) displayData.scale[0] * 4;
+
+				xRot = (float) displayData.rotation[0];
+				yRot = (float) displayData.rotation[1];
+				zRot = (float) displayData.rotation[2];
+				break;
+            case "head":
+                xOffset -= (float) displayData.translation[2] / 16f;
+                yOffset -= (float) displayData.translation[1] / 16f;
+                zOffset -= (float) displayData.translation[0] / 16f;
+
+                xScale = (float) displayData.scale[2];
                 yScale = (float) displayData.scale[1];
-                zScale = (float) displayData.scale[2];
+                zScale = (float) displayData.scale[0];
 
                 xRot = (float) displayData.rotation[0];
 				yRot = (float) displayData.rotation[1] + 180;
 				zRot = (float) displayData.rotation[2];
                 break;
             case "firstperson_righthand":
-                xOffset -= (float) displayData.translation[0] / 16f;
-                yOffset -= (float) displayData.translation[1] / 16f;
-                zOffset -= (float) displayData.translation[2] / 16f;
+                xOffset -= (float) displayData.translation[2] / 8f;
+                yOffset -= (float) displayData.translation[1] / 8f;
+                zOffset -= (float) displayData.translation[0] / 8f;
 
-                xScale = (float) displayData.scale[0] * 2.5f;
+                xScale = (float) displayData.scale[2] * 2.5f;
                 yScale = (float) displayData.scale[1] * 2.5f;
-                zScale = (float) displayData.scale[2] * 2.5f;
+                zScale = (float) displayData.scale[0] * 2.5f;
 
 				xRot = (float) displayData.rotation[0];
 				yRot = (float) displayData.rotation[1] + 45;
@@ -83,13 +96,13 @@ public class BlockModelRenderer {
                 break;
             case "gui":
             default:
-                xOffset -= (float) displayData.translation[0] / 16f;
+                xOffset -= (float) displayData.translation[2] / 16f;
                 yOffset -= (float) displayData.translation[1] / 16f;
-                zOffset -= (float) displayData.translation[2] / 16f;
+                zOffset -= (float) displayData.translation[0] / 16f;
 
-                xScale = (float) displayData.scale[0] * 1.6f;
+                xScale = (float) displayData.scale[2] * 1.6f;
                 yScale = (float) displayData.scale[1] * 1.6f;
-                zScale = (float) displayData.scale[2] * 1.6f;
+                zScale = (float) displayData.scale[0] * 1.6f;
 
 				xRot = (float) displayData.rotation[0] - 30;
 				yRot = (float) displayData.rotation[1] + 45;
@@ -97,11 +110,11 @@ public class BlockModelRenderer {
         }
         Tessellator tessellator = Tessellator.instance;
 
-		GL11.glScalef(xScale, yScale, zScale);
 		GL11.glRotatef(yRot, 0, 1, 0);
 		GL11.glRotatef(xRot, 1, 0, 0);
 		GL11.glRotatef(zRot, 0, 0, 1);
 		GL11.glTranslatef(-xOffset, -yOffset, -zOffset);
+		GL11.glScalef(xScale, yScale, zScale);
 		if (modelDragonFly.baseModel.blockCubes != null){
 			for (BlockCube cube: modelDragonFly.baseModel.blockCubes) {
 				for (BlockFace face: cube.getFaces().values()) {

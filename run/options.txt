@@ -17,7 +17,7 @@ controllerMenuSensitivity:0.5
 controllerDeadzoneL:0.25
 controllerDeadzoneR:0.25
 blockOutlineWidth:0.25
-flightSpeed:0.55
+flightSpeed:0.5
 flightSmoothness:0.5
 invertYMouse:false
 rawMouseInput:false
@@ -86,12 +86,12 @@ turnWithVehicle:true
 downloadSoundfiles:true
 allowSoundOverrides:false
 loadAllSounds:false
-overlayShowCoords:true
-overlayShowDirection:true
-overlayShowTime:true
-overlayShowSeason:true
-overlayShowWeather:true
-overlayShowBiome:true
+overlayShowCoords:false
+overlayShowDirection:false
+overlayShowTime:false
+overlayShowSeason:false
+overlayShowWeather:false
+overlayShowBiome:false
 lastServer:localhost
 skin:Default
 selectedController:
