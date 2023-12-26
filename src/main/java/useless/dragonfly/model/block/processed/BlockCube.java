@@ -178,5 +178,4 @@ public class BlockCube {
 		return toScaled;
 	}
 	public boolean shade() {return cubeData.shade;}
-
 }
