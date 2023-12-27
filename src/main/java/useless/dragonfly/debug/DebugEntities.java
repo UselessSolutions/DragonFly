@@ -21,7 +21,7 @@ import static useless.dragonfly.DragonFly.MOD_ID;
 
 public class DebugEntities {
 	public static void init(){
-		EntityHelper.createEntity(EntityHTest.class, new RenderHTest(ModelHelper.getOrCreateEntityModel(MOD_ID, "hierachyTest.json", HModelTest.class), 0.5f), 1000, "ht");
+		EntityHelper.createEntity(EntityHTest.class, new RenderHTest(ModelHelper.getOrCreateEntityModel(MOD_ID, "hierachytest.json", HModelTest.class), 0.5f), 1000, "ht");
 		EntityHelper.createEntity(EntityZombieTest.class, new RenderZombieTest(ModelHelper.getOrCreateEntityModel(MOD_ID, "zombie_test.json", ZombieModelTest.class), 0.5f), 1000, "zt");
 		AnimationHelper.getOrCreateEntityAnimation(MOD_ID, "zombie_test.animation");
 		EntityHelper.createEntity(EntityDragon.class, new DragonRenderer(ModelHelper.getOrCreateEntityModel(MOD_ID, "mod_dragon.json", DragonModel.class), 0.5f), 1001, "dragon");

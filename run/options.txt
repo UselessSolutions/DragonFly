@@ -107,6 +107,15 @@ muteOnLostFocus:false
 aurora:true
 mobVariants:true
 colorblindnessFix:NONE
+blockTooltips:true
+blockAdvancedTooltips:true
+entityTooltips:true
+entityAdvancedTooltips:true
+showBlockId:false
+showBlockDesc:true
+showHarvestText:true
+tooltipFormatting:LEFT
+scaleTooltips:0.5
 key_key.attack:m0
 key_key.interact:m1
 key_key.pickBlock:m2
@@ -155,4 +164,6 @@ key_key.autoWalk:
 key_key.sprint:
 key_key.toggleDebug:k61
 key_key.toggleOverlay:k62
-hudLayout:hotbar{[];abs[0.5,1.0,BOTTOM_CENTER]}|crosshair{[];abs[0.5,0.5,CENTER]}|health_bar{[];snap[hotbar,TOP_LEFT,BOTTOM_LEFT]}|armor_bar{[];snap[hotbar,TOP_RIGHT,BOTTOM_RIGHT]}|oxygen_bar{[];snap[health_bar,TOP_LEFT,BOTTOM_LEFT]}|fire_bar{[];snap[oxygen_bar,TOP_LEFT,BOTTOM_LEFT]}|rotation_lock{[];snap[crosshair,CENTER_RIGHT,CENTER_LEFT]}|
+key_btwaila.key.menu:k82
+key_btwaila.key.democycle:k67
+hudLayout:hotbar{[];abs[0.5,1.0,BOTTOM_CENTER]}|crosshair{[];abs[0.5,0.5,CENTER]}|health_bar{[];snap[hotbar,TOP_LEFT,BOTTOM_LEFT]}|armor_bar{[];snap[hotbar,TOP_RIGHT,BOTTOM_RIGHT]}|oxygen_bar{[];snap[health_bar,TOP_LEFT,BOTTOM_LEFT]}|fire_bar{[];snap[oxygen_bar,TOP_LEFT,BOTTOM_LEFT]}|rotation_lock{[];snap[crosshair,CENTER_RIGHT,CENTER_LEFT]}|wailaInfoBase{[];abs[0.5,0.0,TOP_CENTER]}|wailaInfoHarvest{[];snap[wailaInfoBase,BOTTOM_CENTER,TOP_CENTER]}|wailaInfoAdvanced{[];snap[wailaInfoHarvest,BOTTOM_CENTER,TOP_CENTER]}|wailaInfoIcon{[];snap[wailaInfoBase,TOP_LEFT,TOP_RIGHT]}|wailaInfoTool{[];snap[wailaInfoIcon,BOTTOM_CENTER,TOP_CENTER]}|

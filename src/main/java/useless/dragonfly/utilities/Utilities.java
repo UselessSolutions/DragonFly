@@ -1,6 +1,7 @@
 package useless.dragonfly.utilities;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.core.data.DataLoader;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.utilities.vector.Vector3f;
 
@@ -53,7 +54,11 @@ public class Utilities {
 	 * Tries to load resource from multiple classes, if they all fail it throws an exception
 	 */
 	public static InputStream getResourceAsStream(String path){
-		InputStream in = Utilities.class.getResourceAsStream(path);
+		InputStream in = DataLoader.class.getResourceAsStream(path);
+		if (in != null){
+			return in;
+		}
+		in = Utilities.class.getResourceAsStream(path);
 		if (in != null){
 			return in;
 		}
