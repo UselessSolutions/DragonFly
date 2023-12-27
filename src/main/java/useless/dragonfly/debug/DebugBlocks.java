@@ -4,7 +4,9 @@ import net.minecraft.client.render.block.color.BlockColorWater;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.block.BlockStairs;
 import net.minecraft.core.block.material.Material;
+import net.minecraft.core.item.Item;
 import turniplabs.halplibe.helper.BlockBuilder;
+import turniplabs.halplibe.helper.ItemHelper;
 import useless.dragonfly.debug.block.BlockModel;
 import useless.dragonfly.debug.block.metastates.StairsMetaStateInterpreter;
 import useless.dragonfly.helper.ModelHelper;
@@ -23,6 +25,7 @@ import static useless.dragonfly.DragonFly.MOD_ID;
 
 public class DebugBlocks {
 	private static int blockId = 1000;
+	private static int itemID = 19000;
 public static final Block testBlock = new BlockBuilder(MOD_ID)
 	.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(MOD_ID, "block/TestBlock.json")))
 	.build(new BlockModel("testblock" + blockId, blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(MOD_ID, "block/TestBlock.json")));
@@ -84,6 +87,11 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 				catch (Exception e){
 					System.out.println(e);
 				}
+			}
+			for (String string : getResourceFiles("assets/minecraft/model/item/")) {
+				System.out.println(string);
+				ItemHelper.createItem(MOD_ID, new Item(string.replace(".json", ""),itemID++), string.replace(".json", ""));
+				System.out.println(string + " created");
 			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);

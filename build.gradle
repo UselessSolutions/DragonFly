@@ -75,6 +75,14 @@ repositories {
 		}
 		metadataSources { artifact() }
 	}
+	ivy {
+		url = "https://github.com/ToufouMaster"
+		patternLayout {
+			artifact "[organisation]/releases/download/[revision]/[module]-[revision].jar"
+			m2compatible = true
+		}
+		metadataSources { artifact() }
+	}
 }
 
 dependencies {
@@ -88,6 +96,7 @@ dependencies {
 	// If you do not need Halplibe you can comment this line out or delete this line
 	modImplementation "com.github.Turnip-Labs:bta-halplibe:${project.halplibe_version}"
 
+	modImplementation "BTWaila:btwaila:1.0.4-7.1"
 	modImplementation "ModMenu:ModMenu:2.0.3"
 	//modImplementation files("lib/terrainapi-2.0.1.jar")
 
