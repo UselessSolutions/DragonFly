@@ -42,7 +42,7 @@ public class BlockModelRenderer {
 	private static int overrideBlockTexture = -1;
 	private static int rotationX = 0;
 	private static int rotationY = 0;
-	public static void renderModelInventory(BlockModelDragonFly modelDragonFly, Block block, int meta, float brightness){
+	public static void renderModelInventory(BlockModel model, Block block, int meta, float brightness){
 		int off = (int) ((System.currentTimeMillis()/20) % 360);
 		float xOffset;
 		float yOffset;
@@ -53,7 +53,7 @@ public class BlockModelRenderer {
 		float xRot;
 		float yRot;
 		float zRot;
-		PositionData displayData = modelDragonFly.baseModel.getDisplayPosition(DragonFly.renderState);
+		PositionData displayData = model.getDisplayPosition(DragonFly.renderState);
         switch (DragonFly.renderState) {
 			case "ground":
 				xScale = (float) displayData.scale[2] * 4;
@@ -149,8 +149,8 @@ public class BlockModelRenderer {
 		GL11.glRotatef(zRot, 0, 0, 1);
 		GL11.glTranslatef(-xOffset, -yOffset, -zOffset);
 		GL11.glScalef(xScale, yScale, zScale);
-		if (modelDragonFly.baseModel.blockCubes != null){
-			for (BlockCube cube: modelDragonFly.baseModel.blockCubes) {
+		if (model.blockCubes != null){
+			for (BlockCube cube: model.blockCubes) {
 				for (BlockFace face: cube.getFaces().values()) {
 					GL11.glColor4f(brightness, brightness, brightness, 1);
 					tessellator.startDrawingQuads();

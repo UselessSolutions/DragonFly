@@ -17,7 +17,7 @@ public abstract class RenderBlocksMixin {
 	public void redirectRenderer(Block block, int metadata, float brightness, float alpha, CallbackInfo ci){
 		if (BlockModelDispatcher.getInstance().getDispatch(block) instanceof BlockModelDragonFly){
 			BlockModelDragonFly blockModelDragonFly = (BlockModelDragonFly) BlockModelDispatcher.getInstance().getDispatch(block);
-			BlockModelRenderer.renderModelInventory(blockModelDragonFly, block, metadata, brightness);
+			BlockModelRenderer.renderModelInventory(blockModelDragonFly.baseModel, block, metadata, brightness);
 			ci.cancel();
 		}
 	}

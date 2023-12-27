@@ -7,10 +7,12 @@ import net.minecraft.core.block.material.Material;
 import net.minecraft.core.item.Item;
 import turniplabs.halplibe.helper.BlockBuilder;
 import turniplabs.halplibe.helper.ItemHelper;
+import turniplabs.halplibe.helper.TextureHelper;
 import useless.dragonfly.debug.block.BlockModel;
 import useless.dragonfly.debug.block.metastates.StairsMetaStateInterpreter;
 import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.model.block.BlockModelDragonFly;
+import useless.dragonfly.model.item.data.ItemModelData;
 import useless.dragonfly.utilities.NamespaceId;
 import useless.dragonfly.utilities.Utilities;
 
@@ -90,7 +92,18 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 			}
 			for (String string : getResourceFiles("assets/minecraft/model/item/")) {
 				System.out.println(string);
-				ItemHelper.createItem(MOD_ID, new Item(string.replace(".json", ""),itemID++), string.replace(".json", ""));
+				ItemModelData data = ModelHelper.getOrCreateItemModel(NamespaceId.coreNamespaceId, "item/" + string);
+				int[] tex = new int[]{4, 10};
+				if (data.textures.containsKey("layer0")){
+					String texString = data.textures.get("layer0");
+					if (texString.contains(":item/")){
+						tex = TextureHelper.getOrCreateItemTexture(NamespaceId.coreNamespaceId, texString.replace("minecraft:item/", "").replace("minecraft:block/", "") + ".png");
+					} else if (texString.contains(":block/")) {
+						tex = TextureHelper.getOrCreateBlockTexture(NamespaceId.coreNamespaceId, texString.replace("minecraft:item/", "").replace("minecraft:block/", "") + ".png");
+					}
+
+				}
+				ModelHelper.setItemModel(ItemHelper.createItem(MOD_ID, new Item(string.replace(".json", ""),itemID++), string.replace(".json", "")).setIconCoord(tex[0], tex[1]), data);
 				System.out.println(string + " created");
 			}
 		} catch (IOException e) {
