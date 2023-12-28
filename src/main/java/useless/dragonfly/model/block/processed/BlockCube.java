@@ -2,6 +2,7 @@ package useless.dragonfly.model.block.processed;
 
 import net.minecraft.core.util.helper.Side;
 import useless.dragonfly.model.block.data.CubeData;
+import useless.dragonfly.model.block.data.FaceData;
 import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.utilities.Utilities;
 import useless.dragonfly.utilities.vector.Vector3f;
@@ -92,6 +93,15 @@ public class BlockCube {
 		}
 
 		for (String key: cubeData.faces.keySet()) {
+			FaceData faceData = cubeData.faces.get(key);
+			if (faceData.uv != null){
+				if (faceData.uv[0] == faceData.uv[2]){ // Don't render faces that don't have a uv area > 0
+					continue;
+				}
+				if (faceData.uv[1] == faceData.uv[3]){
+					continue;
+				}
+			}
 			faces.put(key, new BlockFace(this, key));
 		}
 		for (int i = 0; i < outerFace.length; i++) {

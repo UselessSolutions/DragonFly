@@ -73,6 +73,7 @@ public class BlockModelRenderer {
 				zRot = (float) displayData.rotation[2];
 				break;
             case "head":
+				GL11.glFrontFace(GL11.GL_CW);
 				xScale = (float) displayData.scale[0];
 				yScale = (float) displayData.scale[1];
 				zScale = (float) displayData.scale[2];
@@ -107,6 +108,7 @@ public class BlockModelRenderer {
 				zRot = (float) displayData.rotation[2];
                 break;
 			case "thirdperson_righthand":
+				GL11.glFrontFace(GL11.GL_CW);
 				float scale = 8f/3;
 				xScale = (float) displayData.scale[2] * scale;
 				yScale = (float) displayData.scale[1] * scale;
@@ -144,29 +146,36 @@ public class BlockModelRenderer {
         }
         Tessellator tessellator = Tessellator.instance;
 
+		GL11.glEnable(GL11.GL_CULL_FACE);
+		GL11.glEnable(GL11.GL_DEPTH_TEST);
+
 		GL11.glRotatef(yRot, 0, 1, 0);
 		GL11.glRotatef(xRot, 1, 0, 0);
 		GL11.glRotatef(zRot, 0, 0, 1);
 		GL11.glTranslatef(-xOffset, -yOffset, -zOffset);
 		GL11.glScalef(xScale, yScale, zScale);
 		if (modelDragonFly.baseModel.blockCubes != null){
+			tessellator.startDrawingQuads();
+			GL11.glColor4f(brightness, brightness, brightness, 1);
 			for (BlockCube cube: modelDragonFly.baseModel.blockCubes) {
 				for (BlockFace face: cube.getFaces().values()) {
-					GL11.glColor4f(brightness, brightness, brightness, 1);
-					tessellator.startDrawingQuads();
 					tessellator.setNormal(face.getSide().getOffsetX(), face.getSide().getOffsetY(), face.getSide().getOffsetZ());
+					float r = 1;
+					float g = 1;
+					float b = 1;
 					if (face.useTint()){
 						int color = BlockColorDispatcher.getInstance().getDispatch(block).getFallbackColor(meta);
-						float r = (float)(color >> 16 & 0xFF) / 255.0f;
-						float g = (float)(color >> 8 & 0xFF) / 255.0f;
-						float b = (float)(color & 0xFF) / 255.0f;
-						GL11.glColor4f(r * brightness, g * brightness, b * brightness, 1);
+						r = (float)(color >> 16 & 0xFF) / 255.0f;
+						g = (float)(color >> 8 & 0xFF) / 255.0f;
+						b = (float)(color & 0xFF) / 255.0f;
 					}
-					renderModelFace(face, 0, 0, 0);
-					tessellator.draw();
+					renderModelFaceWithColor(face, 0, 0, 0, r * brightness, g * brightness, b * brightness);
 				}
 			}
+			tessellator.draw();
 		}
+		GL11.glFrontFace(GL11.GL_CCW); // Deleting this breaks rendering for the whole world
+		GL11.glDisable(GL11.GL_CULL_FACE); // Deleting this causes render issues on vanilla transparent blocks
 		GL11.glTranslatef(xOffset, yOffset, zOffset);
 	}
 	public static boolean renderModelNormal(BlockModel model, Block block, int x, int y, int z, int rotationX, int rotationY) {
@@ -467,6 +476,58 @@ public class BlockModelRenderer {
 			tessellator.setColorOpaque_F(colorRedTopRight, colorGreenTopRight, colorBlueTopRight);
 			tessellator.addVertexWithUV(x + vtr.x, y + vtr.y, z + vtr.z, uvTR[0], uvTR[1]);
 		} else {
+			tessellator.addVertexWithUV(x + vtl.x, y + vtl.y, z + vtl.z, uvTL[0], uvTL[1]); // Top Left
+			tessellator.addVertexWithUV(x + vbl.x, y + vbl.y, z + vbl.z, uvBL[0], uvBL[1]); // Bottom Left
+			tessellator.addVertexWithUV(x + vbr.x, y + vbr.y, z + vbr.z, uvBR[0], uvBR[1]); // Bottom Right
+			tessellator.addVertexWithUV(x + vtr.x, y + vtr.y, z + vtr.z, uvTR[0], uvTR[1]); // Top Right
+		}
+	}
+	public static void renderModelFaceWithColor(BlockFace face, double x, double y, double z, float r, float g, float b) {
+		Tessellator tessellator = Tessellator.instance;
+		double[] uvTL;
+		double[] uvBL;
+		double[] uvBR;
+		double[] uvTR;
+		if (overrideBlockTexture >= 0) {
+			uvTL = face.generateVertexUV(overrideBlockTexture, 0);
+			uvBL = face.generateVertexUV(overrideBlockTexture, 1);
+			uvBR = face.generateVertexUV(overrideBlockTexture, 2);
+			uvTR = face.generateVertexUV(overrideBlockTexture, 3);
+		} else {
+			uvTL = face.getVertexUV(0);
+			uvBL = face.getVertexUV(1);
+			uvBR = face.getVertexUV(2);
+			uvTR = face.getVertexUV(3);
+		}
+
+
+		Vector3f[] faceVertices = new Vector3f[4];
+		for (int i = 0; i < faceVertices.length; i++) {
+			faceVertices[i] = face.vertices[i].rotateAroundX(origin, rotationX).rotateAroundY(origin, rotationY);
+		}
+		Vector3f vtl = faceVertices[0];
+		Vector3f vbl = faceVertices[1];
+		Vector3f vbr = faceVertices[2];
+		Vector3f vtr = faceVertices[3];
+
+		if (enableAO) {
+			// Top Left
+			tessellator.setColorOpaque_F(colorRedTopLeft * r, colorGreenTopLeft * g, colorBlueTopLeft * b);
+			tessellator.addVertexWithUV(x + vtl.x, y + vtl.y, z + vtl.z, uvTL[0], uvTL[1]);
+
+			// Bottom Left
+			tessellator.setColorOpaque_F(colorRedBottomLeft * r, colorGreenBottomLeft * g, colorBlueBottomLeft * b);
+			tessellator.addVertexWithUV(x + vbl.x, y + vbl.y, z + vbl.z, uvBL[0], uvBL[1]);
+
+			// Bottom Right
+			tessellator.setColorOpaque_F(colorRedBottomRight * r, colorGreenBottomRight * g, colorBlueBottomRight * b);
+			tessellator.addVertexWithUV(x + vbr.x, y + vbr.y, z + vbr.z, uvBR[0], uvBR[1]);
+
+			// Top Right
+			tessellator.setColorOpaque_F(colorRedTopRight * r, colorGreenTopRight * g, colorBlueTopRight * b);
+			tessellator.addVertexWithUV(x + vtr.x, y + vtr.y, z + vtr.z, uvTR[0], uvTR[1]);
+		} else {
+			tessellator.setColorOpaque_F(r, g, b);
 			tessellator.addVertexWithUV(x + vtl.x, y + vtl.y, z + vtl.z, uvTL[0], uvTL[1]); // Top Left
 			tessellator.addVertexWithUV(x + vbl.x, y + vbl.y, z + vbl.z, uvBL[0], uvBL[1]); // Bottom Left
 			tessellator.addVertexWithUV(x + vbr.x, y + vbr.y, z + vbr.z, uvBR[0], uvBR[1]); // Bottom Right

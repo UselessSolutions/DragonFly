@@ -19,7 +19,7 @@
 
   "environment": "*",
   "entrypoints": {
-    "main": [
+    "beforeGameStart": [
         "useless.dragonfly.DragonFly"
     ]
   },

@@ -51,7 +51,7 @@ public class BlockFace {
 				break;
 			case BOTTOM:
 				vertexKeyMap = new String[]{"--+", "---", "+--", "+-+"};
-				vertexUVMap = new String[]{ "+-", "++", "-+", "--"};
+				vertexUVMap = new String[]{ "--", "-+", "++", "+-"};
 				break;
 			default:
 				vertexUVMap = null;
@@ -90,11 +90,10 @@ public class BlockFace {
 
 		for (int i = 0; i < _uvs.length; i++) {
 			if (i == 0 || i == 2){ // u
-				uvScaled[i] = Math.max(Math.min((_uvs[i]) / TextureFX.tileWidthTerrain, .999d),0.001d);
+				uvScaled[i] = _uvs[i] / TextureFX.tileWidthTerrain;
 			} else { // v
-				uvScaled[i] = Math.max(Math.min(((TextureFX.tileWidthTerrain - _uvs[i]) / TextureFX.tileWidthTerrain), .999d),0.001d);
+				uvScaled[i] = (TextureFX.tileWidthTerrain - _uvs[i]) / TextureFX.tileWidthTerrain;
 			}
-
 		}
 	}
 	public double uMin(){
@@ -115,17 +114,17 @@ public class BlockFace {
 		int texX = texture % Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
 		int texY = texture / Global.TEXTURE_ATLAS_WIDTH_TILES * TextureFX.tileWidthTerrain;
 		double atlasUMin = (texX + uMin() * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double atlasUMax = (texX + uMax() * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
+		double atlasUMax = (texX + uMax() * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
 		double atlasVMin = (texY + (1 - vMin()) * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
-		double atlasVMax = (texY + (1 - vMax()) * TextureFX.tileWidthTerrain - 0.01) / terrainAtlasWidth;
-		if (uMin() < 0.0 || uMax() > 1.0) { // Cap U value
-			atlasUMin = texX / terrainAtlasWidth;
-			atlasUMax = (texX + (TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
-		}
-		if (vMin() < 0.0 || vMax() > 1.0) { // Cap V value
-			atlasVMin = texY / terrainAtlasWidth;
-			atlasVMax = (texY + (TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
-		}
+		double atlasVMax = (texY + (1 - vMax()) * TextureFX.tileWidthTerrain) / terrainAtlasWidth;
+//		if (uMin() < 0.0 || uMax() > 1.0) { // Cap U value
+//			atlasUMin = texX / terrainAtlasWidth;
+//			atlasUMax = (texX + (TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
+//		}
+//		if (vMin() < 0.0 || vMax() > 1.0) { // Cap V value
+//			atlasVMin = texY / terrainAtlasWidth;
+//			atlasVMax = (texY + (TextureFX.tileWidthTerrain - 0.01f)) / terrainAtlasWidth;
+//		}
 
 		String uvKey = vertexUVMap[point];
 		double u = uvKey.charAt(0) == '-' ? atlasUMin : atlasUMax;

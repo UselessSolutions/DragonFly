@@ -1,0 +1,46 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "dragonfly:block/wooden_sieve",
+		"1": "dragonfly:block/wooden_sieve_base",
+		"particle": "dragonfly:block/wooden_sieve"
+	},
+	"elements": [
+		{
+			"from": [1, 0, 1],
+			"to": [15, 5, 15],
+			"faces": {
+				"north": {"uv": [1, 0, 15, 5], "texture": "#1"},
+				"east": {"uv": [1, 0, 15, 5], "texture": "#1"},
+				"south": {"uv": [1, 0, 15, 5], "texture": "#1"},
+				"west": {"uv": [1, 0, 15, 5], "texture": "#1"},
+				"up": {"uv": [0, 0, 0, 0], "texture": "#1"},
+				"down": {"uv": [0, 0, 0, 0], "texture": "#1"}
+			}
+		},
+		{
+			"from": [15, 0, 1],
+			"to": [1, 5, 15],
+			"faces": {
+				"north": {"uv": [1, 0, 15, 5], "texture": "#1"},
+				"east": {"uv": [1, 0, 15, 5], "texture": "#1"},
+				"south": {"uv": [1, 0, 15, 5], "texture": "#1"},
+				"west": {"uv": [1, 0, 15, 5], "texture": "#1"},
+				"up": {"uv": [0, 0, 0, 0], "texture": "#1"},
+				"down": {"uv": [0, 0, 0, 0], "texture": "#1"}
+			}
+		},
+		{
+			"from": [0, 5, 0],
+			"to": [16, 5, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 0], "texture": "#0"},
+				"east": {"uv": [0, 0, 16, 0], "texture": "#0"},
+				"south": {"uv": [0, 0, 16, 0], "texture": "#0"},
+				"west": {"uv": [0, 0, 16, 0], "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"down": {"uv": [0, 16, 16, 0], "texture": "#0"}
+			}
+		}
+	]
+}

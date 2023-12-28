@@ -57,6 +57,12 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 	public static final Block trel2 = new BlockBuilder(MOD_ID)
 		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(MOD_ID, "block/bean_trellis_bottom_2.json")))
 		.build(new BlockModel("trel" + blockId, blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(MOD_ID, "block/bean_trellis_bottom_2.json")));
+	public static final Block sieve = new BlockBuilder(MOD_ID)
+		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(MOD_ID, "block/wooden_sieve.json")))
+		.build(new BlockModel("sieve" + blockId, blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(MOD_ID, "block/wooden_sieve.json")));
+	public static final Block dirTest = new BlockBuilder(MOD_ID)
+		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(MOD_ID, "block/test_block.json")))
+		.build(new BlockModel("sieve" + blockId, blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(MOD_ID, "block/test_block.json")));
 
 	public static void init() {
 		try {
