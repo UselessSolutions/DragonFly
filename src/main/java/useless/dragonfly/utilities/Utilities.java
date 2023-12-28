@@ -1,6 +1,8 @@
 package useless.dragonfly.utilities;
 
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.client.Minecraft;
+import net.minecraft.core.Global;
 import net.minecraft.core.data.DataLoader;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.utilities.vector.Vector3f;
@@ -54,7 +56,14 @@ public class Utilities {
 	 * Tries to load resource from multiple classes, if they all fail it throws an exception
 	 */
 	public static InputStream getResourceAsStream(String path){
-		InputStream in = DataLoader.class.getResourceAsStream(path);
+		InputStream in;
+		if (!Global.isServer && Minecraft.getMinecraft(Minecraft.class).texturePackList != null){
+			in = Minecraft.getMinecraft(Minecraft.class).texturePackList.selectedTexturePack.getResourceAsStream(path);
+			if (in != null){
+				return in;
+			}
+		}
+		in = DataLoader.class.getResourceAsStream(path);
 		if (in != null){
 			return in;
 		}

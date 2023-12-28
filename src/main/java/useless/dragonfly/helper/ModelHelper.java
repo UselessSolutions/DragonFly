@@ -13,25 +13,26 @@ import useless.dragonfly.utilities.Utilities;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class ModelHelper {
-	public static final Map<String, ModelData> modelDataFiles = new HashMap<>();
-	public static final Map<String, BlockModel> registeredModels = new HashMap<>();
-	public static final Map<String, BlockstateData> registeredBlockStates = new HashMap<>();
-	public static HashMap<String, BenchEntityModel> benchEntityModelMap = new HashMap<>();
+	public static final Map<NamespaceId, ModelData> modelDataFiles = new HashMap<>();
+	public static final Map<NamespaceId, BlockModel> registeredModels = new HashMap<>();
+	public static final Map<NamespaceId, BlockstateData> registeredBlockStates = new HashMap<>();
+	public static HashMap<NamespaceId, BenchEntityModel> benchEntityModelMap = new HashMap<>();
 
 	/**
 	 * Place mod models in the <i>assets/modid/model/block/</i> directory for them to be seen.
 	 */
 	public static BlockModel getOrCreateBlockModel(String modId, String modelSource) {
 		NamespaceId namespaceId = new NamespaceId(modId, modelSource);
-		String modelKey = ModelHelper.getModelLocation(namespaceId);
-		if (registeredModels.containsKey(modelKey)){
-			return registeredModels.get(modelKey);
+		if (registeredModels.containsKey(namespaceId)){
+			return registeredModels.get(namespaceId);
 		}
-		BlockModel model = new BlockModel(loadBlockModel(namespaceId));
-		registeredModels.put(modelKey, model);
+		BlockModel model = new BlockModel(namespaceId);
+		registeredModels.put(namespaceId, model);
 		return model;
 	}
 	/**
@@ -39,28 +40,33 @@ public class ModelHelper {
 	 */
 	public static BlockstateData getOrCreateBlockState(String modId, String blockStateSource) {
 		NamespaceId namespaceId = new NamespaceId(modId, blockStateSource);
-		String modelKey = ModelHelper.getBlockStateLocation(namespaceId);
-		if (registeredBlockStates.containsKey(modelKey)){
-			return registeredBlockStates.get(modelKey);
+		if (registeredBlockStates.containsKey(namespaceId)){
+			return registeredBlockStates.get(namespaceId);
 		}
-		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(Utilities.getResourceAsStream(modelKey))));
+		return createBlockState(namespaceId);
+	}
+	private static BlockstateData createBlockState(NamespaceId namespaceId){
+		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(Utilities.getResourceAsStream(getBlockStateLocation(namespaceId)))));
 		BlockstateData blockstateData = DragonFly.GSON.fromJson(reader, BlockstateData.class);
-		registeredBlockStates.put(modelKey, blockstateData);
-		for (VariantData variant : blockstateData.variants.values()) {
-			NamespaceId variantNamespaceId = NamespaceId.idFromString(variant.model);
-			getOrCreateBlockModel(variantNamespaceId.getNamespace(), variantNamespaceId.getId());
+		registeredBlockStates.put(namespaceId, blockstateData);
+		if (blockstateData.variants != null){
+			for (VariantData variant : blockstateData.variants.values()) {
+				NamespaceId variantNamespaceId = NamespaceId.idFromString(variant.model);
+				getOrCreateBlockModel(variantNamespaceId.getNamespace(), variantNamespaceId.getId());
+			}
 		}
 		return blockstateData;
 	}
-
 	public static ModelData loadBlockModel(NamespaceId namespaceId){
-		String modelKey = getModelLocation(namespaceId);
-		if (modelDataFiles.containsKey(modelKey)){
-			return modelDataFiles.get(modelKey);
+		if (modelDataFiles.containsKey(namespaceId)){
+			return modelDataFiles.get(namespaceId);
 		}
-		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(Utilities.getResourceAsStream(modelKey))));
+		return createBlockModel(namespaceId);
+	}
+	private static ModelData createBlockModel(NamespaceId namespaceId){
+		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(Utilities.getResourceAsStream(getModelLocation(namespaceId)))));
 		ModelData modelData = DragonFly.GSON.fromJson(reader, ModelData.class);
-		modelDataFiles.put(modelKey, modelData);
+		modelDataFiles.put(namespaceId, modelData);
 		return modelData;
 	}
 
@@ -68,15 +74,14 @@ public class ModelHelper {
 	 * Place mod models in the <i>assets/modid/model/</i> directory for them to be seen.
 	 */
 	public static BenchEntityModel getOrCreateEntityModel(String modID, String modelSource, Class<? extends BenchEntityModel> baseModel) {
-		String entityModelKey = ModelHelper.getModelLocation(new NamespaceId(modID, modelSource));
-
-		if (benchEntityModelMap.containsKey(entityModelKey)){
-			return benchEntityModelMap.get(entityModelKey);
+		NamespaceId namespaceId = new NamespaceId(modID, modelSource);
+		if (benchEntityModelMap.containsKey(namespaceId)){
+			return benchEntityModelMap.get(namespaceId);
 		}
 
-		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(Utilities.getResourceAsStream(entityModelKey))));
+		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(Utilities.getResourceAsStream(getModelLocation(namespaceId)))));
 		BenchEntityModel model = DragonFly.GSON.fromJson(reader, baseModel);
-		benchEntityModelMap.put(entityModelKey, model);
+		benchEntityModelMap.put(namespaceId, model);
 		return model;
 	}
 	public static String getModelLocation(NamespaceId namespaceId){
@@ -92,5 +97,21 @@ public class ModelHelper {
 			modelSource += ".json";
 		}
 		return "/assets/" + namespaceId.getNamespace() + "/blockstates/" + modelSource;
+	}
+	public static void refreshModels(){
+		Set<NamespaceId> blockModelDataKeys = new HashSet<>(modelDataFiles.keySet());
+		Set<NamespaceId> blockStateKeys = new HashSet<>(registeredBlockStates.keySet());
+//		Set<String> entityModelKeys = new HashSet<>(benchEntityModelMap.keySet());
+
+		for (NamespaceId modelDataKey : blockModelDataKeys){
+			createBlockModel(modelDataKey);
+		}
+		for (BlockModel model : registeredModels.values()){
+			model.refreshModel();
+		}
+		for (NamespaceId stateKey : blockStateKeys){
+			createBlockState(stateKey);
+		}
+
 	}
 }

@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 import java.util.HashMap;
 
 public class BlockModel {
-	private static HashMap<String, PositionData> defaultDisplays = new HashMap<>();
+	private static final HashMap<String, PositionData> defaultDisplays = new HashMap<>();
 	static {
 		PositionData gui = new PositionData();
 		gui.rotation = new double[]{30, 225, 0};
@@ -40,10 +40,17 @@ public class BlockModel {
 	public BlockCube[] blockCubes = new BlockCube[0];
 	protected ModelData modelData;
 	protected BlockModel parentModel;
-	public HashMap<String, String> textureMap = new HashMap<>();
-	public HashMap<String, PositionData> display = new HashMap<>();
-	public BlockModel(ModelData modelData){
-		this.modelData = modelData;
+	public HashMap<String, String> textureMap;
+	public HashMap<String, PositionData> display;
+	public final NamespaceId namespaceId;
+	public BlockModel(NamespaceId namespaceId){
+		this.namespaceId = namespaceId;
+		refreshModel();
+	}
+	public void refreshModel(){
+		this.modelData = ModelHelper.loadBlockModel(namespaceId);
+		textureMap = new HashMap<>();
+		display = new HashMap<>();
 
 		if (modelData.parent != null){ // Has parent Model
 			String namespace;
@@ -82,7 +89,6 @@ public class BlockModel {
 				blockCubes[i] = new BlockCube(this, modelData.elements[i]);
 			}
 		}
-
 	}
 	public NamespaceId getTexture(String textureKey){
 		String result;
