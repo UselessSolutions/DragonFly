@@ -27,7 +27,7 @@ public class EntityDiggingFXMixin extends EntityFX {
 		BlockModel model = BlockModelDispatcher.getInstance().getDispatch(instance);
 		int tex;
 		if (model instanceof BlockModelDragonFly){
-			tex = TextureRegistry.getIndexOrDefault(((BlockModelDragonFly) model).getModelsFromState(block, (int) x, (int) y, (int) z, true)[0].getTexture("particle"), block.getBlockTextureFromSideAndMetadata(Side.BOTTOM, meta));
+			tex = TextureRegistry.getIndexOrDefault(((BlockModelDragonFly) model).getModelsFromState(block, (int) x, (int) y, (int) z, true)[0].model.getTexture("particle"), block.getBlockTextureFromSideAndMetadata(Side.BOTTOM, meta));
 		} else {
 			tex = block.getBlockTextureFromSideAndMetadata(Side.BOTTOM, meta);
 		}

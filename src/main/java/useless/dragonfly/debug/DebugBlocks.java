@@ -7,6 +7,8 @@ import net.minecraft.core.block.material.Material;
 import net.minecraft.core.block.tag.BlockTags;
 import turniplabs.halplibe.helper.BlockBuilder;
 import useless.dragonfly.debug.block.BlockModel;
+import useless.dragonfly.debug.block.BlockRotatable;
+import useless.dragonfly.debug.block.metastates.BookshelfMetaState;
 import useless.dragonfly.debug.block.metastates.BrewingMetaState;
 import useless.dragonfly.debug.block.metastates.FenceMetaState;
 import useless.dragonfly.debug.block.metastates.StairsMetaStateInterpreter;
@@ -74,7 +76,10 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/birch_fence_inventory.json"),
 			ModelHelper.getOrCreateBlockState(MOD_ID, "test_fence.json"), new FenceMetaState(), true))
 		.build(new BlockModel("fence" + blockId, blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/birch_fence_inventory.json"))).withLitInteriorSurface(true).withTags(BlockTags.FENCES_CONNECT);
-
+	public static final Block bookshelf = new BlockBuilder(MOD_ID)
+		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/chiseled_bookshelf_inventory.json"),
+			ModelHelper.getOrCreateBlockState(NamespaceId.coreNamespaceId, "chiseled_bookshelf.json"), new BookshelfMetaState(), true))
+		.build(new BlockRotatable("shelf" + blockId, blockId++, Material.dirt)).withLitInteriorSurface(true);
 	public static void init() {
 		blockId = 2000;
 		try {

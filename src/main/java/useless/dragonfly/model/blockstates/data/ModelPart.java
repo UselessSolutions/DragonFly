@@ -8,5 +8,5 @@ public class ModelPart {
 	@SerializedName("apply")
 	public VariantData apply;
 	@SerializedName("when")
-	public HashMap<String, String> when = new HashMap<>();
+	public HashMap<String, Object> when = new HashMap<>();
 }
