@@ -4,15 +4,20 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.block.model.BlockModelRenderBlocks;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.world.WorldSource;
+import useless.dragonfly.DragonFly;
 import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.mixins.mixin.accessor.RenderBlocksAccessor;
 import useless.dragonfly.model.block.processed.BlockModel;
 import useless.dragonfly.model.blockstates.data.BlockstateData;
+import useless.dragonfly.model.blockstates.data.ModelPart;
 import useless.dragonfly.model.blockstates.data.VariantData;
 import useless.dragonfly.model.blockstates.processed.MetaStateInterpreter;
 import useless.dragonfly.utilities.NamespaceId;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BlockModelDragonFly extends BlockModelRenderBlocks {
 	public BlockModel baseModel;
@@ -26,6 +31,9 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 		this(model, null, null,true, 0.25f);
 	}
 
+	public BlockModelDragonFly(BlockModel model, BlockstateData blockstateData, MetaStateInterpreter metaStateInterpreter, boolean render3d) {
+		this(model, blockstateData, metaStateInterpreter, render3d, 0.25f);
+	}
 	public BlockModelDragonFly(BlockModel model, BlockstateData blockstateData, MetaStateInterpreter metaStateInterpreter, boolean render3d, float renderScale) {
 		super(0);
 		this.baseModel = model;
@@ -39,24 +47,36 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 	public boolean render(Block block, int x, int y, int z) {
 		rotationX = 0;
 		rotationY = 0;
-		BlockModel model = getModelFromState(block, x, y, z, false);
-		return BlockModelRenderer.renderModelNormal(model, block, x, y, z, rotationX, rotationY);
+		BlockModel[] models = getModelsFromState(block, x, y, z, false);
+		boolean didRender = false;
+        for (BlockModel model : models) {
+            didRender |= BlockModelRenderer.renderModelNormal(model, block, x, y, z, rotationX, rotationY);
+        }
+		return didRender;
 	}
 
 	@Override
 	public boolean renderNoCulling(Block block, int x, int y, int z) {
 		rotationX = 0;
 		rotationY = 0;
-		BlockModel model = getModelFromState(block, x, y, z, false);
-		return BlockModelRenderer.renderModelNoCulling(model, block, x, y, z, rotationX, rotationY);
+		BlockModel[] models = getModelsFromState(block, x, y, z, false);
+		boolean didRender = false;
+		for (BlockModel model : models) {
+			didRender |= BlockModelRenderer.renderModelNoCulling(model, block, x, y, z, rotationX, rotationY);
+		}
+		return didRender;
 	}
 
 	@Override
 	public boolean renderWithOverrideTexture(Block block, int x, int y, int z, int textureIndex) {
 		rotationX = 0;
 		rotationY = 0;
-		BlockModel model = getModelFromState(block, x, y, z, false);
-		return BlockModelRenderer.renderModelBlockUsingTexture(model, block, x, y, z, textureIndex, rotationX, rotationY);
+		BlockModel[] models = getModelsFromState(block, x, y, z, false);
+		boolean didRender = false;
+		for (BlockModel model : models) {
+			didRender |= BlockModelRenderer.renderModelBlockUsingTexture(model, block, x, y, z, textureIndex, rotationX, rotationY);
+		}
+		return didRender;
 	}
 
 	@Override
@@ -68,9 +88,9 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 	public float getItemRenderScale() {
 		return renderScale;
 	}
-	public BlockModel getModelFromState(Block block, int x, int y, int z, boolean sourceFromWorld){
+	public BlockModel[] getModelsFromState(Block block, int x, int y, int z, boolean sourceFromWorld){
 		if (blockstateData == null || metaStateInterpreter == null){
-			return baseModel;
+			return new BlockModel[]{baseModel};
 		}
 		RenderBlocksAccessor blocksAccessor = (RenderBlocksAccessor) BlockModelRenderer.getRenderBlocks();
 		WorldSource blockSource;
@@ -81,24 +101,63 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 		}
 		int meta = blockSource.getBlockMetadata(x,y,z);
 		HashMap<String, String> blockStateList = metaStateInterpreter.getStateMap(blockSource, x, y, z, block, meta);
+		if (blockstateData.variants != null){ // If model uses variant system
+			return getModelVariant(blockStateList);
+		}
+		if (blockstateData.multipart != null){
+			return getMultipartModel(blockStateList);
+		}
+		return new BlockModel[]{baseModel};
+	}
+	public BlockModel[] getModelVariant(HashMap<String, String> blockState){
 		VariantData variantData = null;
 
 		for (String stateString: blockstateData.variants.keySet()) {
 			String[] conditions = stateString.split(",");
-			boolean stateMet = true;
-			for (String condition : conditions) {
-				String s1 = condition.split("=")[0];
-				String s2 = condition.split("=")[1];
-				stateMet &= blockStateList.get(s1).equals(s2);
+			HashMap<String, String> conditionMap = new HashMap<>();
+			for (String condition : conditions){
+				conditionMap.put(condition.split("=")[0], condition.split("=")[1]);
 			}
-			if (stateMet){
+			if (matchConditions(blockState, conditionMap)){
 				variantData = blockstateData.variants.get(stateString);
 				break;
 			}
 		}
-		if (variantData == null) return baseModel;
+		if (variantData == null) return new BlockModel[]{baseModel};
 
-		String[] modelID = variantData.model.split(":");
+
+		rotationX = variantData.x;
+		rotationY = variantData.y;
+		return new BlockModel[]{getModelFromKey(variantData.model)};
+	}
+	public BlockModel[] getMultipartModel(HashMap<String, String> blockState){
+		List<BlockModel> modelsToRender = new ArrayList<>();
+		for (ModelPart modelPart : blockstateData.multipart){
+			if (matchConditions(blockState, modelPart.when)){
+				modelsToRender.add(getModelFromKey(modelPart.apply.model));
+			}
+		}
+		return modelsToRender.toArray(new BlockModel[0]);
+	}
+	public boolean matchConditions(HashMap<String, String> blockState, HashMap<String, String> conditions){
+		if (conditions == null){
+			DragonFly.LOGGER.warn("conditions for model '" + baseModel.namespaceId + "' have returned null!");
+			return false;
+		}
+		boolean stateMet = true;
+		for (Map.Entry<String, String > entry: conditions.entrySet()) {
+			String stateValue = blockState.get(entry.getKey());
+			if (stateValue == null){
+				DragonFly.LOGGER.warn("Could not find corresponding value for '" + entry.getKey() + "' in model '" + baseModel.namespaceId + "'!");
+				stateMet = false;
+				continue;
+			}
+			stateMet &= stateValue.equals(entry.getValue());
+		}
+		return stateMet;
+	}
+	public BlockModel getModelFromKey(String key){
+		String[] modelID = key.split(":");
 		String namespace;
 		String model;
 		if (modelID.length < 2){
@@ -108,8 +167,6 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 			namespace = modelID[0];
 			model = modelID[1];
 		}
-		rotationX = variantData.x;
-		rotationY = variantData.y;
 		return ModelHelper.getOrCreateBlockModel(namespace, model);
 	}
 }

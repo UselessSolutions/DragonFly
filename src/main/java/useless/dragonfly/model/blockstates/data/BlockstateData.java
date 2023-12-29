@@ -8,6 +8,8 @@ import java.util.HashMap;
 public class BlockstateData {
 	@SerializedName("variants")
 	public HashMap<String, VariantData> variants;
+	@SerializedName("multipart")
+	public ModelPart[] multipart;
 
 	@Override
 	public String toString() {
