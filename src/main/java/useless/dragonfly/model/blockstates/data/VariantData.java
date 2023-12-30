@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName;
 
 public class VariantData {
 	@SerializedName("")
-	public VariantModelData[] models;
+	public VariantData[] variants;
 
 	@SerializedName("model")
 	public String model;
@@ -14,6 +14,8 @@ public class VariantData {
 	public int y;
 	@SerializedName("uvlock")
 	public boolean uvlock = false;
+	@SerializedName("weight")
+	public int weight = 1;
 	@Override
 	public String toString() {
 		String builder =

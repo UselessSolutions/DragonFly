@@ -135,6 +135,12 @@ public class BlockCube {
 		Side[] yRot = new Side[]{Side.EAST, Side.SOUTH, Side.WEST, Side.NORTH};
 		Side[] xRot = new Side[]{Side.TOP, Side.NORTH, Side.BOTTOM, Side.SOUTH};
 
+		if (rotationX < 0){
+			rotationX += 360;
+		}
+		if (rotationY < 0){
+			rotationY += 360;
+		}
 		int indexY = -1;
 		for (int i = 0; i < yRot.length; i++) {
 			if (keySide == yRot[i]){
