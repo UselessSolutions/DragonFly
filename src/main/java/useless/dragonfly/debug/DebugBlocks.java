@@ -1,6 +1,8 @@
 package useless.dragonfly.debug;
 
+import net.minecraft.client.render.block.color.BlockColorGrass;
 import net.minecraft.client.render.block.color.BlockColorWater;
+import net.minecraft.client.sound.block.BlockSounds;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.block.BlockStairs;
 import net.minecraft.core.block.material.Material;
@@ -11,6 +13,7 @@ import useless.dragonfly.debug.block.BlockRotatable;
 import useless.dragonfly.debug.block.metastates.BookshelfMetaState;
 import useless.dragonfly.debug.block.metastates.BrewingMetaState;
 import useless.dragonfly.debug.block.metastates.FenceMetaState;
+import useless.dragonfly.debug.block.metastates.GrassMetaState;
 import useless.dragonfly.debug.block.metastates.StairsMetaStateInterpreter;
 import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.model.block.BlockModelDragonFly;
@@ -80,6 +83,12 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/chiseled_bookshelf_inventory.json"),
 			ModelHelper.getOrCreateBlockState(NamespaceId.coreNamespaceId, "chiseled_bookshelf.json"), new BookshelfMetaState(), true))
 		.build(new BlockRotatable("shelf" + blockId, blockId++, Material.dirt)).withLitInteriorSurface(true);
+	public static final Block grassBlock = new BlockBuilder(MOD_ID)
+		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/grass_block.json"),
+			ModelHelper.getOrCreateBlockState(MOD_ID, "grass.json"), new GrassMetaState(), true))
+		.setBlockColor(new BlockColorGrass())
+		.setBlockSound(BlockSounds.GRASS)
+		.build(new Block("grass" + blockId, blockId++, Material.grass));
 	public static void init() {
 		blockId = 2000;
 		try {

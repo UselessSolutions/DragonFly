@@ -5,6 +5,7 @@ import useless.dragonfly.DragonFly;
 import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.model.block.processed.BlockModel;
 import useless.dragonfly.model.blockstates.data.BlockstateData;
+import useless.dragonfly.model.blockstates.data.ModelPart;
 import useless.dragonfly.model.blockstates.data.VariantData;
 import useless.dragonfly.model.entity.BenchEntityModel;
 import useless.dragonfly.utilities.NamespaceId;
@@ -52,6 +53,12 @@ public class ModelHelper {
 		if (blockstateData.variants != null){
 			for (VariantData variant : blockstateData.variants.values()) {
 				NamespaceId variantNamespaceId = NamespaceId.idFromString(variant.model);
+				getOrCreateBlockModel(variantNamespaceId.getNamespace(), variantNamespaceId.getId());
+			}
+		}
+		if (blockstateData.multipart != null){
+			for (ModelPart part : blockstateData.multipart){
+				NamespaceId variantNamespaceId = NamespaceId.idFromString(part.apply.model);
 				getOrCreateBlockModel(variantNamespaceId.getNamespace(), variantNamespaceId.getId());
 			}
 		}

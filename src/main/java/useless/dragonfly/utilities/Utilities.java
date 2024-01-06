@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.lang.reflect.Field;
 public class Utilities {
 	public static final float COMPARE_CONST = 0.001f;
-	public static String writeFields(Class clazz){
+	public static String writeFields(Class<?> clazz){
 		Field[] fields = clazz.getFields();
 		StringBuilder builder = new StringBuilder();
 		for (int i = 0; i < fields.length; i++)  {

@@ -18,7 +18,7 @@ public class DragonFly implements GameStartEntrypoint {
 	public static final Gson GSON = new GsonBuilder().registerTypeAdapter(Animation.class, new AnimationDeserializer()).create();
 	public static final Side[] sides = new Side[]{Side.BOTTOM, Side.TOP, Side.NORTH, Side.SOUTH, Side.WEST, Side.EAST};
 	public static double terrainAtlasWidth = TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES;
-	public static String  version;
+	public static String version;
 	public static boolean isDev;
 	public static String renderState = "gui";
 	static {

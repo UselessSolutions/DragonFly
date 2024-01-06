@@ -1,0 +1,73 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "dragonfly:block/grass_base"
+      }
+    },
+    {
+      "apply": {
+        "model": "dragonfly:block/grass_north_normal"
+      },
+      "when": {
+        "north": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "dragonfly:block/grass_north_grassy"
+      },
+      "when": {
+        "north": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "dragonfly:block/grass_east_normal"
+      },
+      "when": {
+        "east": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "dragonfly:block/grass_east_grassy"
+      },
+      "when": {
+        "east": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "dragonfly:block/grass_south_normal"
+      },
+      "when": {
+        "south": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "dragonfly:block/grass_south_grassy"
+      },
+      "when": {
+        "south": "true"
+      }
+    },
+    {
+      "apply": {
+        "model": "dragonfly:block/grass_west_normal"
+      },
+      "when": {
+        "west": "false"
+      }
+    },
+    {
+      "apply": {
+        "model": "dragonfly:block/grass_west_grassy"
+      },
+      "when": {
+        "west": "true"
+      }
+    }
+  ]
+}
