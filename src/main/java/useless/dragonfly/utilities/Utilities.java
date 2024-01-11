@@ -2,13 +2,14 @@ package useless.dragonfly.utilities;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
-import net.minecraft.core.Global;
 import net.minecraft.core.data.DataLoader;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.utilities.vector.Vector3f;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
+import java.util.Objects;
+
 public class Utilities {
 	public static final float COMPARE_CONST = 0.001f;
 	public static String writeFields(Class<?> clazz){
@@ -56,33 +57,24 @@ public class Utilities {
 	 * Tries to load resource from multiple classes, if they all fail it throws an exception
 	 */
 	public static InputStream getResourceAsStream(String path){
-		InputStream in;
-		if (!Global.isServer && Minecraft.getMinecraft(Minecraft.class).texturePackList != null){
-			in = Minecraft.getMinecraft(Minecraft.class).texturePackList.selectedTexturePack.getResourceAsStream(path);
-			if (in != null){
-				return in;
-			}
-		}
-		in = DataLoader.class.getResourceAsStream(path);
-		if (in != null){
-			return in;
-		}
-		in = Utilities.class.getResourceAsStream(path);
-		if (in != null){
-			return in;
-		}
-		in = DragonFly.class.getResourceAsStream(path);
-		if (in != null){
-			return in;
-		}
-		in = FabricLoader.getInstance().getClass().getResourceAsStream(path);
-		if (in != null){
-			return in;
-		}
-		in = Thread.currentThread().getContextClassLoader().getResourceAsStream(path);
-		if (in != null){
-			return in;
-		}
+		try {
+			return Objects.requireNonNull(Minecraft.getMinecraft(Minecraft.class).texturePackList.selectedTexturePack.getResourceAsStream(path));
+		} catch (Exception ignored){}
+		try {
+			return Objects.requireNonNull(DataLoader.class.getResourceAsStream(path));
+		} catch (Exception ignored){}
+		try {
+			return Objects.requireNonNull(Utilities.class.getResourceAsStream(path));
+		} catch (Exception ignored){}
+		try {
+			return Objects.requireNonNull(DragonFly.class.getResourceAsStream(path));
+		} catch (Exception ignored){}
+		try {
+			return Objects.requireNonNull(FabricLoader.getInstance().getClass().getResourceAsStream(path));
+		} catch (Exception ignored){}
+		try {
+			return Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream(path));
+		} catch (Exception ignored){}
 		throw new RuntimeException("Resource at '" + path + "' returned null! Does this file exist?");
 	}
 }
