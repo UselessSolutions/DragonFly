@@ -71,18 +71,18 @@ public class AnimationHelper {
 					Vector3f vector3f3 = posVec(positionFrame.get(Math.min(positionFrame.size() - 1, j + 1)).vector3f());
 
 					p_253861_.set(
-						catmullrom(f2, vector3f.x, vector3f1.x, vector3f2.x, vector3f3.x) * scale,
-						catmullrom(f2, vector3f.y, vector3f1.y, vector3f2.y, vector3f3.y) * scale,
-						catmullrom(f2, vector3f.z, vector3f1.z, vector3f2.z, vector3f3.z) * scale
+						catmullrom(f2, vector3f.x, vector3f1.x, vector3f2.x, vector3f3.x) * scale * 0.5F,
+						catmullrom(f2, vector3f.y, vector3f1.y, vector3f2.y, vector3f3.y) * scale * 0.5F,
+						catmullrom(f2, vector3f.z, vector3f1.z, vector3f2.z, vector3f3.z) * scale * 0.5F
 					);
 					p_232330_.setRotationPoint(p_232330_.rotationPointX + p_253861_.x, p_232330_.rotationPointY + p_253861_.y, p_232330_.rotationPointZ + p_253861_.z);
 				} else {
 					Vector3f vector3f = posVec(positionFrame.get(i).vector3f());
 					Vector3f vector3f1 = posVec(positionFrame.get(j).vector3f());
 					p_253861_.set(
-						fma(vector3f1.x - vector3f.x, f2, vector3f.x) * scale,
-						fma(vector3f1.y - vector3f.y, f2, vector3f.y) * scale,
-						fma(vector3f1.z - vector3f.z, f2, vector3f.z) * scale
+						fma(vector3f1.x - vector3f.x, f2, vector3f.x) * scale * 0.5F,
+						fma(vector3f1.y - vector3f.y, f2, vector3f.y) * scale * 0.5F,
+						fma(vector3f1.z - vector3f.z, f2, vector3f.z) * scale * 0.5F
 					);
 				}
 			}));
@@ -112,18 +112,18 @@ public class AnimationHelper {
 					Vector3f vector3f3 = degreeVec(rotationFrame.get(Math.min(rotationFrame.size() - 1, j + 1)).vector3f());
 
 					p_253861_.set(
-						catmullrom(f2, vector3f.x, vector3f1.x, vector3f2.x, vector3f3.x) * scale,
-						catmullrom(f2, vector3f.y, vector3f1.y, vector3f2.y, vector3f3.y) * scale,
-						catmullrom(f2, vector3f.z, vector3f1.z, vector3f2.z, vector3f3.z) * scale
+						catmullrom(f2, vector3f.x, vector3f1.x, vector3f2.x, vector3f3.x) * scale * 0.5F,
+						catmullrom(f2, vector3f.y, vector3f1.y, vector3f2.y, vector3f3.y) * scale * 0.5F,
+						catmullrom(f2, vector3f.z, vector3f1.z, vector3f2.z, vector3f3.z) * scale * 0.5F
 					);
 					p_232330_.setRotationAngle(p_232330_.rotateAngleX + p_253861_.x, p_232330_.rotateAngleY + p_253861_.y, p_232330_.rotateAngleZ + p_253861_.z);
 				} else {
 					Vector3f vector3f = degreeVec(rotationFrame.get(i).vector3f());
 					Vector3f vector3f1 = degreeVec(rotationFrame.get(j).vector3f());
 					p_253861_.set(
-						fma(vector3f1.x - vector3f.x, f2, vector3f.x) * scale,
-						fma(vector3f1.y - vector3f.y, f2, vector3f.y) * scale,
-						fma(vector3f1.z - vector3f.z, f2, vector3f.z) * scale
+						fma(vector3f1.x - vector3f.x, f2, vector3f.x) * scale * 0.5F,
+						fma(vector3f1.y - vector3f.y, f2, vector3f.y) * scale * 0.5F,
+						fma(vector3f1.z - vector3f.z, f2, vector3f.z) * scale * 0.5F
 					);
 				}
 			}));
@@ -154,18 +154,18 @@ public class AnimationHelper {
 					Vector3f vector3f3 = degreeVec(scaleFrame.get(Math.min(scaleFrame.size() - 1, j + 1)).vector3f());
 
 					p_253861_.set(
-						catmullrom(f2, vector3f.x, vector3f1.x, vector3f2.x, vector3f3.x) * scale,
-						catmullrom(f2, vector3f.y, vector3f1.y, vector3f2.y, vector3f3.y) * scale,
-						catmullrom(f2, vector3f.z, vector3f1.z, vector3f2.z, vector3f3.z) * scale
+						catmullrom(f2, vector3f.x, vector3f1.x, vector3f2.x, vector3f3.x) * scale * 0.5F,
+						catmullrom(f2, vector3f.y, vector3f1.y, vector3f2.y, vector3f3.y) * scale * 0.5F,
+						catmullrom(f2, vector3f.z, vector3f1.z, vector3f2.z, vector3f3.z) * scale * 0.5F
 					);
 					p_232330_.setRotationAngle(p_232330_.rotateAngleX + p_253861_.x, p_232330_.rotateAngleY + p_253861_.y, p_232330_.rotateAngleZ + p_253861_.z);
 				} else {
 					Vector3f vector3f = degreeVec(scaleFrame.get(i).vector3f());
 					Vector3f vector3f1 = degreeVec(scaleFrame.get(j).vector3f());
 					p_253861_.set(
-						fma(vector3f1.x - vector3f.x, f2, vector3f.x) * scale,
-						fma(vector3f1.y - vector3f.y, f2, vector3f.y) * scale,
-						fma(vector3f1.z - vector3f.z, f2, vector3f.z) * scale
+						fma(vector3f1.x - vector3f.x, f2, vector3f.x) * scale * 0.5F,
+						fma(vector3f1.y - vector3f.y, f2, vector3f.y) * scale * 0.5F,
+						fma(vector3f1.z - vector3f.z, f2, vector3f.z) * scale * 0.5F
 					);
 				}
 			}));
@@ -177,7 +177,7 @@ public class AnimationHelper {
 	}
 
 	private static float catmullrom(float p_216245_, float p_216246_, float p_216247_, float p_216248_, float p_216249_) {
-		return 0.25F
+		return 0.5F
 			* (
 			2.0F * p_216247_
 				+ (p_216248_ - p_216246_) * p_216245_
