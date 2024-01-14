@@ -84,6 +84,8 @@ public class AnimationHelper {
 						fma(vector3f1.y - vector3f.y, f2, vector3f.y) * scale * 0.5F,
 						fma(vector3f1.z - vector3f.z, f2, vector3f.z) * scale * 0.5F
 					);
+					p_232330_.setRotationPoint(p_232330_.rotationPointX + p_253861_.x, p_232330_.rotationPointY + p_253861_.y, p_232330_.rotationPointZ + p_253861_.z);
+
 				}
 			}));
 			Map<String, PostData> rotationMap = entry.getValue().getRotation();
@@ -125,6 +127,8 @@ public class AnimationHelper {
 						fma(vector3f1.y - vector3f.y, f2, vector3f.y) * scale * 0.5F,
 						fma(vector3f1.z - vector3f.z, f2, vector3f.z) * scale * 0.5F
 					);
+					p_232330_.setRotationAngle(p_232330_.rotateAngleX + p_253861_.x, p_232330_.rotateAngleY + p_253861_.y, p_232330_.rotateAngleZ + p_253861_.z);
+
 				}
 			}));
 
@@ -158,7 +162,7 @@ public class AnimationHelper {
 						catmullrom(f2, vector3f.y, vector3f1.y, vector3f2.y, vector3f3.y) * scale * 0.5F,
 						catmullrom(f2, vector3f.z, vector3f1.z, vector3f2.z, vector3f3.z) * scale * 0.5F
 					);
-					p_232330_.setRotationAngle(p_232330_.rotateAngleX + p_253861_.x, p_232330_.rotateAngleY + p_253861_.y, p_232330_.rotateAngleZ + p_253861_.z);
+					p_232330_.setScale(p_232330_.scaleX + p_253861_.x, p_232330_.scaleY + p_253861_.y, p_232330_.scaleZ + p_253861_.z);
 				} else {
 					Vector3f vector3f = degreeVec(scaleFrame.get(i).vector3f());
 					Vector3f vector3f1 = degreeVec(scaleFrame.get(j).vector3f());
@@ -167,6 +171,8 @@ public class AnimationHelper {
 						fma(vector3f1.y - vector3f.y, f2, vector3f.y) * scale * 0.5F,
 						fma(vector3f1.z - vector3f.z, f2, vector3f.z) * scale * 0.5F
 					);
+					p_232330_.setScale(p_232330_.scaleX + p_253861_.x, p_232330_.scaleY + p_253861_.y, p_232330_.scaleZ + p_253861_.z);
+
 				}
 			}));
 		}
