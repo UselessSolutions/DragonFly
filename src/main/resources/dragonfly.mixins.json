@@ -13,7 +13,6 @@
   ],
   "client": [
     "EntityDiggingFXMixin",
-    "MinecraftMixin",
     "RenderBlocksMixin",
     "accessor.RenderBlocksAccessor"
   ],

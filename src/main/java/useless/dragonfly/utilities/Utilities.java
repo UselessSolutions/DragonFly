@@ -2,6 +2,7 @@ package useless.dragonfly.utilities;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.Global;
 import net.minecraft.core.data.DataLoader;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.utilities.vector.Vector3f;
@@ -58,8 +59,12 @@ public class Utilities {
 	 */
 	public static InputStream getResourceAsStream(String path){
 		try {
-			return Objects.requireNonNull(Minecraft.getMinecraft(Minecraft.class).texturePackList.selectedTexturePack.getResourceAsStream(path));
-		} catch (Exception ignored){}
+			Class.forName("net.minecraft.client.Minecraft");
+			try {
+				return Objects.requireNonNull(Minecraft.getMinecraft(Global.class).texturePackList.selectedTexturePack.getResourceAsStream(path));
+			} catch (Exception ignored){}
+		} catch (ClassNotFoundException ignored) {
+		}
 		try {
 			return Objects.requireNonNull(DataLoader.class.getResourceAsStream(path));
 		} catch (Exception ignored){}

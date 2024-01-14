@@ -30,7 +30,7 @@ import java.util.List;
 import static useless.dragonfly.DragonFly.MOD_ID;
 
 public class DebugBlocks {
-	private static int blockId = 1000;
+	private static int blockId = 4000;
 public static final Block testBlock = new BlockBuilder(MOD_ID)
 	.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(MOD_ID, "block/testblock.json")))
 	.build(new BlockModel("testblock" + blockId, blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(MOD_ID, "block/testblock.json")));
@@ -90,7 +90,7 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 		.setBlockSound(BlockSounds.GRASS)
 		.build(new Block("grass" + blockId, blockId++, Material.grass));
 	public static void init() {
-		blockId = 2000;
+		blockId = 5000;
 		try {
 			for (String string : getResourceFiles("assets/minecraft/model/block/")) {
 				System.out.println(string);
