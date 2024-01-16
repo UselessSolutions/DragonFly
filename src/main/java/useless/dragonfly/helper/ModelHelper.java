@@ -88,6 +88,7 @@ public class ModelHelper {
 
 		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(Utilities.getResourceAsStream(getModelLocation(namespaceId)))));
 		BenchEntityModel model = DragonFly.GSON.fromJson(reader, baseModel);
+		model.deco();
 		benchEntityModelMap.put(namespaceId, model);
 		return model;
 	}
