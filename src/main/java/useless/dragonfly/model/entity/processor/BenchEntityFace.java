@@ -28,4 +28,11 @@ public class BenchEntityFace {
 		face.uvSize = new float[]{0, 0};
 		return face;
 	}
+
+	public static BenchEntityFace single16X() {
+		BenchEntityFace face = new BenchEntityFace();
+		face.uv = new float[]{0, 0};
+		face.uvSize = new float[]{16, 16};
+		return face;
+	}
 }

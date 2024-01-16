@@ -77,4 +77,8 @@ public class Utilities {
 		} catch (Exception ignored){}
 		throw new RuntimeException("Resource at '" + path + "' returned null! Does this file exist?");
 	}
+
+	public static boolean equalFloat(double a, double b) {
+		return Math.abs(a - b) < 1e-9;
+	}
 }

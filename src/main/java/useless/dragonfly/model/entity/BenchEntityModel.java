@@ -265,4 +265,18 @@ public class BenchEntityModel extends ModelBase {
 		animationState.updateTime(p_233388_, p_233389_);
 		animationState.ifStarted(p_233392_ -> AnimationHelper.animate(this, animationData, p_233392_.getAccumulatedTime(), 1.0F, VEC_ANIMATION));
 	}
+
+	public void deco() {
+		if (!getIndexBones().isEmpty()) {
+			getIndexBones().entrySet().forEach(bonesItem -> {
+				if (bonesItem.getValue().getCubes() != null) {
+					bonesItem.getValue().getCubes().forEach(cubesItem -> {
+						if (!cubesItem.isHasMirror()) {
+							cubesItem.setMirror(bonesItem.getValue().isMirror());
+						}
+					});
+				}
+			});
+		}
+	}
 }
