@@ -9,11 +9,11 @@ public class EntityHTest extends EntityLiving {
 	}
 	@Override
 	public String getEntityTexture() {
-		return "/assets/dragonfly/entity/img.png";
+		return "/assets/dragonfly/entity/swets.png";
 	}
 
 	@Override
 	public String getDefaultEntityTexture() {
-		return "/assets/dragonfly/entity/img.png";
+		return "/assets/dragonfly/entity/swets.png";
 	}
 }

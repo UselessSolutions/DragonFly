@@ -17,7 +17,7 @@ controllerMenuSensitivity:0.5
 controllerDeadzoneL:0.25
 controllerDeadzoneR:0.25
 blockOutlineWidth:0.25
-flightSpeed:1.0
+flightSpeed:0.2
 flightSmoothness:0.5
 invertYMouse:false
 rawMouseInput:false

@@ -29,7 +29,7 @@ public class DebugEntities {
 		EntityHelper.Core.createEntity(EntityWarden.class, 1002, "warden");
 		MobInfoRegistry.register(EntityWarden.class, "df.warden.name", "df.warden.desc", 20, 0, null);
 		if (!Global.isServer){
-			EntityHelper.Client.assignEntityRenderer(EntityHTest.class, new RenderHTest(ModelHelper.getOrCreateEntityModel(MOD_ID, "hierachytest.json", HModelTest.class), 0.5f));
+			EntityHelper.Client.assignEntityRenderer(EntityHTest.class, new RenderHTest(ModelHelper.getOrCreateEntityModel(MOD_ID, "swet.json", HModelTest.class), 0.5f));
 			EntityHelper.Client.assignEntityRenderer(EntityZombieTest.class, new RenderZombieTest(ModelHelper.getOrCreateEntityModel(MOD_ID, "zombie_test.json", ZombieModelTest.class), 0.5f));
 			EntityHelper.Client.assignEntityRenderer(EntityDragon.class, new DragonRenderer(ModelHelper.getOrCreateEntityModel(MOD_ID, "mod_dragon.json", DragonModel.class), 0.5f));
 			EntityHelper.Client.assignEntityRenderer(EntityWarden.class, new WardenRenderer(ModelHelper.getOrCreateEntityModel(MOD_ID, "warden.json", WardenModel.class), 0.5f));
