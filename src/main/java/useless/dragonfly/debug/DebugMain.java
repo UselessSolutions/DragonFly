@@ -7,8 +7,8 @@ import useless.dragonfly.debug.item.ItemDebugStick;
 public class DebugMain {
 	public static void init(){
 		ItemHelper.createItem(DragonFly.MOD_ID, new ItemDebugStick("debug", 21000), "debug").setIconCoord(4, 10);
-		DebugBlocks.init();
 		DebugEntities.init();
+		DebugBlocks.init();
 //		StringBuilder builder = new StringBuilder();
 //		for (String string: ModelHelper.modelDataFiles.keySet()) {
 //			builder.append(string);

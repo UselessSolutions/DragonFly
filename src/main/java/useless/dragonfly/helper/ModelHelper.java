@@ -22,7 +22,8 @@ public class ModelHelper {
 	public static final Map<NamespaceId, ModelData> modelDataFiles = new HashMap<>();
 	public static final Map<NamespaceId, BlockModel> registeredModels = new HashMap<>();
 	public static final Map<NamespaceId, BlockstateData> registeredBlockStates = new HashMap<>();
-	public static HashMap<NamespaceId, BenchEntityModel> benchEntityModelMap = new HashMap<>();
+	public static final Map<NamespaceId, BenchEntityModel> benchEntityModelMap = new HashMap<>();
+	private static final Map<NamespaceId, Class<? extends BenchEntityModel>> modelClassMap = new HashMap<>();
 
 	/**
 	 * Place mod models in the <i>assets/modid/model/block/</i> directory for them to be seen.
@@ -109,7 +110,7 @@ public class ModelHelper {
 	public static void refreshModels(){
 		Set<NamespaceId> blockModelDataKeys = new HashSet<>(modelDataFiles.keySet());
 		Set<NamespaceId> blockStateKeys = new HashSet<>(registeredBlockStates.keySet());
-//		Set<String> entityModelKeys = new HashSet<>(benchEntityModelMap.keySet());
+		Set<NamespaceId> entityModelKeys = new HashSet<>(benchEntityModelMap.keySet());
 
 		for (NamespaceId modelDataKey : blockModelDataKeys){
 			createBlockModel(modelDataKey);
