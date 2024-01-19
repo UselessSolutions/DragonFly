@@ -85,7 +85,7 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 		.build(new BlockRotatable("shelf" + blockId, blockId++, Material.dirt)).withLitInteriorSurface(true);
 	public static final Block grassBlock = new BlockBuilder(MOD_ID)
 		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/grass_block.json"),
-			ModelHelper.getOrCreateBlockState(MOD_ID, "grass.json"), new GrassMetaState(), true))
+			ModelHelper.getOrCreateBlockState(NamespaceId.coreNamespaceId, "grass_block.json"), new GrassMetaState(), true))
 		.setBlockColor(new BlockColorGrass())
 		.setBlockSound(BlockSounds.GRASS)
 		.build(new Block("grass" + blockId, blockId++, Material.grass));

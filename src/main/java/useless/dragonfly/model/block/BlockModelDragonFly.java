@@ -149,30 +149,6 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 		}
 		return stateMet;
 	}
-	public boolean matchConditionsOR(HashMap<String, String> blockState, HashMap<String, String> conditions){
-		if (conditions == null){
-			DragonFly.LOGGER.warn("conditions for model '" + baseModel.namespaceId + "' have returned null!");
-			return false;
-		}
-		for (Map.Entry<String, String > entry: conditions.entrySet()) {
-			String stateValue = blockState.get(entry.getKey());
-			if (stateValue == null){
-				DragonFly.LOGGER.warn("Could not find corresponding value for '" + entry.getKey() + "' in model '" + baseModel.namespaceId + "'!");
-				continue;
-			}
-			if(stateValue.equals(entry.getValue())){
-				return true;
-			}
-		}
-		return false;
-	}
-	private HashMap<String, String> arrToMap(ArrayList<Map<String, String>> arr){
-		HashMap<String, String> map = new HashMap<>();
-        for (Map<String, String> entry : arr){
-			map.putAll(entry);
-		}
-        return new HashMap<>(map);
-	}
 	public BlockModel getModelFromKey(String key){
 		String[] modelID = key.split(":");
 		String namespace;
