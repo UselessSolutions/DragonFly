@@ -5,7 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 import useless.dragonfly.helper.AnimationHelper;
 import useless.dragonfly.model.entity.animation.AnimationData;
-import useless.dragonfly.model.entity.processor.BenceEntityModelData;
+import useless.dragonfly.model.entity.processor.BenchEntityModelData;
 import useless.dragonfly.model.entity.processor.BenchEntityBones;
 import useless.dragonfly.model.entity.processor.BenchEntityCube;
 import useless.dragonfly.model.entity.processor.BenchEntityGeometry;
@@ -23,7 +23,7 @@ import java.util.Optional;
 public class BenchEntityModel extends ModelBase {
 	public Vector3f VEC_ANIMATION = new Vector3f();
 	private final HashMap<String, BenchEntityBones> indexBones = new HashMap<>();
-	public BenceEntityModelData geometry;
+	public BenchEntityModelData geometry;
 	public HashMap<String, BenchEntityBones> getIndexBones() {
 		return indexBones;
 	}

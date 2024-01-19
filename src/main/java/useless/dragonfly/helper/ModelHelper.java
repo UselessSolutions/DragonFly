@@ -8,7 +8,7 @@ import useless.dragonfly.model.blockstates.data.BlockStateData;
 import useless.dragonfly.model.blockstates.data.ModelPart;
 import useless.dragonfly.model.blockstates.data.VariantData;
 import useless.dragonfly.model.entity.BenchEntityModel;
-import useless.dragonfly.model.entity.processor.BenceEntityModelData;
+import useless.dragonfly.model.entity.processor.BenchEntityModelData;
 import useless.dragonfly.utilities.NamespaceId;
 import useless.dragonfly.utilities.Utilities;
 
@@ -26,7 +26,7 @@ public class ModelHelper {
 	public static final Map<NamespaceId, BlockModel> registeredModels = new HashMap<>();
 	public static final Map<NamespaceId, BlockStateData> registeredBlockStates = new HashMap<>();
 	public static final Map<NamespaceId, BenchEntityModel> registeredEntityModels = new HashMap<>();
-	public static final Map<NamespaceId, BenceEntityModelData> entityDataFiles = new HashMap<>();
+	public static final Map<NamespaceId, BenchEntityModelData> entityDataFiles = new HashMap<>();
 
 	/**
 	 * Place mod models in the <i>assets/modid/model/block/</i> directory for them to be seen.
@@ -104,15 +104,15 @@ public class ModelHelper {
 		registeredEntityModels.put(namespaceId, model);
 		return model;
 	}
-	public static BenceEntityModelData loadEntityData(NamespaceId namespaceId){
+	public static BenchEntityModelData loadEntityData(NamespaceId namespaceId){
 		if (entityDataFiles.containsKey(namespaceId)){
 			return entityDataFiles.get(namespaceId);
 		}
 		return createEntityData(namespaceId);
 	}
-	private static BenceEntityModelData createEntityData(NamespaceId namespaceId){
+	private static BenchEntityModelData createEntityData(NamespaceId namespaceId){
 		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(Utilities.getResourceAsStream(getModelLocation(namespaceId)))));
-		BenceEntityModelData modelData = DragonFly.GSON.fromJson(reader, BenceEntityModelData.class);
+		BenchEntityModelData modelData = DragonFly.GSON.fromJson(reader, BenchEntityModelData.class);
 		entityDataFiles.put(namespaceId, modelData);
 		return modelData;
 	}

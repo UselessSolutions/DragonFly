@@ -1,7 +1,5 @@
 package useless.dragonfly.model.entity.processor;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.util.HashMap;
 
 /*
@@ -12,11 +10,12 @@ public class BenchEntityGeometry {
 
 	protected final HashMap<String, BenchEntityBones> modelMap = new HashMap<>();
 
-	@SerializedName("description")
 	private Description description;
-
-	@SerializedName("bones")
 	private BenchEntityBones[] bones;
+	public BenchEntityGeometry(Description description, BenchEntityBones[] bones){
+        this.description = description;
+        this.bones = bones;
+    }
 
 
 	public int getWidth() {
