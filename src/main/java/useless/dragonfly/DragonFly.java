@@ -20,8 +20,12 @@ import useless.dragonfly.model.block.data.FaceData;
 import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.model.block.data.PositionData;
 import useless.dragonfly.model.block.data.RotationData;
+import useless.dragonfly.model.blockstates.adapters.BlockStateJsonAdapter;
 import useless.dragonfly.model.blockstates.adapters.ModelPartJsonAdapter;
+import useless.dragonfly.model.blockstates.adapters.VariantDataJsonAdapter;
+import useless.dragonfly.model.blockstates.data.BlockStateData;
 import useless.dragonfly.model.blockstates.data.ModelPart;
+import useless.dragonfly.model.blockstates.data.VariantData;
 import useless.dragonfly.model.entity.animation.Animation;
 import useless.dragonfly.model.entity.animation.AnimationDeserializer;
 public class DragonFly implements GameStartEntrypoint {
@@ -35,6 +39,8 @@ public class DragonFly implements GameStartEntrypoint {
 		.registerTypeAdapter(FaceData.class, new FaceDataJsonAdapter())
 		.registerTypeAdapter(RotationData.class, new RotationDataJsonAdapter())
 		.registerTypeAdapter(ModelPart.class, new ModelPartJsonAdapter())
+		.registerTypeAdapter(VariantData.class, new VariantDataJsonAdapter())
+		.registerTypeAdapter(BlockStateData.class, new BlockStateJsonAdapter())
 		.create();
 	public static final Side[] sides = new Side[]{Side.BOTTOM, Side.TOP, Side.NORTH, Side.SOUTH, Side.WEST, Side.EAST};
 	public static double terrainAtlasWidth = TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES;

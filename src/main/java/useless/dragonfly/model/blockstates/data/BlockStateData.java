@@ -1,16 +1,18 @@
 package useless.dragonfly.model.blockstates.data;
 
-import com.google.gson.annotations.SerializedName;
 import useless.dragonfly.utilities.Utilities;
 
-import java.util.HashMap;
+import java.util.Map;
 
-public class BlockstateData {
-	@SerializedName("variants")
-	public HashMap<String, VariantData> variants;
-	@SerializedName("multipart")
+public class BlockStateData {
+	public Map<String, ModelPart> variants;
 	public ModelPart[] multipart;
-
+	public BlockStateData(Map<String, ModelPart> variants){
+		this.variants = variants;
+	}
+	public BlockStateData(ModelPart[] multipart){
+		this.multipart = multipart;
+	}
 	@Override
 	public String toString() {
 		StringBuilder builder = new StringBuilder();

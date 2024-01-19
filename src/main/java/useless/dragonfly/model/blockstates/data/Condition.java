@@ -11,6 +11,7 @@ public class Condition {
         this.conditions = conditions;
     }
 	public boolean match(HashMap<String, String> blockState){
+		if (conditions == null || conditions.isEmpty()) return true;
 		switch (id){
 			case "or":
 				for (Map.Entry<String, String > entry: conditions.entrySet()) {

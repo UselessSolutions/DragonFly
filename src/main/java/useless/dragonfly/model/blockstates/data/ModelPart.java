@@ -12,6 +12,6 @@ public class ModelPart {
 			if (!(entry.weightAccum >= r)) continue;
 			return entry;
 		}
-		return apply[0];
+		return null;
 	}
 }

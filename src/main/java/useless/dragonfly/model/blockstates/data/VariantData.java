@@ -1,22 +1,23 @@
 package useless.dragonfly.model.blockstates.data;
 
-import com.google.gson.annotations.SerializedName;
-
 public class VariantData {
-	@SerializedName("")
-	public VariantData[] variants;
-
-	@SerializedName("model")
 	public String model;
-	@SerializedName("x")
 	public int x;
-	@SerializedName("y")
 	public int y;
-	@SerializedName("uvlock")
-	public boolean uvlock = false;
-	@SerializedName("weight")
-	public int weight = 1;
+	public boolean uvlock;
+	public int weight;
 	public double weightAccum = 0;
+	public VariantData(){
+		this(null, 0, 0, false, 1);
+	}
+	public VariantData(String model, int x, int y, boolean uvlock, int weight){
+        this.model = model;
+        this.x = x;
+        this.y = y;
+        this.uvlock = uvlock;
+        this.weight = weight;
+    }
+
 	@Override
 	public String toString() {
 		String builder =
