@@ -1,5 +1,6 @@
 package useless.dragonfly.model.block.processed;
 
+import net.minecraft.core.util.helper.Axis;
 import net.minecraft.core.util.helper.Side;
 import useless.dragonfly.model.block.data.CubeData;
 import useless.dragonfly.model.block.data.FaceData;
@@ -42,7 +43,7 @@ public class BlockCube {
 		if (cubeData.rotation != null && cubeData.rotation.rescale){
 			float angle = cubeData.rotation.angle;
 
-			String axis = cubeData.rotation.axis;
+			Axis axis = cubeData.rotation.axis;
 			Vector3f re = new Vector3f(cubeData.rotation.origin[0]/ 16f, cubeData.rotation.origin[1]/16f, cubeData.rotation.origin[2]/16f);
 
 			float scalar = getScalar(angle);
@@ -60,13 +61,13 @@ public class BlockCube {
 			fromScaled = fromOrigin;
 			toScaled = toOrigin;
 			switch (axis){
-				case "x":
+				case X:
 					fromScaled.setX(xf);
 					toScaled.setX(xt);
 					break;
-				case "y":
+				case Y:
 					break;
-				case "z":
+				case Z:
 					fromScaled.setZ(zf);
 					toScaled.setZ(zt);
 					break;

@@ -14,7 +14,6 @@ public class BlockFace {
 	protected FaceData faceData;
 	protected double[] uvScaled;
 	protected Side side;
-	protected Side cullFace = null;
 	public final Vector3f[] vertices;
 	protected final String[] vertexUVMap;
 	protected String[] vertexKeyMap = new String[4];
@@ -23,9 +22,6 @@ public class BlockFace {
 	public BlockFace(BlockCube cube, String key){
 		this.faceData = cube.cubeData.faces.get(key);
 		this.side = ModelData.keyToSide.get(key);
-		if (faceData.cullface != null){
-			this.cullFace = ModelData.keyToSide.get(faceData.cullface);
-		}
 		this.parentCube = cube;
 		generateUVs(cube);
 		switch (side){ // TODO replace this whole string key system with something better
@@ -132,7 +128,7 @@ public class BlockFace {
 		return new double[]{u, v};
 	}
 	public boolean cullFace(int x, int y, int z, boolean renderOuterSide){
-		return !renderOuterSide && side == cullFace;
+		return !renderOuterSide && side == faceData.cullface;
 	}
 	public boolean useTint(){
 		return faceData.tintindex >= 0;

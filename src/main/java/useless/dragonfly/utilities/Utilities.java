@@ -5,6 +5,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Global;
 import net.minecraft.core.data.DataLoader;
+import net.minecraft.core.util.helper.Axis;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.utilities.vector.Vector3f;
 
@@ -43,13 +44,13 @@ public class Utilities {
 	public static boolean equalFloats(float a, float b){
 		return Math.abs(Float.compare(a, b)) < COMPARE_CONST;
 	}
-	public static Vector3f rotatePoint(Vector3f point, Vector3f origin, String axis, float angle){
+	public static Vector3f rotatePoint(Vector3f point, Vector3f origin, Axis axis, float angle){
 		switch (axis){
-			case "x":
+			case X:
 				return point.rotateAroundX(origin, -angle);
-			case "y":
+			case Y:
 				return point.rotateAroundY(origin, angle);
-			case "z":
+			case Z:
 				return point.rotateAroundZ(origin, -angle);
 		}
 		throw new RuntimeException("Axis " + axis + " Is not 'X', 'Y', or 'Z'!");
