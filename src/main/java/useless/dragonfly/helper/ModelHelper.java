@@ -59,8 +59,10 @@ public class ModelHelper {
 		}
 		if (blockstateData.multipart != null){
 			for (ModelPart part : blockstateData.multipart){
-				NamespaceId variantNamespaceId = NamespaceId.idFromString(part.apply.model);
-				getOrCreateBlockModel(variantNamespaceId.getNamespace(), variantNamespaceId.getId());
+				for (VariantData variantData : part.apply){
+					NamespaceId variantNamespaceId = NamespaceId.idFromString(variantData.model);
+					getOrCreateBlockModel(variantNamespaceId.getNamespace(), variantNamespaceId.getId());
+				}
 			}
 		}
 		return blockstateData;

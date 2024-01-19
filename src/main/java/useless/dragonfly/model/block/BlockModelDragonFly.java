@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class BlockModelDragonFly extends BlockModelRenderBlocks {
 	public BlockModel baseModel;
@@ -121,28 +122,12 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 		return new InternalModel[]{new InternalModel(getModelFromKey(variantData.model), variantData.x, variantData.y)};
 	}
 	public InternalModel[] getMultipartModel(HashMap<String, String> blockState){
+		Random random = new Random();
 		List<InternalModel> modelsToRender = new ArrayList<>();
 		for (ModelPart modelPart : blockstateData.multipart){
-			if (modelPart.when.get("AND") != null){
-				ArrayList<Map<String, String>> and = (ArrayList<Map<String, String>>) modelPart.when.get("AND");
-				if (matchConditionsAND(blockState, arrToMap(and))){
-					modelsToRender.add(new InternalModel(getModelFromKey(modelPart.apply.model), modelPart.apply.x, modelPart.apply.y));
-				}
-				continue;
-			}
-			if (modelPart.when.get("OR") != null){
-				ArrayList<Map<String, String>> or = ((ArrayList<Map<String, String>>) modelPart.when.get("OR"));
-				if (matchConditionsOR(blockState, arrToMap(or))){
-					modelsToRender.add(new InternalModel(getModelFromKey(modelPart.apply.model), modelPart.apply.x, modelPart.apply.y));
-				}
-				continue;
-			}
-			HashMap<String,String> conditions = new HashMap<>();
-			for (Map.Entry<String, Object> entry : modelPart.when.entrySet()){
-				conditions.put(entry.getKey(), (String) entry.getValue());
-			}
-			if (matchConditionsAND(blockState, conditions)){
-				modelsToRender.add(new InternalModel(getModelFromKey(modelPart.apply.model), modelPart.apply.x, modelPart.apply.y));
+			if (modelPart.when == null || modelPart.when.match(blockState)){
+				VariantData data = modelPart.getRandomModel(random);
+				modelsToRender.add(new InternalModel(getModelFromKey(data.model), data.x, data.y));
 			}
 		}
 		return modelsToRender.toArray(new InternalModel[0]);

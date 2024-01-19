@@ -16,6 +16,7 @@ public class VariantData {
 	public boolean uvlock = false;
 	@SerializedName("weight")
 	public int weight = 1;
+	public double weightAccum = 0;
 	@Override
 	public String toString() {
 		String builder =
