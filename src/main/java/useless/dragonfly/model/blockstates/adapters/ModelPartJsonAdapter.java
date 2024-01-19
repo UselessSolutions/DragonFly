@@ -21,8 +21,6 @@ import java.util.Map;
 public class ModelPartJsonAdapter implements JsonDeserializer<ModelPart>, JsonSerializer<ModelPart> {
 	@Override
 	public ModelPart deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-		System.out.println(json.toString());
-
 		ModelPart data = new ModelPart();
 		if (json.isJsonObject()){
 			JsonObject obj = json.getAsJsonObject();

@@ -27,7 +27,7 @@ import useless.dragonfly.model.blockstates.data.BlockStateData;
 import useless.dragonfly.model.blockstates.data.ModelPart;
 import useless.dragonfly.model.blockstates.data.VariantData;
 import useless.dragonfly.model.entity.animation.Animation;
-import useless.dragonfly.model.entity.animation.AnimationDeserializer;
+import useless.dragonfly.model.entity.adapters.AnimationDeserializer;
 public class DragonFly implements GameStartEntrypoint {
     public static final String MOD_ID = "dragonfly";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);

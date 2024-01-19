@@ -2,11 +2,10 @@ package useless.dragonfly.utilities;
 
 import com.google.gson.JsonArray;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.Global;
 import net.minecraft.core.data.DataLoader;
 import net.minecraft.core.util.helper.Axis;
 import useless.dragonfly.DragonFly;
+import useless.dragonfly.DragonFlyClient;
 import useless.dragonfly.utilities.vector.Vector3f;
 
 import java.io.InputStream;
@@ -60,12 +59,17 @@ public class Utilities {
 	 * Tries to load resource from multiple classes, if they all fail it throws an exception
 	 */
 	public static InputStream getResourceAsStream(String path){
+		if (path.contains("warden")){
+			System.out.println("W");
+		}
 		try {
 			Class.forName("net.minecraft.client.Minecraft");
 			try {
-				return Objects.requireNonNull(Minecraft.getMinecraft(Global.class).texturePackList.selectedTexturePack.getResourceAsStream(path));
+				System.out.println("Trying to load from pack: " + path);
+				return Objects.requireNonNull(DragonFlyClient.getMinecraft().texturePackList.selectedTexturePack.getResourceAsStream(path));
 			} catch (Exception ignored){}
 		} catch (ClassNotFoundException ignored) {
+			System.out.println("Failed to load from pack: " + path);
 		}
 		try {
 			return Objects.requireNonNull(DataLoader.class.getResourceAsStream(path));

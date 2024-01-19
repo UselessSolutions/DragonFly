@@ -1,8 +1,12 @@
-package useless.dragonfly.model.entity.animation;
+package useless.dragonfly.model.entity.adapters;
 
 import com.google.common.collect.Maps;
 import com.google.gson.*;
 import org.spongepowered.include.com.google.common.collect.Lists;
+import useless.dragonfly.model.entity.animation.Animation;
+import useless.dragonfly.model.entity.animation.AnimationData;
+import useless.dragonfly.model.entity.animation.BoneData;
+import useless.dragonfly.model.entity.animation.PostData;
 
 import java.lang.reflect.Type;
 import java.util.List;
