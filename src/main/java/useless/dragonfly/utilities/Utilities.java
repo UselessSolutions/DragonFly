@@ -1,5 +1,6 @@
 package useless.dragonfly.utilities;
 
+import com.google.gson.JsonArray;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.Global;
@@ -81,6 +82,20 @@ public class Utilities {
 			return Objects.requireNonNull(Thread.currentThread().getContextClassLoader().getResourceAsStream(path));
 		} catch (Exception ignored){}
 		throw new RuntimeException("Resource at '" + path + "' returned null! Does this file exist?");
+	}
+	public static float[] floatArrFromJsonArr(JsonArray arr){
+		float[] result = new float[arr.size()];
+		for (int i = 0; i < arr.size(); i++) {
+			result[i] = arr.get(i).getAsFloat();
+		}
+		return result;
+	}
+	public static double[] doubleArrFromJsonArr(JsonArray arr){
+		double[] result = new double[arr.size()];
+		for (int i = 0; i < arr.size(); i++) {
+			result[i] = arr.get(i).getAsDouble();
+		}
+		return result;
 	}
 
 	public static boolean equalFloat(double a, double b) {

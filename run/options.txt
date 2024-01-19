@@ -17,7 +17,7 @@ controllerMenuSensitivity:0.5
 controllerDeadzoneL:0.25
 controllerDeadzoneR:0.25
 blockOutlineWidth:0.25
-flightSpeed:0.2
+flightSpeed:1.0
 flightSmoothness:0.5
 invertYMouse:false
 rawMouseInput:false
@@ -57,11 +57,11 @@ enableVbos:false
 forceUnicodeFont:false
 placementMode:DEFAULT
 discordRichPresence:false
-immersiveMode:0
+immersiveMode:2
 guiBackgroundColor:r=16,g=16,b=16,a=192
 difficulty:NORMAL
 thirdPersonView:0
-renderDistance:FAR
+renderDistance:EXTREME
 limitFramerate:0
 customFpsLimit:144
 guiScale:0
