@@ -40,6 +40,7 @@ public class BenchEntityModel extends ModelBase {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(770, 771);
 		GL11.glEnable(2884);
+		GL11.glDisable(GL11.GL_CULL_FACE);
 		BenchEntityGeometry entityGeometry = geometry.benchEntityGeometry.get(0);
 
 		int texWidth = entityGeometry.getWidth();
@@ -126,6 +127,7 @@ public class BenchEntityModel extends ModelBase {
 				GL11.glPopMatrix();
 			}
 		}
+		GL11.glEnable(GL11.GL_CULL_FACE);
 	}
 
 	/*

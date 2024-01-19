@@ -68,7 +68,7 @@ public class Utilities {
 				System.out.println("Trying to load from pack: " + path);
 				return Objects.requireNonNull(DragonFlyClient.getMinecraft().texturePackList.selectedTexturePack.getResourceAsStream(path));
 			} catch (Exception ignored){}
-		} catch (ClassNotFoundException ignored) {
+		} catch (Exception ignored) {
 			System.out.println("Failed to load from pack: " + path);
 		}
 		try {
