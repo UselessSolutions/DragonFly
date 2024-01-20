@@ -13,6 +13,7 @@ import useless.dragonfly.model.blockstates.data.ModelPart;
 import useless.dragonfly.model.blockstates.data.VariantData;
 import useless.dragonfly.model.blockstates.processed.MetaStateInterpreter;
 import useless.dragonfly.utilities.NamespaceId;
+import useless.dragonfly.utilities.Utilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -93,18 +94,18 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 			blockSource = blocksAccessor.getBlockAccess(); // chunk cache
 		}
 		int meta = blockSource.getBlockMetadata(x,y,z);
+		Random random = Utilities.getRandomFromPos(x, y, z);
 		HashMap<String, String> blockStateList = metaStateInterpreter.getStateMap(blockSource, x, y, z, block, meta);
 		if (blockstateData.variants != null){ // If model uses variant system
-			return getModelVariant(blockStateList);
+			return getModelVariant(blockStateList, random);
 		}
 		if (blockstateData.multipart != null){
-			return getMultipartModel(blockStateList);
+			return getMultipartModel(blockStateList, random);
 		}
 		return new InternalModel[]{new InternalModel(baseModel, 0, 0)};
 	}
-	public InternalModel[] getModelVariant(HashMap<String, String> blockState){
+	public InternalModel[] getModelVariant(HashMap<String, String> blockState, Random random){
 		VariantData variantData = null;
-		Random random = new Random();
 		for (String stateString: blockstateData.variants.keySet()) {
 			String[] conditions = stateString.split(",");
 			HashMap<String, String> conditionMap = new HashMap<>();
@@ -121,8 +122,7 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 
 		return new InternalModel[]{new InternalModel(getModelFromKey(variantData.model), variantData.x, variantData.y)};
 	}
-	public InternalModel[] getMultipartModel(HashMap<String, String> blockState){
-		Random random = new Random();
+	public InternalModel[] getMultipartModel(HashMap<String, String> blockState, Random random){
 		List<InternalModel> modelsToRender = new ArrayList<>();
 		for (ModelPart modelPart : blockstateData.multipart){
 			if (modelPart.when == null || modelPart.when.match(blockState)){

@@ -11,6 +11,7 @@ import useless.dragonfly.utilities.vector.Vector3f;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.Objects;
+import java.util.Random;
 
 public class Utilities {
 	public static final float COMPARE_CONST = 0.001f;
@@ -99,5 +100,13 @@ public class Utilities {
 
 	public static boolean equalFloat(double a, double b) {
 		return Math.abs(a - b) < 1e-9;
+	}
+	public static Random getRandomFromPos(int x, int y, int z){
+		Random rand = new Random(0);
+		long l1 = rand.nextLong() / 2L * 2L + 1L;
+		long l2 = rand.nextLong() / 2L * 2L + 1L;
+		long l3 = rand.nextLong() / 2L * 2L + 1L;
+		rand.setSeed((long)x * l1 + (long)z * l2 + y * l3);
+		return rand;
 	}
 }
