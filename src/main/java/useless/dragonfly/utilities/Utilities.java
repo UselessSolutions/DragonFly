@@ -1,15 +1,17 @@
 package useless.dragonfly.utilities;
 
+import com.google.gson.JsonArray;
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.client.Minecraft;
-import net.minecraft.core.Global;
 import net.minecraft.core.data.DataLoader;
+import net.minecraft.core.util.helper.Axis;
 import useless.dragonfly.DragonFly;
+import useless.dragonfly.DragonFlyClient;
 import useless.dragonfly.utilities.vector.Vector3f;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.Objects;
+import java.util.Random;
 
 public class Utilities {
 	public static final float COMPARE_CONST = 0.001f;
@@ -42,13 +44,13 @@ public class Utilities {
 	public static boolean equalFloats(float a, float b){
 		return Math.abs(Float.compare(a, b)) < COMPARE_CONST;
 	}
-	public static Vector3f rotatePoint(Vector3f point, Vector3f origin, String axis, float angle){
+	public static Vector3f rotatePoint(Vector3f point, Vector3f origin, Axis axis, float angle){
 		switch (axis){
-			case "x":
+			case X:
 				return point.rotateAroundX(origin, -angle);
-			case "y":
+			case Y:
 				return point.rotateAroundY(origin, angle);
-			case "z":
+			case Z:
 				return point.rotateAroundZ(origin, -angle);
 		}
 		throw new RuntimeException("Axis " + axis + " Is not 'X', 'Y', or 'Z'!");
@@ -61,10 +63,9 @@ public class Utilities {
 		try {
 			Class.forName("net.minecraft.client.Minecraft");
 			try {
-				return Objects.requireNonNull(Minecraft.getMinecraft(Global.class).texturePackList.selectedTexturePack.getResourceAsStream(path));
+				return Objects.requireNonNull(DragonFlyClient.getMinecraft().texturePackList.selectedTexturePack.getResourceAsStream(path));
 			} catch (Exception ignored){}
-		} catch (ClassNotFoundException ignored) {
-		}
+		} catch (Exception ignored) {}
 		try {
 			return Objects.requireNonNull(DataLoader.class.getResourceAsStream(path));
 		} catch (Exception ignored){}
@@ -82,8 +83,30 @@ public class Utilities {
 		} catch (Exception ignored){}
 		throw new RuntimeException("Resource at '" + path + "' returned null! Does this file exist?");
 	}
+	public static float[] floatArrFromJsonArr(JsonArray arr){
+		float[] result = new float[arr.size()];
+		for (int i = 0; i < arr.size(); i++) {
+			result[i] = arr.get(i).getAsFloat();
+		}
+		return result;
+	}
+	public static double[] doubleArrFromJsonArr(JsonArray arr){
+		double[] result = new double[arr.size()];
+		for (int i = 0; i < arr.size(); i++) {
+			result[i] = arr.get(i).getAsDouble();
+		}
+		return result;
+	}
 
 	public static boolean equalFloat(double a, double b) {
 		return Math.abs(a - b) < 1e-9;
+	}
+	public static Random getRandomFromPos(int x, int y, int z){
+		Random rand = new Random(0);
+		long l1 = rand.nextLong() / 2L * 2L + 1L;
+		long l2 = rand.nextLong() / 2L * 2L + 1L;
+		long l3 = rand.nextLong() / 2L * 2L + 1L;
+		rand.setSeed((long)x * l1 + (long)z * l2 + y * l3);
+		return rand;
 	}
 }

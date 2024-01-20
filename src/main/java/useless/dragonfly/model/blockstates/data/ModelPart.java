@@ -1,12 +1,17 @@
 package useless.dragonfly.model.blockstates.data;
 
-import com.google.gson.annotations.SerializedName;
-
-import java.util.HashMap;
+import java.util.Random;
 
 public class ModelPart {
-	@SerializedName("apply")
-	public VariantData apply;
-	@SerializedName("when")
-	public HashMap<String, Object> when = new HashMap<>();
+	public VariantData[] apply;
+	public Condition when;
+	public double weightAccum = 0;
+	public VariantData getRandomModel(Random random){
+		double r = random.nextDouble() * this.weightAccum;
+		for (VariantData entry : apply) {
+			if (!(entry.weightAccum >= r)) continue;
+			return entry;
+		}
+		return null;
+	}
 }

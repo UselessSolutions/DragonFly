@@ -1,11 +1,11 @@
 package useless.dragonfly.model.entity;
 
-import com.google.gson.annotations.SerializedName;
 import net.minecraft.client.render.model.ModelBase;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 import useless.dragonfly.helper.AnimationHelper;
 import useless.dragonfly.model.entity.animation.AnimationData;
+import useless.dragonfly.model.entity.processor.BenchEntityModelData;
 import useless.dragonfly.model.entity.processor.BenchEntityBones;
 import useless.dragonfly.model.entity.processor.BenchEntityCube;
 import useless.dragonfly.model.entity.processor.BenchEntityGeometry;
@@ -23,15 +23,13 @@ import java.util.Optional;
 public class BenchEntityModel extends ModelBase {
 	public Vector3f VEC_ANIMATION = new Vector3f();
 	private final HashMap<String, BenchEntityBones> indexBones = new HashMap<>();
-	@SerializedName("format_version")
-	private String formatVersion;
-	@SerializedName("minecraft:geometry")
-	private List<BenchEntityGeometry> benchEntityGeometry;
-
+	public BenchEntityModelData geometry;
 	public HashMap<String, BenchEntityBones> getIndexBones() {
 		return indexBones;
 	}
+	public BenchEntityModel(){
 
+	}
 	@Override
 	public void render(float limbSwing, float limbYaw, float ticksExisted, float headYaw, float headPitch, float scale) {
 		super.render(limbSwing, limbYaw, ticksExisted, headYaw, headPitch, scale);
@@ -42,7 +40,8 @@ public class BenchEntityModel extends ModelBase {
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(770, 771);
 		GL11.glEnable(2884);
-		BenchEntityGeometry entityGeometry = this.benchEntityGeometry.get(0);
+		GL11.glDisable(GL11.GL_CULL_FACE);
+		BenchEntityGeometry entityGeometry = geometry.benchEntityGeometry.get(0);
 
 		int texWidth = entityGeometry.getWidth();
 		int texHeight = entityGeometry.getHeight();
@@ -58,7 +57,7 @@ public class BenchEntityModel extends ModelBase {
 
 		for (BenchEntityBones bones : entityGeometry.getBones()) {
 			String name = bones.getName();
-			@Nullable List<Float> rotation = bones.getRotation();
+			Vector3f rotation = bones.getRotation();
 			@Nullable String parent = bones.getParent();
 
 
@@ -75,8 +74,8 @@ public class BenchEntityModel extends ModelBase {
 
 			for (BenchEntityCube cube : bones.getCubes()) {
 				List<Float> uv = cube.getUv();
-				List<Float> size = cube.getSize();
-				@Nullable List<Float> cubeRotation = cube.getRotation();
+				Vector3f size = cube.getSize();
+				Vector3f cubeRotation = cube.getRotation();
 				boolean mirror = cube.isMirror();
 				float inflate = cube.getInflate();
 
@@ -102,19 +101,19 @@ public class BenchEntityModel extends ModelBase {
 					GL11.glTranslatef(bones.rotationPointX * scale, bones.rotationPointY * scale, bones.rotationPointZ * scale);
 				}
 				if (rotation != null) {
-					GL11.glRotatef((float) Math.toRadians(rotation.get(0)), 0.0f, 0.0f, 1.0f);
-					GL11.glRotatef((float) Math.toRadians(rotation.get(1)), 0.0f, 1.0f, 0.0f);
-					GL11.glRotatef((float) Math.toRadians(rotation.get(2)), 1.0f, 0.0f, 0.0f);
+					GL11.glRotatef(rotation.x, 1.0f, 0.0f, 0.0f);
+					GL11.glRotatef(rotation.y, 0.0f, 1.0f, 0.0f);
+					GL11.glRotatef(rotation.z, 0.0f, 0.0f, 1.0f);
 				}
 
 				if (bones.rotateAngleZ != 0.0f) {
-					GL11.glRotatef((float) (Math.toDegrees(bones.rotateAngleZ)), 0.0f, 0.0f, 1.0f);
+					GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleZ), 0.0f, 0.0f, 1.0f);
 				}
 				if (bones.rotateAngleY != 0.0f) {
-					GL11.glRotatef((float) (Math.toDegrees(bones.rotateAngleY)), 0.0f, 1.0f, 0.0f);
+					GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleY), 0.0f, 1.0f, 0.0f);
 				}
 				if (bones.rotateAngleX != 0.0f) {
-					GL11.glRotatef((float) (Math.toDegrees(bones.rotateAngleX)), 1.0f, 0.0f, 0.0f);
+					GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleX), 1.0f, 0.0f, 0.0f);
 				}
 
 				if (bones.scaleX != 0.0f || bones.scaleY != 0.0f || bones.scaleZ != 0.0f) {
@@ -128,13 +127,14 @@ public class BenchEntityModel extends ModelBase {
 				GL11.glPopMatrix();
 			}
 		}
+		GL11.glEnable(GL11.GL_CULL_FACE);
 	}
 
 	/*
 	 * This method used Translate for item render
 	 */
 	public void postRender(BenchEntityBones bones, float scale) {
-		List<Float> rotation = bones.getRotation();
+		Vector3f rotation = bones.getRotation();
 		//parent time before rotate it self
 		if (bones.getParent() != null) {
 			BenchEntityBones parentBone = this.getIndexBones().get(bones.getParent());
@@ -148,19 +148,19 @@ public class BenchEntityModel extends ModelBase {
 			GL11.glTranslatef(bones.rotationPointX * scale, bones.rotationPointY * scale, bones.rotationPointZ * scale);
 		}
 		if (rotation != null) {
-			GL11.glRotatef((float) Math.toRadians(rotation.get(0)), 0.0f, 0.0f, 1.0f);
-			GL11.glRotatef((float) Math.toRadians(rotation.get(1)), 0.0f, 1.0f, 0.0f);
-			GL11.glRotatef((float) Math.toRadians(rotation.get(2)), 1.0f, 0.0f, 0.0f);
+			GL11.glRotatef(rotation.x, 1.0f, 0.0f, 0.0f);
+			GL11.glRotatef(rotation.y, 0.0f, 1.0f, 0.0f);
+			GL11.glRotatef(rotation.z, 0.0f, 0.0f, 1.0f);
 		}
 
 		if (bones.rotateAngleZ != 0.0f) {
-			GL11.glRotatef((float) (Math.toDegrees(bones.rotateAngleZ)), 0.0f, 0.0f, 1.0f);
+			GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleZ), 0.0f, 0.0f, 1.0f);
 		}
 		if (bones.rotateAngleY != 0.0f) {
-			GL11.glRotatef((float) (Math.toDegrees(bones.rotateAngleY)), 0.0f, 1.0f, 0.0f);
+			GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleY), 0.0f, 1.0f, 0.0f);
 		}
 		if (bones.rotateAngleX != 0.0f) {
-			GL11.glRotatef((float) (Math.toDegrees(bones.rotateAngleX)), 1.0f, 0.0f, 0.0f);
+			GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleX), 1.0f, 0.0f, 0.0f);
 		}
 
 		if (bones.scaleX != 0.0f || bones.scaleY != 0.0f || bones.scaleZ != 0.0f) {
@@ -180,19 +180,19 @@ public class BenchEntityModel extends ModelBase {
 			GL11.glTranslatef(parentBone.rotationPointX * scale, parentBone.rotationPointY * scale, parentBone.rotationPointZ * scale);
 		}
 		if (parentBone.getRotation() != null) {
-			GL11.glRotatef((float) Math.toRadians(parentBone.getRotation().get(0)), 0.0f, 0.0f, 1.0f);
-			GL11.glRotatef((float) Math.toRadians(parentBone.getRotation().get(1)), 0.0f, 1.0f, 0.0f);
-			GL11.glRotatef((float) Math.toRadians(parentBone.getRotation().get(2)), 1.0f, 0.0f, 0.0f);
+			GL11.glRotatef(parentBone.getRotation().x, 1.0f, 0.0f, 0.0f);
+			GL11.glRotatef(parentBone.getRotation().y, 0.0f, 1.0f, 0.0f);
+			GL11.glRotatef(parentBone.getRotation().z, 0.0f, 0.0f, 1.0f);
 		}
 
 		if (parentBone.rotateAngleZ != 0.0f) {
-			GL11.glRotatef((float) (Math.toDegrees(parentBone.rotateAngleZ)), 0.0f, 0.0f, 1.0f);
+			GL11.glRotatef(parentBone.rotateAngleZ, 0.0f, 0.0f, 1.0f);
 		}
 		if (parentBone.rotateAngleY != 0.0f) {
-			GL11.glRotatef((float) (Math.toDegrees(parentBone.rotateAngleY)), 0.0f, 1.0f, 0.0f);
+			GL11.glRotatef(parentBone.rotateAngleY, 0.0f, 1.0f, 0.0f);
 		}
 		if (parentBone.rotateAngleX != 0.0f) {
-			GL11.glRotatef((float) (Math.toDegrees(parentBone.rotateAngleX)), 1.0f, 0.0f, 0.0f);
+			GL11.glRotatef(parentBone.rotateAngleX, 1.0f, 0.0f, 0.0f);
 		}
 
 		if (parentBone.scaleX != 0.0f || parentBone.scaleY != 0.0f || parentBone.scaleZ != 0.0f) {
@@ -203,15 +203,15 @@ public class BenchEntityModel extends ModelBase {
 	public float convertPivot(BenchEntityBones bones, int index) {
 		if (bones.getParent() != null) {
 			if (index == 1) {
-				return getIndexBones().get(bones.getParent()).getPivot().get(index) - bones.getPivot().get(index);
+				return getIndexBones().get(bones.getParent()).getPivot().getY() - bones.getPivot().getY();
 			} else {
-				return bones.getPivot().get(index) - getIndexBones().get(bones.getParent()).getPivot().get(index);
+				return bones.getPivot().getFromIndex(index) - getIndexBones().get(bones.getParent()).getPivot().getFromIndex(index);
 			}
 		} else {
 			if (index == 1) {
-				return 24 - bones.getPivot().get(index);
+				return 24 - bones.getPivot().getFromIndex(index);
 			} else {
-				return bones.getPivot().get(index);
+				return bones.getPivot().getFromIndex(index);
 			}
 		}
 	}
@@ -219,26 +219,26 @@ public class BenchEntityModel extends ModelBase {
 	public float convertPivot(BenchEntityBones parent, BenchEntityCube cube, int index) {
 		assert cube.getPivot() != null;
 		if (index == 1) {
-			return parent.getPivot().get(index) - cube.getPivot().get(index);
+			return parent.getPivot().getFromIndex(index) - cube.getPivot().getFromIndex(index);
 		} else {
-			return cube.getPivot().get(index) - parent.getPivot().get(index);
+			return cube.getPivot().getFromIndex(index) - parent.getPivot().getFromIndex(index);
 		}
 	}
 
 	public float convertOrigin(BenchEntityBones bone, BenchEntityCube cube, int index) {
 		if (index == 1) {
-			return bone.getPivot().get(index) - cube.getOrigin().get(index) - cube.getSize().get(index);
+			return bone.getPivot().getFromIndex(index) - cube.getOrigin().getFromIndex(index) - cube.getSize().getFromIndex(index);
 		} else {
-			return cube.getOrigin().get(index) - bone.getPivot().get(index);
+			return cube.getOrigin().getFromIndex(index) - bone.getPivot().getFromIndex(index);
 		}
 	}
 
 	public float convertOrigin(BenchEntityCube cube, int index) {
 		assert cube.getPivot() != null;
 		if (index == 1) {
-			return cube.getPivot().get(index) - cube.getOrigin().get(index) - cube.getSize().get(index);
+			return cube.getPivot().getFromIndex(index) - cube.getOrigin().getFromIndex(index) - cube.getSize().getFromIndex(index);
 		} else {
-			return cube.getOrigin().get(index) - cube.getPivot().get(index);
+			return cube.getOrigin().getFromIndex(index) - cube.getPivot().getFromIndex(index);
 		}
 	}
 

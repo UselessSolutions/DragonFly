@@ -102,8 +102,8 @@ public class TextureRegistry {
 			return;
 		}
 		NamespaceId namespaceId = NamespaceId.idFromString(fullTextureID);
-		System.out.println(namespaceId);
-		System.out.println(blockTextureNameToIndex.get(namespaceId));
+//		System.out.println(namespaceId);
+//		System.out.println(blockTextureNameToIndex.get(namespaceId));
 		if (TextureRegistry.containsTexture(namespaceId)) return;
 
 		String[] dirSplit = namespaceId.getId().split("/");

@@ -1,7 +1,7 @@
 package useless.dragonfly.model.entity.processor;
 
 import com.google.common.collect.Lists;
-import com.google.gson.annotations.SerializedName;
+import useless.dragonfly.utilities.vector.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -12,24 +12,20 @@ import java.util.List;
  * https://github.com/0999312/MMLib/blob/3e87210c9305a5724e06c492be503533a1ebcd59/src/main/java/cn/mcmod_mmf/mmlib/client/model/pojo/BonesItem.java
  */
 public class BenchEntityBones {
-	@SerializedName("cubes")
-	private List<BenchEntityCube> cubes;
-
-	@SerializedName("name")
-	private String name;
-
-	@SerializedName("pivot")
-	private List<Float> pivot;
-
-	@SerializedName("rotation")
-	private List<Float> rotation;
-
-	@SerializedName("parent")
-	private String parent;
-
-	@SerializedName("mirror")
-	private boolean mirror;
-
+	private final List<BenchEntityCube> cubes;
+	private final String name;
+	private final Vector3f pivot;
+	private final Vector3f rotation;
+	private final String parent;
+	private final boolean mirror;
+	public BenchEntityBones(List<BenchEntityCube> cubes, String name, Vector3f pivot, Vector3f rotation, String parent, boolean mirror){
+        this.cubes = cubes;
+        this.name = name;
+        this.pivot = pivot;
+        this.rotation = rotation;
+        this.parent = parent;
+        this.mirror = mirror;
+    }
 	private final List<BenchEntityBones> children = Lists.newArrayList();
 	public float rotationPointX;
 	public float rotationPointY;
@@ -52,11 +48,11 @@ public class BenchEntityBones {
 		return name;
 	}
 
-	public List<Float> getPivot() {
+	public Vector3f getPivot() {
 		return pivot;
 	}
 
-	public List<Float> getRotation() {
+	public Vector3f getRotation() {
 		return rotation;
 	}
 

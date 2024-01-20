@@ -19,6 +19,7 @@ public class GrassMetaState extends MetaStateInterpreter {
 		result.put("east", east ? "true" : "false");
 		result.put("south", south ? "true" : "false");
 		result.put("west", west ? "true" : "false");
+		result.put("snowy", worldSource.getBlock(x, y+1, z) == Block.layerSnow ? "true" : "false");
 		return result;
 	}
 	private boolean isBlockGrass(WorldSource worldSource, int x, int y, int z){

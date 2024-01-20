@@ -14,7 +14,6 @@ public class BlockFace {
 	protected FaceData faceData;
 	protected double[] uvScaled;
 	protected Side side;
-	protected Side cullFace = null;
 	public final Vector3f[] vertices;
 	protected final String[] vertexUVMap;
 	protected String[] vertexKeyMap = new String[4];
@@ -23,9 +22,6 @@ public class BlockFace {
 	public BlockFace(BlockCube cube, String key){
 		this.faceData = cube.cubeData.faces.get(key);
 		this.side = ModelData.keyToSide.get(key);
-		if (faceData.cullface != null){
-			this.cullFace = ModelData.keyToSide.get(faceData.cullface);
-		}
 		this.parentCube = cube;
 		generateUVs(cube);
 		switch (side){ // TODO replace this whole string key system with something better
@@ -56,8 +52,8 @@ public class BlockFace {
 			default:
 				vertexUVMap = null;
 		}
-		System.out.println(getTexture());
-		System.out.println(parentCube.parentModel.getTexture(getTexture()));
+//		System.out.println(getTexture());
+//		System.out.println(parentCube.parentModel.getTexture(getTexture()));
 		int texture = TextureRegistry.getIndexOrDefault(parentCube.parentModel.getTexture(getTexture()), 0);
 		vertices = new Vector3f[]{parentCube.vertices.get(vertexKeyMap[0]), parentCube.vertices.get(vertexKeyMap[1]), parentCube.vertices.get(vertexKeyMap[2]), parentCube.vertices.get(vertexKeyMap[3])};
 		vertexUVs = new double[][]{generateVertexUV(texture, 0), generateVertexUV(texture, 1), generateVertexUV(texture, 2), generateVertexUV(texture, 3)};
@@ -132,7 +128,7 @@ public class BlockFace {
 		return new double[]{u, v};
 	}
 	public boolean cullFace(int x, int y, int z, boolean renderOuterSide){
-		return !renderOuterSide && side == cullFace;
+		return !renderOuterSide && side == faceData.cullface;
 	}
 	public boolean useTint(){
 		return faceData.tintindex >= 0;

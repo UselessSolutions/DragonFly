@@ -1,22 +1,27 @@
 package useless.dragonfly.model.block.data;
 
-import com.google.gson.annotations.SerializedName;
 import net.minecraft.core.util.helper.Side;
 import useless.dragonfly.utilities.Utilities;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class ModelData {
-	@SerializedName("parent")
 	public String parent = null;
-	@SerializedName("ambientocclusion")
 	public boolean ambientocclusion = true;
-	@SerializedName("display")
-	public HashMap<String, PositionData> display = new HashMap<>();
-	@SerializedName("textures")
-	public HashMap<String, String> textures = new HashMap<>();
-	@SerializedName("elements")
+	public Map<String, PositionData> display;
+	public Map<String, String> textures = new HashMap<>();
 	public CubeData[] elements;
+	public ModelData(){
+		this(null, true, new HashMap<>(), new HashMap<>(), null);
+	}
+	public ModelData(String parent, boolean ao, Map<String, PositionData> display, Map<String, String> texture, CubeData[] elements){
+		this.parent = parent;
+		this.ambientocclusion = ao;
+		this.display = display;
+		this.textures = texture;
+		this.elements = elements;
+	}
 
 	public static final HashMap<String, Side> keyToSide = new HashMap<>();
 	public static final HashMap<Side, String> sideToKey = new HashMap<>();

@@ -10,29 +10,29 @@ import com.google.gson.annotations.SerializedName;
 public class BenchEntityFace {
 
 	@SerializedName("uv")
-	private float[] uv;
+	private double[] uv;
 	@SerializedName("uv_size")
-	private float[] uvSize;
+	private double[] uvSize;
 
-	public float[] getUv() {
+	public double[] getUv() {
 		return uv;
 	}
 
-	public float[] getUvSize() {
+	public double[] getUvSize() {
 		return uvSize;
 	}
 
 	public static BenchEntityFace empty() {
 		BenchEntityFace face = new BenchEntityFace();
-		face.uv = new float[]{0, 0};
-		face.uvSize = new float[]{0, 0};
+		face.uv = new double[]{0, 0};
+		face.uvSize = new double[]{0, 0};
 		return face;
 	}
 
 	public static BenchEntityFace single16X() {
 		BenchEntityFace face = new BenchEntityFace();
-		face.uv = new float[]{0, 0};
-		face.uvSize = new float[]{16, 16};
+		face.uv = new double[]{0, 0};
+		face.uvSize = new double[]{16, 16};
 		return face;
 	}
 }

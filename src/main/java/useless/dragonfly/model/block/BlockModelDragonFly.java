@@ -8,31 +8,33 @@ import useless.dragonfly.DragonFly;
 import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.mixins.mixin.accessor.RenderBlocksAccessor;
 import useless.dragonfly.model.block.processed.BlockModel;
-import useless.dragonfly.model.blockstates.data.BlockstateData;
+import useless.dragonfly.model.blockstates.data.BlockStateData;
 import useless.dragonfly.model.blockstates.data.ModelPart;
 import useless.dragonfly.model.blockstates.data.VariantData;
 import useless.dragonfly.model.blockstates.processed.MetaStateInterpreter;
 import useless.dragonfly.utilities.NamespaceId;
+import useless.dragonfly.utilities.Utilities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class BlockModelDragonFly extends BlockModelRenderBlocks {
 	public BlockModel baseModel;
 	public boolean render3d;
 	public float renderScale;
-	public BlockstateData blockstateData;
+	public BlockStateData blockstateData;
 	public MetaStateInterpreter metaStateInterpreter;
 	public BlockModelDragonFly(BlockModel model) {
 		this(model, null, null,true, 0.25f);
 	}
 
-	public BlockModelDragonFly(BlockModel model, BlockstateData blockstateData, MetaStateInterpreter metaStateInterpreter, boolean render3d) {
+	public BlockModelDragonFly(BlockModel model, BlockStateData blockstateData, MetaStateInterpreter metaStateInterpreter, boolean render3d) {
 		this(model, blockstateData, metaStateInterpreter, render3d, 0.25f);
 	}
-	public BlockModelDragonFly(BlockModel model, BlockstateData blockstateData, MetaStateInterpreter metaStateInterpreter, boolean render3d, float renderScale) {
+	public BlockModelDragonFly(BlockModel model, BlockStateData blockstateData, MetaStateInterpreter metaStateInterpreter, boolean render3d, float renderScale) {
 		super(0);
 		this.baseModel = model;
 		this.render3d = render3d;
@@ -92,18 +94,18 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 			blockSource = blocksAccessor.getBlockAccess(); // chunk cache
 		}
 		int meta = blockSource.getBlockMetadata(x,y,z);
+		Random random = Utilities.getRandomFromPos(x, y, z);
 		HashMap<String, String> blockStateList = metaStateInterpreter.getStateMap(blockSource, x, y, z, block, meta);
 		if (blockstateData.variants != null){ // If model uses variant system
-			return getModelVariant(blockStateList);
+			return getModelVariant(blockStateList, random);
 		}
 		if (blockstateData.multipart != null){
-			return getMultipartModel(blockStateList);
+			return getMultipartModel(blockStateList, random);
 		}
 		return new InternalModel[]{new InternalModel(baseModel, 0, 0)};
 	}
-	public InternalModel[] getModelVariant(HashMap<String, String> blockState){
+	public InternalModel[] getModelVariant(HashMap<String, String> blockState, Random random){
 		VariantData variantData = null;
-
 		for (String stateString: blockstateData.variants.keySet()) {
 			String[] conditions = stateString.split(",");
 			HashMap<String, String> conditionMap = new HashMap<>();
@@ -111,7 +113,7 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 				conditionMap.put(condition.split("=")[0], condition.split("=")[1]);
 			}
 			if (matchConditionsAND(blockState, conditionMap)){
-				variantData = blockstateData.variants.get(stateString);
+				variantData = blockstateData.variants.get(stateString).getRandomModel(random);
 				break;
 			}
 		}
@@ -120,29 +122,12 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 
 		return new InternalModel[]{new InternalModel(getModelFromKey(variantData.model), variantData.x, variantData.y)};
 	}
-	public InternalModel[] getMultipartModel(HashMap<String, String> blockState){
+	public InternalModel[] getMultipartModel(HashMap<String, String> blockState, Random random){
 		List<InternalModel> modelsToRender = new ArrayList<>();
 		for (ModelPart modelPart : blockstateData.multipart){
-			if (modelPart.when.get("AND") != null){
-				ArrayList<Map<String, String>> and = (ArrayList<Map<String, String>>) modelPart.when.get("AND");
-				if (matchConditionsAND(blockState, arrToMap(and))){
-					modelsToRender.add(new InternalModel(getModelFromKey(modelPart.apply.model), modelPart.apply.x, modelPart.apply.y));
-				}
-				continue;
-			}
-			if (modelPart.when.get("OR") != null){
-				ArrayList<Map<String, String>> or = ((ArrayList<Map<String, String>>) modelPart.when.get("OR"));
-				if (matchConditionsOR(blockState, arrToMap(or))){
-					modelsToRender.add(new InternalModel(getModelFromKey(modelPart.apply.model), modelPart.apply.x, modelPart.apply.y));
-				}
-				continue;
-			}
-			HashMap<String,String> conditions = new HashMap<>();
-			for (Map.Entry<String, Object> entry : modelPart.when.entrySet()){
-				conditions.put(entry.getKey(), (String) entry.getValue());
-			}
-			if (matchConditionsAND(blockState, conditions)){
-				modelsToRender.add(new InternalModel(getModelFromKey(modelPart.apply.model), modelPart.apply.x, modelPart.apply.y));
+			if (modelPart.when == null || modelPart.when.match(blockState)){
+				VariantData data = modelPart.getRandomModel(random);
+				modelsToRender.add(new InternalModel(getModelFromKey(data.model), data.x, data.y));
 			}
 		}
 		return modelsToRender.toArray(new InternalModel[0]);
@@ -163,30 +148,6 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 			stateMet &= stateValue.equals(entry.getValue());
 		}
 		return stateMet;
-	}
-	public boolean matchConditionsOR(HashMap<String, String> blockState, HashMap<String, String> conditions){
-		if (conditions == null){
-			DragonFly.LOGGER.warn("conditions for model '" + baseModel.namespaceId + "' have returned null!");
-			return false;
-		}
-		for (Map.Entry<String, String > entry: conditions.entrySet()) {
-			String stateValue = blockState.get(entry.getKey());
-			if (stateValue == null){
-				DragonFly.LOGGER.warn("Could not find corresponding value for '" + entry.getKey() + "' in model '" + baseModel.namespaceId + "'!");
-				continue;
-			}
-			if(stateValue.equals(entry.getValue())){
-				return true;
-			}
-		}
-		return false;
-	}
-	private HashMap<String, String> arrToMap(ArrayList<Map<String, String>> arr){
-		HashMap<String, String> map = new HashMap<>();
-        for (Map<String, String> entry : arr){
-			map.putAll(entry);
-		}
-        return new HashMap<>(map);
 	}
 	public BlockModel getModelFromKey(String key){
 		String[] modelID = key.split(":");

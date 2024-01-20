@@ -85,7 +85,7 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 		.build(new BlockRotatable("shelf" + blockId, blockId++, Material.dirt)).withLitInteriorSurface(true);
 	public static final Block grassBlock = new BlockBuilder(MOD_ID)
 		.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/grass_block.json"),
-			ModelHelper.getOrCreateBlockState(MOD_ID, "grass.json"), new GrassMetaState(), true))
+			ModelHelper.getOrCreateBlockState(NamespaceId.coreNamespaceId, "grass_block.json"), new GrassMetaState(), true))
 		.setBlockColor(new BlockColorGrass())
 		.setBlockSound(BlockSounds.GRASS)
 		.build(new Block("grass" + blockId, blockId++, Material.grass));
@@ -93,7 +93,7 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 		blockId = 5000;
 		try {
 			for (String string : getResourceFiles("assets/minecraft/model/block/")) {
-				System.out.println(string);
+//				System.out.println(string);
 				if (string.contains("cauldron")){
 					new BlockBuilder(MOD_ID)
 						.setBlockModel(new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/" + string)))
@@ -106,17 +106,17 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 						.build(new BlockModel(string.replace(".json", ""), blockId++, Material.dirt, ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "block/" + string)));
 				}
 
-				System.out.println(string + " created");
+//				System.out.println(string + " created");
 			}
-			for (String string : getResourceFiles("assets/minecraft/blockstates/")) {
-				System.out.println(string);
-				try {
-					System.out.println(ModelHelper.getOrCreateBlockState(NamespaceId.coreNamespaceId, string));
-				}
-				catch (Exception e){
-					System.out.println(e);
-				}
-			}
+//			for (String string : getResourceFiles("assets/minecraft/blockstates/")) {
+////				System.out.println(string);
+//				try {
+//					System.out.println(ModelHelper.getOrCreateBlockState(NamespaceId.coreNamespaceId, string));
+//				}
+//				catch (Exception e){
+//					System.out.println(e);
+//				}
+//			}
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

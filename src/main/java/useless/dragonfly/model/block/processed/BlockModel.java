@@ -12,25 +12,10 @@ import java.util.HashMap;
 public class BlockModel {
 	private static final HashMap<String, PositionData> defaultDisplays = new HashMap<>();
 	static {
-		PositionData gui = new PositionData();
-		gui.rotation = new double[]{30, 225, 0};
-		gui.translation = new double[] {0, 0, 0};
-		gui.scale = new double[]{0.625, 0.625, 0.625};
-
-		PositionData ground = new PositionData();
-		ground.rotation = new double[]{0, 0, 0};
-		ground.translation = new double[] {0, 3, 0};
-		ground.scale = new double[]{0.25, 0.25, 0.25};
-
-		PositionData right_3rd = new PositionData();
-		right_3rd.rotation = new double[]{75, 45, 0};
-		right_3rd.translation = new double[] {0, 2.5, 0};
-		right_3rd.scale = new double[]{0.375, 0.375, 0.375};
-
-		PositionData right_first = new PositionData();
-		right_first.rotation = new double[]{0, 45, 0};
-		right_first.translation = new double[] {0, 0, 0};
-		right_first.scale = new double[]{0.4, 0.4, 0.4};
+		PositionData gui = new PositionData(new double[]{30, 225, 0}, new double[] {0, 0, 0}, new double[]{0.625, 0.625, 0.625});
+		PositionData ground = new PositionData(new double[]{0, 0, 0}, new double[] {0, 3, 0}, new double[]{0.25, 0.25, 0.25});
+		PositionData right_3rd = new PositionData(new double[]{75, 45, 0}, new double[] {0, 2.5, 0}, new double[]{0.375, 0.375, 0.375});
+		PositionData right_first = new PositionData(new double[]{0, 45, 0}, new double[] {0, 0, 0}, new double[]{0.4, 0.4, 0.4});
 
 		defaultDisplays.put("gui", gui);
 		defaultDisplays.put("ground", ground);
