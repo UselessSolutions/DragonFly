@@ -1,6 +1,5 @@
 package useless.dragonfly.utilities.vector;
 
-import java.io.Serializable;
 import java.nio.FloatBuffer;
 
 /**
@@ -12,7 +11,7 @@ import java.nio.FloatBuffer;
  * $Id$
  */
 
-public class Vector3f extends Vector implements Serializable {
+public class Vector3f extends Vector {
 
 	private static final long serialVersionUID = 1L;
 
@@ -374,6 +373,18 @@ public class Vector3f extends Vector implements Serializable {
 		y = newZ + origin.getY();
 		x = newY + origin.getX();
 		return new Vector3f(x, y, getZ());
+	}
+
+	public float getFromIndex(int index){
+		switch (index){
+			case 0:
+				return x;
+			case 1:
+				return y;
+			case 2:
+				return z;
+		}
+		throw new ArrayIndexOutOfBoundsException();
 	}
 
 }

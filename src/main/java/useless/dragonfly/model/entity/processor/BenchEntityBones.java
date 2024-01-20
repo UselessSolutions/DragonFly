@@ -1,6 +1,7 @@
 package useless.dragonfly.model.entity.processor;
 
 import com.google.common.collect.Lists;
+import useless.dragonfly.utilities.vector.Vector3f;
 
 import javax.annotation.Nullable;
 import java.util.List;
@@ -11,13 +12,13 @@ import java.util.List;
  * https://github.com/0999312/MMLib/blob/3e87210c9305a5724e06c492be503533a1ebcd59/src/main/java/cn/mcmod_mmf/mmlib/client/model/pojo/BonesItem.java
  */
 public class BenchEntityBones {
-	private List<BenchEntityCube> cubes;
-	private String name;
-	private List<Float> pivot;
-	private List<Float> rotation;
-	private String parent;
-	private boolean mirror;
-	public BenchEntityBones(List<BenchEntityCube> cubes, String name, List<Float> pivot, List<Float> rotation, String parent, boolean mirror){
+	private final List<BenchEntityCube> cubes;
+	private final String name;
+	private final Vector3f pivot;
+	private final Vector3f rotation;
+	private final String parent;
+	private final boolean mirror;
+	public BenchEntityBones(List<BenchEntityCube> cubes, String name, Vector3f pivot, Vector3f rotation, String parent, boolean mirror){
         this.cubes = cubes;
         this.name = name;
         this.pivot = pivot;
@@ -47,11 +48,11 @@ public class BenchEntityBones {
 		return name;
 	}
 
-	public List<Float> getPivot() {
+	public Vector3f getPivot() {
 		return pivot;
 	}
 
-	public List<Float> getRotation() {
+	public Vector3f getRotation() {
 		return rotation;
 	}
 

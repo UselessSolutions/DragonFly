@@ -20,14 +20,14 @@ public class BenchEntityCube {
 	private List<Polygon> polygons;
 	private Boolean mirror;
 	private final float inflate;
-	private final List<Float> size;
-	private final List<Float> origin;
+	private final Vector3f size;
+	private final Vector3f origin;
 	private final List<Float> uv;
 	@Nullable
 	private final BenchFaceUVsItem faceUv;
-	private final List<Float> rotation;
-	private final List<Float> pivot;
-	public BenchEntityCube(List<Float> origin, List<Float> pivot, List<Float> rotation, List<Float> size, float inflate, List<Float> uv, BenchFaceUVsItem faceUv, Boolean mirrored){
+	private final Vector3f rotation;
+	private final Vector3f pivot;
+	public BenchEntityCube(Vector3f origin, Vector3f pivot, Vector3f rotation, Vector3f size, float inflate, List<Float> uv, BenchFaceUVsItem faceUv, Boolean mirrored){
         this.origin = origin;
         this.pivot = pivot;
         this.rotation = rotation;
@@ -48,7 +48,7 @@ public class BenchEntityCube {
 	private int displayList = 0;
 
 	public boolean isMirror() {
-		return mirror == null ? false : mirror;
+		return mirror != null && mirror;
 	}
 
 	public boolean isHasMirror() {
@@ -63,21 +63,21 @@ public class BenchEntityCube {
 		return inflate;
 	}
 
-	public List<Float> getSize() {
+	public Vector3f getSize() {
 		return size;
 	}
 
-	public List<Float> getOrigin() {
+	public Vector3f getOrigin() {
 		return origin;
 	}
 
 	@Nullable
-	public List<Float> getRotation() {
+	public Vector3f getRotation() {
 		return rotation;
 	}
 
 	@Nullable
-	public List<Float> getPivot() {
+	public Vector3f getPivot() {
 		return pivot;
 	}
 
@@ -97,9 +97,9 @@ public class BenchEntityCube {
 			float minX = x;
 			float minY = y;
 			float minZ = z;
-			float maxX = size.get(0) + x;
-			float maxY = size.get(1) + y;
-			float maxZ = size.get(2) + z;
+			float maxX = size.x + x;
+			float maxY = size.y + y;
+			float maxZ = size.z + z;
 			minX -= inflate;
 			minY -= inflate;
 			minZ -= inflate;
@@ -114,12 +114,12 @@ public class BenchEntityCube {
 			}
 			Vertex ptvMinXMinYMinZ = new Vertex(minX, minY, minZ, 0.0f, 0.0f);
 			Vertex ptvMaxXMinYMinZ = new Vertex(maxX, minY, minZ, 0.0f, 8.0f);
-			Vertex ptvMaxXMaxYMinZ = new Vertex(maxX, maxY, minZ, 8.0f, 8.0f);
 			Vertex ptvMinXMaxYMinZ = new Vertex(minX, maxY, minZ, 8.0f, 0.0f);
+			Vertex ptvMaxXMaxYMinZ = new Vertex(maxX, maxY, minZ, 8.0f, 8.0f);
 			Vertex ptvMinXMinYMaxZ = new Vertex(minX, minY, maxZ, 0.0f, 0.0f);
 			Vertex ptvMaxXMinYMaxZ = new Vertex(maxX, minY, maxZ, 0.0f, 8.0f);
-			Vertex ptvMaxXMaxYMaxZ = new Vertex(maxX, maxY, maxZ, 8.0f, 8.0f);
 			Vertex ptvMinXMaxYMaxZ = new Vertex(minX, maxY, maxZ, 8.0f, 0.0f);
+			Vertex ptvMaxXMaxYMaxZ = new Vertex(maxX, maxY, maxZ, 8.0f, 8.0f);
 			this.corners[0] = ptvMinXMinYMinZ;
 			this.corners[1] = ptvMaxXMinYMinZ;
 			this.corners[2] = ptvMaxXMaxYMinZ;
@@ -161,12 +161,12 @@ public class BenchEntityCube {
 			float minX = x;
 			float minY = y;
 			float minZ = z;
-			float maxX = size.get(0) + x;
-			float maxY = size.get(1) + y;
-			float maxZ = size.get(2) + z;
-			float sizeX = size.get(0);
-			float sizeY = size.get(1);
-			float sizeZ = size.get(2);
+			float maxX = size.x + x;
+			float maxY = size.y + y;
+			float maxZ = size.z + z;
+			float sizeX = size.x;
+			float sizeY = size.y;
+			float sizeZ = size.z;
 			minX -= inflate;
 			minY -= inflate;
 			minZ -= inflate;
@@ -216,8 +216,7 @@ public class BenchEntityCube {
 		}
 	}
 
-	private Polygon getTexturedQuad(Vertex[] positionsIn, float texWidth, float texHeight,
-									Direction direction, BenchFaceUVsItem faces) {
+	private Polygon getTexturedQuad(Vertex[] positionsIn, float texWidth, float texHeight, Direction direction, BenchFaceUVsItem faces) {
 		BenchEntityFace face = faces.getFace(direction);
 		if (Utilities.equalFloat(face.getUvSize()[0], 0.0F) && Utilities.equalFloat(face.getUvSize()[1], 0.0F))
 			return null;

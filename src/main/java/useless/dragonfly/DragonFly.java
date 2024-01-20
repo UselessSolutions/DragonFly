@@ -36,11 +36,14 @@ import useless.dragonfly.model.entity.processor.BenchEntityBones;
 import useless.dragonfly.model.entity.processor.BenchEntityCube;
 import useless.dragonfly.model.entity.processor.BenchEntityGeometry;
 import useless.dragonfly.model.entity.processor.BenchEntityModelData;
+import useless.dragonfly.utilities.vector.Vector3f;
+import useless.dragonfly.utilities.vector.Vector3fJsonAdapter;
 
 public class DragonFly implements GameStartEntrypoint {
     public static final String MOD_ID = "dragonfly";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 	public static final Gson GSON = new GsonBuilder()
+		.registerTypeAdapter(Vector3f.class, new Vector3fJsonAdapter())
 		.registerTypeAdapter(Animation.class, new AnimationDeserializer())
 		.registerTypeAdapter(ModelData.class, new ModelDataJsonAdapter())
 		.registerTypeAdapter(PositionData.class, new PositionDataJsonAdapter())

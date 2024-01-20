@@ -12,6 +12,7 @@ import org.apache.commons.lang3.NotImplementedException;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.model.entity.processor.BenchEntityBones;
 import useless.dragonfly.model.entity.processor.BenchEntityCube;
+import useless.dragonfly.utilities.vector.Vector3f;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ public class BenchEntityBonesJsonAdapter implements JsonDeserializer<BenchEntity
 		List<BenchEntityCube> cubes = new ArrayList<>();
 		String parent = null;
 		String name = null;
-		List<Float> pivot = null;
-		List<Float> rotation = null;
+		Vector3f pivot = null;
+		Vector3f rotation = null;
 		boolean mirror = false;
 		if (obj.has("cubes")){
 			JsonArray arr = obj.getAsJsonArray("cubes");
@@ -35,20 +36,8 @@ public class BenchEntityBonesJsonAdapter implements JsonDeserializer<BenchEntity
 		}
 		if (obj.has("name")) name = obj.get("name").getAsString();
 		if (obj.has("parent")) parent = obj.get("parent").getAsString();
-		if (obj.has("pivot")){
-			JsonArray arr = obj.getAsJsonArray("pivot");
-			pivot = new ArrayList<>();
-			for (JsonElement e : arr){
-				pivot.add(e.getAsFloat());
-			}
-		}
-		if (obj.has("rotation")){
-			JsonArray arr = obj.getAsJsonArray("rotation");
-			rotation = new ArrayList<>();
-			for (JsonElement e : arr){
-				rotation.add(e.getAsFloat());
-			}
-		}
+		if (obj.has("pivot")) pivot = DragonFly.GSON.fromJson(obj.get("pivot"), Vector3f.class);
+		if (obj.has("rotation")) rotation = DragonFly.GSON.fromJson(obj.get("rotation"), Vector3f.class);
 		if (obj.has("mirror")) mirror = obj.get("mirror").getAsBoolean();
 
 		return new BenchEntityBones(cubes, name, pivot, rotation, parent, mirror);
