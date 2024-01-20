@@ -59,18 +59,12 @@ public class Utilities {
 	 * Tries to load resource from multiple classes, if they all fail it throws an exception
 	 */
 	public static InputStream getResourceAsStream(String path){
-		if (path.contains("warden")){
-			System.out.println("W");
-		}
 		try {
 			Class.forName("net.minecraft.client.Minecraft");
 			try {
-				System.out.println("Trying to load from pack: " + path);
 				return Objects.requireNonNull(DragonFlyClient.getMinecraft().texturePackList.selectedTexturePack.getResourceAsStream(path));
 			} catch (Exception ignored){}
-		} catch (Exception ignored) {
-			System.out.println("Failed to load from pack: " + path);
-		}
+		} catch (Exception ignored) {}
 		try {
 			return Objects.requireNonNull(DataLoader.class.getResourceAsStream(path));
 		} catch (Exception ignored){}

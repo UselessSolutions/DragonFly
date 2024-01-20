@@ -1,9 +1,6 @@
 package useless.dragonfly.model.entity.processor;
 
 import com.google.common.collect.Lists;
-import com.google.gson.*;
-import com.google.gson.annotations.Expose;
-import com.google.gson.annotations.SerializedName;
 import net.minecraft.client.GLAllocation;
 import net.minecraft.client.render.Polygon;
 import net.minecraft.client.render.Tessellator;
@@ -14,7 +11,6 @@ import org.lwjgl.opengl.GL11;
 import useless.dragonfly.utilities.Utilities;
 import useless.dragonfly.utilities.vector.Vector3f;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 public class BenchEntityCube {
@@ -22,35 +18,25 @@ public class BenchEntityCube {
 	private static final float COMPARE_CONST = 0.001f;
 	private Vertex[] corners;
 	private List<Polygon> polygons;
-
-
-	private boolean mirror = false;
-	private boolean hasMirror = false;
-	@Expose
-	@SerializedName("inflate")
-	private float inflate;
-
-	@Expose
-	@SerializedName("size")
-	private List<Float> size;
-
-	@Expose
-	@SerializedName("origin")
-	private List<Float> origin;
-
-	private List<Float> uv;
+	private Boolean mirror;
+	private final float inflate;
+	private final List<Float> size;
+	private final List<Float> origin;
+	private final List<Float> uv;
 	@Nullable
-	private BenchFaceUVsItem faceUv;
-
-
-
-	@Expose
-	@SerializedName("rotation")
-	private List<Float> rotation;
-
-	@Expose
-	@SerializedName("pivot")
-	private List<Float> pivot;
+	private final BenchFaceUVsItem faceUv;
+	private final List<Float> rotation;
+	private final List<Float> pivot;
+	public BenchEntityCube(List<Float> origin, List<Float> pivot, List<Float> rotation, List<Float> size, float inflate, List<Float> uv, BenchFaceUVsItem faceUv, Boolean mirrored){
+        this.origin = origin;
+        this.pivot = pivot;
+        this.rotation = rotation;
+        this.size = size;
+        this.inflate = inflate;
+        this.uv = uv;
+        this.faceUv = faceUv;
+		this.mirror = mirrored;
+    }
 
 	public float rotationPointX;
 	public float rotationPointY;
@@ -62,11 +48,11 @@ public class BenchEntityCube {
 	private int displayList = 0;
 
 	public boolean isMirror() {
-		return mirror;
+		return mirror == null ? false : mirror;
 	}
 
 	public boolean isHasMirror() {
-		return hasMirror;
+		return mirror != null;
 	}
 
 	public void setMirror(boolean mirror) {
@@ -121,7 +107,7 @@ public class BenchEntityCube {
 			maxY += inflate;
 			maxZ += inflate;
 
-			if (this.mirror) {
+			if (this.isMirror()) {
 				float temp = maxX;
 				maxX = minX;
 				minX = temp;
@@ -188,7 +174,7 @@ public class BenchEntityCube {
 			maxY += inflate;
 			maxZ += inflate;
 
-			if (this.mirror) {
+			if (this.isMirror()) {
 				float temp = maxX;
 				maxX = minX;
 				minX = temp;
@@ -222,7 +208,7 @@ public class BenchEntityCube {
 			}
 			this.polygons.add(new Polygon(new Vertex[]{ptvMaxXMinYMinZ, ptvMinXMinYMinZ, ptvMinXMaxYMinZ, ptvMaxXMaxYMinZ}, (int) (texU + sizeZ), (int) (texV + sizeZ), (int) (texU + sizeZ + sizeX), (int) (texV + sizeZ + sizeY), texWidth, texHeight));
 			this.polygons.add(new Polygon(new Vertex[]{ptvMinXMinYMaxZ, ptvMaxXMinYMaxZ, ptvMaxXMaxYMaxZ, ptvMinXMaxYMaxZ}, (int) (texU + sizeZ + sizeX + sizeZ), (int) (texV + sizeZ), (int) (texU + sizeZ + sizeX + sizeZ + sizeX), (int) (texV + sizeZ + sizeY), texWidth, texHeight));
-			if (this.mirror) {
+			if (this.isMirror()) {
 				for (Polygon face : this.polygons) {
 					face.flipFace();
 				}
@@ -288,35 +274,4 @@ public class BenchEntityCube {
 		return displayList;
 	}
 
-	public static class Deserializer implements JsonDeserializer<BenchEntityCube> {
-		@Override
-		public BenchEntityCube deserialize(JsonElement json, Type type, JsonDeserializationContext context) throws JsonParseException {
-			BenchEntityCube cube = new GsonBuilder().excludeFieldsWithoutExposeAnnotation().create().fromJson(json, BenchEntityCube.class);
-			if (json.isJsonObject()) {
-				JsonObject obj = json.getAsJsonObject();
-
-				JsonElement uvElement = obj.get("uv");
-				if (uvElement.isJsonArray()) {
-					cube.uv = Lists.newArrayList();
-					JsonArray array = uvElement.getAsJsonArray();
-					for (int i = 0; i < array.size(); i++) {
-						cube.uv.add(array.get(i).getAsFloat());
-					}
-				}
-				if (uvElement.isJsonObject()) {
-					cube.faceUv = new Gson().fromJson(uvElement, BenchFaceUVsItem.class);
-				}
-
-				JsonElement mirrorElement = obj.get("mirror");
-				if (mirrorElement != null && mirrorElement.isJsonPrimitive()) {
-					JsonPrimitive primitive = mirrorElement.getAsJsonPrimitive();
-					if (primitive.isBoolean()) {
-						cube.mirror = primitive.getAsBoolean();
-						cube.hasMirror = true;
-					}
-				}
-			}
-			return cube;
-		}
-	}
 }
