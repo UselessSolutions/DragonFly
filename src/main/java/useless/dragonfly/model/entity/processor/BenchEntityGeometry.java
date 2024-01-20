@@ -10,8 +10,8 @@ public class BenchEntityGeometry {
 
 	protected final HashMap<String, BenchEntityBones> modelMap = new HashMap<>();
 
-	private Description description;
-	private BenchEntityBones[] bones;
+	private final Description description;
+	private final BenchEntityBones[] bones;
 	public BenchEntityGeometry(Description description, BenchEntityBones[] bones){
         this.description = description;
         this.bones = bones;

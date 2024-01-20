@@ -128,27 +128,27 @@ public class BenchEntityCube {
 			this.corners[5] = ptvMaxXMinYMaxZ;
 			this.corners[6] = ptvMaxXMaxYMaxZ;
 			this.corners[7] = ptvMinXMaxYMaxZ;
-			Polygon downQuad = getTexturedQuad(new Vertex[]{ptvMaxXMinYMaxZ, ptvMaxXMinYMinZ, ptvMaxXMaxYMinZ, ptvMaxXMaxYMaxZ}, texWidth,
+			Polygon downQuad = getTexturedQuad(new Vertex[]{ptvMinXMinYMaxZ, ptvMinXMinYMinZ, ptvMaxXMinYMinZ, ptvMaxXMinYMaxZ}, texWidth,
 				texHeight, Direction.DOWN, faceUv);
 			if (downQuad != null)
 				this.polygons.add(downQuad);
-			Polygon upQuad = getTexturedQuad(new Vertex[]{ptvMinXMinYMinZ, ptvMinXMinYMaxZ, ptvMinXMaxYMaxZ, ptvMinXMaxYMinZ}, texWidth,
+			Polygon upQuad = getTexturedQuad(new Vertex[]{ptvMinXMaxYMaxZ, ptvMinXMaxYMinZ, ptvMaxXMaxYMinZ, ptvMaxXMaxYMaxZ}, texWidth,
 				texHeight, Direction.UP, faceUv);
 			if (upQuad != null)
 				this.polygons.add(upQuad);
-			Polygon westQuad = getTexturedQuad(new Vertex[]{ptvMaxXMinYMaxZ, ptvMinXMinYMaxZ, ptvMinXMinYMinZ, ptvMaxXMinYMinZ}, texWidth,
+			Polygon westQuad = getTexturedQuad(new Vertex[]{ptvMinXMaxYMinZ, ptvMinXMinYMinZ, ptvMinXMinYMaxZ, ptvMinXMaxYMaxZ}, texWidth,
 				texHeight, Direction.WEST, faceUv);
 			if (westQuad != null)
 				this.polygons.add(westQuad);
-			Polygon northQuad = getTexturedQuad(new Vertex[]{ptvMaxXMaxYMaxZ, ptvMinXMaxYMaxZ, ptvMinXMaxYMinZ, ptvMaxXMaxYMinZ}, texWidth,
+			Polygon northQuad = getTexturedQuad(new Vertex[]{ptvMinXMinYMaxZ, ptvMaxXMinYMaxZ, ptvMaxXMaxYMaxZ, ptvMinXMaxYMaxZ}, texWidth,
 				texHeight, Direction.NORTH, faceUv);
 			if (northQuad != null)
 				this.polygons.add(northQuad);
-			Polygon eastQuad = getTexturedQuad(new Vertex[]{ptvMaxXMinYMinZ, ptvMinXMinYMinZ, ptvMinXMaxYMinZ, ptvMaxXMaxYMinZ}, texWidth,
+			Polygon eastQuad = getTexturedQuad(new Vertex[]{ptvMaxXMaxYMinZ, ptvMaxXMinYMinZ, ptvMaxXMinYMaxZ, ptvMaxXMaxYMaxZ}, texWidth,
 				texHeight, Direction.EAST, faceUv);
 			if (eastQuad != null)
 				this.polygons.add(eastQuad);
-			Polygon southQuad = getTexturedQuad(new Vertex[]{ptvMinXMinYMaxZ, ptvMaxXMinYMaxZ, ptvMaxXMaxYMaxZ, ptvMinXMaxYMaxZ}, texWidth,
+			Polygon southQuad = getTexturedQuad(new Vertex[]{ptvMinXMinYMinZ, ptvMaxXMinYMinZ, ptvMaxXMaxYMinZ, ptvMinXMaxYMinZ}, texWidth,
 				texHeight, Direction.SOUTH, faceUv);
 			if (southQuad != null)
 				this.polygons.add(southQuad);
@@ -225,12 +225,11 @@ public class BenchEntityCube {
 		float u2 = u1 + face.getUvSize()[0];
 		float v2 = v1 + face.getUvSize()[1];
 		Polygon polygon = new Polygon(positionsIn, (int) u1, (int) v1, (int) u2, (int) v2, (int) texWidth, (int) texHeight);
-		Vector3f vec3d = new Vector3f(direction.getOffsetX(), direction.getOffsetY(), direction.getOffsetZ());
 
 		for (int i = 0; i < polygon.vertexPositions.length; ++i) {
-			polygon.vertexPositions[i].vector3D.xCoord *= vec3d.getX();
-			polygon.vertexPositions[i].vector3D.yCoord *= vec3d.getY();
-			polygon.vertexPositions[i].vector3D.zCoord *= vec3d.getZ();
+			polygon.vertexPositions[i].vector3D.xCoord += direction.getOffsetX();
+			polygon.vertexPositions[i].vector3D.yCoord += direction.getOffsetY();
+			polygon.vertexPositions[i].vector3D.zCoord += direction.getOffsetZ();
 		}
 
 		return polygon;
@@ -241,9 +240,9 @@ public class BenchEntityCube {
 			this.displayList = GLAllocation.generateDisplayLists(1);
 			GL11.glNewList(this.displayList, 4864);
 			Tessellator tessellator = Tessellator.instance;
-			for (int i = 0; i < this.polygons.size(); ++i) {
-				this.polygons.get(i).draw(tessellator, f);
-			}
+            for (Polygon polygon : this.polygons) {
+                polygon.draw(tessellator, f);
+            }
 			GL11.glEndList();
 			this.compiled = true;
 		}
