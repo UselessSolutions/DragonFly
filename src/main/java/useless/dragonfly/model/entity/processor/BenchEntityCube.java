@@ -101,9 +101,6 @@ public class BenchEntityCube {
 			float maxX = size.x + x;
 			float maxY = size.y + y;
 			float maxZ = size.z + z;
-			float sizeX = size.x;
-			float sizeY = size.y;
-			float sizeZ = size.z;
 			minX -= inflate;
 			minY -= inflate;
 			minZ -= inflate;
@@ -133,10 +130,10 @@ public class BenchEntityCube {
 			this.corners[6] = ptvMaxXMaxYMaxZ;
 			this.corners[7] = ptvMinXMaxYMaxZ;
 			BenchEntityFace benchFace = faceUv.getFace(Direction.EAST);
-			float texU = benchFace.getUv()[0];
-			float texV = benchFace.getUv()[1];
-			float uSize = benchFace.getUvSize()[0];
-			float vSize = benchFace.getUvSize()[1];
+			double texU = benchFace.getUv()[0];
+			double texV = benchFace.getUv()[1];
+			double uSize = benchFace.getUvSize()[0];
+			double vSize = benchFace.getUvSize()[1];
 			this.polygons.add(new Polygon(new Vertex[]{ptvMaxXMinYMaxZ, ptvMaxXMinYMinZ, ptvMaxXMaxYMinZ, ptvMaxXMaxYMaxZ}, (int) texU, (int) texV, (int) (texU + uSize), (int) (texV + vSize), texWidth, texHeight));
 			benchFace = faceUv.getFace(Direction.WEST);
 			texU = benchFace.getUv()[0];
@@ -248,10 +245,10 @@ public class BenchEntityCube {
 		BenchEntityFace face = faces.getFace(direction);
 		if (Utilities.equalFloat(face.getUvSize()[0], 0.0F) && Utilities.equalFloat(face.getUvSize()[1], 0.0F))
 			return null;
-		float u1 = face.getUv()[0];
-		float v1 = face.getUv()[1];
-		float u2 = u1 + face.getUvSize()[0];
-		float v2 = v1 + face.getUvSize()[1];
+		double u1 = face.getUv()[0];
+		double v1 = face.getUv()[1];
+		double u2 = u1 + face.getUvSize()[0];
+		double v2 = v1 + face.getUvSize()[1];
 		Polygon polygon = new Polygon(positionsIn, (int) u1, (int) v1, (int) u2, (int) v2, (int) texWidth, (int) texHeight);
 
 		for (int i = 0; i < polygon.vertexPositions.length; ++i) {
