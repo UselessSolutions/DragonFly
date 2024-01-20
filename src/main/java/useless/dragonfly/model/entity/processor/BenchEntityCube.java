@@ -94,12 +94,16 @@ public class BenchEntityCube {
 		if (faceUv != null) {
 			this.corners = new Vertex[8];
 			this.polygons = Lists.newArrayList();
+
 			float minX = x;
 			float minY = y;
 			float minZ = z;
 			float maxX = size.x + x;
 			float maxY = size.y + y;
 			float maxZ = size.z + z;
+			float sizeX = size.x;
+			float sizeY = size.y;
+			float sizeZ = size.z;
 			minX -= inflate;
 			minY -= inflate;
 			minZ -= inflate;
@@ -114,12 +118,12 @@ public class BenchEntityCube {
 			}
 			Vertex ptvMinXMinYMinZ = new Vertex(minX, minY, minZ, 0.0f, 0.0f);
 			Vertex ptvMaxXMinYMinZ = new Vertex(maxX, minY, minZ, 0.0f, 8.0f);
-			Vertex ptvMinXMaxYMinZ = new Vertex(minX, maxY, minZ, 8.0f, 0.0f);
 			Vertex ptvMaxXMaxYMinZ = new Vertex(maxX, maxY, minZ, 8.0f, 8.0f);
+			Vertex ptvMinXMaxYMinZ = new Vertex(minX, maxY, minZ, 8.0f, 0.0f);
 			Vertex ptvMinXMinYMaxZ = new Vertex(minX, minY, maxZ, 0.0f, 0.0f);
 			Vertex ptvMaxXMinYMaxZ = new Vertex(maxX, minY, maxZ, 0.0f, 8.0f);
-			Vertex ptvMinXMaxYMaxZ = new Vertex(minX, maxY, maxZ, 8.0f, 0.0f);
 			Vertex ptvMaxXMaxYMaxZ = new Vertex(maxX, maxY, maxZ, 8.0f, 8.0f);
+			Vertex ptvMinXMaxYMaxZ = new Vertex(minX, maxY, maxZ, 8.0f, 0.0f);
 			this.corners[0] = ptvMinXMinYMinZ;
 			this.corners[1] = ptvMaxXMinYMinZ;
 			this.corners[2] = ptvMaxXMaxYMinZ;
@@ -128,30 +132,54 @@ public class BenchEntityCube {
 			this.corners[5] = ptvMaxXMinYMaxZ;
 			this.corners[6] = ptvMaxXMaxYMaxZ;
 			this.corners[7] = ptvMinXMaxYMaxZ;
-			Polygon downQuad = getTexturedQuad(new Vertex[]{ptvMinXMinYMaxZ, ptvMinXMinYMinZ, ptvMaxXMinYMinZ, ptvMaxXMinYMaxZ}, texWidth,
-				texHeight, Direction.DOWN, faceUv);
-			if (downQuad != null)
-				this.polygons.add(downQuad);
-			Polygon upQuad = getTexturedQuad(new Vertex[]{ptvMinXMaxYMaxZ, ptvMinXMaxYMinZ, ptvMaxXMaxYMinZ, ptvMaxXMaxYMaxZ}, texWidth,
-				texHeight, Direction.UP, faceUv);
-			if (upQuad != null)
-				this.polygons.add(upQuad);
-			Polygon westQuad = getTexturedQuad(new Vertex[]{ptvMinXMaxYMinZ, ptvMinXMinYMinZ, ptvMinXMinYMaxZ, ptvMinXMaxYMaxZ}, texWidth,
-				texHeight, Direction.WEST, faceUv);
-			if (westQuad != null)
-				this.polygons.add(westQuad);
-			Polygon northQuad = getTexturedQuad(new Vertex[]{ptvMinXMinYMaxZ, ptvMaxXMinYMaxZ, ptvMaxXMaxYMaxZ, ptvMinXMaxYMaxZ}, texWidth,
-				texHeight, Direction.NORTH, faceUv);
-			if (northQuad != null)
-				this.polygons.add(northQuad);
-			Polygon eastQuad = getTexturedQuad(new Vertex[]{ptvMaxXMaxYMinZ, ptvMaxXMinYMinZ, ptvMaxXMinYMaxZ, ptvMaxXMaxYMaxZ}, texWidth,
-				texHeight, Direction.EAST, faceUv);
-			if (eastQuad != null)
-				this.polygons.add(eastQuad);
-			Polygon southQuad = getTexturedQuad(new Vertex[]{ptvMinXMinYMinZ, ptvMaxXMinYMinZ, ptvMaxXMaxYMinZ, ptvMinXMaxYMinZ}, texWidth,
-				texHeight, Direction.SOUTH, faceUv);
-			if (southQuad != null)
-				this.polygons.add(southQuad);
+			BenchEntityFace benchFace = faceUv.getFace(Direction.EAST);
+			float texU = benchFace.getUv()[0];
+			float texV = benchFace.getUv()[1];
+			float uSize = benchFace.getUvSize()[0];
+			float vSize = benchFace.getUvSize()[1];
+			this.polygons.add(new Polygon(new Vertex[]{ptvMaxXMinYMaxZ, ptvMaxXMinYMinZ, ptvMaxXMaxYMinZ, ptvMaxXMaxYMaxZ}, (int) texU, (int) texV, (int) (texU + uSize), (int) (texV + vSize), texWidth, texHeight));
+			benchFace = faceUv.getFace(Direction.WEST);
+			texU = benchFace.getUv()[0];
+			texV = benchFace.getUv()[1];
+			uSize = benchFace.getUvSize()[0];
+			vSize = benchFace.getUvSize()[1];
+			this.polygons.add(new Polygon(new Vertex[]{ptvMinXMinYMinZ, ptvMinXMinYMaxZ, ptvMinXMaxYMaxZ, ptvMinXMaxYMinZ}, (int) texU, (int) texV, (int) (texU + uSize), (int) (texV + vSize), texWidth, texHeight));
+			benchFace = faceUv.getFace(Direction.DOWN);
+			texU = benchFace.getUv()[0];
+			texV = benchFace.getUv()[1];
+			uSize = benchFace.getUvSize()[0];
+			vSize = benchFace.getUvSize()[1];
+			this.polygons.add(new Polygon(new Vertex[]{ptvMaxXMinYMaxZ, ptvMinXMinYMaxZ, ptvMinXMinYMinZ, ptvMaxXMinYMinZ}, (int) texU, (int) texV, (int) (texU + uSize), (int) (texV + vSize), texWidth, texHeight));
+			benchFace = faceUv.getFace(Direction.UP);
+			texU = benchFace.getUv()[0];
+			texV = benchFace.getUv()[1];
+			uSize = benchFace.getUvSize()[0];
+			vSize = benchFace.getUvSize()[1];
+			if (flipBottomUV) {
+				Polygon polygon = new Polygon(new Vertex[]{ptvMaxXMaxYMaxZ, ptvMinXMaxYMaxZ, ptvMinXMaxYMinZ, ptvMaxXMaxYMinZ}, (int) texU, (int) texV, (int) (texU + uSize), (int) (texV + vSize), texWidth, texHeight);
+				polygon.invertNormal = true;
+				this.polygons.add(polygon);
+			} else {
+				Polygon polygon = new Polygon(new Vertex[]{ptvMaxXMaxYMinZ, ptvMinXMaxYMinZ, ptvMinXMaxYMaxZ, ptvMaxXMaxYMaxZ}, (int) texU, (int) texV, (int) (texU + uSize), (int) (texV + vSize), texWidth, texHeight);
+				this.polygons.add(polygon);
+			}
+			benchFace = faceUv.getFace(Direction.NORTH);
+			texU = benchFace.getUv()[0];
+			texV = benchFace.getUv()[1];
+			uSize = benchFace.getUvSize()[0];
+			vSize = benchFace.getUvSize()[1];
+			this.polygons.add(new Polygon(new Vertex[]{ptvMaxXMinYMinZ, ptvMinXMinYMinZ, ptvMinXMaxYMinZ, ptvMaxXMaxYMinZ}, (int) texU, (int) texV, (int) (texU + uSize), (int) (texV + vSize), texWidth, texHeight));
+			benchFace = faceUv.getFace(Direction.SOUTH);
+			texU = benchFace.getUv()[0];
+			texV = benchFace.getUv()[1];
+			uSize = benchFace.getUvSize()[0];
+			vSize = benchFace.getUvSize()[1];
+			this.polygons.add(new Polygon(new Vertex[]{ptvMinXMinYMaxZ, ptvMaxXMinYMaxZ, ptvMaxXMaxYMaxZ, ptvMinXMaxYMaxZ}, (int) texU, (int) texV, (int) (texU + uSize), (int) (texV + vSize), texWidth, texHeight));
+			if (this.isMirror()) {
+				for (Polygon face : this.polygons) {
+					face.flipFace();
+				}
+			}
 		} else if (polygons == null) {
 			this.corners = new Vertex[8];
 			this.polygons = Lists.newArrayList();
