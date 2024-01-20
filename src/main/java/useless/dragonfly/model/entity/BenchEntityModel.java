@@ -100,11 +100,22 @@ public class BenchEntityModel extends ModelBase {
 				if (bones.rotationPointX != 0.0f || bones.rotationPointY != 0.0f || bones.rotationPointZ != 0.0f) {
 					GL11.glTranslatef(bones.rotationPointX * scale, bones.rotationPointY * scale, bones.rotationPointZ * scale);
 				}
+				float rx = 0;
+				float ry = 0;
+				float rz = 0;
 				if (rotation != null) {
-					GL11.glRotatef(rotation.x, 1.0f, 0.0f, 0.0f);
-					GL11.glRotatef(rotation.y, 0.0f, 1.0f, 0.0f);
-					GL11.glRotatef(rotation.z, 0.0f, 0.0f, 1.0f);
+					rx += rotation.x;
+					ry += rotation.y;
+					rz += rotation.z;
 				}
+				if (cubeRotation != null){
+					rx += cubeRotation.x;
+					ry += cubeRotation.y;
+					rz += cubeRotation.z;
+				}
+				GL11.glRotatef(rx, 1.0f, 0.0f, 0.0f);
+				GL11.glRotatef(ry, 0.0f, 1.0f, 0.0f);
+				GL11.glRotatef(rz, 0.0f, 0.0f, 1.0f);
 
 				if (bones.rotateAngleZ != 0.0f) {
 					GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleZ), 0.0f, 0.0f, 1.0f);
