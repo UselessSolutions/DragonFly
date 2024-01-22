@@ -4,13 +4,13 @@ import useless.dragonfly.utilities.Utilities;
 
 import java.util.Map;
 
-public class BlockStateData {
+public class BlockstateData {
 	public Map<String, ModelPart> variants;
 	public ModelPart[] multipart;
-	public BlockStateData(Map<String, ModelPart> variants){
+	public BlockstateData(Map<String, ModelPart> variants){
 		this.variants = variants;
 	}
-	public BlockStateData(ModelPart[] multipart){
+	public BlockstateData(ModelPart[] multipart){
 		this.multipart = multipart;
 	}
 	@Override

@@ -23,19 +23,21 @@ import useless.dragonfly.model.block.data.RotationData;
 import useless.dragonfly.model.blockstates.adapters.BlockStateJsonAdapter;
 import useless.dragonfly.model.blockstates.adapters.ModelPartJsonAdapter;
 import useless.dragonfly.model.blockstates.adapters.VariantDataJsonAdapter;
-import useless.dragonfly.model.blockstates.data.BlockStateData;
+import useless.dragonfly.model.blockstates.data.BlockstateData;
 import useless.dragonfly.model.blockstates.data.ModelPart;
 import useless.dragonfly.model.blockstates.data.VariantData;
 import useless.dragonfly.model.entity.adapters.BenchEntityBonesJsonAdapter;
 import useless.dragonfly.model.entity.adapters.BenchEntityCubeJsonAdapter;
 import useless.dragonfly.model.entity.adapters.BenchEntityDataJsonAdapter;
 import useless.dragonfly.model.entity.adapters.BenchEntityGeometryJsonAdapter;
+import useless.dragonfly.model.entity.adapters.DescriptionJsonAdapter;
 import useless.dragonfly.model.entity.animation.Animation;
 import useless.dragonfly.model.entity.adapters.AnimationDeserializer;
 import useless.dragonfly.model.entity.processor.BenchEntityBones;
 import useless.dragonfly.model.entity.processor.BenchEntityCube;
 import useless.dragonfly.model.entity.processor.BenchEntityGeometry;
 import useless.dragonfly.model.entity.processor.BenchEntityModelData;
+import useless.dragonfly.model.entity.processor.Description;
 import useless.dragonfly.utilities.vector.Vector3f;
 import useless.dragonfly.utilities.vector.Vector3fJsonAdapter;
 
@@ -52,17 +54,18 @@ public class DragonFly implements GameStartEntrypoint {
 		.registerTypeAdapter(RotationData.class, new RotationDataJsonAdapter())
 		.registerTypeAdapter(ModelPart.class, new ModelPartJsonAdapter())
 		.registerTypeAdapter(VariantData.class, new VariantDataJsonAdapter())
-		.registerTypeAdapter(BlockStateData.class, new BlockStateJsonAdapter())
+		.registerTypeAdapter(BlockstateData.class, new BlockStateJsonAdapter())
 		.registerTypeAdapter(BenchEntityModelData.class, new BenchEntityDataJsonAdapter())
 		.registerTypeAdapter(BenchEntityGeometry.class, new BenchEntityGeometryJsonAdapter())
 		.registerTypeAdapter(BenchEntityBones.class, new BenchEntityBonesJsonAdapter())
 		.registerTypeAdapter(BenchEntityCube.class, new BenchEntityCubeJsonAdapter())
+		.registerTypeAdapter(Description.class, new DescriptionJsonAdapter())
 		.create();
 	public static final Side[] sides = new Side[]{Side.BOTTOM, Side.TOP, Side.NORTH, Side.SOUTH, Side.WEST, Side.EAST};
 	public static double terrainAtlasWidth = TextureFX.tileWidthTerrain * Global.TEXTURE_ATLAS_WIDTH_TILES;
 	public static String version;
-	public static boolean isDev;
 	public static String renderState = "gui";
+	public static boolean isDev;
 	static {
 		version = FabricLoader.getInstance().getModContainer(MOD_ID).get().getMetadata().getVersion().getFriendlyString();
 		isDev = version.equals("${version}") || version.contains("dev");

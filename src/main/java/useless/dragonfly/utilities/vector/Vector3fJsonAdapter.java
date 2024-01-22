@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
+import org.apache.commons.lang3.NotImplementedException;
 
 import java.lang.reflect.Type;
 
@@ -22,6 +23,6 @@ public class Vector3fJsonAdapter implements JsonDeserializer<Vector3f>, JsonSeri
 
 	@Override
 	public JsonElement serialize(Vector3f src, Type typeOfSrc, JsonSerializationContext context) {
-		return null;
+		throw new NotImplementedException();
 	}
 }

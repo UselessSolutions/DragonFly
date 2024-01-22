@@ -28,8 +28,12 @@ public class BlockModel {
 	public HashMap<String, String> textureMap;
 	public HashMap<String, PositionData> display;
 	public final NamespaceId namespaceId;
-	public BlockModel(NamespaceId namespaceId){
+	public float rotX;
+	public float rotY;
+	public BlockModel(NamespaceId namespaceId, float rotX, float rotY){
 		this.namespaceId = namespaceId;
+		this.rotX = rotX;
+		this.rotY = rotY;
 		refreshModel();
 	}
 	public void refreshModel(){
@@ -66,12 +70,12 @@ public class BlockModel {
 		if (parentModel != null && modelData.elements == null){
 			this.blockCubes = new BlockCube[parentModel.blockCubes.length];
 			for (int i = 0; i < blockCubes.length; i++) {
-				blockCubes[i] = new BlockCube(this, parentModel.blockCubes[i].cubeData);
+				blockCubes[i] = new BlockCube(this, parentModel.blockCubes[i].cubeData, rotX, rotY);
 			}
 		} else if (modelData.elements != null) {
 			this.blockCubes = new BlockCube[modelData.elements.length];
 			for (int i = 0; i < blockCubes.length; i++) {
-				blockCubes[i] = new BlockCube(this, modelData.elements[i]);
+				blockCubes[i] = new BlockCube(this, modelData.elements[i], rotX, rotY);
 			}
 		}
 	}

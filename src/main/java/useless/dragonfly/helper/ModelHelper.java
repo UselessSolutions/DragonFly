@@ -4,7 +4,7 @@ import com.google.gson.stream.JsonReader;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.model.block.processed.BlockModel;
-import useless.dragonfly.model.blockstates.data.BlockStateData;
+import useless.dragonfly.model.blockstates.data.BlockstateData;
 import useless.dragonfly.model.blockstates.data.ModelPart;
 import useless.dragonfly.model.blockstates.data.VariantData;
 import useless.dragonfly.model.entity.BenchEntityModel;
@@ -23,8 +23,8 @@ import java.util.Set;
 
 public class ModelHelper {
 	public static final Map<NamespaceId, ModelData> modelDataFiles = new HashMap<>();
-	public static final Map<NamespaceId, BlockModel> registeredModels = new HashMap<>();
-	public static final Map<NamespaceId, BlockStateData> registeredBlockStates = new HashMap<>();
+	public static final Map<NamespaceId, Map<Integer, Map<Integer, BlockModel>>> registeredModels = new HashMap<>();
+	public static final Map<NamespaceId, BlockstateData> registeredBlockStates = new HashMap<>();
 	public static final Map<NamespaceId, BenchEntityModel> registeredEntityModels = new HashMap<>();
 	public static final Map<NamespaceId, BenchEntityModelData> entityDataFiles = new HashMap<>();
 
@@ -32,27 +32,42 @@ public class ModelHelper {
 	 * Place mod models in the <i>assets/modid/model/block/</i> directory for them to be seen.
 	 */
 	public static BlockModel getOrCreateBlockModel(String modId, String modelSource) {
+		return getOrCreateBlockModel(modId, modelSource, 0, 0);
+	}
+	/**
+	 * Place mod models in the <i>assets/modid/model/block/</i> directory for them to be seen.
+	 */
+	public static BlockModel getOrCreateBlockModel(String modId, String modelSource, int rotationX, int rotationY) {
 		NamespaceId namespaceId = new NamespaceId(modId, modelSource);
-		if (registeredModels.containsKey(namespaceId)){
-			return registeredModels.get(namespaceId);
+		if (registeredModels.containsKey(namespaceId) && registeredModels.get(namespaceId).containsKey(rotationX) && registeredModels.get(namespaceId).get(rotationX).containsKey(rotationY)){
+			return registeredModels.get(namespaceId).get(rotationX).get(rotationY);
 		}
-		BlockModel model = new BlockModel(namespaceId);
-		registeredModels.put(namespaceId, model);
+		BlockModel model = new BlockModel(namespaceId, rotationX, rotationY);
+		registeredModels.putIfAbsent(namespaceId, new HashMap<>());
+		if (registeredModels.get(namespaceId).containsKey(rotationX)){
+			registeredModels.get(namespaceId).get(rotationX).put(rotationY, model);
+		} else {
+			Map<Integer, Map<Integer, BlockModel>> rotationMap = new HashMap<>();
+			Map<Integer, BlockModel> modelMap = new HashMap<>();
+			modelMap.put(rotationY, model);
+			rotationMap.put(rotationX, modelMap);
+			registeredModels.put(namespaceId, rotationMap);
+		}
 		return model;
 	}
 	/**
 	 * Place mod models in the <i>assets/modid/blockstates/</i> directory for them to be seen.
 	 */
-	public static BlockStateData getOrCreateBlockState(String modId, String blockStateSource) {
+	public static BlockstateData getOrCreateBlockState(String modId, String blockStateSource) {
 		NamespaceId namespaceId = new NamespaceId(modId, blockStateSource);
 		if (registeredBlockStates.containsKey(namespaceId)){
 			return registeredBlockStates.get(namespaceId);
 		}
 		return createBlockState(namespaceId);
 	}
-	private static BlockStateData createBlockState(NamespaceId namespaceId){
+	private static BlockstateData createBlockState(NamespaceId namespaceId){
 		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(Utilities.getResourceAsStream(getBlockStateLocation(namespaceId)))));
-		BlockStateData blockstateData = DragonFly.GSON.fromJson(reader, BlockStateData.class);
+		BlockstateData blockstateData = DragonFly.GSON.fromJson(reader, BlockstateData.class);
 		registeredBlockStates.put(namespaceId, blockstateData);
 		if (blockstateData.variants != null){
 			for (ModelPart part : blockstateData.variants.values()) {
@@ -141,8 +156,12 @@ public class ModelHelper {
 		for (NamespaceId modelDataKey : blockModelDataKeys){
 			createBlockModel(modelDataKey);
 		}
-		for (BlockModel model : registeredModels.values()){
-			model.refreshModel();
+		for (Map<Integer, Map<Integer, BlockModel>> x : registeredModels.values()){
+			for (Map<Integer, BlockModel> y : x.values()){
+				for (BlockModel model : y.values()){
+					model.refreshModel();
+				}
+			}
 		}
 		for (NamespaceId stateKey : blockStateKeys){
 			createBlockState(stateKey);

@@ -10,18 +10,18 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import org.apache.commons.lang3.NotImplementedException;
 import useless.dragonfly.DragonFly;
-import useless.dragonfly.model.blockstates.data.BlockStateData;
+import useless.dragonfly.model.blockstates.data.BlockstateData;
 import useless.dragonfly.model.blockstates.data.ModelPart;
 
 import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.Map;
 
-public class BlockStateJsonAdapter implements JsonDeserializer<BlockStateData>, JsonSerializer<BlockStateData> {
+public class BlockStateJsonAdapter implements JsonDeserializer<BlockstateData>, JsonSerializer<BlockstateData> {
 	@Override
-	public BlockStateData deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+	public BlockstateData deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 		JsonObject obj = json.getAsJsonObject();
-		BlockStateData data = null;
+		BlockstateData data = null;
 
 		if (obj.has("variants")){
 			Map<String, JsonElement> rawVariantData = obj.getAsJsonObject("variants").asMap();
@@ -29,7 +29,7 @@ public class BlockStateJsonAdapter implements JsonDeserializer<BlockStateData>, 
 			for (Map.Entry<String, JsonElement> e : rawVariantData.entrySet()){
 				v.put(e.getKey(), DragonFly.GSON.fromJson(e.getValue(), ModelPart.class));
 			}
-			return new BlockStateData(v);
+			return new BlockstateData(v);
 
 		} else if (obj.has("multipart")){
 			JsonArray arr = obj.getAsJsonArray("multipart");
@@ -37,13 +37,13 @@ public class BlockStateJsonAdapter implements JsonDeserializer<BlockStateData>, 
 			for (int i = 0; i < arr.size(); i++) {
 				parts[i] = DragonFly.GSON.fromJson(arr.get(i), ModelPart.class);
 			}
-			return new BlockStateData(parts);
+			return new BlockstateData(parts);
 		}
 		throw new IllegalArgumentException("Blockstate is missing a multipart or a variants! " + json.getAsString());
 	}
 
 	@Override
-	public JsonElement serialize(BlockStateData src, Type typeOfSrc, JsonSerializationContext context) {
+	public JsonElement serialize(BlockstateData src, Type typeOfSrc, JsonSerializationContext context) {
 		throw new NotImplementedException();
 	}
 }

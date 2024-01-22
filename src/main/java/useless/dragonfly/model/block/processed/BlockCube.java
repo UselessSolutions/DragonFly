@@ -32,7 +32,7 @@ public class BlockCube {
 		}
 		return scalar;
 	}
-	public BlockCube(BlockModel model, CubeData cubeData){
+	public BlockCube(BlockModel model, CubeData cubeData, float rotX, float rotY){
 		this.parentModel = model;
 		this.cubeData = cubeData;
 		outerFace = new boolean[6];
@@ -88,7 +88,7 @@ public class BlockCube {
 		if (cubeData.rotation != null){
 			vertices.replaceAll((k, v) -> Utilities.rotatePoint(
 				vertices.get(k),
-				new Vector3f(cubeData.rotation.origin[0]/ 16f, cubeData.rotation.origin[1]/16f, cubeData.rotation.origin[2]/16f),
+				new Vector3f((cubeData.rotation.origin[0]/ 16f) + rotX, (cubeData.rotation.origin[1]/16f) + rotY, (cubeData.rotation.origin[2]/16f)),
 				cubeData.rotation.axis,
 				cubeData.rotation.angle));
 		}
