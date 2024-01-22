@@ -45,30 +45,30 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 
 	@Override
 	public boolean render(Block block, int x, int y, int z) {
-		InternalModel[] models = getModelsFromState(block, x, y, z, false);
+		BlockModel[] models = getModelsFromState(block, x, y, z, false);
 		boolean didRender = false;
-        for (InternalModel model : models) {
-            didRender |= BlockModelRenderer.renderModelNormal(model.model, block, x, y, z, model.rotationX, -model.rotationY);
+        for (BlockModel model : models) {
+            didRender |= BlockModelRenderer.renderModelNormal(model, block, x, y, z);
         }
 		return didRender;
 	}
 
 	@Override
 	public boolean renderNoCulling(Block block, int x, int y, int z) {
-		InternalModel[] models = getModelsFromState(block, x, y, z, false);
+		BlockModel[] models = getModelsFromState(block, x, y, z, false);
 		boolean didRender = false;
-		for (InternalModel model : models) {
-			didRender |= BlockModelRenderer.renderModelNoCulling(model.model, block, x, y, z, model.rotationX, -model.rotationY);
+		for (BlockModel model : models) {
+			didRender |= BlockModelRenderer.renderModelNoCulling(model, block, x, y, z);
 		}
 		return didRender;
 	}
 
 	@Override
 	public boolean renderWithOverrideTexture(Block block, int x, int y, int z, int textureIndex) {
-		InternalModel[] models = getModelsFromState(block, x, y, z, false);
+		BlockModel[] models = getModelsFromState(block, x, y, z, false);
 		boolean didRender = false;
-		for (InternalModel model : models) {
-			didRender |= BlockModelRenderer.renderModelBlockUsingTexture(model.model, block, x, y, z, textureIndex, model.rotationX, -model.rotationY);
+		for (BlockModel model : models) {
+			didRender |= BlockModelRenderer.renderModelBlockUsingTexture(model, block, x, y, z, textureIndex);
 		}
 		return didRender;
 	}
@@ -82,9 +82,9 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 	public float getItemRenderScale() {
 		return renderScale;
 	}
-	public InternalModel[] getModelsFromState(Block block, int x, int y, int z, boolean sourceFromWorld){
+	public BlockModel[] getModelsFromState(Block block, int x, int y, int z, boolean sourceFromWorld){
 		if (blockstateData == null || metaStateInterpreter == null){
-			return new InternalModel[]{new InternalModel(baseModel, 0, 0)};
+			return new BlockModel[]{baseModel};
 		}
 		RenderBlocksAccessor blocksAccessor = (RenderBlocksAccessor) BlockModelRenderer.getRenderBlocks();
 		WorldSource blockSource;
@@ -102,9 +102,9 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 		if (blockstateData.multipart != null){
 			return getMultipartModel(blockStateList, random);
 		}
-		return new InternalModel[]{new InternalModel(baseModel, 0, 0)};
+		return new BlockModel[]{baseModel};
 	}
-	public InternalModel[] getModelVariant(HashMap<String, String> blockState, Random random){
+	public BlockModel[] getModelVariant(HashMap<String, String> blockState, Random random){
 		VariantData variantData = null;
 		for (String stateString: blockstateData.variants.keySet()) {
 			String[] conditions = stateString.split(",");
@@ -117,20 +117,20 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 				break;
 			}
 		}
-		if (variantData == null) return new InternalModel[]{new InternalModel(baseModel, 0, 0)};
+		if (variantData == null) return new BlockModel[]{baseModel};
 
 
-		return new InternalModel[]{new InternalModel(getModelFromKey(variantData.model), variantData.x, variantData.y)};
+		return new BlockModel[]{getModelFromKey(variantData.model, variantData.x, variantData.y)};
 	}
-	public InternalModel[] getMultipartModel(HashMap<String, String> blockState, Random random){
-		List<InternalModel> modelsToRender = new ArrayList<>();
+	public BlockModel[] getMultipartModel(HashMap<String, String> blockState, Random random){
+		List<BlockModel> modelsToRender = new ArrayList<>();
 		for (ModelPart modelPart : blockstateData.multipart){
 			if (modelPart.when == null || modelPart.when.match(blockState)){
 				VariantData data = modelPart.getRandomModel(random);
-				modelsToRender.add(new InternalModel(getModelFromKey(data.model), data.x, data.y));
+				modelsToRender.add(getModelFromKey(data.model, data.x, data.y));
 			}
 		}
-		return modelsToRender.toArray(new InternalModel[0]);
+		return modelsToRender.toArray(new BlockModel[0]);
 	}
 	public boolean matchConditionsAND(HashMap<String, String> blockState, HashMap<String, String> conditions){
 		if (conditions == null){
@@ -149,7 +149,7 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 		}
 		return stateMet;
 	}
-	public BlockModel getModelFromKey(String key){
+	public BlockModel getModelFromKey(String key, int x, int y){
 		String[] modelID = key.split(":");
 		String namespace;
 		String model;
@@ -160,6 +160,6 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 			namespace = modelID[0];
 			model = modelID[1];
 		}
-		return ModelHelper.getOrCreateBlockModel(namespace, model);
+		return ModelHelper.getOrCreateBlockModel(namespace, model, x, -y);
 	}
 }

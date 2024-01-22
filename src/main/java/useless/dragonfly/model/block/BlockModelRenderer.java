@@ -21,8 +21,6 @@ import useless.dragonfly.utilities.vector.Vector3f;
 import java.awt.*;
 import java.lang.reflect.Field;
 
-import static useless.dragonfly.utilities.vector.Vector3f.origin;
-
 public class BlockModelRenderer {
 	public static Minecraft mc = Minecraft.getMinecraft(Minecraft.class);
 	private static boolean enableAO = false;
@@ -40,8 +38,6 @@ public class BlockModelRenderer {
 	private static float colorBlueBottomLeft;
 	private static float colorBlueTopLeft;
 	private static int overrideBlockTexture = -1;
-	private static int rotationX = 0;
-	private static int rotationY = 0;
 	public static void renderModelInventory(BlockModelDragonFly modelDragonFly, Block block, int meta, float brightness){
 		int off = (int) ((System.currentTimeMillis()/20) % 360);
 		float xOffset;
@@ -178,31 +174,26 @@ public class BlockModelRenderer {
 		GL11.glDisable(GL11.GL_CULL_FACE); // Deleting this causes render issues on vanilla transparent blocks
 		GL11.glTranslatef(xOffset, yOffset, zOffset);
 	}
-	public static boolean renderModelNormal(BlockModel model, Block block, int x, int y, int z, int rotationX, int rotationY) {
-		BlockModelRenderer.rotationX = rotationX;
-		BlockModelRenderer.rotationY = rotationY;
-		if (rotationX % 90 != 0 || rotationY % 90 != 0) throw new IllegalArgumentException("Rotation must be a multiple of 90!!");
+	public static boolean renderModelNormal(BlockModel model, Block block, int x, int y, int z) {
 		boolean didRender;
 		if (mc.isAmbientOcclusionEnabled() && model.getAO()) {
 			didRender = renderStandardModelWithAmbientOcclusion(model, block, x, y, z);
 		} else {
 			didRender = renderStandardModelWithColorMultiplier(model, block, x, y, z, 1, 1, 1);
 		}
-		BlockModelRenderer.rotationX = 0;
-		BlockModelRenderer.rotationY = 0;
 		return didRender;
 	}
 
-	public static boolean renderModelNoCulling(BlockModel model, Block block, int x, int y, int z, int rotationX, int rotationY) {
+	public static boolean renderModelNoCulling(BlockModel model, Block block, int x, int y, int z) {
 		renderAllFaces = true;
-		boolean result = renderModelNormal(model, block, x, y, z, rotationX, rotationY);
+		boolean result = renderModelNormal(model, block, x, y, z);
 		renderAllFaces = false;
 		return result;
 	}
 
-	public static boolean renderModelBlockUsingTexture(BlockModel model, Block block, int x, int y, int z, int textureIndex, int rotationX, int rotationY) {
+	public static boolean renderModelBlockUsingTexture(BlockModel model, Block block, int x, int y, int z, int textureIndex) {
 		overrideBlockTexture = textureIndex;
-		boolean result = renderModelNormal(model, block, x, y, z, rotationX, rotationY);
+		boolean result = renderModelNormal(model, block, x, y, z);
 		overrideBlockTexture = -1;
 		return result;
 	}
@@ -219,7 +210,7 @@ public class BlockModelRenderer {
 		return somethingRendered;
 	}
 	public static boolean renderModelSide(BlockModel model, BlockCube cube, Block block, int x, int y, int z, Side side) {
-		BlockFace blockFace = cube.getFaceFromSide(side, rotationX, rotationY);
+		BlockFace blockFace = cube.getFaceFromSide(side);
 		if (blockFace == null) return false;
 		if (!renderAllFaces){
 			if (!renderSide(model, cube, side, x, y, z)) return false;
@@ -229,8 +220,8 @@ public class BlockModelRenderer {
 		int sideOffY = side.getOffsetY();
 		int sideOffZ = side.getOffsetZ();
 
-		Vector3f vMin = cube.getMin().rotateAroundX(origin, rotationX).rotateAroundY(origin, rotationY);
-		Vector3f vMax = cube.getMax().rotateAroundX(origin, rotationX).rotateAroundY(origin, rotationY);
+		Vector3f vMin = cube.getMin();
+		Vector3f vMax = cube.getMax();
 		float minX = vMin.x;
 		float minY = vMin.y;
 		float minZ = vMin.z;
@@ -450,10 +441,7 @@ public class BlockModelRenderer {
 		}
 
 
-		Vector3f[] faceVertices = new Vector3f[4];
-		for (int i = 0; i < faceVertices.length; i++) {
-			faceVertices[i] = face.vertices[i].rotateAroundX(origin, rotationX).rotateAroundY(origin, rotationY);
-		}
+		Vector3f[] faceVertices = face.vertices;
 		Vector3f vtl = faceVertices[0];
 		Vector3f vbl = faceVertices[1];
 		Vector3f vbr = faceVertices[2];
@@ -501,10 +489,7 @@ public class BlockModelRenderer {
 		}
 
 
-		Vector3f[] faceVertices = new Vector3f[4];
-		for (int i = 0; i < faceVertices.length; i++) {
-			faceVertices[i] = face.vertices[i].rotateAroundX(origin, rotationX).rotateAroundY(origin, rotationY);
-		}
+		Vector3f[] faceVertices = face.vertices;
 		Vector3f vtl = faceVertices[0];
 		Vector3f vbl = faceVertices[1];
 		Vector3f vbr = faceVertices[2];
@@ -566,7 +551,7 @@ public class BlockModelRenderer {
 		float blockBrightness = rba().invokeGetBlockBrightness(rba().getBlockAccess(), x, y, z);
 		for (BlockCube cube: model.blockCubes) {
 			for (Side side: DragonFly.sides) {
-				BlockFace face = cube.getFaceFromSide(side, rotationX, rotationY);
+				BlockFace face = cube.getFaceFromSide(side);
 				if (face == null) continue;
 				int _x = x + side.getOffsetX();
 				int _y = y + side.getOffsetY();
@@ -577,7 +562,7 @@ public class BlockModelRenderer {
 				}
 
 				float sideBrightness;
-				if (!cube.isOuterFace(side, rotationX, rotationY) && !block.blockMaterial.isLiquid()){
+				if (!cube.isOuterFace(side) && !block.blockMaterial.isLiquid()){
 					sideBrightness = blockBrightness;
 				} else {
 					sideBrightness = rba().invokeGetBlockBrightness(rba().getBlockAccess(), _x, _y, _z);
@@ -626,7 +611,7 @@ public class BlockModelRenderer {
 	public static boolean renderSide(BlockModel model, BlockCube cube, Side side, int x, int y, int z){
 		WorldSource blockAccess = rba().getBlockAccess();
 		boolean renderOuterSide = blockAccess.getBlock(x, y, z).shouldSideBeRendered(blockAccess, x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ(), side.getId(), blockAccess.getBlockMetadata(x + side.getOffsetX(), y + side.getOffsetY(), z + side.getOffsetZ()));
-		return !cube.getFaceFromSide(side, rotationX, rotationY).cullFace(x, y, z, renderOuterSide);
+		return !cube.getFaceFromSide(side).cullFace(x, y, z, renderOuterSide);
 	}
 	public static RenderBlocks getRenderBlocks(){
 		try {

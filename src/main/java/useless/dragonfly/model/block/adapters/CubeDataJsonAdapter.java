@@ -29,7 +29,7 @@ public class CubeDataJsonAdapter implements JsonDeserializer<CubeData>, JsonSeri
 		if (obj.has("shade")) data.shade = obj.get("shade").getAsBoolean();
 		if (obj.has("faces")){
 			for (Map.Entry<String, JsonElement> e : obj.getAsJsonObject("faces").asMap().entrySet()){
-				data.faces.put(e.getKey(), DragonFly.GSON.fromJson(e.getValue(), FaceData.class));
+				data.faces.put(FaceDataJsonAdapter.keyToSide.get(e.getKey()), DragonFly.GSON.fromJson(e.getValue(), FaceData.class));
 			}
 		}
 		return data;

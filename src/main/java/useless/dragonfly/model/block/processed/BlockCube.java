@@ -4,7 +4,6 @@ import net.minecraft.core.util.helper.Axis;
 import net.minecraft.core.util.helper.Side;
 import useless.dragonfly.model.block.data.CubeData;
 import useless.dragonfly.model.block.data.FaceData;
-import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.utilities.Utilities;
 import useless.dragonfly.utilities.vector.Vector3f;
 
@@ -16,8 +15,10 @@ public class BlockCube {
 	protected Vector3f toScaled;
 	protected boolean[] outerFace;
 	public final BlockModel parentModel;
+	private float rotX;
+	private float rotY;
 	protected HashMap<String, Vector3f> vertices = new HashMap<>();
-	protected HashMap<String, BlockFace> faces = new HashMap<>();
+	protected HashMap<Side, BlockFace> faces = new HashMap<>();
 	private float getScalar(float angle){
 		final float modRange = 90f;
 		float v = (Math.abs(angle) - (modRange/2));
@@ -33,6 +34,8 @@ public class BlockCube {
 		return scalar;
 	}
 	public BlockCube(BlockModel model, CubeData cubeData, float rotX, float rotY){
+		this.rotX = rotX;
+		this.rotY = rotY;
 		this.parentModel = model;
 		this.cubeData = cubeData;
 		outerFace = new boolean[6];
@@ -88,12 +91,23 @@ public class BlockCube {
 		if (cubeData.rotation != null){
 			vertices.replaceAll((k, v) -> Utilities.rotatePoint(
 				vertices.get(k),
-				new Vector3f((cubeData.rotation.origin[0]/ 16f) + rotX, (cubeData.rotation.origin[1]/16f) + rotY, (cubeData.rotation.origin[2]/16f)),
+				new Vector3f((cubeData.rotation.origin[0]/ 16f), (cubeData.rotation.origin[1]/16f), (cubeData.rotation.origin[2]/16f)),
 				cubeData.rotation.axis,
 				cubeData.rotation.angle));
 		}
+		vertices.replaceAll((k, v) -> Utilities.rotatePoint(
+			vertices.get(k),
+			new Vector3f(0.5f, 0.5f, 0.5f),
+			Axis.X,
+			rotX));
+		vertices.replaceAll((k, v) -> Utilities.rotatePoint(
+			vertices.get(k),
+			new Vector3f(0.5f, 0.5f, 0.5f),
+			Axis.Y,
+			rotY));
 
-		for (String key: cubeData.faces.keySet()) {
+
+		for (Side key: cubeData.faces.keySet()) {
 			FaceData faceData = cubeData.faces.get(key);
 			if (faceData.uv != null){
 				if (faceData.uv[0] == faceData.uv[2]){ // Don't render faces that don't have a uv area > 0
@@ -103,7 +117,7 @@ public class BlockCube {
 					continue;
 				}
 			}
-			faces.put(key, new BlockFace(this, key));
+			faces.put(key, new BlockFace(this, key, rotX, rotY));
 		}
 		for (int i = 0; i < outerFace.length; i++) {
 			outerFace[i] = Utilities.equalFloats(getAxisPosition(Side.getSideById(i)), 0f) || Utilities.equalFloats(getAxisPosition(Side.getSideById(i)), 1f);
@@ -128,8 +142,8 @@ public class BlockCube {
 		}
 		throw new RuntimeException("Specified side does not exist on a cube!!!");
 	}
-	public boolean isOuterFace(Side side, int rotationX, int rotationY){
-		return outerFace[rotateSide(side, rotationX, rotationY).getId()];
+	public boolean isOuterFace(Side side){
+		return outerFace[side.getId()];
 	}
 	public Side rotateSide(Side side, int rotationX, int rotationY){
 		Side keySide = side;
@@ -164,10 +178,10 @@ public class BlockCube {
 		return keySide;
 	}
 
-	public BlockFace getFaceFromSide(Side side, int rotationX, int rotationY){
-		return faces.get(ModelData.sideToKey.get(rotateSide(side, rotationX, rotationY)));
+	public BlockFace getFaceFromSide(Side side){
+		return faces.get(side);
 	}
-	public HashMap<String, BlockFace> getFaces(){
+	public HashMap<Side, BlockFace> getFaces(){
 		return faces;
 	}
 	public float xMin(){

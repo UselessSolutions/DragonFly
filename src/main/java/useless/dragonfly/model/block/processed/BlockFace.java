@@ -4,7 +4,6 @@ import net.minecraft.client.render.TextureFX;
 import net.minecraft.core.Global;
 import net.minecraft.core.util.helper.Side;
 import useless.dragonfly.model.block.data.FaceData;
-import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.registries.TextureRegistry;
 import useless.dragonfly.utilities.vector.Vector3f;
 
@@ -19,12 +18,12 @@ public class BlockFace {
 	protected String[] vertexKeyMap = new String[4];
 	protected double[][] vertexUVs;
 	public BlockCube parentCube;
-	public BlockFace(BlockCube cube, String key){
-		this.faceData = cube.cubeData.faces.get(key);
-		this.side = ModelData.keyToSide.get(key);
+	public BlockFace(BlockCube cube, Side side, float rotX, float rotY){
+		this.faceData = cube.cubeData.faces.get(side);
+		this.side = side;
 		this.parentCube = cube;
 		generateUVs(cube);
-		switch (side){ // TODO replace this whole string key system with something better
+		switch (this.side){ // TODO replace this whole string key system with something better
 			case NORTH:
 				vertexKeyMap = new String[]{"-+-", "++-", "+--", "---"};
 				vertexUVMap = new String[]{"+-", "--", "-+", "++"};
@@ -52,6 +51,7 @@ public class BlockFace {
 			default:
 				vertexUVMap = null;
 		}
+		this.side = cube.rotateSide(side, (int) rotX, (int) rotY);
 //		System.out.println(getTexture());
 //		System.out.println(parentCube.parentModel.getTexture(getTexture()));
 		int texture = TextureRegistry.getIndexOrDefault(parentCube.parentModel.getTexture(getTexture()), 0);
