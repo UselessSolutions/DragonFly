@@ -5,10 +5,10 @@ import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 import useless.dragonfly.helper.AnimationHelper;
 import useless.dragonfly.model.entity.animation.AnimationData;
-import useless.dragonfly.model.entity.processor.BenchEntityModelData;
 import useless.dragonfly.model.entity.processor.BenchEntityBones;
 import useless.dragonfly.model.entity.processor.BenchEntityCube;
 import useless.dragonfly.model.entity.processor.BenchEntityGeometry;
+import useless.dragonfly.model.entity.processor.BenchEntityModelData;
 import useless.dragonfly.utilities.vector.Vector3f;
 
 import java.util.HashMap;
@@ -46,8 +46,17 @@ public class BenchEntityModel extends ModelBase {
 		int texWidth = entityGeometry.getWidth();
 		int texHeight = entityGeometry.getHeight();
 		for (BenchEntityBones bones : entityGeometry.getBones()) {
+			@Nullable String parent = bones.getParent();
+
+
 			if (!this.getIndexBones().containsKey(bones.getName())) {
 				this.getIndexBones().put(bones.getName(), bones);
+			}
+
+			if (parent != null) {
+				if (!this.getIndexBones().get(parent).getChildren().contains(bones)) {
+					this.getIndexBones().get(parent).addChild(bones);
+				}
 			}
 		}
 		if (!this.getIndexBones().isEmpty()) {
@@ -56,17 +65,10 @@ public class BenchEntityModel extends ModelBase {
 		}
 
 		for (BenchEntityBones bones : entityGeometry.getBones()) {
-			String name = bones.getName();
-			Vector3f rotation = bones.getRotation();
 			@Nullable String parent = bones.getParent();
 
-
-			if (parent != null) {
-				if (!this.getIndexBones().get(parent).getChildren().contains(bones)) {
-					this.getIndexBones().get(parent).addChild(bones);
-				}
-			}
-
+			String name = bones.getName();
+			Vector3f rotation = bones.getRotation();
 
 			if (bones.getCubes() == null) {
 				continue;
@@ -97,6 +99,12 @@ public class BenchEntityModel extends ModelBase {
 
 				GL11.glTranslatef(convertPivot(bones, 0) * scale, convertPivot(bones, 1) * scale, convertPivot(bones, 2) * scale);
 
+				if (cube.getPivot() != null) {
+					GL11.glTranslatef(convertPivot(bones, cube, 0) * scale, convertPivot(bones, cube, 1) * scale, convertPivot(bones, cube, 2) * scale);
+
+				}
+
+
 				if (bones.rotationPointX != 0.0f || bones.rotationPointY != 0.0f || bones.rotationPointZ != 0.0f) {
 					GL11.glTranslatef(bones.rotationPointX * scale, bones.rotationPointY * scale, bones.rotationPointZ * scale);
 				}
@@ -116,16 +124,16 @@ public class BenchEntityModel extends ModelBase {
 				GL11.glRotatef(rx, 1.0f, 0.0f, 0.0f);
 				GL11.glRotatef(ry, 0.0f, 1.0f, 0.0f);
 				GL11.glRotatef(rz, 0.0f, 0.0f, 1.0f);
-
-				if (bones.rotateAngleZ != 0.0f) {
-					GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleZ), 0.0f, 0.0f, 1.0f);
-				}
 				if (bones.rotateAngleY != 0.0f) {
 					GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleY), 0.0f, 1.0f, 0.0f);
 				}
 				if (bones.rotateAngleX != 0.0f) {
 					GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleX), 1.0f, 0.0f, 0.0f);
 				}
+				if (bones.rotateAngleZ != 0.0f) {
+					GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleZ), 0.0f, 0.0f, 1.0f);
+				}
+
 
 				if (bones.scaleX != 0.0f || bones.scaleY != 0.0f || bones.scaleZ != 0.0f) {
 					GL11.glScalef(bones.scaleX, bones.scaleY, bones.scaleZ);
@@ -163,16 +171,16 @@ public class BenchEntityModel extends ModelBase {
 			GL11.glRotatef(rotation.y, 0.0f, 1.0f, 0.0f);
 			GL11.glRotatef(rotation.z, 0.0f, 0.0f, 1.0f);
 		}
-
-		if (bones.rotateAngleZ != 0.0f) {
-			GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleZ), 0.0f, 0.0f, 1.0f);
-		}
 		if (bones.rotateAngleY != 0.0f) {
 			GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleY), 0.0f, 1.0f, 0.0f);
 		}
 		if (bones.rotateAngleX != 0.0f) {
 			GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleX), 1.0f, 0.0f, 0.0f);
 		}
+		if (bones.rotateAngleZ != 0.0f) {
+			GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleZ), 0.0f, 0.0f, 1.0f);
+		}
+
 
 		if (bones.scaleX != 0.0f || bones.scaleY != 0.0f || bones.scaleZ != 0.0f) {
 			GL11.glScalef(bones.scaleX, bones.scaleY, bones.scaleZ);
