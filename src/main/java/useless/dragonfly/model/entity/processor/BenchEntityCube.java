@@ -38,12 +38,6 @@ public class BenchEntityCube {
 		this.mirror = mirrored;
     }
 
-	public float rotationPointX;
-	public float rotationPointY;
-	public float rotationPointZ;
-	public float rotateAngleX;
-	public float rotateAngleY;
-	public float rotateAngleZ;
 	private boolean compiled = false;
 	private int displayList = 0;
 
@@ -271,18 +265,6 @@ public class BenchEntityCube {
 			GL11.glEndList();
 			this.compiled = true;
 		}
-	}
-
-	public void setRotationPoint(float x, float y, float z) {
-		this.rotationPointX = x;
-		this.rotationPointY = y;
-		this.rotationPointZ = z;
-	}
-
-	public void setRotationAngle(float x, float y, float z) {
-		this.rotateAngleX = x;
-		this.rotateAngleY = y;
-		this.rotateAngleZ = z;
 	}
 
 	private static boolean equalFloats(float a, float b) {
