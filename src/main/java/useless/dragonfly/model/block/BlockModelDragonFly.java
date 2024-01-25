@@ -8,7 +8,7 @@ import useless.dragonfly.DragonFly;
 import useless.dragonfly.helper.ModelHelper;
 import useless.dragonfly.mixins.mixin.accessor.RenderBlocksAccessor;
 import useless.dragonfly.model.block.processed.BlockModel;
-import useless.dragonfly.model.blockstates.data.BlockStateData;
+import useless.dragonfly.model.blockstates.data.BlockstateData;
 import useless.dragonfly.model.blockstates.data.ModelPart;
 import useless.dragonfly.model.blockstates.data.VariantData;
 import useless.dragonfly.model.blockstates.processed.MetaStateInterpreter;
@@ -25,16 +25,16 @@ public class BlockModelDragonFly extends BlockModelRenderBlocks {
 	public BlockModel baseModel;
 	public boolean render3d;
 	public float renderScale;
-	public BlockStateData blockstateData;
+	public BlockstateData blockstateData;
 	public MetaStateInterpreter metaStateInterpreter;
 	public BlockModelDragonFly(BlockModel model) {
 		this(model, null, null,true, 0.25f);
 	}
 
-	public BlockModelDragonFly(BlockModel model, BlockStateData blockstateData, MetaStateInterpreter metaStateInterpreter, boolean render3d) {
+	public BlockModelDragonFly(BlockModel model, BlockstateData blockstateData, MetaStateInterpreter metaStateInterpreter, boolean render3d) {
 		this(model, blockstateData, metaStateInterpreter, render3d, 0.25f);
 	}
-	public BlockModelDragonFly(BlockModel model, BlockStateData blockstateData, MetaStateInterpreter metaStateInterpreter, boolean render3d, float renderScale) {
+	public BlockModelDragonFly(BlockModel model, BlockstateData blockstateData, MetaStateInterpreter metaStateInterpreter, boolean render3d, float renderScale) {
 		super(0);
 		this.baseModel = model;
 		this.render3d = render3d;

@@ -4,7 +4,7 @@ import com.google.gson.stream.JsonReader;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.model.block.processed.BlockModel;
-import useless.dragonfly.model.blockstates.data.BlockStateData;
+import useless.dragonfly.model.blockstates.data.BlockstateData;
 import useless.dragonfly.model.blockstates.data.ModelPart;
 import useless.dragonfly.model.blockstates.data.VariantData;
 import useless.dragonfly.model.entity.BenchEntityModel;
@@ -24,7 +24,7 @@ import java.util.Set;
 public class ModelHelper {
 	public static final Map<NamespaceId, ModelData> modelDataFiles = new HashMap<>();
 	public static final Map<NamespaceId, BlockModel> registeredModels = new HashMap<>();
-	public static final Map<NamespaceId, BlockStateData> registeredBlockStates = new HashMap<>();
+	public static final Map<NamespaceId, BlockstateData> registeredBlockStates = new HashMap<>();
 	public static final Map<NamespaceId, BenchEntityModel> registeredEntityModels = new HashMap<>();
 	public static final Map<NamespaceId, BenchEntityModelData> entityDataFiles = new HashMap<>();
 
@@ -43,16 +43,16 @@ public class ModelHelper {
 	/**
 	 * Place mod models in the <i>assets/modid/blockstates/</i> directory for them to be seen.
 	 */
-	public static BlockStateData getOrCreateBlockState(String modId, String blockStateSource) {
+	public static BlockstateData getOrCreateBlockState(String modId, String blockStateSource) {
 		NamespaceId namespaceId = new NamespaceId(modId, blockStateSource);
 		if (registeredBlockStates.containsKey(namespaceId)){
 			return registeredBlockStates.get(namespaceId);
 		}
 		return createBlockState(namespaceId);
 	}
-	private static BlockStateData createBlockState(NamespaceId namespaceId){
+	private static BlockstateData createBlockState(NamespaceId namespaceId){
 		JsonReader reader = new JsonReader(new BufferedReader(new InputStreamReader(Utilities.getResourceAsStream(getBlockStateLocation(namespaceId)))));
-		BlockStateData blockstateData = DragonFly.GSON.fromJson(reader, BlockStateData.class);
+		BlockstateData blockstateData = DragonFly.GSON.fromJson(reader, BlockstateData.class);
 		registeredBlockStates.put(namespaceId, blockstateData);
 		if (blockstateData.variants != null){
 			for (ModelPart part : blockstateData.variants.values()) {

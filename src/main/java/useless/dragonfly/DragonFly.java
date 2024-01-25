@@ -23,7 +23,7 @@ import useless.dragonfly.model.block.data.RotationData;
 import useless.dragonfly.model.blockstates.adapters.BlockStateJsonAdapter;
 import useless.dragonfly.model.blockstates.adapters.ModelPartJsonAdapter;
 import useless.dragonfly.model.blockstates.adapters.VariantDataJsonAdapter;
-import useless.dragonfly.model.blockstates.data.BlockStateData;
+import useless.dragonfly.model.blockstates.data.BlockstateData;
 import useless.dragonfly.model.blockstates.data.ModelPart;
 import useless.dragonfly.model.blockstates.data.VariantData;
 import useless.dragonfly.model.entity.adapters.BenchEntityBonesJsonAdapter;
@@ -52,7 +52,7 @@ public class DragonFly implements GameStartEntrypoint {
 		.registerTypeAdapter(RotationData.class, new RotationDataJsonAdapter())
 		.registerTypeAdapter(ModelPart.class, new ModelPartJsonAdapter())
 		.registerTypeAdapter(VariantData.class, new VariantDataJsonAdapter())
-		.registerTypeAdapter(BlockStateData.class, new BlockStateJsonAdapter())
+		.registerTypeAdapter(BlockstateData.class, new BlockStateJsonAdapter())
 		.registerTypeAdapter(BenchEntityModelData.class, new BenchEntityDataJsonAdapter())
 		.registerTypeAdapter(BenchEntityGeometry.class, new BenchEntityGeometryJsonAdapter())
 		.registerTypeAdapter(BenchEntityBones.class, new BenchEntityBonesJsonAdapter())
