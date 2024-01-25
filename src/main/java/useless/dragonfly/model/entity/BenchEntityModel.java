@@ -205,13 +205,13 @@ public class BenchEntityModel extends ModelBase {
 		}
 
 		if (parentBone.rotateAngleZ != 0.0f) {
-			GL11.glRotatef(parentBone.rotateAngleZ, 0.0f, 0.0f, 1.0f);
+			GL11.glRotatef((float) Math.toDegrees(parentBone.rotateAngleZ), 0.0f, 0.0f, 1.0f);
 		}
 		if (parentBone.rotateAngleY != 0.0f) {
-			GL11.glRotatef(parentBone.rotateAngleY, 0.0f, 1.0f, 0.0f);
+			GL11.glRotatef((float) Math.toDegrees(parentBone.rotateAngleY), 0.0f, 1.0f, 0.0f);
 		}
 		if (parentBone.rotateAngleX != 0.0f) {
-			GL11.glRotatef(parentBone.rotateAngleX, 1.0f, 0.0f, 0.0f);
+			GL11.glRotatef((float) Math.toDegrees(parentBone.rotateAngleX), 1.0f, 0.0f, 0.0f);
 		}
 
 		if (parentBone.scaleX != 0.0f || parentBone.scaleY != 0.0f || parentBone.scaleZ != 0.0f) {
