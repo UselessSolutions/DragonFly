@@ -123,7 +123,7 @@ public class BenchEntityModel extends ModelBase {
 				}
 				GL11.glRotatef(rx, 1.0f, 0.0f, 0.0f);
 				GL11.glRotatef(ry, 0.0f, 1.0f, 0.0f);
-				GL11.glRotatef(rz, 0.0f, 0.0f, 1.0f);
+				GL11.glRotatef(rz, 0.0f, 0.0f, -1.0f);
 				if (bones.rotateAngleY != 0.0f) {
 					GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleY), 0.0f, 1.0f, 0.0f);
 				}
@@ -131,7 +131,7 @@ public class BenchEntityModel extends ModelBase {
 					GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleX), 1.0f, 0.0f, 0.0f);
 				}
 				if (bones.rotateAngleZ != 0.0f) {
-					GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleZ), 0.0f, 0.0f, 1.0f);
+					GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleZ), 0.0f, 0.0f, -1.0f);
 				}
 
 
@@ -169,7 +169,7 @@ public class BenchEntityModel extends ModelBase {
 		if (rotation != null) {
 			GL11.glRotatef(rotation.x, 1.0f, 0.0f, 0.0f);
 			GL11.glRotatef(rotation.y, 0.0f, 1.0f, 0.0f);
-			GL11.glRotatef(rotation.z, 0.0f, 0.0f, 1.0f);
+			GL11.glRotatef(rotation.z, 0.0f, 0.0f, -1.0f);
 		}
 		if (bones.rotateAngleY != 0.0f) {
 			GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleY), 0.0f, 1.0f, 0.0f);
@@ -178,7 +178,7 @@ public class BenchEntityModel extends ModelBase {
 			GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleX), 1.0f, 0.0f, 0.0f);
 		}
 		if (bones.rotateAngleZ != 0.0f) {
-			GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleZ), 0.0f, 0.0f, 1.0f);
+			GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleZ), 0.0f, 0.0f, -1.0f);
 		}
 
 
@@ -201,11 +201,11 @@ public class BenchEntityModel extends ModelBase {
 		if (parentBone.getRotation() != null) {
 			GL11.glRotatef(parentBone.getRotation().x, 1.0f, 0.0f, 0.0f);
 			GL11.glRotatef(parentBone.getRotation().y, 0.0f, 1.0f, 0.0f);
-			GL11.glRotatef(parentBone.getRotation().z, 0.0f, 0.0f, 1.0f);
+			GL11.glRotatef(parentBone.getRotation().z, 0.0f, 0.0f, -1.0f);
 		}
 
 		if (parentBone.rotateAngleZ != 0.0f) {
-			GL11.glRotatef((float) Math.toDegrees(parentBone.rotateAngleZ), 0.0f, 0.0f, 1.0f);
+			GL11.glRotatef((float) Math.toDegrees(parentBone.rotateAngleZ), 0.0f, 0.0f, -1.0f);
 		}
 		if (parentBone.rotateAngleY != 0.0f) {
 			GL11.glRotatef((float) Math.toDegrees(parentBone.rotateAngleY), 0.0f, 1.0f, 0.0f);
