@@ -2,6 +2,8 @@ package useless.dragonfly.mixins.mixin;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.ItemRenderer;
+import net.minecraft.client.render.block.model.BlockModelDispatcher;
+import net.minecraft.core.block.Block;
 import net.minecraft.core.entity.Entity;
 import net.minecraft.core.item.ItemStack;
 import org.lwjgl.opengl.GL11;
@@ -12,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import useless.dragonfly.DragonFly;
 import useless.dragonfly.helper.ModelHelper;
+import useless.dragonfly.model.block.BlockModelDragonFly;
 import useless.dragonfly.model.block.BlockModelRenderer;
 
 @Mixin(value = ItemRenderer.class, remap = false)
@@ -28,9 +31,19 @@ public class ItemRendererMixin {
 				DragonFly.renderState = "ground";
 			}
 		}
-		if (ModelHelper.itemModelMap.containsKey(itemstack.getItem())){
+		BlockModelDragonFly modelDragonFly = null;
+
+		if (itemstack.itemID > Block.blocksList.length){
+			modelDragonFly = ModelHelper.itemModelMap.get(itemstack.getItem());
+		} else {
+			Block block = Block.blocksList[itemstack.itemID];
+			if (BlockModelDispatcher.getInstance().getDispatch(block) instanceof BlockModelDragonFly){
+				modelDragonFly = (BlockModelDragonFly) BlockModelDispatcher.getInstance().getDispatch(block);
+			}
+		}
+		if (modelDragonFly != null){
 			GL11.glBindTexture(3553, mc.renderEngine.getTexture("/terrain.png"));
-			BlockModelRenderer.renderModelInventory(ModelHelper.itemModelMap.get(itemstack.getItem()), itemstack.getItem().id, itemstack.getMetadata(), entity.getBrightness(1f));
+			BlockModelRenderer.renderModelInventory(modelDragonFly, itemstack.getItem().id, itemstack.getMetadata(), entity.getBrightness(1f));
 			ci.cancel();
 			if (!DragonFly.renderState.equals("head")){
 				DragonFly.renderState = "gui";
