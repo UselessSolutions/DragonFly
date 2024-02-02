@@ -42,7 +42,7 @@ public class BlockModelRenderer {
 	private static int overrideBlockTexture = -1;
 	private static int rotationX = 0;
 	private static int rotationY = 0;
-	public static void renderModelInventory(BlockModelDragonFly modelDragonFly, Block block, int meta, float brightness){
+	public static void renderModelInventory(BlockModelDragonFly modelDragonFly, int id, int meta, float brightness){
 		int off = (int) ((System.currentTimeMillis()/20) % 360);
 		float xOffset;
 		float yOffset;
@@ -163,8 +163,8 @@ public class BlockModelRenderer {
 					float r = 1;
 					float g = 1;
 					float b = 1;
-					if (face.useTint()){
-						int color = BlockColorDispatcher.getInstance().getDispatch(block).getFallbackColor(meta);
+					if (face.useTint() && id < Block.blocksList.length){
+						int color = BlockColorDispatcher.getInstance().getDispatch(Block.blocksList[id]).getFallbackColor(meta);
 						r = (float)(color >> 16 & 0xFF) / 255.0f;
 						g = (float)(color >> 8 & 0xFF) / 255.0f;
 						b = (float)(color & 0xFF) / 255.0f;

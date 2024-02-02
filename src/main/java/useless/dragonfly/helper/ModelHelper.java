@@ -1,7 +1,9 @@
 package useless.dragonfly.helper;
 
 import com.google.gson.stream.JsonReader;
+import net.minecraft.core.item.Item;
 import useless.dragonfly.DragonFly;
+import useless.dragonfly.model.block.BlockModelDragonFly;
 import useless.dragonfly.model.block.data.ModelData;
 import useless.dragonfly.model.block.processed.BlockModel;
 import useless.dragonfly.model.blockstates.data.BlockstateData;
@@ -27,9 +29,14 @@ public class ModelHelper {
 	public static final Map<NamespaceId, BlockstateData> registeredBlockStates = new HashMap<>();
 	public static final Map<NamespaceId, BenchEntityModel> registeredEntityModels = new HashMap<>();
 	public static final Map<NamespaceId, BenchEntityModelData> entityDataFiles = new HashMap<>();
+	public static final Map<Item, BlockModelDragonFly> itemModelMap = new HashMap<>();
+
+	public static void assignItemModel(Item item, BlockModelDragonFly model){
+		itemModelMap.put(item, model);
+	}
 
 	/**
-	 * Place mod models in the <i>assets/modid/model/block/</i> directory for them to be seen.
+	 * Place mod models in the <i>assets/modid/model/</i> directory for them to be seen.
 	 */
 	public static BlockModel getOrCreateBlockModel(String modId, String modelSource) {
 		NamespaceId namespaceId = new NamespaceId(modId, modelSource);

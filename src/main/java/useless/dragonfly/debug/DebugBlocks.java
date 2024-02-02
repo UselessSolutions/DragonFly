@@ -7,6 +7,7 @@ import net.minecraft.core.block.Block;
 import net.minecraft.core.block.BlockStairs;
 import net.minecraft.core.block.material.Material;
 import net.minecraft.core.block.tag.BlockTags;
+import net.minecraft.core.item.Item;
 import turniplabs.halplibe.helper.BlockBuilder;
 import useless.dragonfly.debug.block.BlockModel;
 import useless.dragonfly.debug.block.BlockRotatable;
@@ -90,6 +91,8 @@ public static final Block testBlock = new BlockBuilder(MOD_ID)
 		.setBlockSound(BlockSounds.GRASS)
 		.build(new Block("grass" + blockId, blockId++, Material.grass));
 	public static void init() {
+		ModelHelper.assignItemModel(Item.toolFishingrod, new BlockModelDragonFly(ModelHelper.getOrCreateBlockModel(NamespaceId.coreNamespaceId, "item/barrel.json")));
+
 		blockId = 5000;
 		try {
 			for (String string : getResourceFiles("assets/minecraft/model/block/")) {
