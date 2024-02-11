@@ -17,7 +17,7 @@ See DragonFly Example Mod [Here](https://github.com/UselessBullets/DragonFlyExam
 - Add mod repository to "build.gradle"
 ```
 ivy {
-	url = "https://github.com/UselessBullets"
+	url = "https://github.com/UselessSolutions"
 	patternLayout {
 		artifact "[organisation]/releases/download/v[revision]/[module]-[revision].jar"
 		m2compatible = true
