@@ -6,7 +6,9 @@ public class NamespaceId {
 	private final String id;
 	public NamespaceId(String namespace, String id){
 		this.namespace = namespace.toLowerCase();
+		if (!namespace.equals(this.namespace)) throw new IllegalArgumentException("Namespaces must be lowercase! '" + namespace + "'");
 		this.id = id.toLowerCase();
+		if (!id.equals(this.id)) throw new IllegalArgumentException("ID must be lowercase! '" + id + "'");
 	}
 	public String getNamespace(){
 		return namespace;
@@ -15,7 +17,7 @@ public class NamespaceId {
 		return id;
 	}
 	public String toString(){
-		return (namespace + ":" + id).toLowerCase();
+		return (namespace + ":" + id);
 	}
 
 	@Override
@@ -35,14 +37,15 @@ public class NamespaceId {
 	}
 
 	public static NamespaceId idFromString(String formattedString){
-		formattedString = formattedString.toLowerCase();
+		String formattedStringLower = formattedString.toLowerCase();
+		if (!formattedString.equals(formattedStringLower)) throw new IllegalArgumentException("All Namespaces and IDs must be lowercase! '" + formattedString + "'");
 		String namespace = coreNamespaceId;
 		String id;
-		if (formattedString.contains(":")){
-			namespace = formattedString.split(":")[0];
-			id = formattedString.split(":")[1];
+		if (formattedStringLower.contains(":")){
+			namespace = formattedStringLower.split(":")[0];
+			id = formattedStringLower.split(":")[1];
 		} else {
-			id = formattedString;
+			id = formattedStringLower;
 		}
 
 		if (namespace.contains(":") || namespace.isEmpty()) throw new IllegalArgumentException("Namespace '" + namespace + "' is not formatted correctly!");
