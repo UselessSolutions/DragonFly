@@ -8,8 +8,6 @@
 - Supports a limited version of Modern MC Models
 - Supports a limited version of Modern Bedrock edition entity Models
 
-This is an early pre release version of DragonFly, expect many bugs, and expect many features to get broken in future updates
-
 See DragonFly Example Mod [Here](https://github.com/UselessBullets/DragonFlyExample)
 
 ### Add to project
