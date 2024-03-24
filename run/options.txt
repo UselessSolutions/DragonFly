@@ -7,6 +7,7 @@ sound.entity:0.29347825
 sound.cave:1.0
 sound.gui:1.0
 sound.weather:1.0
+playServerSounds:true
 fov:0.8035714
 mouseSensitivity:0.5
 screenPadding:0.0
@@ -61,7 +62,7 @@ immersiveMode:0
 guiBackgroundColor:r=16,g=16,b=16,a=192
 difficulty:NORMAL
 thirdPersonView:0
-renderDistance:FAR
+renderDistance:EXTREME
 limitFramerate:0
 customFpsLimit:144
 guiScale:0
@@ -93,7 +94,7 @@ overlayShowSeason:false
 overlayShowWeather:false
 overlayShowBiome:false
 lastServer:localhost
-skin:TestPack-splitter-BTA_Darkmode_Violet.zip
+skin:BTA_Darkmode_Violet.zip
 selectedController:
 language:en_US
 mipmapLevels:0
@@ -151,8 +152,8 @@ key_key.screenshot:k60
 key_key.cinematicCamera:k66
 key_key.switchPerspective:k63
 key_key.immersiveMode:k59
-key_key.autoWalk:
-key_key.sprint:
+key_key.autoWalk:NONE
+key_key.sprint:NONE
 key_key.toggleDebug:k61
 key_key.toggleOverlay:k62
 hudLayout:hotbar{[];abs[0.5,1.0,BOTTOM_CENTER]}|crosshair{[];abs[0.5,0.5,CENTER]}|health_bar{[];snap[hotbar,TOP_LEFT,BOTTOM_LEFT]}|armor_bar{[];snap[hotbar,TOP_RIGHT,BOTTOM_RIGHT]}|oxygen_bar{[];snap[health_bar,TOP_LEFT,BOTTOM_LEFT]}|fire_bar{[];snap[oxygen_bar,TOP_LEFT,BOTTOM_LEFT]}|rotation_lock{[];snap[crosshair,CENTER_RIGHT,CENTER_LEFT]}|

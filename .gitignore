@@ -6,3 +6,4 @@ run/
 run-server/
 /src/main/resources/assets/minecraft/
 lib/bta-1.7.7.1.jar
+run/options.txt
