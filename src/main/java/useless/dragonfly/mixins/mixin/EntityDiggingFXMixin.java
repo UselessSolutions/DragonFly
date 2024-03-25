@@ -22,7 +22,7 @@ public class EntityDiggingFXMixin extends EntityFX {
 	public EntityDiggingFXMixin(World world, double x, double y, double z, double motionX, double motionY, double motionZ) {
 		super(world, x, y, z, motionX, motionY, motionZ);
 	}
-	@Redirect(method = "<init>(Lnet/minecraft/core/world/World;DDDDDDLnet/minecraft/core/block/Block;II)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/block/Block;getBlockTextureFromSideAndMetadata(Lnet/minecraft/core/util/helper/Side;I)I"))
+	@Redirect(method = "<init>(Lnet/minecraft/core/world/World;DDDDDDLnet/minecraft/core/block/Block;I)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/core/block/Block;getBlockTextureFromSideAndMetadata(Lnet/minecraft/core/util/helper/Side;I)I"))
 	private int particleFromModel(Block instance, Side side, int meta){
 		BlockModel model = BlockModelDispatcher.getInstance().getDispatch(instance);
 		int tex;
