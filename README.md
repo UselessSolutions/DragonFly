@@ -27,7 +27,7 @@ ivy {
 	maven { url = "https://jitpack.io" }
 }
 ```
-- Implement mod in "build.gradle" `modImplementation 'com.github.UselessSolutions:dragonfly:${project.dragonfly_version}"`
+- Implement mod in "build.gradle" `modImplementation "com.github.UselessSolutions:dragonfly:v${project.dragonfly_version}"`
 
 # Credits:
 - UselessBullets - Block Model Support
