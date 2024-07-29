@@ -1,0 +1,45 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 3, 0, 1 ],
+                    "to": [ 15, 8, 15 ],
+                    "faces": {
+                        "bottom": { "texture": "#bottom", "cullface": "bottom" },
+                        "top":    { "texture": "#top" },
+                        "north": { "texture": "#side" },
+                        "south": { "texture": "#side" },
+                        "west":  { "texture": "#inside" },
+                        "east":  { "texture": "#side" }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "overlay": "#side",
+            "particle_bottom": "#bottom",
+            "particle_top": "#top",
+            "particle_north": "#side",
+            "particle_south": "#side",
+            "particle_west": "#side",
+            "particle_east": "#side",
+            "top": "block/cake_top",
+            "side": "block/cake_side",
+            "inside": "block/cake_inner",
+            "bottom": "block/cake_bottom"
+        },
+        "particle_colors": {
+            "bottom": false,
+            "top": false,
+            "north": false,
+            "south": false,
+            "west": false,
+            "east": false
+        }
+    }
+}

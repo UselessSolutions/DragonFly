@@ -1,0 +1,10 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/template_fence_gate",
+        "textures": {
+            "texture": "block/planks_oak_painted_pink"
+        }
+    }
+}

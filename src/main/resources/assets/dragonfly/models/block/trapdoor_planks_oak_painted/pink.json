@@ -1,0 +1,11 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/template_trapdoor",
+        "textures": {
+            "end": "block/trapdoor_planks_oak_pink_top",
+            "side": "block/trapdoor_planks_oak_pink_side"
+        }
+    }
+}

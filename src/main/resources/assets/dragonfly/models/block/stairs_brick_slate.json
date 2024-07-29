@@ -1,0 +1,12 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/stairs",
+        "textures": {
+            "top": "block/brick_slate",
+            "bottom": "block/brick_slate",
+            "side": "block/brick_slate"
+        }
+    }
+}

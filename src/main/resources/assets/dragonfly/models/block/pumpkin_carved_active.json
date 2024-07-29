@@ -1,0 +1,15 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/cube",
+        "textures": {
+            "top": "block/pumpkin_top",
+            "north": "block/pumpkin_side",
+            "south": "block/pumpkin_carved_active",
+            "west": "block/pumpkin_side",
+            "east": "block/pumpkin_side",
+            "bottom": "block/pumpkin_bottom"
+        }
+    }
+}

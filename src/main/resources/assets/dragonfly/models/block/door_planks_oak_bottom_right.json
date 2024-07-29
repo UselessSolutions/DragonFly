@@ -1,0 +1,10 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/template_door_bottom_right",
+        "textures": {
+            "door": "block/door_planks_oak"
+        }
+    }
+}

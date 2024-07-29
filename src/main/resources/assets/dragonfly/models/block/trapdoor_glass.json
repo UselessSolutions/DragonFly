@@ -1,0 +1,11 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/template_trapdoor",
+        "textures": {
+            "end": "block/glass",
+            "side": "block/trapdoor_glass_side"
+        }
+    }
+}

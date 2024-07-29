@@ -1,0 +1,11 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/template_rail_straight_overbright",
+        "textures": {
+            "rail": "block/rail_powered_active",
+            "overbright": "block/rail_powered_overlay"
+        }
+    }
+}

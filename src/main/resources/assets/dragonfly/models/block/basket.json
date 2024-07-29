@@ -1,0 +1,60 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, 0, 0 ],
+                    "to": [ 16, 16, 16 ],
+                    "faces": {
+                        "bottom": { "texture": "#bottom", "cullface": "bottom" },
+                        "top":    { "texture": "#top", "cullface": "top" },
+                        "north": { "texture": "#side", "cullface": "north" },
+                        "south": { "texture": "#side", "cullface": "south" },
+                        "west":  { "texture": "#side", "cullface": "west" },
+                        "east":  { "texture": "#side", "cullface": "east" }
+                    }
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 1, 1, 1 ],
+                    "to": [ 15, 16, 15 ],
+                    "inner_lighting": true,
+                    "faces": {
+                        "bottom": { "texture": "#bottom", "flip_normal": true },
+                        "north": { "texture": "#side", "flip_normal": true },
+                        "south": { "texture": "#side", "flip_normal": true },
+                        "west":  { "texture": "#side", "flip_normal": true },
+                        "east":  { "texture": "#side", "flip_normal": true }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "overlay": "#top",
+            "particle_bottom": "#bottom",
+            "particle_top": "#top",
+            "particle_north": "#side",
+            "particle_south": "#side",
+            "particle_west": "#side",
+            "particle_east": "#side",
+            "top": "block/basket_top",
+            "side": "block/basket_side",
+            "bottom": "block/basket_bottom"
+        },
+        "particle_colors": {
+            "bottom": false,
+            "top": false,
+            "north": false,
+            "south": false,
+            "west": false,
+            "east": false
+        }
+    }
+}

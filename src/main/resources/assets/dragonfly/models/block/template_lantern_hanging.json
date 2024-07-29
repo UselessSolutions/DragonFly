@@ -1,0 +1,96 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "ambientocclusion": false,
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 5, 5.99, 5 ],
+                    "to": [ 11, 14, 11 ],
+                    "shade": false,
+                    "faces": {
+                        "bottom": { "texture": "#texture", "uv": [6, 0, 12, 6], "doubled_sided": true },
+                        "top":    { "texture": "#texture", "uv": [0, 0, 6, 6], "doubled_sided": true },
+                        "north": { "texture": "#texture", "uv": [0, 6, 6, 14], "doubled_sided": true },
+                        "south": { "texture": "#texture", "uv": [0, 6, 6, 14], "doubled_sided": true },
+                        "west":  { "texture": "#texture", "uv": [0, 6, 6, 14], "doubled_sided": true },
+                        "east":  { "texture": "#texture", "uv": [0, 6, 6, 14], "doubled_sided": true }
+                    }
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 6, 6, 6 ],
+                    "to": [ 10, 12, 10 ],
+                    "shade": false,
+                    "faces": {
+                        "top":    { "texture": "#texture", "uv": [6, 6, 10, 10] },
+                        "bottom":    { "texture": "#texture", "uv": [6, 6, 10, 10] },
+                        "north":    { "texture": "#texture", "uv": [6, 10, 10, 16] },
+                        "south":    { "texture": "#texture", "uv": [6, 10, 10, 16] },
+                        "west":    { "texture": "#texture", "uv": [6, 10, 10, 16] },
+                        "east":    { "texture": "#texture", "uv": [6, 10, 10, 16] }
+                    }
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 6, 14, 8 ],
+                    "to": [ 10, 16, 8 ],
+                    "shade": false,
+                    "rotation": {
+                        "origin": [ 8, 8, 8],
+                        "angles": [0, 45, 0],
+                        "rescale_y": false
+                    },
+                    "faces": {
+                        "north": { "texture": "#texture", "use_color": true, "uv": [11, 7, 15, 9] },
+                        "south": { "texture": "#texture", "use_color": true, "uv": [11, 7, 15, 9] }
+                    }
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 8, 14, 6 ],
+                    "to": [ 8, 16, 10 ],
+                    "shade": false,
+                    "rotation": {
+                        "origin": [ 8, 8, 8],
+                        "angles": [0, 45, 0],
+                        "rescale_y": false
+                    },
+                    "faces": {
+                        "west":  { "texture": "#texture", "use_color": true, "uv": [11, 7, 15, 9] },
+                        "east":  { "texture": "#texture", "use_color": true, "uv": [11, 7, 15, 9] }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "overlay": "#texture",
+            "particle_bottom": "#texture",
+            "particle_top": "#texture",
+            "particle_north": "#texture",
+            "particle_south": "#texture",
+            "particle_west": "#texture",
+            "particle_east": "#texture"
+        },
+        "particle_colors": {
+            "bottom": false,
+            "top": false,
+            "north": false,
+            "south": false,
+            "west": false,
+            "east": false
+        }
+    }
+}

@@ -79,7 +79,7 @@ public class DragonFly implements GameStartEntrypoint {
 		if (isDev){
 			if (HalpLibe.isClient){
 				try {
-					TextureRegistry.initializeAllFiles(MOD_ID, TextureRegistry.blockAtlas);
+					TextureRegistry.initializeAllFiles(MOD_ID, TextureRegistry.blockAtlas, true);
 				} catch (URISyntaxException | IOException | NullPointerException e) {
 					LOGGER.error("Failed to initialize files!", e);
 				}

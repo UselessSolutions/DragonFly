@@ -1,0 +1,12 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/slab_bottom",
+        "textures": {
+            "top": "block/planks_oak_painted_black",
+            "side": "block/planks_oak_painted_black",
+            "bottom": "block/planks_oak_painted_black"
+        }
+    }
+}

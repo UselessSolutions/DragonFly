@@ -1,0 +1,61 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "ambientocclusion": false,
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, 1, -3 ],
+                    "to": [ 16, 1, 13 ],
+                    "rotation": {
+                        "angles": [-11.25, 90, 0],
+                        "rescale_x": true
+                    },
+                    "shade": false,
+                    "faces": {
+                        "bottom": { "texture": "#texture" },
+                        "top":    { "texture": "#texture" }
+                    }
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, 1, -3 ],
+                    "to": [ 16, 1, 13 ],
+                    "rotation": {
+                        "angles": [-11.25, -90, 0],
+                        "rescale_x": true
+                    },
+                    "shade": false,
+                    "faces": {
+                        "bottom": { "texture": "#texture" },
+                        "top":    { "texture": "#texture" }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "overlay": "#texture",
+            "particle_bottom": "#texture",
+            "particle_top": "#texture",
+            "particle_north": "#texture",
+            "particle_south": "#texture",
+            "particle_west": "#texture",
+            "particle_east": "#texture",
+            "texture": "block/crops_pumpkin_stage0"
+        },
+        "particle_colors": {
+            "bottom": false,
+            "top": false,
+            "north": false,
+            "south": false,
+            "west": false,
+            "east": false
+        }
+    }
+}

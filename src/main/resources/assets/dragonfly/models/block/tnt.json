@@ -1,0 +1,12 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/cube_top_bottom",
+        "textures": {
+            "top": "block/tnt_top",
+            "side": "block/tnt_side",
+            "bottom": "block/tnt_bottom"
+        }
+    }
+}

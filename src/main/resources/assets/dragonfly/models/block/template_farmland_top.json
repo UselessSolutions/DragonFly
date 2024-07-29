@@ -1,0 +1,30 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, 0, 0 ],
+                    "to": [ 16, 15, 16 ],
+                    "faces": {
+                        "top":    { "texture": "#top", "cullface": "top" }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "particle_top": "#top"
+        },
+        "particle_colors": {
+            "bottom": false,
+            "top": false,
+            "north": false,
+            "south": false,
+            "west": false,
+            "east": false
+        }
+    }
+}

@@ -1,0 +1,147 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, 5, 7 ],
+                    "to": [ 2, 16, 9 ],
+                    "faces": {
+                        "bottom": { "texture": "#texture" },
+                        "top":    { "texture": "#texture", "cullface": "top" },
+                        "north": { "texture": "#texture" },
+                        "south": { "texture": "#texture" },
+                        "west":  { "texture": "#texture", "cullface": "west" },
+                        "east":  { "texture": "#texture" }
+                    },
+                    "__comment": "Right Post"
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 14, 5, 7 ],
+                    "to": [ 16, 16, 9 ],
+                    "faces": {
+                        "bottom": { "texture": "#texture" },
+                        "top":    { "texture": "#texture", "cullface": "top" },
+                        "north": { "texture": "#texture" },
+                        "south": { "texture": "#texture" },
+                        "west":  { "texture": "#texture" },
+                        "east":  { "texture": "#texture", "cullface": "east" }
+                    },
+                    "__comment": "Left Post"
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 8, 12, 7 ],
+                    "to": [ 14, 15, 9 ],
+                    "faces": {
+                        "bottom": { "texture": "#texture" },
+                        "top":    { "texture": "#texture" },
+                        "north": { "texture": "#texture" },
+                        "south": { "texture": "#texture" }
+                    },
+                    "__comment": "Upper Left Beam"
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 8, 6, 7 ],
+                    "to": [ 14, 9, 9 ],
+                    "faces": {
+                        "bottom": { "texture": "#texture" },
+                        "top":    { "texture": "#texture" },
+                        "north": { "texture": "#texture" },
+                        "south": { "texture": "#texture" }
+                    },
+                    "__comment": "Lower Left Beam"
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 8, 9, 7 ],
+                    "to": [ 10, 12, 9 ],
+                    "faces": {
+                        "north": { "texture": "#texture" },
+                        "south": { "texture": "#texture" },
+                        "east":  { "texture": "#texture" }
+                    },
+                    "__comment": "Left Center Beam"
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 6, 9, 7 ],
+                    "to": [ 8, 12, 9 ],
+                    "faces": {
+                        "north": { "texture": "#texture" },
+                        "south": { "texture": "#texture" },
+                        "west":  { "texture": "#texture" }
+                    },
+                    "__comment": "Right Center Beam"
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 2, 6, 7 ],
+                    "to": [ 8, 9, 9 ],
+                    "faces": {
+                        "bottom": { "texture": "#texture" },
+                        "top":    { "texture": "#texture" },
+                        "north": { "texture": "#texture" },
+                        "south": { "texture": "#texture" }
+                    },
+                    "__comment": "Lower Right Beam"
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 2, 12, 7 ],
+                    "to": [ 8, 15, 9 ],
+                    "faces": {
+                        "bottom": { "texture": "#texture" },
+                        "top":    { "texture": "#texture" },
+                        "north": { "texture": "#texture" },
+                        "south": { "texture": "#texture" }
+                    },
+                    "__comment": "Upper Right Beam"
+                }
+            }
+        ],
+        "textures": {
+            "overlay": "#texture",
+            "particle_bottom": "#texture",
+            "particle_top": "#texture",
+            "particle_north": "#texture",
+            "particle_south": "#texture",
+            "particle_west": "#texture",
+            "particle_east": "#texture"
+        },
+        "particle_colors": {
+            "bottom": false,
+            "top": false,
+            "north": false,
+            "south": false,
+            "west": false,
+            "east": false
+        }
+    }
+}

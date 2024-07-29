@@ -1,0 +1,10 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/cube_all",
+        "textures": {
+            "texture": "block/wool_silver"
+        }
+    }
+}

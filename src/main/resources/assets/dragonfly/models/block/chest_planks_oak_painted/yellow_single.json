@@ -1,0 +1,11 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/template_chest_single",
+        "textures": {
+            "texture": "block/chest_planks_oak_painted_yellow_top",
+            "chest": "block/chest_planks_oak_painted_yellow"
+        }
+    }
+}

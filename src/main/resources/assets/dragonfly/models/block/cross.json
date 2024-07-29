@@ -1,0 +1,62 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "ambientocclusion": false,
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0.8, 0, 8 ],
+                    "to": [ 15.2, 16, 8 ],
+                    "shade": false,
+                    "rotation": {
+                        "origin": [ 8, 8, 8],
+                        "angles": [0, 45, 0],
+                        "rescale_y": true
+                    },
+                    "faces": {
+                        "north": { "texture": "#cross", "use_color": true, "uv": [0, 0, 16, 16] },
+                        "south": { "texture": "#cross", "use_color": true, "uv": [0, 0, 16, 16] }
+                    }
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 8, 0, 0.8 ],
+                    "to": [ 8, 16, 15.2 ],
+                    "shade": false,
+                    "rotation": {
+                        "origin": [ 8, 8, 8],
+                        "angles": [0, 45, 0],
+                        "rescale_y": true
+                    },
+                    "faces": {
+                        "west":  { "texture": "#cross", "use_color": true, "uv": [0, 0, 16, 16] },
+                        "east":  { "texture": "#cross", "use_color": true, "uv": [0, 0, 16, 16] }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "overlay": "#cross",
+            "particle_bottom": "#cross",
+            "particle_top": "#cross",
+            "particle_north": "#cross",
+            "particle_south": "#cross",
+            "particle_west": "#cross",
+            "particle_east": "#cross"
+        },
+        "particle_colors": {
+            "bottom": true,
+            "top": true,
+            "north": true,
+            "south": true,
+            "west": true,
+            "east": true
+        }
+    }
+}

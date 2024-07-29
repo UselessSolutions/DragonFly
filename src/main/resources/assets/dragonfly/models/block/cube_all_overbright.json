@@ -1,0 +1,21 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/cube_overbright",
+        "textures": {
+            "bottom": "#texture",
+            "top": "#texture",
+            "north": "#texture",
+            "south": "#texture",
+            "west": "#texture",
+            "east": "#texture",
+            "overbright_bottom": "#overbright",
+            "overbright_top": "#overbright",
+            "overbright_north": "#overbright",
+            "overbright_south": "#overbright",
+            "overbright_west": "#overbright",
+            "overbright_east": "#overbright"
+        }
+    }
+}

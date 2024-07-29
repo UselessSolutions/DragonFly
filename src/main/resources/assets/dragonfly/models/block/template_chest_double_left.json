@@ -1,0 +1,25 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/cube_all",
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, 0, 0 ],
+                    "to": [ 16, 16, 16 ],
+                    "faces": {
+                        "bottom": { "texture": "#chest", "cullface": "bottom", "uv": [ 16, 0, 32, 16], "uv_scale": [48, 48] },
+                        "top":    { "texture": "#chest", "cullface": "top", "uv": [ 0, 0, 16, 16], "uv_scale": [48, 48] },
+                        "north": { "texture": "#chest", "cullface": "north", "uv": [ 16, 32, 32, 48], "uv_scale": [48, 48] },
+                        "south": { "texture": "#chest", "cullface": "south", "uv": [ 0, 16, 16, 32], "uv_scale": [48, 48] },
+                        "west":  { "texture": "#chest", "cullface": "west", "uv": [ 32, 32, 48, 48], "uv_scale": [48, 48] },
+                        "east":  { "texture": "#chest", "cullface": "east", "uv": [ 32, 32, 48, 48], "uv_scale": [48, 48] }
+                    }
+                }
+            }
+        ]
+    }
+}

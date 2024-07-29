@@ -1,0 +1,49 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/cube_top_bottom",
+        "textures": {
+            "top": "block/grass_top",
+            "side": "block/grass_side",
+            "bottom": "block/dirt",
+            "side_overlay": "block/grass_side_overlay",
+            "overlay": "block/grass_side"
+        },
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, 0, 0 ],
+                    "to": [ 16, 16, 16 ],
+                    "faces": {
+                        "bottom": { "texture": "#bottom", "cullface": "bottom" },
+                        "top":    { "texture": "#top", "cullface": "top", "use_color": true },
+                        "north": { "texture": "#side", "cullface": "north" },
+                        "south": { "texture": "#side", "cullface": "south" },
+                        "west":  { "texture": "#side", "cullface": "west" },
+                        "east":  { "texture": "#side", "cullface": "east" }
+                    }
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, 0, 0 ],
+                    "to": [ 16, 16, 16 ],
+                    "faces": {
+                        "north": { "texture": "#side_overlay", "cullface": "north", "use_color": true },
+                        "south": { "texture": "#side_overlay", "cullface": "south", "use_color": true },
+                        "west":  { "texture": "#side_overlay", "cullface": "west", "use_color": true },
+                        "east":  { "texture": "#side_overlay", "cullface": "east", "use_color": true }
+                    }
+                }
+            }
+        ],
+        "particle_colors": {
+            "top": true
+        }
+    }
+}

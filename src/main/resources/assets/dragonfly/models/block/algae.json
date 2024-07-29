@@ -1,0 +1,40 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "ambientocclusion": false,
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, -1.8, 0 ],
+                    "to": [ 16, -1.8, 16 ],
+                    "inner_lighting": true,
+                    "faces": {
+                        "top":    { "texture": "#top", "use_color": true },
+                        "bottom":    { "texture": "#top", "use_color": true  }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "overlay": "#top",
+            "particle_bottom": "#top",
+            "particle_top": "#top",
+            "particle_north": "#top",
+            "particle_south": "#top",
+            "particle_west": "#top",
+            "particle_east": "#top",
+            "top": "block/algae"
+        },
+        "particle_colors": {
+            "bottom": true,
+            "top": true,
+            "north": true,
+            "south": true,
+            "west": true,
+            "east": true
+        }
+    }
+}

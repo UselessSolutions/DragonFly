@@ -1,0 +1,54 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "ambientocclusion": false,
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 5, 0.01, 5 ],
+                    "to": [ 11, 6, 11 ],
+                    "shade": false,
+                    "faces": {
+                        "bottom": { "texture": "#texture", "uv": [6, 0, 12, 6], "cullface": "bottom", "doubled_sided": true },
+                        "north": { "texture": "#texture", "uv": [0, 8, 6, 14], "doubled_sided": true },
+                        "south": { "texture": "#texture", "uv": [0, 8, 6, 14], "doubled_sided": true },
+                        "west":  { "texture": "#texture", "uv": [0, 8, 6, 14], "doubled_sided": true },
+                        "east":  { "texture": "#texture", "uv": [0, 8, 6, 14], "doubled_sided": true }
+                    }
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 5, 4, 5 ],
+                    "to": [ 11, 4, 11 ],
+                    "shade": false,
+                    "faces": {
+                        "top":    { "texture": "#texture", "uv": [0, 0, 6, 6] }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "overlay": "#texture",
+            "particle_bottom": "#texture",
+            "particle_top": "#texture",
+            "particle_north": "#texture",
+            "particle_south": "#texture",
+            "particle_west": "#texture",
+            "particle_east": "#texture"
+        },
+        "particle_colors": {
+            "bottom": false,
+            "top": false,
+            "north": false,
+            "south": false,
+            "west": false,
+            "east": false
+        }
+    }
+}

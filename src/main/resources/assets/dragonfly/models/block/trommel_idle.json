@@ -1,0 +1,15 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/cube",
+        "textures": {
+            "bottom": "block/trommel_top",
+            "top": "block/trommel_top",
+            "north": "block/trommel_idle_front",
+            "south": "block/trommel_idle_front",
+            "east": "block/trommel_side_slot",
+            "west": "block/furnace_side"
+        }
+    }
+}

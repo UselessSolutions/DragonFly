@@ -1,0 +1,43 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 1, 0, 1 ],
+                    "to": [ 15, 14, 15 ],
+                    "faces": {
+                        "bottom": { "texture": "#top", "cullface": "bottom"},
+                        "top":    { "texture": "#top" },
+                        "north":    { "texture": "#side" },
+                        "south":    { "texture": "#side" },
+                        "west":    { "texture": "#side" },
+                        "east":    { "texture": "#side" }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "overlay": "#top",
+            "particle_bottom": "#top",
+            "particle_top": "#top",
+            "particle_north": "#side",
+            "particle_south": "#side",
+            "particle_west": "#side",
+            "particle_east": "#side",
+            "top": "block/crops_pumpkin_stage4_top",
+            "side": "block/crops_pumpkin_stage4_side"
+        },
+        "particle_colors": {
+            "bottom": false,
+            "top": false,
+            "north": false,
+            "south": false,
+            "west": false,
+            "east": false
+        }
+    }
+}

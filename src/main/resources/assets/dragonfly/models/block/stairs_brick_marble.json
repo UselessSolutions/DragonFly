@@ -1,0 +1,12 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/stairs",
+        "textures": {
+            "top": "block/brick_marble",
+            "bottom": "block/brick_marble",
+            "side": "block/brick_marble"
+        }
+    }
+}

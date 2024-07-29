@@ -1,0 +1,54 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/cube_all",
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, 0, 0 ],
+                    "to": [ 16, 16, 16 ],
+                    "faces": {
+                        "bottom": { "texture": "#stone", "cullface": "bottom" },
+                        "top":    { "texture": "#stone", "cullface": "top" },
+                        "north": { "texture": "#stone", "cullface": "north" },
+                        "south": { "texture": "#stone", "cullface": "south" },
+                        "west":  { "texture": "#stone", "cullface": "west" },
+                        "east":  { "texture": "#stone", "cullface": "east" }
+                    }
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, 0, 0 ],
+                    "to": [ 16, 16, 16 ],
+                    "faces": {
+                        "bottom": { "texture": "#moss", "cullface": "bottom", "use_color": true },
+                        "top":    { "texture": "#moss", "cullface": "top", "use_color": true  },
+                        "north": { "texture": "#moss", "cullface": "north", "use_color": true  },
+                        "south": { "texture": "#moss", "cullface": "south", "use_color": true  },
+                        "west":  { "texture": "#moss", "cullface": "west", "use_color": true  },
+                        "east":  { "texture": "#moss", "cullface": "east", "use_color": true  }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "moss": "block/moss_overlay",
+            "texture": "block/moss_overlay",
+            "overlay": "#stone"
+        },
+        "particle_colors": {
+            "bottom": true,
+            "top": true,
+            "north": true,
+            "south": true,
+            "west": true,
+            "east": true
+        }
+    }
+}

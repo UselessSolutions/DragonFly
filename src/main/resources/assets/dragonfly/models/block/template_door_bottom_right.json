@@ -1,0 +1,33 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/cube",
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, 0, 0 ],
+                    "to": [ 16, 16, 3 ],
+                    "faces": {
+                        "bottom": { "texture": "#bottom", "cullface": "bottom", "uv": [3, 35, 19, 38], "uv_scale": [22, 38] },
+                        "top":    { "texture": "#top", "cullface": "top", "uv": [3, 0, 19, 3], "uv_scale": [22, 38] },
+                        "north": { "texture": "#north", "cullface": "north", "uv": [19, 19, 3, 35], "uv_scale": [22, 38] },
+                        "south": { "texture": "#south", "cullface": "south", "uv": [3, 19, 19, 35], "uv_scale": [22, 38] },
+                        "east":  { "texture": "#east", "cullface": "east", "uv": [19, 22, 22, 35], "uv_scale": [22, 38] },
+                        "west":  { "texture": "#west", "cullface": "west", "uv": [0, 19, 3, 35], "uv_scale": [22, 38] }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "top": "#door",
+            "bottom": "#door",
+            "north": "#door",
+            "south": "#door",
+            "west": "#door",
+            "east": "#door"
+        }
+    }
+}

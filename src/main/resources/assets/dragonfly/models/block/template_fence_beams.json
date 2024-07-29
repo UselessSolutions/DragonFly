@@ -1,0 +1,57 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 7, 6, 7 ],
+                    "to": [ 16, 9, 9 ],
+                    "faces": {
+                        "bottom": { "texture": "#texture" },
+                        "top":    { "texture": "#texture" },
+                        "north": { "texture": "#texture" },
+                        "south": { "texture": "#texture" },
+                        "west":  { "texture": "#texture", "cullface": "west" },
+                        "east":  { "texture": "#texture", "cullface": "east" }
+                    }
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 7, 12, 7 ],
+                    "to": [ 16, 15, 9 ],
+                    "faces": {
+                        "bottom": { "texture": "#texture" },
+                        "top":    { "texture": "#texture" },
+                        "north": { "texture": "#texture" },
+                        "south": { "texture": "#texture" },
+                        "west":  { "texture": "#texture", "cullface": "west" },
+                        "east":  { "texture": "#texture", "cullface": "east" }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "overlay": "#texture",
+            "particle_bottom": "#texture",
+            "particle_top": "#texture",
+            "particle_north": "#texture",
+            "particle_south": "#texture",
+            "particle_west": "#texture",
+            "particle_east": "#texture"
+        },
+        "particle_colors": {
+            "bottom": false,
+            "top": false,
+            "north": false,
+            "south": false,
+            "west": false,
+            "east": false
+        }
+    }
+}

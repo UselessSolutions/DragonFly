@@ -1,0 +1,43 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "ambientocclusion": false,
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, 0, 6 ],
+                    "to": [ 16, 16, 10 ],
+                    "shade": false,
+                    "faces": {
+                        "bottom": { "texture": "#portal", "cullface": "bottom", "use_color": true },
+                        "top":    { "texture": "#portal", "cullface": "top", "use_color": true },
+                        "north": { "texture": "#portal", "cullface": "north", "use_color": true },
+                        "south": { "texture": "#portal", "cullface": "south", "use_color": true },
+                        "west":  { "texture": "#portal", "cullface": "west", "use_color": true },
+                        "east":  { "texture": "#portal", "cullface": "east", "use_color": true }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "overlay": "#portal",
+            "particle_bottom": "#portal",
+            "particle_top": "#portal",
+            "particle_north": "#portal",
+            "particle_south": "#portal",
+            "particle_west": "#portal",
+            "particle_east": "#portal"
+        },
+        "particle_colors": {
+            "bottom": true,
+            "top": true,
+            "north": true,
+            "south": true,
+            "west": true,
+            "east": true
+        }
+    }
+}

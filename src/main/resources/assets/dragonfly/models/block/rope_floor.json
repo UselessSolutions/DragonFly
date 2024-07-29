@@ -1,0 +1,57 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 5, 0, 5 ],
+                    "to": [ 11, 2, 11 ],
+                    "faces": {
+                        "bottom": { "texture": "#texture", "cullface": "bottom" },
+                        "top":    { "texture": "#texture" },
+                        "north": { "texture": "#texture" },
+                        "south": { "texture": "#texture" },
+                        "west":  { "texture": "#texture" },
+                        "east":  { "texture": "#texture" }
+                    }
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 6, 2, 6 ],
+                    "to": [ 10, 3, 10 ],
+                    "faces": {
+                        "top":    { "texture": "#texture" },
+                        "north": { "texture": "#texture" },
+                        "south": { "texture": "#texture" },
+                        "west":  { "texture": "#texture" },
+                        "east":  { "texture": "#texture" }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "overlay": "#texture",
+            "particle_bottom": "#texture",
+            "particle_top": "#texture",
+            "particle_north": "#texture",
+            "particle_south": "#texture",
+            "particle_west": "#texture",
+            "particle_east": "#texture",
+            "texture": "block/rope"
+        },
+        "particle_colors": {
+            "bottom": false,
+            "top": false,
+            "north": false,
+            "south": false,
+            "west": false,
+            "east": false
+        }
+    }
+}

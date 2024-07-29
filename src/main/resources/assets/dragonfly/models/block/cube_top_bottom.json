@@ -1,0 +1,13 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/cube",
+        "textures": {
+            "north": "#side",
+            "south": "#side",
+            "west": "#side",
+            "east": "#side"
+        }
+    }
+}

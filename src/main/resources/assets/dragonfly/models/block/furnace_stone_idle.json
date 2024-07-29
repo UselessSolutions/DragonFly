@@ -1,0 +1,12 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/cube_column",
+        "textures": {
+            "end": "block/furnace_stone_top",
+            "south": "block/furnace_stone_idle_front",
+            "side": "block/furnace_stone_side"
+        }
+    }
+}

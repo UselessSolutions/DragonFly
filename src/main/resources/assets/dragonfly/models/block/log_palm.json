@@ -1,0 +1,11 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/cube_column",
+        "textures": {
+            "end": "block/log_palm_top",
+            "side": "block/log_palm_side"
+        }
+    }
+}

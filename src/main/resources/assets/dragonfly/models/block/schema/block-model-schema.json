@@ -1,0 +1,266 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "$id": "block-model-schema",
+    "title": "BTA Block Model",
+    "description": "Model format for BTA block models",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "type": {
+            "description": "Identifier for what type of data the data field contains.",
+            "type": "string"
+        },
+        "version": {
+            "description": "Version of data layout for the data field.",
+            "type": "number"
+        },
+        "data": {
+            "description": "Json object representation of the model data.",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "parent":{
+                    "description": "Model identifier of the model to inherit the properties of",
+                    "type": "string"
+                },
+                "ambientocclusion":{
+                    "description": "Flag for if the model should render with ambient occlusion enabled",
+                    "type": "boolean"
+                },
+                "elements": {
+                    "description": "Array of ModelComponent objects that make up the structure of the model.",
+                    "type": "array",
+                    "items": [ {"$ref": "#/$defs/BlockComponent"}]
+                },
+                "textures": {
+                    "description": "Map of texture symbols to their values, a texture symbol can refer to another texture symbol by starting witht the character '#' followed by the symbol to reference.",
+                    "type": "object",
+                    "additionalProperties": {
+                        "type": "string"
+                    },
+                    "properties": {
+                        "overlay": {
+                            "description": "Texture symbol used for the overlay if stuck inside a block, and as a one texture representation of the model.",
+                            "type": "string"
+                        },
+                        "particle_bottom": {
+                            "description": "Texture symbol used for the particle from the bottom side.",
+                            "type": "string"
+                        },
+                        "particle_top": {
+                            "description": "Texture symbol used for the particle from the top side.",
+                            "type": "string"
+                        },
+                        "particle_north": {
+                            "description": "Texture symbol used for the particle from the north side.",
+                            "type": "string"
+                        },
+                        "particle_south": {
+                            "description": "Texture symbol used for the particle from the south side.",
+                            "type": "string"
+                        },
+                        "particle_west": {
+                            "description": "Texture symbol used for the particle from the west side.",
+                            "type": "string"
+                        },
+                        "particle_east": {
+                            "description": "Texture symbol used for the particle from the east side.",
+                            "type": "string"
+                        }
+                    }
+                },
+                "particle_colors": {
+                    "description": "Map of sides to if the corresponding particle should use the colorizer given to the block.",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "bottom": {
+                            "description": "Flag for if particle_bottom should use the given colorizer.",
+                            "type": "boolean"
+                        },
+                        "top": {
+                            "description": "Flag for if particle_top should use the given colorizer.",
+                            "type": "boolean"
+                        },
+                        "north": {
+                            "description": "Flag for if particle_north should use the given colorizer.",
+                            "type": "boolean"
+                        },
+                        "south": {
+                            "description": "Flag for if particle_south should use the given colorizer.",
+                            "type": "boolean"
+                        },
+                        "west": {
+                            "description": "Flag for if particle_west should use the given colorizer.",
+                            "type": "boolean"
+                        }, 
+                        "east": {
+                            "description": "Flag for if particle_east should use the given colorizer.",
+                            "type": "boolean"
+                        }
+                    }
+                }
+            }
+        },
+        "required": [ "type", "version", "data" ]
+    },
+    "$defs": {
+        "BlockComponent": {
+            "$schema": "https://json-schema.org/draft/2020-12/schema",
+            "$id": "block-component-schema",
+            "title": "Block Component",
+            "description": "Cube based model component.",
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "type": {
+                    "description": "Identifier for what type of data the data field contains.",
+                    "type": "string"
+                },
+                "version": {
+                    "description": "Version of data layout for the data field.",
+                    "type": "number"
+                },
+                "data": {
+                    "description": "Json object representation of the model component data.",
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "from": {
+                            "description": "XYZ coordinates of the cube closest to the origin [0, 0, 0]",
+                            "type": "array",
+                            "items": ["number"],
+                            "minItems": 3,
+                            "maxItems": 3
+                        },
+                        "to": {
+                            "description": "XYZ coordinates of the cube furthest from the origin [0, 0, 0]",
+                            "type": "array",
+                            "items": ["number"],
+                            "minItems": 3,
+                            "maxItems": 3
+                        },
+                        "shade": {
+                            "description": "Whether lighting is enabled for this cube.",
+                            "type": "boolean"
+                        },
+                        "inner_lighting": {
+                            "description": "If light value should have to come from the current block rather then neighboring blocks.",
+                            "type": "boolean"
+                        },
+                        "rotation": {
+                            "description": "Static rotation settings for the cube.",
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "origin": {
+                                    "description": "Point which the cube is rotated around.",
+                                    "type": "array",
+                                    "items": ["number"],
+                                    "minItems": 3,
+                                    "maxItems": 3
+                                },
+                                "angles": {
+                                    "description": "Angles which to rotate, applied in the order of x, then y, then z",
+                                    "type": "array",
+                                    "items": ["number"],
+                                    "minItems": 3,
+                                    "maxItems": 3
+                                },
+                                "rescale_x": {
+                                    "description": "Rescales based on X rotation",
+                                    "type": "boolean"
+                                },
+                                "rescale_y": {
+                                    "description": "Rescales based on Y rotation",
+                                    "type": "boolean"
+                                },
+                                "rescale_z": {
+                                    "description": "Rescales based on Z rotation",
+                                    "type": "boolean"
+                                }
+                            }
+                        },
+                        "faces": {
+                            "description": "Textured faces that make up the cube.",
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "bottom": { "$ref" : "#/$defs/BlockComponent/$defs/face" },
+                                "top": { "$ref" : "#/$defs/BlockComponent/$defs/face" },
+                                "north": { "$ref" : "#/$defs/BlockComponent/$defs/face" },
+                                "south": { "$ref" : "#/$defs/BlockComponent/$defs/face" },
+                                "west": { "$ref" : "#/$defs/BlockComponent/$defs/face" },
+                                "east": { "$ref" : "#/$defs/BlockComponent/$defs/face" }
+                            }                    
+                        },
+                        "overbright_faces": {
+                            "description": "Textured overbright faces that make up the cube, rendered ontop of the regular faces.",
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                                "bottom": { "$ref" : "#/$defs/BlockComponent/$defs/face" },
+                                "top": { "$ref" : "#/$defs/BlockComponent/$defs/face" },
+                                "north": { "$ref" : "#/$defs/BlockComponent/$defs/face" },
+                                "south": { "$ref" : "#/$defs/BlockComponent/$defs/face" },
+                                "west": { "$ref" : "#/$defs/BlockComponent/$defs/face" },
+                                "east": { "$ref" : "#/$defs/BlockComponent/$defs/face" }
+                            }  
+                        },
+                        "required": [ "from", "to" ]
+                    }
+                    
+                },
+                "required": [ "type", "version", "data" ]
+            },
+            "$defs": {
+                "face": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                        "texture": {
+                            "description": "Texture symbol to the texture map.",
+                            "type": "string"
+                        },
+                        "cullface": {
+                            "description": "Texture symbol to the texture map.",
+                            "type": { "$ref": "#/$defs/side" }
+                        },
+                        "uv": {
+                            "description": "UV coordinates of the face in pixels, [u1, v1, u2, v2], flipping u1 and u2, or v1 and v2 will flip the texture.",
+                            "type": "array",
+                            "items": ["number"],
+                            "minItems": 4,
+                            "maxItems": 4
+                        },
+                        "uv_scale": {
+                            "description": "Size of the texture's expected pixels, adjusts how big each value is from the uv field.",
+                            "type": "array",
+                            "items": ["number"],
+                            "minItems": 2,
+                            "maxItems": 2
+                        },
+                        "rotation": {
+                            "description": "Number of 90 degree rotations to rotate the texture by.",
+                            "type": "number"
+                        },
+                        "use_color": {
+                            "description": "Whether the face should get colored by the colorizer.",
+                            "type": "boolean"
+                        }, 
+                        "flip_normal": {
+                            "description": "Whether the direction the face is rendered should be flipped.",
+                            "type": "boolean"
+                        },
+                        "doubled_sided": {
+                            "description": "Whether the face should render in both directions.",
+                            "type": "boolean"
+                        },
+                        "required": [ "texture" ]
+                    }
+                }
+            }
+        },
+        "side": { "enum": ["bottom", "top", "north", "south", "west", "east" ]}
+    }
+}

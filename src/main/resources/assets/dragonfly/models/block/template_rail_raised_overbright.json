@@ -1,0 +1,48 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "ambientocclusion": false,
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, 9, 0 ],
+                    "to": [ 16, 9, 16 ],
+                    "shade": false,
+                    "rotation": {
+                        "origin": [ 8, 9, 8],
+                        "angles": [ -45, 0, 0],
+                        "rescale_x": true
+                    },
+                    "faces": {
+                        "top":    { "texture": "#rail", "use_color": false },
+                        "bottom":    { "texture": "#rail", "use_color": false  }
+                    },
+                    "overbright_faces": {
+                        "top":    { "texture": "#overbright", "use_color": false },
+                        "bottom":    { "texture": "#overbright", "use_color": false  }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "overlay": "#rail",
+            "particle_bottom": "#rail",
+            "particle_top": "#rail",
+            "particle_north": "#rail",
+            "particle_south": "#rail",
+            "particle_west": "#rail",
+            "particle_east": "#rail"
+        },
+        "particle_colors": {
+            "bottom": false,
+            "top": false,
+            "north": false,
+            "south": false,
+            "west": false,
+            "east": false
+        }
+    }
+}

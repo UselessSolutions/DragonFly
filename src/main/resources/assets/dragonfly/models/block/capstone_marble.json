@@ -1,0 +1,11 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/cube_column",
+        "textures": {
+            "end": "block/capstone_marble_top",
+            "side": "block/capstone_marble_side"
+        }
+    }
+}

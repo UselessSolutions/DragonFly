@@ -1,0 +1,12 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/stairs",
+        "textures": {
+            "top": "block/cobbled_granite",
+            "bottom": "block/cobbled_granite",
+            "side": "block/cobbled_granite"
+        }
+    }
+}

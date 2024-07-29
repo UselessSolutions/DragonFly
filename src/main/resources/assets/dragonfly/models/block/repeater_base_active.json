@@ -1,0 +1,10 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/template_repeater_base",
+        "textures": {
+            "top": "block/repeater_active_top"
+        }
+    }
+}

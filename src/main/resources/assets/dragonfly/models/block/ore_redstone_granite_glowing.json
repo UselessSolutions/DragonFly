@@ -1,0 +1,11 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/cube_all_overbright",
+        "textures": {
+            "texture": "block/ore_redstone_granite",
+            "overbright": "block/ore_redstone_overlay"
+        }
+    }
+}

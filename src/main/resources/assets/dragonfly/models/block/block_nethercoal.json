@@ -1,0 +1,11 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/cube_all_overbright",
+        "textures": {
+            "texture": "block/block_nethercoal",
+            "overbright": "block/block_nethercoal_overlay"
+        }
+    }
+}

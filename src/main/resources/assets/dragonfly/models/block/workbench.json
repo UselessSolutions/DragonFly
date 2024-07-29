@@ -1,0 +1,15 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/cube",
+        "textures": {
+            "top": "block/workbench_top",
+            "bottom": "block/planks_oak",
+            "north": "block/workbench_front",
+            "south": "block/workbench_front",
+            "west": "block/workbench_side",
+            "east": "block/workbench_side"
+        }
+    }
+}

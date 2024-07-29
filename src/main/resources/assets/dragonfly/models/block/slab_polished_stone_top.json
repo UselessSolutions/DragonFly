@@ -1,0 +1,12 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/slab_top",
+        "textures": {
+            "top": "block/polished_stone_top",
+            "side": "block/carved_stone",
+            "bottom": "block/polished_stone_top"
+        }
+    }
+}

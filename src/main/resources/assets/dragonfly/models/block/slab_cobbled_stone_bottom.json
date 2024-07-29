@@ -1,0 +1,12 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/slab_bottom",
+        "textures": {
+            "top": "block/cobbled_stone",
+            "side": "block/cobbled_stone",
+            "bottom": "block/cobbled_stone"
+        }
+    }
+}

@@ -1,0 +1,11 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/template_chest_double_right",
+        "textures": {
+            "texture": "block/chest_planks_oak_top",
+            "chest": "block/chest_planks_oak"
+        }
+    }
+}

@@ -1,0 +1,78 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "ambientocclusion": false,
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 4, -1, 0 ],
+                    "to": [ 4, 15, 16 ],
+                    "shade": false,
+                    "faces": {
+                        "west":  { "texture": "#texture" },
+                        "east":  { "texture": "#texture" }
+                    }
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 12, -1, 0 ],
+                    "to": [ 12, 15, 16 ],
+                    "shade": false,
+                    "faces": {
+                        "west":  { "texture": "#texture" },
+                        "east":  { "texture": "#texture" }
+                    }
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, -1, 4 ],
+                    "to": [ 16, 15, 4 ],
+                    "shade": false,
+                    "faces": {
+                        "north":  { "texture": "#texture" },
+                        "south":  { "texture": "#texture" }
+                    }
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, -1, 12 ],
+                    "to": [ 16, 15, 12 ],
+                    "shade": false,
+                    "faces": {
+                        "north":  { "texture": "#texture" },
+                        "south":  { "texture": "#texture" }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "overlay": "#texture",
+            "particle_bottom": "#texture",
+            "particle_top": "#texture",
+            "particle_north": "#texture",
+            "particle_south": "#texture",
+            "particle_west": "#texture",
+            "particle_east": "#texture"
+        },
+        "particle_colors": {
+            "bottom": false,
+            "top": false,
+            "north": false,
+            "south": false,
+            "west": false,
+            "east": false
+        }
+    }
+}

@@ -1,0 +1,60 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 8, 0, 1 ],
+                    "to": [ 15, 6, 8 ],
+                    "faces": {
+                        "bottom": { "texture": "#bottom", "cullface": "bottom" },
+                        "top":    { "texture": "#top" },
+                        "north": { "texture": "#side" },
+                        "west":  { "texture": "#inner" },
+                        "east":  { "texture": "#side" }
+                    }
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 1, 0, 8 ],
+                    "to": [ 15, 6, 15 ],
+                    "faces": {
+                        "bottom": { "texture": "#bottom", "cullface": "bottom" },
+                        "top":    { "texture": "#top" },
+                        "north": { "texture": "#inner" },
+                        "south": { "texture": "#side" },
+                        "west":  { "texture": "#side" },
+                        "east":  { "texture": "#side" }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "overlay": "#side",
+            "particle_bottom": "#bottom",
+            "particle_top": "#top",
+            "particle_north": "#side",
+            "particle_south": "#side",
+            "particle_west": "#side",
+            "particle_east": "#side",
+            "top": "block/pumpkin_pie_top",
+            "side": "block/pumpkin_pie_side",
+            "inner": "block/pumpkin_pie_inside",
+            "bottom": "block/pumpkin_pie_bottom"
+        },
+        "particle_colors": {
+            "bottom": false,
+            "top": false,
+            "north": false,
+            "south": false,
+            "west": false,
+            "east": false
+        }
+    }
+}

@@ -1,0 +1,54 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, 0, 0 ],
+                    "to": [ 16, 9, 16 ],
+                    "faces": {
+                        "top":    { "texture": "#top" },
+                        "north": { "texture": "#side", "cullface": "north" },
+                        "south": { "texture": "#side", "cullface": "south" },
+                        "west":  { "texture": "#side", "cullface": "west" },
+                        "east":  { "texture": "#side", "cullface": "east" }
+                    }
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, 3, 0 ],
+                    "to": [ 16, 9, 16 ],
+                    "faces": {
+                        "bottom":    { "texture": "#bottom" }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "overlay": "#top",
+            "particle_bottom": "#bottom",
+            "particle_top": "#top",
+            "particle_north": "#side",
+            "particle_south": "#side",
+            "particle_west": "#side",
+            "particle_east": "#side",
+            "top": "block/seat_top",
+            "side": "block/seat_side",
+            "bottom": "block/planks_oak"
+        },
+        "particle_colors": {
+            "bottom": false,
+            "top": false,
+            "north": false,
+            "south": false,
+            "west": false,
+            "east": false
+        }
+    }
+}

@@ -1,0 +1,48 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "parent": "block/cube_all",
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, 0, 0 ],
+                    "to": [ 16, 16, 16 ],
+                    "faces": {
+                        "bottom": { "texture": "#bottom", "cullface": "bottom" },
+                        "north": { "texture": "#north", "cullface": "north" },
+                        "south": { "texture": "#south", "cullface": "south" },
+                        "west":  { "texture": "#west", "cullface": "west" },
+                        "east":  { "texture": "#east", "cullface": "east" }
+                    }
+                }
+            },
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0.05, 0.05, 0.05 ],
+                    "to": [ 15.95, 15.95, 15.95 ],
+                    "inner_lighting": true,
+                    "faces": {
+                        "bottom": { "texture": "#top", "flip_normal": true },
+                        "north": { "texture": "#north", "flip_normal": true },
+                        "south": { "texture": "#south", "flip_normal": true },
+                        "west":  { "texture": "#west", "flip_normal": true },
+                        "east":  { "texture": "#east", "flip_normal": true }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "top": "block/brazier_base",
+            "bottom": "block/brazier_base",
+            "north": "block/brazier_side",
+            "south": "block/brazier_side",
+            "west": "block/brazier_side",
+            "east": "block/brazier_side"
+        }
+    }
+}

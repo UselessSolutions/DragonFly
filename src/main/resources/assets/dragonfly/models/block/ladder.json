@@ -1,0 +1,40 @@
+{
+    "type": "BTA_Block_Model",
+    "version": 1,
+    "data": {
+        "ambientocclusion": false,
+        "elements": [
+            {
+                "type": "BTA_Block_Cube_Component",
+                "version": 1,
+                "data": {
+                    "from": [ 0, 0, 0.5 ],
+                    "to": [ 16, 16, 0.5 ],
+                    "shade": false,
+                    "faces": {
+                        "north":    { "texture": "#ladder" },
+                        "south":    { "texture": "#ladder"  }
+                    }
+                }
+            }
+        ],
+        "textures": {
+            "overlay": "#ladder",
+            "particle_bottom": "#ladder",
+            "particle_top": "#ladder",
+            "particle_north": "#ladder",
+            "particle_south": "#ladder",
+            "particle_west": "#ladder",
+            "particle_east": "#ladder",
+            "ladder": "block/ladder"
+        },
+        "particle_colors": {
+            "bottom": false,
+            "top": false,
+            "north": false,
+            "south": false,
+            "west": false,
+            "east": false
+        }
+    }
+}
