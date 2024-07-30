@@ -1,5 +1,6 @@
 package org.useless.dragonfly.model.newmodels.generic;
 
+import net.minecraft.client.render.block.model.BlockModelStandard;
 import net.minecraft.client.render.stitcher.IconCoordinate;
 import net.minecraft.client.render.stitcher.TextureRegistry;
 import net.minecraft.core.util.collection.NamespaceID;
@@ -97,7 +98,7 @@ public final class StaticModel {
     public IconCoordinate getTexture(@NotNull String textureSymbol, boolean isNullable){
         if (textureSymbol.isEmpty()) {
             if (isNullable) return null;
-            return TextureRegistry.getTexture("builtin:block/missing");
+            return BlockModelStandard.BLOCK_TEXTURE_MISSING;
         }
         String texVar = textureSymbol;
 
@@ -109,7 +110,7 @@ public final class StaticModel {
             // Variable doesn't have an assigned texture id
             if (texVar == null){
                 if (isNullable) return null;
-                return TextureRegistry.getTexture("builtin:block/unassigned");
+                return BlockModelStandard.BLOCK_TEXTURE_UNASSIGNED;
             }
 
             // Variable links to another variable
@@ -126,7 +127,7 @@ public final class StaticModel {
             texID = new NamespaceID(texVar);
         } catch (IllegalArgumentException e){
             if (isNullable) return null;
-            return TextureRegistry.getTexture("builtin:block/missing");
+            return BlockModelStandard.BLOCK_TEXTURE_MISSING;
         }
 
         IconCoordinate icon;
@@ -136,10 +137,10 @@ public final class StaticModel {
                 if (icon != null) return icon;
             }
             if (isNullable) return null;
-            return TextureRegistry.getTexture("builtin:block/missing");
+            return BlockModelStandard.BLOCK_TEXTURE_MISSING;
         } catch (IllegalArgumentException e){
             if (isNullable) return null;
-            return TextureRegistry.getTexture("builtin:block/missing");
+            return BlockModelStandard.BLOCK_TEXTURE_MISSING;
         }
     }
 

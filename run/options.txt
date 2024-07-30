@@ -106,7 +106,7 @@ borderlessFullscreen:true
 startInFullscreen:true
 osxFullscreenModeAPI:true
 tooltipStyle:default
-lightmapStyle:DISABLED
+lightmapStyle:GRAY
 customLightmap:true
 fog:true
 hideUndiscoveredItems:true

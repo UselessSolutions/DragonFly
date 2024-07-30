@@ -1,6 +1,5 @@
 package org.useless.dragonfly.debug;
 
-import net.minecraft.core.block.Block;
 import net.minecraft.core.block.material.Material;
 import net.minecraft.core.util.collection.NamespaceID;
 import org.useless.dragonfly.debug.block.BlockDebugModel;
@@ -134,13 +133,6 @@ public class DebugBlocks {
 //		.setBlockSound(BlockSounds.GRASS)
 //		.setBlockColor((block) -> new BlockColorCustom(Colorizers.grass))
 //		.build(new Block("grass" + blockId, blockId++, Material.grass));
-
-	public static final Block newModelsTest = new BlockBuilder(MOD_ID)
-		.setBlockModel(b -> new BlockModelStandard<>(b, StaticModelRegistry.getInstance().retrieveModel(new NamespaceID("minecraft", "block/basket"))))
-		.build(new Block("modelTest" + blockId, blockId++, Material.stone));
-	public static final Block newModelsTest2 = new BlockBuilder(MOD_ID)
-		.setBlockModel(b -> new BlockModelStandard<>(b, StaticModelRegistry.getInstance().retrieveModel(new NamespaceID("minecraft", "block/jar"))))
-		.build(new Block("modelTest" + blockId, blockId++, Material.stone));
 
 	public static void init() {
 		blockId = 5000;
