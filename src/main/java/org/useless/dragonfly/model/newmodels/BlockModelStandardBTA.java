@@ -10,24 +10,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class BlockModelStandard<T extends Block> extends BlockModelGeneric<T>{
+public class BlockModelStandardBTA<T extends Block> extends BlockModelGenericBTA<T> {
 	public final List<StaticModel> inventoryModels = new ArrayList<>();
 	public final List<StaticModel> worldModels = new ArrayList<>();
-	public BlockModelStandard(Block block) {
+	public BlockModelStandardBTA(Block block) {
 		super(block);
 	}
-	public BlockModelStandard(Block block, StaticModel model) {
+	public BlockModelStandardBTA(Block block, StaticModel model) {
 		super(block);
 		addInventoryModel(model);
 		addWorldModel(model);
 	}
 
-	public BlockModelStandard<?> addInventoryModel(StaticModel modelContainer){
+	public BlockModelStandardBTA<?> addInventoryModel(StaticModel modelContainer){
 		inventoryModels.add(modelContainer);
 		return this;
 	}
 
-	public BlockModelStandard<?> addWorldModel(StaticModel modelContainer){
+	public BlockModelStandardBTA<?> addWorldModel(StaticModel modelContainer){
 		worldModels.add(modelContainer);
 		return this;
 	}

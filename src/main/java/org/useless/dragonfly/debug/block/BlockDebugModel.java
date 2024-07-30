@@ -7,8 +7,6 @@ import net.minecraft.core.block.material.Material;
 import net.minecraft.core.util.phys.AABB;
 import net.minecraft.core.world.World;
 import org.useless.dragonfly.model.block.BlockModelDragonFly;
-import org.useless.dragonfly.model.block.processed.BlockCube;
-import org.useless.dragonfly.model.block.processed.ModernBlockModel;
 
 import java.util.ArrayList;
 
@@ -37,11 +35,11 @@ public class BlockDebugModel extends BlockTransparent {
 			super.getCollidingBoundingBoxes(world, x, y, z, aabb, aabbList);
 			return;
 		}
-		ModernBlockModel blockModel = ((BlockModelDragonFly)model).baseModel;
-		for (BlockCube cube: blockModel.blockCubes) {
-			setBlockBounds(cube.xMin(), cube.yMin(), cube.zMin(), cube.xMax(), cube.yMax(), cube.zMax());
-			super.getCollidingBoundingBoxes(world, x, y, z, aabb, aabbList);
-		}
-		this.setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
+//		ModernBlockModel blockModel = ((BlockModelDragonFly)model).baseModel;
+//		for (BlockCube cube: blockModel.blockCubes) {
+//			setBlockBounds(cube.xMin(), cube.yMin(), cube.zMin(), cube.xMax(), cube.yMax(), cube.zMax());
+//			super.getCollidingBoundingBoxes(world, x, y, z, aabb, aabbList);
+//		}
+//		this.setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
 	}
 }

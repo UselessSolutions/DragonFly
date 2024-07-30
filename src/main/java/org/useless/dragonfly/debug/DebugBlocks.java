@@ -1,9 +1,21 @@
 package org.useless.dragonfly.debug;
 
+import net.minecraft.client.render.block.color.BlockColorCustom;
+import net.minecraft.client.render.colorizer.Colorizers;
+import net.minecraft.core.block.Block;
+import net.minecraft.core.block.BlockStairs;
 import net.minecraft.core.block.material.Material;
+import net.minecraft.core.block.tag.BlockTags;
+import net.minecraft.core.sound.BlockSounds;
 import net.minecraft.core.util.collection.NamespaceID;
 import org.useless.dragonfly.debug.block.BlockDebugModel;
-import org.useless.dragonfly.model.newmodels.BlockModelStandard;
+import org.useless.dragonfly.debug.block.BlockRotatable;
+import org.useless.dragonfly.debug.block.metastates.BookshelfMetaState;
+import org.useless.dragonfly.debug.block.metastates.FenceMetaState;
+import org.useless.dragonfly.debug.block.metastates.GrassMetaState;
+import org.useless.dragonfly.debug.block.metastates.StairsMetaStateInterpreter;
+import org.useless.dragonfly.model.block.DFBlockModelBuilder;
+import org.useless.dragonfly.model.newmodels.BlockModelStandardBTA;
 import org.useless.dragonfly.model.newmodels.generic.StaticModelRegistry;
 import org.useless.dragonfly.utilities.Utilities;
 import turniplabs.halplibe.helper.BlockBuilder;
@@ -61,14 +73,14 @@ public class DebugBlocks {
 //				.setBlockModel("block/slope.json")
 //				.build(block))
 //		.build(new BlockDebugModel("testblock" + blockId, blockId++, Material.dirt));
-//	public static final Block stairs = new BlockBuilder(MOD_ID)
-//		.setBlockModel(
-//			block -> new DFBlockModelBuilder(MOD_ID)
-//				.setBlockModel("minecraft", "block/cut_copper_stairs.json")
-//				.setBlockState("test_stairs.json")
-//				.setMetaStateInterpreter(new StairsMetaStateInterpreter())
-//				.build(block))
-//		.build(new BlockStairs(Block.dirt,blockId++)).withLitInteriorSurface(true);
+	public static final Block stairs = new BlockBuilder(MOD_ID)
+		.setBlockModel(
+			block -> new DFBlockModelBuilder(MOD_ID)
+				.setBlockModel("minecraft", "block/cut_copper_stairs")
+				.setBlockState("test_stairs.json")
+				.setMetaStateInterpreter(new StairsMetaStateInterpreter())
+				.build(block))
+		.build(new BlockStairs(Block.dirt,blockId++)).withLitInteriorSurface(true);
 //	public static final Block trel = new BlockBuilder(MOD_ID)
 //		.setBlockModel(
 //			block -> new DFBlockModelBuilder(MOD_ID)
@@ -107,32 +119,32 @@ public class DebugBlocks {
 //				.setMetaStateInterpreter(new BrewingMetaState())
 //				.build(block))
 //		.build(new BlockDebugModel("brew" + blockId, blockId++, Material.dirt)).withLitInteriorSurface(true);
-//	public static final Block fence = new BlockBuilder(MOD_ID)
-//		.setBlockModel(
-//			block -> new DFBlockModelBuilder(MOD_ID)
-//				.setBlockModel("minecraft", "block/birch_fence_inventory.json")
-//				.setBlockState("test_fence.json")
-//				.setMetaStateInterpreter(new FenceMetaState())
-//				.build(block))
-//		.build(new BlockDebugModel("fence" + blockId, blockId++, Material.dirt)).withLitInteriorSurface(true).withTags(BlockTags.FENCES_CONNECT);
-//	public static final Block bookshelf = new BlockBuilder(MOD_ID)
-//		.setBlockModel(
-//			block -> new DFBlockModelBuilder(MOD_ID)
-//				.setBlockModel("minecraft", "block/chiseled_bookshelf_inventory.json")
-//				.setBlockState("minecraft", "chiseled_bookshelf.json")
-//				.setMetaStateInterpreter(new BookshelfMetaState())
-//				.build(block))
-//		.build(new BlockRotatable("shelf" + blockId, blockId++, Material.dirt)).withLitInteriorSurface(true);
-//	public static final Block grassBlock = new BlockBuilder(MOD_ID)
-//		.setBlockModel(
-//			block -> new DFBlockModelBuilder(MOD_ID)
-//				.setBlockModel("minecraft", "block/grass_block.json")
-//				.setBlockState("minecraft", "grass_block.json")
-//				.setMetaStateInterpreter(new GrassMetaState())
-//				.build(block))
-//		.setBlockSound(BlockSounds.GRASS)
-//		.setBlockColor((block) -> new BlockColorCustom(Colorizers.grass))
-//		.build(new Block("grass" + blockId, blockId++, Material.grass));
+	public static final Block fence = new BlockBuilder(MOD_ID)
+		.setBlockModel(
+			block -> new DFBlockModelBuilder(MOD_ID)
+				.setBlockModel("minecraft", "block/birch_fence_inventory.json")
+				.setBlockState("test_fence.json")
+				.setMetaStateInterpreter(new FenceMetaState())
+				.build(block))
+		.build(new BlockDebugModel("fence" + blockId, blockId++, Material.dirt)).withLitInteriorSurface(true).withTags(BlockTags.FENCES_CONNECT);
+	public static final Block bookshelf = new BlockBuilder(MOD_ID)
+		.setBlockModel(
+			block -> new DFBlockModelBuilder(MOD_ID)
+				.setBlockModel("minecraft", "block/chiseled_bookshelf_inventory.json")
+				.setBlockState("minecraft", "chiseled_bookshelf.json")
+				.setMetaStateInterpreter(new BookshelfMetaState())
+				.build(block))
+		.build(new BlockRotatable("shelf" + blockId, blockId++, Material.dirt)).withLitInteriorSurface(true);
+	public static final Block grassBlock = new BlockBuilder(MOD_ID)
+		.setBlockModel(
+			block -> new DFBlockModelBuilder(MOD_ID)
+				.setBlockModel("minecraft", "block/grass_block.json")
+				.setBlockState("minecraft", "grass_block.json")
+				.setMetaStateInterpreter(new GrassMetaState())
+				.build(block))
+		.setBlockSound(BlockSounds.GRASS)
+		.setBlockColor((block) -> new BlockColorCustom(Colorizers.grass))
+		.build(new Block("grass" + blockId, blockId++, Material.grass));
 
 	public static void init() {
 		blockId = 5000;
@@ -143,7 +155,7 @@ public class DebugBlocks {
 				try{
 					new BlockBuilder(MOD_ID)
 						.setBlockModel(
-							block -> new BlockModelStandard<>(block, StaticModelRegistry.getInstance().retrieveModel(new NamespaceID("minecraft", "block/" + string2))))
+							block -> new BlockModelStandardBTA<>(block, StaticModelRegistry.getInstance().retrieveModel(new NamespaceID("minecraft", "block/" + string2))))
 						.setHardness(1)
 						.build(new BlockDebugModel(string2, blockId++, Material.dirt));
 				} catch (Exception e){

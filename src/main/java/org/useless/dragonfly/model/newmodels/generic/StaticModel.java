@@ -115,6 +115,11 @@ public final class StaticModel {
 
             // Variable links to another variable
             if (texVar.startsWith("#")){
+				if (texVar == textureSymbol) {
+					new IllegalArgumentException("Self reference detected with '" + textureSymbol + "'!!!").printStackTrace();
+					if (isNullable) return null;
+					return BlockModelStandard.BLOCK_TEXTURE_MISSING;
+				}
                 return getTexture(texVar, isNullable);
             }
         }
@@ -125,7 +130,7 @@ public final class StaticModel {
         NamespaceID texID;
         try {
             texID = new NamespaceID(texVar);
-        } catch (IllegalArgumentException e){
+        } catch (/*IllegalArgumentException*/ Exception e){
             if (isNullable) return null;
             return BlockModelStandard.BLOCK_TEXTURE_MISSING;
         }
@@ -138,7 +143,7 @@ public final class StaticModel {
             }
             if (isNullable) return null;
             return BlockModelStandard.BLOCK_TEXTURE_MISSING;
-        } catch (IllegalArgumentException e){
+        } catch (/*IllegalArgumentException*/ Exception e){
             if (isNullable) return null;
             return BlockModelStandard.BLOCK_TEXTURE_MISSING;
         }

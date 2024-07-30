@@ -1,16 +1,18 @@
 package org.useless.dragonfly.model.block;
 
 import net.minecraft.core.block.Block;
+import net.minecraft.core.util.collection.NamespaceID;
 import org.useless.dragonfly.helper.ModelHelper;
-import org.useless.dragonfly.model.block.processed.ModernBlockModel;
 import org.useless.dragonfly.model.blockstates.data.BlockstateData;
 import org.useless.dragonfly.model.blockstates.processed.MetaStateInterpreter;
+import org.useless.dragonfly.model.newmodels.generic.StaticModel;
+import org.useless.dragonfly.model.newmodels.generic.StaticModelRegistry;
 
 public final class DFBlockModelBuilder {
 	private final String modid;
 	private boolean render3d = true;
 	private float renderScale = 0.25f;
-	private ModernBlockModel modernBlockModel;
+	private StaticModel modernBlockModel;
 	private BlockstateData blockstateData;
 	private MetaStateInterpreter metaStateInterpreter;
 	public DFBlockModelBuilder(String modId){
@@ -25,19 +27,19 @@ public final class DFBlockModelBuilder {
 		return this;
 	}
 	public DFBlockModelBuilder setBlockModel(String blockModelPath){
-		this.modernBlockModel = ModelHelper.getOrCreateBlockModel(modid, blockModelPath);
+		this.modernBlockModel = StaticModelRegistry.getInstance().retrieveModel(new NamespaceID(modid, blockModelPath.replace(".json", "")));
 		return this;
 	}
 	public DFBlockModelBuilder setBlockModel(String modid, String blockModelPath){
-		this.modernBlockModel = ModelHelper.getOrCreateBlockModel(modid, blockModelPath);
+		this.modernBlockModel = StaticModelRegistry.getInstance().retrieveModel(new NamespaceID(modid, blockModelPath.replace(".json", "")));
 		return this;
 	}
 	public DFBlockModelBuilder setBlockState(String blockStatePath){
-		this.blockstateData = ModelHelper.getOrCreateBlockState(modid, blockStatePath);
+		this.blockstateData = ModelHelper.getOrCreateBlockState(modid, blockStatePath.replace(".json", ""));
 		return this;
 	}
 	public DFBlockModelBuilder setBlockState(String modid, String blockStatePath){
-		this.blockstateData = ModelHelper.getOrCreateBlockState(modid, blockStatePath);
+		this.blockstateData = ModelHelper.getOrCreateBlockState(modid, blockStatePath.replace(".json", ""));
 		return this;
 	}
 	public DFBlockModelBuilder setMetaStateInterpreter(MetaStateInterpreter interpreter){

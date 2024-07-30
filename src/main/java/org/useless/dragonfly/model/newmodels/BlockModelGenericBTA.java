@@ -18,11 +18,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public abstract class BlockModelGeneric<T extends Block> extends BlockModel<T> {
+public abstract class BlockModelGenericBTA<T extends Block> extends BlockModel<T> {
 	protected static ModelContainer modelContainer = new ModelContainer();
 	protected boolean render3d = true;
 	protected float renderScale = 0.25f;
-	public BlockModelGeneric(Block block) {
+	public BlockModelGenericBTA(Block block) {
 		super(block);
 		hasOverbright = true;
 	}
@@ -170,12 +170,12 @@ public abstract class BlockModelGeneric<T extends Block> extends BlockModel<T> {
 		setWorldModel(modelContainer,blockAccess, x, y, z, meta);
 		return modelContainer.shouldParticleBeColored(side);
 	}
-	public BlockModelGeneric<?> setRender3d(boolean render3d){
+	public BlockModelGenericBTA<?> setRender3d(boolean render3d){
 		this.render3d = render3d;
 		return this;
 	}
 
-	public BlockModelGeneric<?> setRenderScale(float renderScale){
+	public BlockModelGenericBTA<?> setRenderScale(float renderScale){
 		this.renderScale = renderScale;
 		return this;
 	}
