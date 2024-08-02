@@ -40,7 +40,7 @@ public class AnimationHelper {
 		return "/assets/" + modID + "/animation/" + animationSource;
 	}
 
-	public static void animate(BenchEntityModel entityModel, AnimationData animationData, long time, float scale, Vector3f p_253861_) {
+	public static void animate(BenchEntityModel entityModel, AnimationData animationData, long time, float scale, Vector3f animationVecCache) {
 		float seconds = getElapsedSeconds(animationData, time);
 
 		for (Map.Entry<String, BoneData> entry : animationData.getBones().entrySet()) {
@@ -64,29 +64,9 @@ public class AnimationHelper {
 					f2 = 0.0F;
 				}
 
-				if (keyFrame2.lerp_mode.equals("catmullrom")) {
-					Vector3f vector3f = posVec(positionFrame.get(Math.max(0, i - 1)).vector3f());
-					Vector3f vector3f1 = posVec(positionFrame.get(i).vector3f());
-					Vector3f vector3f2 = posVec(positionFrame.get(j).vector3f());
-					Vector3f vector3f3 = posVec(positionFrame.get(Math.min(positionFrame.size() - 1, j + 1)).vector3f());
+				AnimationChannel.Interpolations.getInterpolations(keyFrame2.lerp_mode).apply(animationVecCache, f2, positionFrame, i, j, scale);
+				AnimationChannel.Targets.ROTATION.apply(p_232330_, animationVecCache);
 
-					p_253861_.set(
-						catmullrom(f2, vector3f.x, vector3f1.x, vector3f2.x, vector3f3.x) * scale,
-						catmullrom(f2, vector3f.y, vector3f1.y, vector3f2.y, vector3f3.y) * scale,
-						catmullrom(f2, vector3f.z, vector3f1.z, vector3f2.z, vector3f3.z) * scale
-					);
-					p_232330_.setRotationPoint(p_232330_.rotationPointX + p_253861_.x, p_232330_.rotationPointY + p_253861_.y, p_232330_.rotationPointZ + p_253861_.z);
-				} else {
-					Vector3f vector3f = posVec(positionFrame.get(i).vector3f());
-					Vector3f vector3f1 = posVec(positionFrame.get(j).vector3f());
-					p_253861_.set(
-						fma(vector3f1.x - vector3f.x, f2, vector3f.x) * scale,
-						fma(vector3f1.y - vector3f.y, f2, vector3f.y) * scale,
-						fma(vector3f1.z - vector3f.z, f2, vector3f.z) * scale
-					);
-					p_232330_.setRotationPoint(p_232330_.rotationPointX + p_253861_.x, p_232330_.rotationPointY + p_253861_.y, p_232330_.rotationPointZ + p_253861_.z);
-
-				}
 			}));
 			Map<String, PostData> rotationMap = entry.getValue().getRotation();
 			List<KeyFrame> rotationFrame = Lists.newArrayList();
@@ -107,29 +87,9 @@ public class AnimationHelper {
 					f2 = 0.0F;
 				}
 
-				if (keyFrame3.lerp_mode.equals("catmullrom")) {
-					Vector3f vector3f = degreeVec(rotationFrame.get(Math.max(0, i - 1)).vector3f());
-					Vector3f vector3f1 = degreeVec(rotationFrame.get(i).vector3f());
-					Vector3f vector3f2 = degreeVec(rotationFrame.get(j).vector3f());
-					Vector3f vector3f3 = degreeVec(rotationFrame.get(Math.min(rotationFrame.size() - 1, j + 1)).vector3f());
+				AnimationChannel.Interpolations.getInterpolations(keyFrame3.lerp_mode).apply(animationVecCache, f2, rotationFrame, i, j, scale);
+				AnimationChannel.Targets.ROTATION.apply(p_232330_, animationVecCache);
 
-					p_253861_.set(
-						catmullrom(f2, vector3f.x, vector3f1.x, vector3f2.x, vector3f3.x) * scale / (float) (Math.PI),
-						catmullrom(f2, vector3f.y, vector3f1.y, vector3f2.y, vector3f3.y) * scale / (float) (Math.PI),
-						catmullrom(f2, vector3f.z, vector3f1.z, vector3f2.z, vector3f3.z) * scale / (float) (Math.PI)
-					);
-					p_232330_.setRotationAngle(p_232330_.rotateAngleX + p_253861_.x, p_232330_.rotateAngleY + p_253861_.y, p_232330_.rotateAngleZ + p_253861_.z);
-				} else {
-					Vector3f vector3f = degreeVec(rotationFrame.get(i).vector3f());
-					Vector3f vector3f1 = degreeVec(rotationFrame.get(j).vector3f());
-					p_253861_.set(
-						fma(vector3f1.x - vector3f.x, f2, vector3f.x) * scale / (float) (Math.PI),
-						fma(vector3f1.y - vector3f.y, f2, vector3f.y) * scale / (float) (Math.PI),
-						fma(vector3f1.z - vector3f.z, f2, vector3f.z) * scale / (float) (Math.PI)
-					);
-					p_232330_.setRotationAngle(p_232330_.rotateAngleX + p_253861_.x, p_232330_.rotateAngleY + p_253861_.y, p_232330_.rotateAngleZ + p_253861_.z);
-
-				}
 			}));
 
 			Map<String, PostData> scaleMap = entry.getValue().getScale();
@@ -151,29 +111,8 @@ public class AnimationHelper {
 					f2 = 0.0F;
 				}
 
-				if (keyFrame3.lerp_mode.equals("catmullrom")) {
-					Vector3f vector3f = degreeVec(scaleFrame.get(Math.max(0, i - 1)).vector3f());
-					Vector3f vector3f1 = degreeVec(scaleFrame.get(i).vector3f());
-					Vector3f vector3f2 = degreeVec(scaleFrame.get(j).vector3f());
-					Vector3f vector3f3 = degreeVec(scaleFrame.get(Math.min(scaleFrame.size() - 1, j + 1)).vector3f());
-
-					p_253861_.set(
-						catmullrom(f2, vector3f.x, vector3f1.x, vector3f2.x, vector3f3.x) * scale,
-						catmullrom(f2, vector3f.y, vector3f1.y, vector3f2.y, vector3f3.y) * scale,
-						catmullrom(f2, vector3f.z, vector3f1.z, vector3f2.z, vector3f3.z) * scale
-					);
-					p_232330_.setScale(p_232330_.scaleX + p_253861_.x, p_232330_.scaleY + p_253861_.y, p_232330_.scaleZ + p_253861_.z);
-				} else {
-					Vector3f vector3f = degreeVec(scaleFrame.get(i).vector3f());
-					Vector3f vector3f1 = degreeVec(scaleFrame.get(j).vector3f());
-					p_253861_.set(
-						fma(vector3f1.x - vector3f.x, f2, vector3f.x) * scale,
-						fma(vector3f1.y - vector3f.y, f2, vector3f.y) * scale,
-						fma(vector3f1.z - vector3f.z, f2, vector3f.z) * scale
-					);
-					p_232330_.setScale(p_232330_.scaleX + p_253861_.x, p_232330_.scaleY + p_253861_.y, p_232330_.scaleZ + p_253861_.z);
-
-				}
+				AnimationChannel.Interpolations.getInterpolations(keyFrame3.lerp_mode).apply(animationVecCache, f2, scaleFrame, i, j, scale);
+				AnimationChannel.Targets.SCALE.apply(p_232330_, animationVecCache);
 			}));
 		}
 	}
@@ -182,13 +121,13 @@ public class AnimationHelper {
 		return a * b + c;
 	}
 
-	private static float catmullrom(float p_216245_, float p_216246_, float p_216247_, float p_216248_, float p_216249_) {
+	public static float catmullrom(float delta, float controlPoint1, float controlPoint2, float controlPoint3, float controlPoint4) {
 		return 0.5F
 			* (
-			2.0F * p_216247_
-				+ (p_216248_ - p_216246_) * p_216245_
-				+ (2.0F * p_216246_ - 5.0F * p_216247_ + 4.0F * p_216248_ - p_216249_) * p_216245_ * p_216245_
-				+ (3.0F * p_216247_ - p_216246_ - 3.0F * p_216248_ + p_216249_) * p_216245_ * p_216245_ * p_216245_
+			2.0F * controlPoint2
+				+ (controlPoint3 - controlPoint1) * delta
+				+ (2.0F * controlPoint1 - 5.0F * controlPoint2 + 4.0F * controlPoint3 - controlPoint4) * delta * delta
+				+ (3.0F * controlPoint2 - controlPoint1 - 3.0F * controlPoint3 + controlPoint4) * delta * delta * delta
 		);
 	}
 

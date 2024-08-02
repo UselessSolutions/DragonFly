@@ -113,7 +113,7 @@ public class BenchEntityModel extends ModelBase {
 				if (rotation != null) {
 					rx += rotation.x;
 					ry += rotation.y;
-					rz -= rotation.z;
+					rz += rotation.z;
 				}
 				if (cubeRotation != null){
 					rx += cubeRotation.x;
@@ -162,7 +162,7 @@ public class BenchEntityModel extends ModelBase {
 		if (rotation != null) {
 			GL11.glRotatef(rotation.x, 1.0f, 0.0f, 0.0f);
 			GL11.glRotatef(rotation.y, 0.0f, 1.0f, 0.0f);
-			GL11.glRotatef(rotation.z, 0.0f, 0.0f, -1.0f);
+			GL11.glRotatef(rotation.z, 0.0f, 0.0f, 1.0f);
 		}
 		if (bones.rotateAngleY != 0.0f) {
 			GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleY), 0.0f, 1.0f, 0.0f);
@@ -199,7 +199,7 @@ public class BenchEntityModel extends ModelBase {
 		if (rotation != null) {
 			rx += rotation.x;
 			ry += rotation.y;
-			rz -= rotation.z;
+			rz += rotation.z;
 		}
 		GL11.glRotatef(rx, 1.0f, 0.0f, 0.0f);
 		GL11.glRotatef(ry, 0.0f, 1.0f, 0.0f);
