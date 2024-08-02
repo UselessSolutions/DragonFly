@@ -43,8 +43,8 @@ public class AnimationChannel {
 	}
 
 	public static class Targets {
-		public static final AnimationChannel.Target POSITION = BenchEntityBones::offsetPos;
-		public static final AnimationChannel.Target ROTATION = BenchEntityBones::offsetRotation;
+		public static final AnimationChannel.Target POSITION = ((modelPart, animationVector) -> modelPart.offsetPos(AnimationHelper.posVec(animationVector)));
+		public static final AnimationChannel.Target ROTATION = ((modelPart, animationVector) -> modelPart.offsetRotation(AnimationHelper.degreeVec(animationVector)));
 		public static final AnimationChannel.Target SCALE = BenchEntityBones::offsetScale;
 	}
 }

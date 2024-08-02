@@ -65,7 +65,7 @@ public class AnimationHelper {
 				}
 
 				AnimationChannel.Interpolations.getInterpolations(keyFrame2.lerp_mode).apply(animationVecCache, f2, positionFrame, i, j, scale);
-				AnimationChannel.Targets.ROTATION.apply(p_232330_, animationVecCache);
+				AnimationChannel.Targets.POSITION.apply(p_232330_, animationVecCache);
 
 			}));
 			Map<String, PostData> rotationMap = entry.getValue().getRotation();

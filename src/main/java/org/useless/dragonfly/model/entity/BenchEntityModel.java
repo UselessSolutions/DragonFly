@@ -102,7 +102,7 @@ public class BenchEntityModel extends ModelBase {
 
 
 				if (cube.getPivot() != null) {
-					GL11.glTranslatef(convertPivot(bones, cube, 0) * scale, convertPivot(bones, cube, 1) * scale, convertPivot(bones, cube, 2) * scale);
+					GL11.glTranslatef(convertPivot(bones, cube, 0) * scale, convertPivot(bones, cube, 1) * scale, -convertPivot(bones, cube, 2) * scale);
 				}
 
 				GL11.glTranslatef(bones.rotationPointX * scale, bones.rotationPointY * scale, bones.rotationPointZ * scale);
@@ -111,18 +111,24 @@ public class BenchEntityModel extends ModelBase {
 				float ry = 0;
 				float rz = 0;
 				if (rotation != null) {
-					rx += rotation.x;
-					ry += rotation.y;
-					rz += rotation.z;
+					rotation = AnimationHelper.degreeVec(bones.getRotation());
+					rx = rotation.x;
+					ry = rotation.y;
+					rz = rotation.z;
+					GL11.glRotatef((float) Math.toDegrees(rx), 1.0f, 0.0f, 0.0f);
+					GL11.glRotatef((float) Math.toDegrees(ry), 0.0f, 1.0f, 0.0f);
+					GL11.glRotatef((float) Math.toDegrees(rz), 0.0f, 0.0f, 1.0f);
 				}
 				if (cubeRotation != null){
-					rx += cubeRotation.x;
-					ry += cubeRotation.y;
-					rz += cubeRotation.z;
+					cubeRotation = AnimationHelper.degreeVec(cubeRotation);
+					rx = cubeRotation.x;
+					ry = cubeRotation.y;
+					rz = cubeRotation.z;
+					GL11.glRotatef((float) Math.toDegrees(rx), 1.0f, 0.0f, 0.0f);
+					GL11.glRotatef((float) Math.toDegrees(ry), 0.0f, 1.0f, 0.0f);
+					GL11.glRotatef((float) Math.toDegrees(rz), 0.0f, 0.0f, 1.0f);
 				}
-				GL11.glRotatef(rx, 1.0f, 0.0f, 0.0f);
-				GL11.glRotatef(ry, 0.0f, 1.0f, 0.0f);
-				GL11.glRotatef(rz, 0.0f, 0.0f, 1.0f);
+
 
 				GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleX), 1.0f, 0.0f, 0.0f);
 				GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleY), 0.0f, 1.0f, 0.0f);
@@ -160,9 +166,10 @@ public class BenchEntityModel extends ModelBase {
 			GL11.glTranslatef(bones.rotationPointX * scale, bones.rotationPointY * scale, bones.rotationPointZ * scale);
 		}
 		if (rotation != null) {
-			GL11.glRotatef(rotation.x, 1.0f, 0.0f, 0.0f);
-			GL11.glRotatef(rotation.y, 0.0f, 1.0f, 0.0f);
-			GL11.glRotatef(rotation.z, 0.0f, 0.0f, 1.0f);
+			rotation = AnimationHelper.degreeVec(bones.getRotation());
+			GL11.glRotatef((float) Math.toDegrees(rotation.x), 1.0f, 0.0f, 0.0f);
+			GL11.glRotatef((float) Math.toDegrees(rotation.y), 0.0f, 1.0f, 0.0f);
+			GL11.glRotatef((float) Math.toDegrees(rotation.z), 0.0f, 0.0f, 1.0f);
 		}
 		if (bones.rotateAngleY != 0.0f) {
 			GL11.glRotatef((float) Math.toDegrees(bones.rotateAngleY), 0.0f, 1.0f, 0.0f);
@@ -197,13 +204,14 @@ public class BenchEntityModel extends ModelBase {
 		Vector3f rotation = parentBone.getRotation();
 
 		if (rotation != null) {
+			rotation = AnimationHelper.degreeVec(parentBone.getRotation());
 			rx += rotation.x;
 			ry += rotation.y;
 			rz += rotation.z;
 		}
-		GL11.glRotatef(rx, 1.0f, 0.0f, 0.0f);
-		GL11.glRotatef(ry, 0.0f, 1.0f, 0.0f);
-		GL11.glRotatef(rz, 0.0f, 0.0f, 1.0f);
+		GL11.glRotatef((float) Math.toDegrees(rx), 1.0f, 0.0f, 0.0f);
+		GL11.glRotatef((float) Math.toDegrees(ry), 0.0f, 1.0f, 0.0f);
+		GL11.glRotatef((float) Math.toDegrees(rz), 0.0f, 0.0f, 1.0f);
 
 		GL11.glRotatef((float) Math.toDegrees(parentBone.rotateAngleX), 1.0f, 0.0f, 0.0f);
 		GL11.glRotatef((float) Math.toDegrees(parentBone.rotateAngleY), 0.0f, 1.0f, 0.0f);
