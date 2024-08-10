@@ -387,4 +387,29 @@ public class Vector3f extends Vector {
 		throw new ArrayIndexOutOfBoundsException();
 	}
 
+	public Vector3f lerp(Vector3f other, float t) {
+		return lerp(other, t, this);
+	}
+
+	public Vector3f lerp(Vector3f other, float t, Vector3f dest) {
+		dest.x = (other.x - x) * t - x;
+		dest.y = (other.y - y) * t - y;
+		dest.z = (other.z - z) * t - z;
+		return dest;
+	}
+
+	public Vector3f mul(Vector3f v) {
+		this.x = x * v.x;
+		this.y = y * v.y;
+		this.z = z * v.z;
+		return this;
+	}
+
+	public Vector3f mul(float scalar) {
+		this.x = this.x * scalar;
+		this.y = this.y * scalar;
+		this.z = this.z * scalar;
+		return this;
+	}
+
 }

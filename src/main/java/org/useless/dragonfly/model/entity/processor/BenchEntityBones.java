@@ -95,6 +95,24 @@ public class BenchEntityBones {
 		this.scaleZ = 1;
 	}
 
+	public void offsetPos(Vector3f offset) {
+		this.rotationPointX = this.rotationPointX + offset.x;
+		this.rotationPointY = this.rotationPointY + offset.y;
+		this.rotationPointZ = this.rotationPointZ + offset.z;
+	}
+
+	public void offsetRotation(Vector3f offset) {
+		this.rotateAngleX = this.rotateAngleX + offset.x;
+		this.rotateAngleY = this.rotateAngleY + offset.y;
+		this.rotateAngleZ = this.rotateAngleZ + offset.z;
+	}
+
+	public void offsetScale(Vector3f offset) {
+		this.scaleX = this.scaleX + offset.x;
+		this.scaleY = this.scaleY + offset.y;
+		this.scaleZ = this.scaleZ + offset.z;
+	}
+
 
 	public void addChild(BenchEntityBones benchEntityBones) {
 		children.add(benchEntityBones);
