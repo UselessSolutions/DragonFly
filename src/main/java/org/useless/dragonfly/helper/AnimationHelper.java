@@ -64,7 +64,7 @@ public class AnimationHelper {
 					f2 = 0.0F;
 				}
 
-				AnimationChannel.Interpolations.getInterpolations(keyFrame2.lerp_mode).apply(animationVecCache, f2, positionFrame, i, j, scale);
+				AnimationChannel.Interpolations.getInterpolations(keyFrame2.lerp_mode).apply(animationVecCache, f2, positionFrame, i, j, scale / MathHelper.PI);
 				AnimationChannel.Targets.POSITION.apply(p_232330_, animationVecCache);
 
 			}));
@@ -87,7 +87,7 @@ public class AnimationHelper {
 					f2 = 0.0F;
 				}
 
-				AnimationChannel.Interpolations.getInterpolations(keyFrame3.lerp_mode).apply(animationVecCache, f2, rotationFrame, i, j, scale);
+				AnimationChannel.Interpolations.getInterpolations(keyFrame3.lerp_mode).apply(animationVecCache, f2, rotationFrame, i, j, scale / MathHelper.PI);
 				AnimationChannel.Targets.ROTATION.apply(p_232330_, animationVecCache);
 
 			}));
