@@ -102,7 +102,7 @@ public class BenchEntityModel extends ModelBase {
 
 
 				if (cube.getPivot() != null) {
-					GL11.glTranslatef(convertPivot(bones, cube, 0) * scale, convertPivot(bones, cube, 1) * scale, -convertPivot(bones, cube, 2) * scale);
+					GL11.glTranslatef(convertPivot(bones, cube, 0) * scale, convertPivot(bones, cube, 1) * scale, convertPivot(bones, cube, 2) * scale);
 				}
 
 				GL11.glTranslatef(bones.rotationPointX * scale, bones.rotationPointY * scale, bones.rotationPointZ * scale);
