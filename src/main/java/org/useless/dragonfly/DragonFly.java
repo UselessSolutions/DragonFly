@@ -7,27 +7,15 @@ import net.minecraft.client.render.stitcher.TextureRegistry;
 import net.minecraft.core.util.helper.Side;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.useless.dragonfly.model.block.adapters.CubeDataJsonAdapter;
-import org.useless.dragonfly.model.block.adapters.FaceDataJsonAdapter;
-import org.useless.dragonfly.model.block.adapters.ModelDataJsonAdapter;
-import org.useless.dragonfly.model.block.adapters.PositionDataJsonAdapter;
-import org.useless.dragonfly.model.block.adapters.RotationDataJsonAdapter;
-import org.useless.dragonfly.model.block.data.CubeData;
-import org.useless.dragonfly.model.block.data.FaceData;
-import org.useless.dragonfly.model.block.data.ModelData;
-import org.useless.dragonfly.model.block.data.PositionData;
-import org.useless.dragonfly.model.block.data.RotationData;
+import org.useless.dragonfly.model.block.adapters.*;
+import org.useless.dragonfly.model.block.data.*;
 import org.useless.dragonfly.model.blockstates.adapters.BlockStateJsonAdapter;
 import org.useless.dragonfly.model.blockstates.adapters.ModelPartJsonAdapter;
 import org.useless.dragonfly.model.blockstates.adapters.VariantDataJsonAdapter;
 import org.useless.dragonfly.model.blockstates.data.BlockstateData;
 import org.useless.dragonfly.model.blockstates.data.ModelPart;
 import org.useless.dragonfly.model.blockstates.data.VariantData;
-import org.useless.dragonfly.model.entity.adapters.AnimationDeserializer;
-import org.useless.dragonfly.model.entity.adapters.BenchEntityBonesJsonAdapter;
-import org.useless.dragonfly.model.entity.adapters.BenchEntityCubeJsonAdapter;
-import org.useless.dragonfly.model.entity.adapters.BenchEntityDataJsonAdapter;
-import org.useless.dragonfly.model.entity.adapters.BenchEntityGeometryJsonAdapter;
+import org.useless.dragonfly.model.entity.adapters.*;
 import org.useless.dragonfly.model.entity.animation.Animation;
 import org.useless.dragonfly.model.entity.processor.BenchEntityBones;
 import org.useless.dragonfly.model.entity.processor.BenchEntityCube;
@@ -79,7 +67,7 @@ public class DragonFly implements GameStartEntrypoint {
 		if (isDev){
 			if (HalpLibe.isClient){
 				try {
-					TextureRegistry.initializeAllFiles(MOD_ID, TextureRegistry.blockAtlas);
+					TextureRegistry.initializeAllFiles(MOD_ID, TextureRegistry.blockAtlas, true);
 				} catch (URISyntaxException | IOException | NullPointerException e) {
 					LOGGER.error("Failed to initialize files!", e);
 				}
@@ -93,5 +81,6 @@ public class DragonFly implements GameStartEntrypoint {
 			}
 		}
 		LOGGER.info("DragonFly initialized.");
+		//DebugEntities.init();
 	}
 }
