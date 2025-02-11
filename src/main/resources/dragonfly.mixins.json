@@ -6,6 +6,8 @@
   "mixins": [
   ],
   "client": [
+    "MinecraftMixin",
+    "TexturePackListMixin"
   ],
   "injectors": {
     "defaultRequire": 1

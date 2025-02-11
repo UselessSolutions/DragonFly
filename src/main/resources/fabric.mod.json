@@ -19,18 +19,17 @@
 
   "environment": "*",
   "entrypoints": {
-    "afterGameStart": [
-        "org.useless.dragonfly.DragonFly"
-    ]
-  },
+		"beforeGameStart": ["org.useless.DFTest"],
+		"afterGameStart": ["org.useless.DFTest"],
+		"initModels": ["org.useless.DFTest"]
+	},
   "mixins": [
     "dragonfly.mixins.json"
   ],
 
   "depends": {
     "fabricloader": ">=0.13.3",
-		"halplibe": ">=4.0.2",
-		"minecraft": "^7.2-beta"
+		"minecraft": "^7.3-beta"
   },
   "suggests": {
   },

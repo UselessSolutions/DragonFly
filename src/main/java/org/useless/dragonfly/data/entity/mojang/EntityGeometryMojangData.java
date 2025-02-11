@@ -12,6 +12,7 @@ import com.google.gson.JsonParser;
 import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.mojang.logging.LogUtils;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.render.texturepack.TexturePack;
 import net.minecraft.client.render.texturepack.TexturePackList;
 import net.minecraft.core.util.HardIllegalArgumentException;
@@ -35,6 +36,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class EntityGeometryMojangData implements EntityModelData {
     public static final @NotNull String CURRENT_VERSION = "1.8.0";
@@ -276,45 +278,51 @@ public class EntityGeometryMojangData implements EntityModelData {
 
             final Collection<String> modelPaths = new HashSet<>();
 
-            for (final TexturePack pack : packs) {
-                try (final @Nullable InputStream stream = pack.getResourceAsStream("/assets/minecraft/models/entity/models.json")) {
-                    if (stream == null) continue;
-                    final JsonObject manifestObject = JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject();
-                    if (manifestObject.has("model_paths")) {
-                        final JsonArray paths = manifestObject.getAsJsonArray("model_paths");
-                        for (final JsonElement e : paths) {
-                            modelPaths.add(e.getAsString());
-                        }
-                    }
-                    if (manifestObject.has("renderers")) {
-                        final JsonObject renderersObj = manifestObject.getAsJsonObject("renderers");
-                        for (final Map.Entry<String, JsonElement> entry : renderersObj.entrySet()) {
-                            final NamespaceID id;
-                            try {
-                                id = NamespaceID.getPermanent(entry.getKey());
-                            } catch (final HardIllegalArgumentException exception) {
-                                LOGGER.error("Id '{}' is malformed!", entry.getKey(), exception);
-                                continue;
-                            }
-                            localModelMappings.putIfAbsent(id, new HashMap<>());
-                            final Map<String, Pair<String, Double>> modelMappings = localModelMappings.get(id);
-                            final JsonObject mappingsObject = entry.getValue().getAsJsonObject();
-                            for (final Map.Entry<String, JsonElement> mappingEntry : mappingsObject.entrySet()) {
-                                final JsonElement element = mappingEntry.getValue();
-                                if (element.isJsonPrimitive()) {
-                                    modelMappings.put(mappingEntry.getKey(), Pair.of(mappingEntry.getValue().getAsString(), 0D));
-                                } else if (element.isJsonObject()) {
-                                    final JsonObject mapping = element.getAsJsonObject();
-                                    modelMappings.put(mappingEntry.getKey(), Pair.of(mapping.get("model").getAsString(), mapping.has("inflation") ? mapping.get("inflation").getAsDouble() : 0D));
-                                } else {
-                                    LOGGER.warn("Unknown format for element '{}' of key '{}' in pack '{}'", element, mappingEntry.getKey(), pack.packId);
-                                }
-                            }
-                        }
-                    }
-                } catch (final Exception e) {
-                    LOGGER.error("Exception while reading entity models manifest in pack '{}'!", pack.packId, e);
-                }
+			final Set<String> namespaces = new HashSet<>();
+			namespaces.add("minecraft");
+			FabricLoader.getInstance().getAllMods().forEach(modContainer -> namespaces.add(modContainer.getMetadata().getId()));
+
+			for (final TexturePack pack : packs) {
+                for (final String namespace : namespaces) {
+					try (final @Nullable InputStream stream = pack.getResourceAsStream("/assets/" + namespace + "/models/entity/models.json")) {
+						if (stream == null) continue;
+						final JsonObject manifestObject = JsonParser.parseReader(new InputStreamReader(stream)).getAsJsonObject();
+						if (manifestObject.has("model_paths")) {
+							final JsonArray paths = manifestObject.getAsJsonArray("model_paths");
+							for (final JsonElement e : paths) {
+								modelPaths.add(e.getAsString());
+							}
+						}
+						if (manifestObject.has("renderers")) {
+							final JsonObject renderersObj = manifestObject.getAsJsonObject("renderers");
+							for (final Map.Entry<String, JsonElement> entry : renderersObj.entrySet()) {
+								final NamespaceID id;
+								try {
+									id = NamespaceID.getPermanent(entry.getKey());
+								} catch (final HardIllegalArgumentException exception) {
+									LOGGER.error("Id '{}' is malformed!", entry.getKey(), exception);
+									continue;
+								}
+								localModelMappings.putIfAbsent(id, new HashMap<>());
+								final Map<String, Pair<String, Double>> modelMappings = localModelMappings.get(id);
+								final JsonObject mappingsObject = entry.getValue().getAsJsonObject();
+								for (final Map.Entry<String, JsonElement> mappingEntry : mappingsObject.entrySet()) {
+									final JsonElement element = mappingEntry.getValue();
+									if (element.isJsonPrimitive()) {
+										modelMappings.put(mappingEntry.getKey(), Pair.of(mappingEntry.getValue().getAsString(), 0D));
+									} else if (element.isJsonObject()) {
+										final JsonObject mapping = element.getAsJsonObject();
+										modelMappings.put(mappingEntry.getKey(), Pair.of(mapping.get("model").getAsString(), mapping.has("inflation") ? mapping.get("inflation").getAsDouble() : 0D));
+									} else {
+										LOGGER.warn("Unknown format for element '{}' of key '{}' in pack '{}'", element, mappingEntry.getKey(), pack.packId);
+									}
+								}
+							}
+						}
+					} catch (final Exception e) {
+						LOGGER.error("Exception while reading entity models manifest in pack '{}'!", pack.packId, e);
+					}
+				}
             }
 
             for (final TexturePack pack : packs) {
