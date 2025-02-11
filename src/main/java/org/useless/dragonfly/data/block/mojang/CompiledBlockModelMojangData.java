@@ -12,7 +12,6 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.useless.dragonfly.DisplayPos;
 
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -100,7 +99,7 @@ public class CompiledBlockModelMojangData {
             } else if (path.startsWith("#")) { // Texture variable
                 return getTexture(path.substring(1), defaultCoordinate, logWarnings);
             } else {
-                if (!path.contains(":")) path = "minecraft" + ":" + path;
+                if (!path.contains(":")) path = "minecraft:" + path;
                 if (TextureRegistry.hasTexture(path)) {
                     return TextureRegistry.getTexture(path);
                 } else {

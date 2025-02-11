@@ -46,7 +46,6 @@ public class DFTest implements GameStartEntrypoint, ModelEntrypoint {
 	@Override
 	public void initEntityModels(EntityRenderDispatcher dispatcher) {
 		ModelHelper.setEntityModel(MobCow.class, () -> new MobRendererQuadruped<>(0.7f));
-		dispatcher.getRenderer(MobCow.class).init(dispatcher);
 	}
 
 	@Override
