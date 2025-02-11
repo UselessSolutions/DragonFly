@@ -6,11 +6,9 @@ import net.minecraft.client.render.TileEntityRenderDispatcher;
 import net.minecraft.client.render.block.color.BlockColorDispatcher;
 import net.minecraft.client.render.block.model.BlockModelDispatcher;
 import net.minecraft.client.render.item.model.ItemModelDispatcher;
-import net.minecraft.core.entity.Mob;
 import net.minecraft.core.entity.animal.MobCow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.useless.dragonfly.renderer.EntityRenderer;
 import turniplabs.halplibe.helper.ModelHelper;
 import turniplabs.halplibe.util.GameStartEntrypoint;
 import turniplabs.halplibe.util.ModelEntrypoint;
@@ -47,9 +45,8 @@ public class DFTest implements GameStartEntrypoint, ModelEntrypoint {
 
 	@Override
 	public void initEntityModels(EntityRenderDispatcher dispatcher) {
-		MobRendererQuadruped<MobCow> renderer = new MobRendererQuadruped<>(0.7f);
-		renderer.init(MobCow.class, dispatcher);
-		ModelHelper.setEntityModel(MobCow.class, () -> renderer);
+		ModelHelper.setEntityModel(MobCow.class, () -> new MobRendererQuadruped<>(0.7f));
+		dispatcher.getRenderer(MobCow.class).init(dispatcher);
 	}
 
 	@Override

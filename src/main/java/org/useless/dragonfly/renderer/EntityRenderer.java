@@ -20,6 +20,7 @@ import net.minecraft.core.world.World;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 import org.useless.dragonfly.data.entity.mojang.EntityGeometryMojangData;
+import org.useless.dragonfly.mixins.EntityRenderDispatcherAccessor;
 import org.useless.dragonfly.models.entity.StaticEntityModel;
 
 import java.util.HashMap;
@@ -29,7 +30,6 @@ public abstract class EntityRenderer<T extends Entity> extends net.minecraft.cli
 {
     public static boolean renderShadows = true;
     private final @NotNull Map<@NotNull String, @NotNull StaticEntityModel> modelMap = new HashMap<>();
-    protected EntityRenderDispatcher renderDispatcher = null;
     protected Class<? extends T> appliedClass = null;
 
     private float shadowSize;
@@ -87,11 +87,19 @@ public abstract class EntityRenderer<T extends Entity> extends net.minecraft.cli
         return this;
     }
 
-    public void onWorldChanged(final @NotNull World world)
-    {
-    }
+	@Override
+	public void init(final EntityRenderDispatcher dispatcher) {
+		super.init(dispatcher);
+		for (Map.Entry<Class<?>, net.minecraft.client.render.entity.EntityRenderer<?>> entry : ((EntityRenderDispatcherAccessor)dispatcher).getRenderers().entrySet()) {
+			if (entry.getValue() == this) {
+				appliedClass = (Class<? extends T>) entry.getKey();
+				break;
+			}
+		}
 
-    private void renderFire(final @NotNull Tessellator tessellator, final @NotNull T entity, final double x, final double y, final double z, final float partialTick)
+	}
+
+	private void renderFire(final @NotNull Tessellator tessellator, final @NotNull T entity, final double x, final double y, final double z, final float partialTick)
     {
         GL11.glDisable(GL11.GL_LIGHTING);
         final IconCoordinate texture = TextureRegistry.getTexture("minecraft:block/fire");
@@ -299,12 +307,6 @@ public abstract class EntityRenderer<T extends Entity> extends net.minecraft.cli
         tessellator.addVertex(aabb.maxX, aabb.maxY, aabb.maxZ);
         tessellator.addVertex(aabb.maxX, aabb.minY, aabb.maxZ);
         tessellator.draw();
-    }
-
-    public void init(@NotNull final Class<? extends T> appliedClass, final @NotNull EntityRenderDispatcher dispatcher)
-    {
-        this.renderDispatcher = dispatcher;
-        this.appliedClass = appliedClass;
     }
 
     public void postRender(final @NotNull Tessellator tessellator, final @NotNull T entity, final double x, final double y, final double z, final float yaw, final float partialTick)
