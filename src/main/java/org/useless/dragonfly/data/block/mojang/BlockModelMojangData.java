@@ -21,8 +21,8 @@ import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.useless.dragonfly.DisplayPos;
 import org.useless.dragonfly.data.block.BlockModelData;
-import org.useless.dragonfly.models.block.StaticBlockModel;
-import org.useless.dragonfly.models.block.mojang.StaticBlockModelMojang;
+//import org.useless.dragonfly.models.block.StaticBlockModel;
+//import org.useless.dragonfly.models.block.mojang.StaticBlockModelMojang;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -154,10 +154,10 @@ public class BlockModelMojangData implements BlockModelData {
         return this.modelId;
     }
 
-    @Override
-    public @NotNull StaticBlockModel asModel() {
-        return new StaticBlockModelMojang(this);
-    }
+//    @Override
+//    public @NotNull StaticBlockModel asModel() {
+//        return new StaticBlockModelMojang(this);
+//    }
 
     @Override
     public String toString() {

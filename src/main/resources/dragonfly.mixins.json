@@ -1,15 +1,11 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "org.useless.dragonfly.mixins.mixin",
+  "package": "org.useless.dragonfly.mixins",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
   ],
   "client": [
-    "RenderEngineMixin",
-    "StatMixin",
-    "accessor.StatListAccessor",
-    "accessor.RenderBlocksAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
