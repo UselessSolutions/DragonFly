@@ -1,7 +1,0 @@
-{
-  "parent": "minecraft:block/cube_emissive_all",
-  "textures": {
-    "all": "minecraft:block/ore/nethercoal/netherrack",
-    "all_emissive": "minecraft:block/ore/nethercoal/netherrack_overlay"
-  }
-}
