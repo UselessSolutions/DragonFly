@@ -9,7 +9,6 @@ import net.minecraft.client.render.block.model.BlockModelDispatcher;
 import net.minecraft.client.render.block.model.BlockModelStandard;
 import net.minecraft.client.render.item.model.ItemModelDispatcher;
 import net.minecraft.core.block.Block;
-import net.minecraft.core.block.BlockLogic;
 import net.minecraft.core.block.BlockLogicTransparent;
 import net.minecraft.core.block.Blocks;
 import net.minecraft.core.block.material.Material;
@@ -18,8 +17,8 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.useless.dragonfly.data.block.mojang.BlockModelMojangData;
-import org.useless.dragonfly.models.block.BlockModelGeneric;
-import org.useless.dragonfly.models.block.BlockModelObj;
+import org.useless.dragonfly.models.block.BlockModelDFJava;
+import org.useless.dragonfly.models.block.BlockModelDFObj;
 import turniplabs.halplibe.helper.ModelHelper;
 import turniplabs.halplibe.util.GameStartEntrypoint;
 import turniplabs.halplibe.util.ModelEntrypoint;
@@ -51,8 +50,8 @@ public class DFTest implements GameStartEntrypoint, ModelEntrypoint {
 
 	@Override
 	public void initBlockModels(BlockModelDispatcher dispatcher) {
-		dispatcher.addDispatch(new BlockModelGeneric<>(block, loadDataModel("block/dragon_egg")));
-		dispatcher.addDispatch(new BlockModelObj<>(benz, Minecraft.getMinecraft().texturePackList.getResourceAsStream("/cat.obj")).setAllTextures(BlockModelStandard.BLOCK_TEXTURES, "minecraft:block/cat"));
+		dispatcher.addDispatch(new BlockModelDFJava<>(block, loadDataModel("block/dragon_egg")));
+		dispatcher.addDispatch(new BlockModelDFObj<>(benz, Minecraft.getMinecraft().texturePackList.getResourceAsStream("/cat.obj")).setAllTextures(BlockModelStandard.BLOCK_TEXTURES, "minecraft:block/cat"));
 	}
 
 	@Override

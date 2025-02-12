@@ -6,7 +6,6 @@ import net.minecraft.client.render.texture.stitcher.IconCoordinate;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.block.BlockLogic;
 import net.minecraft.core.util.helper.Side;
-import net.minecraft.core.world.WorldSource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
@@ -19,9 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class BlockModelObj<T extends BlockLogic> extends BlockModelStandard<T> {
+public class BlockModelDFObj<T extends BlockLogic> extends BlockModelStandard<T> {
     protected final ObjModel model;
-    public BlockModelObj(final Block<T> block, final InputStream objStream) {
+    public BlockModelDFObj(final Block<T> block, final InputStream objStream) {
         super(block);
         try {
             this.model = new ObjModel(Objects.requireNonNull(objStream));

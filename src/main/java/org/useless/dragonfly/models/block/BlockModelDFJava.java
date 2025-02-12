@@ -14,15 +14,15 @@ import org.jetbrains.annotations.Nullable;
 import org.useless.dragonfly.DisplayPos;
 import org.useless.dragonfly.data.block.BlockModelData;
 
-public class BlockModelGeneric<T extends BlockLogic> extends BlockModel<T> {
+public class BlockModelDFJava<T extends BlockLogic> extends BlockModel<T> {
     private final StaticBlockModel staticModel;
 
-    public BlockModelGeneric(@NotNull final Block<T> block, @NotNull final StaticBlockModel staticModel) {
+    public BlockModelDFJava(@NotNull final Block<T> block, @NotNull final StaticBlockModel staticModel) {
         super(block);
         this.staticModel = staticModel;
     }
 
-    public BlockModelGeneric(@NotNull final Block<T> block, @NotNull final BlockModelData staticModel) {
+    public BlockModelDFJava(@NotNull final Block<T> block, @NotNull final BlockModelData staticModel) {
         super(block);
         this.staticModel = staticModel.asModel();
     }
