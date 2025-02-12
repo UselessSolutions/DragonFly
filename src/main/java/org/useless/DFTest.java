@@ -6,6 +6,7 @@ import net.minecraft.client.render.EntityRenderDispatcher;
 import net.minecraft.client.render.TileEntityRenderDispatcher;
 import net.minecraft.client.render.block.color.BlockColorDispatcher;
 import net.minecraft.client.render.block.model.BlockModelDispatcher;
+import net.minecraft.client.render.block.model.BlockModelStandard;
 import net.minecraft.client.render.item.model.ItemModelDispatcher;
 import net.minecraft.core.block.Block;
 import net.minecraft.core.block.BlockLogic;
@@ -18,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.useless.dragonfly.data.block.mojang.BlockModelMojangData;
 import org.useless.dragonfly.models.block.BlockModelGeneric;
+import org.useless.dragonfly.models.block.BlockModelObj;
 import turniplabs.halplibe.helper.ModelHelper;
 import turniplabs.halplibe.util.GameStartEntrypoint;
 import turniplabs.halplibe.util.ModelEntrypoint;
@@ -33,6 +35,7 @@ public class DFTest implements GameStartEntrypoint, ModelEntrypoint {
 	}
 
 	public static Block<?> block = Blocks.register("test", "df:block/test", 3000, (b) -> new BlockLogicTransparent(b, Material.stone));
+	public static Block<?> benz = Blocks.register("benz", "df:block/benz", 3001, (b) -> new BlockLogicTransparent(b, Material.stone));
 
 	@Override
 	public void beforeGameStart() {
@@ -49,6 +52,7 @@ public class DFTest implements GameStartEntrypoint, ModelEntrypoint {
 	@Override
 	public void initBlockModels(BlockModelDispatcher dispatcher) {
 		dispatcher.addDispatch(new BlockModelGeneric<>(block, loadDataModel("block/dragon_egg")));
+		dispatcher.addDispatch(new BlockModelObj<>(benz, Minecraft.getMinecraft().texturePackList.getResourceAsStream("/cat.obj")).setAllTextures(BlockModelStandard.BLOCK_TEXTURES, "minecraft:block/cat"));
 	}
 
 	@Override
