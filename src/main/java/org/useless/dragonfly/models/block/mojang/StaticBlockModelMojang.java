@@ -21,6 +21,7 @@ import org.useless.dragonfly.data.block.mojang.BlockModelMojangData;
 import org.useless.dragonfly.data.block.mojang.CompiledBlockModelMojangData;
 import org.useless.dragonfly.data.block.mojang.CompiledBlockModelMojangData.C_Element;
 import org.useless.dragonfly.models.block.LightingCache;
+import org.useless.dragonfly.models.block.RenderBlocks;
 import org.useless.dragonfly.models.block.StaticBlockModel;
 
 import java.util.Locale;
@@ -41,9 +42,6 @@ import static org.useless.dragonfly.data.block.mojang.CompiledBlockModelMojangDa
 import static org.useless.dragonfly.data.block.mojang.CompiledBlockModelMojangData.C_Element.VERTEX_TOP_RIGHT;
 
 public class StaticBlockModelMojang implements StaticBlockModel {
-    public static boolean ENABLE_DIRECTIONAL_LIGHTING = true;
-    public static final float[] SIDE_LIGHT_MULTIPLIER = {0.5f, 1.0f, 0.8f, 0.8f, 0.6f, 0.6f};
-    public static final float FULL_CUBE_THRESHOLD = 1.0f / 16.0f;
 
     protected static final Minecraft MC = Minecraft.getMinecraft();
     protected static final LightingCache LIGHTING_CACHE = new LightingCache();
@@ -57,8 +55,10 @@ public class StaticBlockModelMojang implements StaticBlockModel {
     protected static final byte[] V_LEF_Z = new byte[] {0, 0, 0, 0, 0, 0};
 
     protected final CompiledBlockModelMojangData compiled;
+    protected final BlockModelMojangData data;
     public StaticBlockModelMojang(BlockModelMojangData data) {
         this.compiled = new CompiledBlockModelMojangData(data);
+        this.data = data;
     }
 
     @Override
@@ -177,7 +177,7 @@ public class StaticBlockModelMojang implements StaticBlockModel {
                 }
 
                 final boolean useAO = compiled.data.ambientOcclusion && MC.isAmbientOcclusionEnabled() && element.shade;
-                final boolean isFullCube = depth <= FULL_CUBE_THRESHOLD && element.shade;
+                final boolean isFullCube = depth <= RenderBlocks.FULL_CUBE_THRESHOLD && element.shade;
 
                 final float r;
                 final float g;
@@ -320,7 +320,7 @@ public class StaticBlockModelMojang implements StaticBlockModel {
                     lightTL = lightBL = lightBR = lightTR = getBrightness(dirX2, dirY2, dirZ2, minBrightness);
                 }
 
-                final float sideLight = (element.shade && ENABLE_DIRECTIONAL_LIGHTING) ? SIDE_LIGHT_MULTIPLIER[direction.getId()] : 1;
+                final float sideLight = (element.shade && RenderBlocks.ENABLE_DIRECTIONAL_LIGHTING) ? RenderBlocks.SIDE_LIGHT_MULTIPLIER[direction.getId()] : 1;
                 float colorRedBottomLeft = r * sideLight;
                 float colorRedBottomRight = colorRedBottomLeft;
                 float colorRedTopRight = colorRedBottomLeft;
