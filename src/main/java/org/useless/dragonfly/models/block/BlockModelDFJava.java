@@ -76,7 +76,7 @@ public class BlockModelDFJava<T extends BlockLogic> extends BlockModel<T> {
 		for (ModelPart modelPart : stateData.multipart){
 			if (modelPart.when == null || modelPart.when.match(blockState)){
 				AppliedData data = modelPart.getRandomModel(random);
-				modelsToRender.add(DragonFly.loadDataModel(data.model).asModel());
+				modelsToRender.add(DragonFly.loadBlockModel(data.model).asModel());
 			}
 		}
 		return modelsToRender.toArray(new StaticBlockModel[0]);

@@ -2,12 +2,6 @@ package org.useless;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.render.EntityRenderDispatcher;
-import net.minecraft.client.render.TileEntityRenderDispatcher;
-import net.minecraft.client.render.block.color.BlockColorDispatcher;
-import net.minecraft.client.render.block.model.BlockModelDispatcher;
-import net.minecraft.client.render.item.model.ItemModelDispatcher;
-import net.minecraft.core.util.collection.NamespaceID;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,8 +9,9 @@ import org.useless.dragonfly.data.block.mojang.BlockModelMojangData;
 import org.useless.dragonfly.data.block.mojang.state.AppliedData;
 import org.useless.dragonfly.data.block.mojang.state.BlockstateData;
 import org.useless.dragonfly.data.block.mojang.state.ModelPart;
+import org.useless.dragonfly.data.entity.mojang.EntityGeometryMojangData;
+import org.useless.dragonfly.models.entity.StaticEntityModel;
 import turniplabs.halplibe.util.GameStartEntrypoint;
-import turniplabs.halplibe.util.ModelEntrypoint;
 
 import java.util.Objects;
 import java.util.Random;
@@ -53,9 +48,14 @@ public class DragonFly implements GameStartEntrypoint {
 		return rand;
 	}
 
-	public static @NotNull BlockModelMojangData loadDataModel(@NotNull final String id) {
+	public static @NotNull BlockModelMojangData loadBlockModel(@NotNull final String id) {
 		final Minecraft mc = Minecraft.getMinecraft();
 		return Objects.requireNonNull(BlockModelMojangData.Cache.loadModelData(mc.texturePackList, id), "Cannot find model for id '" + id + "'!");
+	}
+
+	public static @NotNull StaticEntityModel loadEntityModel(@NotNull final String id, final double inflation) {
+		final Minecraft mc = Minecraft.getMinecraft();
+		return Objects.requireNonNull(EntityGeometryMojangData.Cache.getModel(id, inflation), "Cannot find model for id '" + id + "'!");
 	}
 
 	public static @NotNull BlockstateData loadStateData(@NotNull final String id) {
@@ -64,14 +64,14 @@ public class DragonFly implements GameStartEntrypoint {
 		if (blockstateData.variants != null){
 			for (ModelPart part : blockstateData.variants.values()) {
 				for (AppliedData variantData : part.apply){
-					loadDataModel(variantData.model);
+					loadBlockModel(variantData.model);
 				}
 			}
 		}
 		if (blockstateData.multipart != null){
 			for (ModelPart part : blockstateData.multipart){
 				for (AppliedData variantData : part.apply){
-					loadDataModel(variantData.model);
+					loadBlockModel(variantData.model);
 				}
 			}
 		}
