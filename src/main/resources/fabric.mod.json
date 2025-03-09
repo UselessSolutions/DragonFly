@@ -19,9 +19,12 @@
 
   "environment": "*",
   "entrypoints": {
-		"beforeGameStart": ["org.useless.DFTest"],
-		"afterGameStart": ["org.useless.DFTest"],
-		"initModels": ["org.useless.DFTest"]
+		"beforeGameStart": [
+			"org.useless.DragonFly"
+		],
+		"afterGameStart": [
+			"org.useless.DragonFly"
+		]
 	},
   "mixins": [
     "dragonfly.mixins.json"

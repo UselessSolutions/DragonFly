@@ -109,7 +109,7 @@ public final class RenderBlocks
 
     public boolean renderStandardBlock(Tessellator tessellator, WorldSource worldSource, BlockModelStandard<?> blockModel, AABB bounds, int x, int y, int z)
     {
-        int color = BlockColorDispatcher.getInstance().getDispatch(blockModel.block).getWorldColor(worldSource, x, y, z, 0);
+        int color = BlockColorDispatcher.getInstance().getDispatch(blockModel.block).getWorldColor(worldSource, x, y, z);
         float r = (float)(color >> 16 & 0xff) / 255F;
         float g = (float)(color >> 8 & 0xff) / 255F;
         float b = (float)(color & 0xff) / 255F;
@@ -135,42 +135,42 @@ public final class RenderBlocks
         boolean useColor;
         switch (side){
             case BOTTOM:
-                useColor = blockModel.shouldSideBeColored(worldSource, x, y, z, side, meta);
+                useColor = blockModel.shouldSideBeColored(worldSource, x, y, z, side.getId(), meta);
                 return renderSide(tessellator, worldSource, blockModel, bounds, x, y, z,
                         useColor ? r : 1, useColor ? g : 1, useColor ? b : 1,side, meta,
                         0, -1, 0, (float)bounds.minY,
                         0, 0, 1, (float)bounds.maxZ, (float)bounds.minZ,
                         -1, 0, 0, 1-(float)bounds.minX, 1-(float)bounds.maxX);
             case TOP:
-                useColor = blockModel.shouldSideBeColored(worldSource, x, y, z, side, meta);
+                useColor = blockModel.shouldSideBeColored(worldSource, x, y, z, side.getId(), meta);
                 return renderSide(tessellator, worldSource, blockModel, bounds, x, y, z,
                         useColor ? r : 1, useColor ? g : 1, useColor ? b : 1,side, meta,
                         0,1,0, 1-(float)bounds.maxY,
                         0,0,1, (float)bounds.maxZ, (float)bounds.minZ,
                         1,0,0, (float)bounds.maxX, (float)bounds.minX);
             case NORTH:
-                useColor = blockModel.shouldSideBeColored(worldSource, x, y, z, side, meta);
+                useColor = blockModel.shouldSideBeColored(worldSource, x, y, z, side.getId(), meta);
                 return renderSide(tessellator, worldSource, blockModel, bounds, x, y, z,
                         useColor ? r : 1, useColor ? g : 1, useColor ? b : 1,side, meta,
                         0,0,-1, (float)bounds.minZ,
                         -1,0,0, 1-(float)bounds.minX, 1-(float)bounds.maxX,
                         0,1,0, (float)bounds.maxY, (float)bounds.minY);
             case SOUTH:
-                useColor = blockModel.shouldSideBeColored(worldSource, x, y, z, side, meta);
+                useColor = blockModel.shouldSideBeColored(worldSource, x, y, z, side.getId(), meta);
                 return renderSide(tessellator, worldSource, blockModel, bounds, x, y, z,
                         useColor ? r : 1, useColor ? g : 1, useColor ? b : 1,side, meta,
                         0,0,1, 1-(float)bounds.maxZ,
                         0,1,0, (float)bounds.maxY, (float)bounds.minY,
                         -1,0,0, 1-(float)bounds.minX, 1-(float)bounds.maxX);
             case WEST:
-                useColor = blockModel.shouldSideBeColored(worldSource, x, y, z, side, meta);
+                useColor = blockModel.shouldSideBeColored(worldSource, x, y, z, side.getId(), meta);
                 return renderSide(tessellator, worldSource, blockModel, bounds, x, y, z,
                         useColor ? r : 1, useColor ? g : 1, useColor ? b : 1,side, meta,
                         -1,0,0, (float)bounds.minX,
                         0,0,1, (float)bounds.maxZ, (float)bounds.minZ,
                         0,1,0, (float)bounds.maxY, (float)bounds.minY);
             case EAST:
-                useColor = blockModel.shouldSideBeColored(worldSource, x, y, z, side, meta);
+                useColor = blockModel.shouldSideBeColored(worldSource, x, y, z, side.getId(), meta);
                 return renderSide(tessellator, worldSource, blockModel, bounds, x, y, z,
                         useColor ? r : 1, useColor ? g : 1, useColor ? b : 1,side, meta,
                         1,0,0, 1-(float)bounds.maxX,
@@ -192,14 +192,14 @@ public final class RenderBlocks
     ){
         IconCoordinate tex;
         if (this.overbright) {
-            tex = blockModel.getBlockOverbrightTexture(worldSource, x, y, z, side);
+            tex = blockModel.getBlockOverbrightTexture(worldSource, x, y, z, side.getId());
         } else {
             tex = blockModel.getBlockTexture(worldSource, x, y, z, side);
         }
         if (tex == null || ((renderBitMask >> side.getId()) & 1) != 0) return false;
 
         boolean rendered = false;
-        if (this.renderAllFaces || blockModel.shouldSideBeRendered(worldSource, bounds, x+dirX, y+dirY, z+dirZ, side, meta)) {
+        if (this.renderAllFaces || blockModel.shouldSideBeRendered(worldSource, bounds, x+dirX, y+dirY, z+dirZ, side.getId(), meta)) {
 
             setupLighting(blockModel.block, worldSource, x, y, z, r, g, b, side,
                 dirX, dirY, dirZ, depth,
@@ -368,7 +368,7 @@ public final class RenderBlocks
             }
         }
 
-        if (overbright || !BlockModel.ENABLE_DIRECTIONAL_LIGHTING)
+        if (overbright || !RenderBlocks.ENABLE_DIRECTIONAL_LIGHTING)
         {
             this.colorRedTopLeft = this.colorRedBottomLeft = this.colorRedBottomRight = this.colorRedTopRight = r;
             this.colorGreenTopLeft = this.colorGreenBottomLeft = this.colorGreenBottomRight = this.colorGreenTopRight = g;

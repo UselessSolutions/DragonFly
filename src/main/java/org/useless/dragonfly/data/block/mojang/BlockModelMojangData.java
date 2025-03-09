@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import static org.useless.DragonFly.DEFAULT_NAMESPACE;
+
 /**
  * <p>Modern Minecraft Block Model Data scheme as laid out on the {@see <a href="https://minecraft.wiki/w/Model#Block_models">minecraft.wiki/w/Model#Block_models</a>} page of the minecraft wiki.</p>
  * <p>Implementation should align with Modern's as of the release of 1.21.4</>
@@ -53,8 +55,6 @@ public class BlockModelMojangData implements BlockModelData {
         builder.registerTypeAdapter(DisplayPos.class, new DisplayPos.Serializer());
         return builder;
     }
-
-    protected static final String DEFAULT_NAMESPACE = "minecraft";
 
     protected static final String DEFAULT_PARENT = null;
     protected static final boolean DEFAULT_AMBIENT_OCCLUSION = true;

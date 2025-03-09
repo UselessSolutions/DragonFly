@@ -227,7 +227,7 @@ public class CompiledBlockModelMojangData {
                 directions[i] = d;
                 textures[i] = f.texture;
                 int offset = i * 4 * FLOATS_PER_VERTEX;
-                int rot = 4 - f.rotation;
+                int rot = /*4 -*/ f.rotation;
                 switch (d) {
                     case UP:
                         vertexData[offset + (VERTEX_TOP_LEFT * FLOATS_PER_VERTEX) + VERTEX_FLOAT_X] = maxX;

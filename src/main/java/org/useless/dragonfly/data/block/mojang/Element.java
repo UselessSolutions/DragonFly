@@ -29,6 +29,11 @@ public class Element {
     public final float toY;
     public final float toZ;
 
+	/**
+	 * Defines the name of the element.
+	 */
+	public String name = "";
+
     /**
      *  Defines the rotation of an element.
      */
@@ -45,13 +50,14 @@ public class Element {
     public final @NotNull Map<@NotNull Direction, @NotNull Face> faces;
 
     protected Element(
-        float fromX, float fromY, float fromZ,
+        String name, float fromX, float fromY, float fromZ,
         float toX, float toY, float toZ,
         @Nullable Rotation rotation,
         boolean shade,
         int lightEmission,
         @NotNull Map<@NotNull Direction, @NotNull Face> faces)
     {
+		this.name = name;
         this.fromX = fromX;
         this.fromY = fromY;
         this.fromZ = fromZ;
@@ -89,6 +95,8 @@ public class Element {
         protected final float toY;
         protected final float toZ;
 
+		protected String name;
+
         protected @Nullable Rotation rotation = null;
         protected boolean shade = DEFAULT_SHADE;
         protected int lightEmission = DEFAULT_LIGHT_EMISSION;
@@ -104,7 +112,12 @@ public class Element {
             this.toZ = toZ;
         }
 
-        public @NotNull Builder setRotation(@Nullable Rotation.Builder rotation) {
+		public @NotNull Builder setName(String name) {
+			this.name = name;
+			return this;
+		}
+
+		public @NotNull Builder setRotation(@Nullable Rotation.Builder rotation) {
             this.rotation = rotation == null ? null : rotation.build();
             return this;
         }
@@ -130,6 +143,7 @@ public class Element {
                 faceMap.put(e.getKey(), e.getValue().build(fromX, fromY, fromZ, toX, toY, toZ, e.getKey()));
             }
             return new Element(
+				name,
                 fromX, fromY, fromZ,
                 toX, toY, toZ,
                 rotation,
@@ -146,6 +160,7 @@ public class Element {
                 float[] from = GsonHelper.getAsFloatArray(object.get("from"), 3);
                 float[] to = GsonHelper.getAsFloatArray(object.get("to"), 3);
                 Builder builder = new Builder(from[0], from[1], from[2], to[0], to[1], to[2]);
+				if (object.has("name")) builder.setName(object.get("name").getAsString());
                 if (object.has("rotation")) builder.setRotation(context.deserialize(object.get("rotation"), Rotation.Builder.class));
                 if (object.has("shade")) builder.setShade(object.get("shade").getAsBoolean());
                 if (object.has("light_emission")) builder.setLightEmission(object.get("light_emission").getAsInt());
