@@ -11,6 +11,7 @@ import net.minecraft.core.util.phys.AABB;
 import net.minecraft.core.world.WorldSource;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.opengl.GL11;
 import org.useless.DragonFly;
 import org.useless.dragonfly.DisplayPos;
 import org.useless.dragonfly.data.block.BlockModelData;
@@ -19,10 +20,7 @@ import org.useless.dragonfly.data.block.mojang.state.BlockstateData;
 import org.useless.dragonfly.data.block.mojang.state.MetaStateInterpreter;
 import org.useless.dragonfly.data.block.mojang.state.ModelPart;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 public class BlockModelDFJava<T extends BlockLogic> extends BlockModel<T> {
     private final StaticBlockModel baseModel;
@@ -60,15 +58,52 @@ public class BlockModelDFJava<T extends BlockLogic> extends BlockModel<T> {
 		HashMap<String, String> blockStateList = stateInterpreter.getStateMap(worldSource, x, y, z, block, meta);
 
 		//TODO:
-		/*if (stateData.variants != null){ // If model uses variant system
+		if (stateData.variants != null){ // If model uses variant system
 			return getModelVariant(blockStateList, random);
-		}*/
+		}
 
 		if (stateData.multipart != null){
 			return getModelFromMultipart(blockStateList, random);
 		}
 
 		return new StaticBlockModel[]{baseModel};
+	}
+
+	public boolean matchConditionsAND(HashMap<String, String> blockState, HashMap<String, String> conditions){
+		if (conditions == null){
+			DragonFly.LOGGER.warn("conditions for model '" + baseModel + "' have returned null!");
+			return false;
+		}
+		boolean stateMet = true;
+		for (Map.Entry<String, String > entry: conditions.entrySet()) {
+			String stateValue = blockState.get(entry.getKey());
+			if (stateValue == null){
+				DragonFly.LOGGER.warn("Could not find corresponding value for '" + entry.getKey() + "' in model '" + baseModel + "'!");
+				stateMet = false;
+				continue;
+			}
+			stateMet &= stateValue.equals(entry.getValue());
+		}
+		return stateMet;
+	}
+
+	public StaticBlockModel[] getModelVariant(HashMap<String, String> blockState, Random random){
+		AppliedData variantData = null;
+		for (String stateString: stateData.variants.keySet()) {
+			String[] conditions = stateString.split(",");
+			HashMap<String, String> conditionMap = new HashMap<>();
+			for (String condition : conditions){
+				conditionMap.put(condition.split("=")[0], condition.split("=")[1]);
+			}
+			if (matchConditionsAND(blockState, conditionMap)){
+				variantData = stateData.variants.get(stateString).getRandomModel(random);
+				break;
+			}
+		}
+		if (variantData == null) return new StaticBlockModel[]{baseModel};
+
+
+		return new StaticBlockModel[]{DragonFly.loadBlockModel(variantData.model).asModel()};
 	}
 
 	public StaticBlockModel[] getModelFromMultipart(HashMap<String, String> blockState, Random random){
@@ -92,7 +127,7 @@ public class BlockModelDFJava<T extends BlockLogic> extends BlockModel<T> {
 				worldSource, x,
 				y,
 				z,
-				0, 0, 0, false, null);;
+				0, 0, 0, false, null);
 			if(!rendered) {
 				return false;
 			}
@@ -110,7 +145,7 @@ public class BlockModelDFJava<T extends BlockLogic> extends BlockModel<T> {
 				worldSource, x,
 				y,
 				z,
-				0, 0, 0, true, null);;
+				0, 0, 0, true, null);
 			if(!rendered) {
 				return false;
 			}

@@ -114,7 +114,7 @@ public class StaticEntityModelMojang implements StaticEntityModel {
             final double maxX = minX + cube.size[0] + (cube.inflate + bone.inflate + this.inflation) * 2;
             final double maxY = minY + cube.size[1] + (cube.inflate + bone.inflate + this.inflation) * 2;
             final double maxZ = minZ + cube.size[2] + (cube.inflate + bone.inflate + this.inflation) * 2;
-            
+
             if (cube.rotation == null) {
                 // Top
                 Face face = cube.faces[Direction.UP.getId()];
