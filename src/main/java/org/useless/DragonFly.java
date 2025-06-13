@@ -5,12 +5,14 @@ import net.minecraft.client.Minecraft;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.useless.dragonfly.animation.Animation;
 import org.useless.dragonfly.data.block.mojang.BlockModelMojangData;
 import org.useless.dragonfly.data.block.mojang.state.AppliedData;
 import org.useless.dragonfly.data.block.mojang.state.BlockstateData;
 import org.useless.dragonfly.data.block.mojang.state.ModelPart;
 import org.useless.dragonfly.data.entity.mojang.EntityGeometryMojangData;
 import org.useless.dragonfly.models.entity.StaticEntityModel;
+import org.useless.util.AnimationHelper;
 import turniplabs.halplibe.util.GameStartEntrypoint;
 
 import java.util.Objects;
@@ -29,7 +31,7 @@ public class DragonFly implements GameStartEntrypoint {
 
 	@Override
 	public void beforeGameStart() {
-
+		//new ModEntity().initializeEntities();
 	}
 
 
@@ -53,9 +55,15 @@ public class DragonFly implements GameStartEntrypoint {
 		return Objects.requireNonNull(BlockModelMojangData.Cache.loadModelData(mc.texturePackList, id), "Cannot find model for id '" + id + "'!");
 	}
 
+
 	public static @NotNull StaticEntityModel loadEntityModel(@NotNull final String id, final double inflation) {
 		final Minecraft mc = Minecraft.getMinecraft();
 		return Objects.requireNonNull(EntityGeometryMojangData.Cache.getModel(id, inflation), "Cannot find model for id '" + id + "'!");
+	}
+
+	public static @NotNull Animation loadEntityAnimations(@NotNull final String modid, @NotNull final String id) {
+		final Minecraft mc = Minecraft.getMinecraft();
+		return Objects.requireNonNull(AnimationHelper.getOrCreateEntityAnimation(modid, id), "Cannot find model for id '" + id + "'!");
 	}
 
 	public static @NotNull BlockstateData loadStateData(@NotNull final String id) {

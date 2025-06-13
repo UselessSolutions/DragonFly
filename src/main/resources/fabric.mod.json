@@ -24,6 +24,9 @@
 		],
 		"afterGameStart": [
 			"org.useless.DragonFly"
+		],
+		"initModels": [
+			"org.useless.DragonFlyClient"
 		]
 	},
   "mixins": [

@@ -12,15 +12,21 @@ import net.minecraft.core.util.helper.MathHelper;
 import net.minecraft.core.util.phys.AABB;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.slf4j.Logger;
+import org.useless.dragonfly.animation.Animation;
 import org.useless.dragonfly.models.entity.StaticEntityModel;
+import org.useless.dragonfly.models.entity.mojang.StaticEntityModelMojang;
+import org.useless.util.AnimationHelper;
+import org.useless.util.AnimationState;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class MobRenderer<T extends Mob> extends EntityRenderer<T> {
+	public Vector3f VEC_ANIMATION = new Vector3f();
     public static final float ENTITY_RENDER_SCALE = 16f;
     private static final Logger LOGGER = LogUtils.getLogger();
     private final @NotNull List<@Nullable StaticEntityModel> setupModels = new ArrayList<>();
@@ -230,4 +236,22 @@ public abstract class MobRenderer<T extends Mob> extends EntityRenderer<T> {
 //        return this.entityModel.visibleBounds().cloneMove(entity.x, entity.y, entity.z);
         return super.entityViewBox(entity);
     }
+
+	/*
+	 * Animation Util
+	 */
+	protected void animateWalk(StaticEntityModelMojang staticEntityModelMojang, Animation animationData, float p_268057_, float p_268347_, float p_268138_, float p_268165_) {
+		long time = (long) (p_268057_ * 50.0F * p_268138_);
+		float scale = Math.min(p_268347_ * p_268165_, 1.0F);
+		AnimationHelper.animate(staticEntityModelMojang, animationData, time, scale, VEC_ANIMATION);
+	}
+
+	protected void applyStatic(StaticEntityModelMojang staticEntityModelMojang, Animation animationData) {
+		AnimationHelper.animate(staticEntityModelMojang, animationData, 0L, 1.0F, VEC_ANIMATION);
+	}
+
+	protected void animate(StaticEntityModelMojang staticEntityModelMojang, AnimationState animationState, Animation animationData, float p_233388_, float p_233389_) {
+		animationState.updateTime(p_233388_, p_233389_);
+		animationState.ifStarted(p_233392_ -> AnimationHelper.animate(staticEntityModelMojang, animationData, p_233392_.getAccumulatedTime(), 1.0F, VEC_ANIMATION));
+	}
 }
