@@ -7,7 +7,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.data.DataLoader;
 import net.minecraft.core.util.helper.MathHelper;
 import org.jetbrains.annotations.NotNull;
-import org.joml.Vector3f;
+import org.lwjgl.util.vector.Vector3f;
 import org.useless.DragonFly;
 import org.useless.dragonfly.animation.Animation;
 import org.useless.dragonfly.animation.AnimationData;
