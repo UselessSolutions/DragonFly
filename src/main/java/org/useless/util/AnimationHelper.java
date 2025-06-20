@@ -6,13 +6,11 @@ import com.google.gson.stream.JsonReader;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.core.data.DataLoader;
 import net.minecraft.core.util.helper.MathHelper;
-import org.jetbrains.annotations.NotNull;
 import org.lwjgl.util.vector.Vector3f;
 import org.useless.DragonFly;
 import org.useless.dragonfly.animation.Animation;
 import org.useless.dragonfly.animation.AnimationData;
 import org.useless.dragonfly.animation.KeyFrameData;
-import org.useless.dragonfly.data.entity.mojang.Bone;
 import org.useless.dragonfly.data.entity.mojang.MojangAnimationDeserializer;
 import org.useless.dragonfly.models.entity.BoneTransform;
 import org.useless.dragonfly.models.entity.mojang.StaticEntityModelMojang;
@@ -87,8 +85,7 @@ public class AnimationHelper {
 		float seconds = getElapsedSeconds(animationData, time);
 
 		for (AnimationData animationData1 : animationData.getAnimations()) {
-			for (@NotNull Bone bone : entityModel.bones) {
-				if (animationData1.getBone().equals(bone.name) && animationData1.getKeyFrames() != null) {
+			if (animationData1.getKeyFrames() != null) {
 					List<KeyFrameData> positionFrame = animationData1.getKeyFrames().stream().sorted(Comparator.comparing(KeyFrameData::getTimestamp)).collect(Collectors.toList());
 
 					int i = Math.max(0, binarySearch(0, positionFrame.size(), p_232315_ -> seconds <= positionFrame.get(p_232315_).getTimestamp()) - 1);
@@ -195,7 +192,6 @@ public class AnimationHelper {
 							}
 							break;
 					}
-				}
 			}
 		}
 	}
