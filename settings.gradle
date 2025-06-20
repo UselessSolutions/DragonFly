@@ -18,7 +18,4 @@ pluginManagement {
 			url = 'https://maven.thesignalumproject.net/infrastructure'
 		}
 	}
-    plugins {
-        id 'org.jetbrains.kotlin.jvm' version '2.1.20'
-    }
 }
