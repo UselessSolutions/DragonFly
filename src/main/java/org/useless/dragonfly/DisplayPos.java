@@ -111,9 +111,18 @@ public final class DisplayPos {
         @Override
         public DisplayPos deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             JsonObject object = json.getAsJsonObject();
-            float[] rotation = GsonHelper.getAsFloatArray(object.get("rotation"), 3);
-            float[] translation = GsonHelper.getAsFloatArray(object.get("translation"), 3);
-            float[] scale = GsonHelper.getAsFloatArray(object.get("scale"), 3);
+            float[] rotation = new float[]{0,0,0};
+			if(object.has("rotation")) {
+				rotation = GsonHelper.getAsFloatArray(object.get("rotation"), 3);
+			}
+            float[] translation = new float[]{0,0,0};
+			if(object.has("translation")) {
+				translation = GsonHelper.getAsFloatArray(object.get("translation"), 3);
+			}
+            float[] scale = new float[]{0,0,0};
+			if(object.has("scale")) {
+				scale = GsonHelper.getAsFloatArray(object.get("scale"), 3);
+			}
             return new DisplayPos(
                 translation[0] * BlockModelMojangData.BLOCKS_PER_UNIT, translation[1] * BlockModelMojangData.BLOCKS_PER_UNIT, translation[2] * BlockModelMojangData.BLOCKS_PER_UNIT,
                 rotation[0], rotation[1], rotation[2],
