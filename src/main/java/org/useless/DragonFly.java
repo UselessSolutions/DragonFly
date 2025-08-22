@@ -34,12 +34,9 @@ public class DragonFly implements GameStartEntrypoint {
 		version = FabricLoader.getInstance().getModContainer(MOD_ID).get().getMetadata().getVersion().getFriendlyString();
 	}
 
-	public static Block b;
-
 	@Override
 	public void beforeGameStart() {
 		//new ModEntity().initializeEntities();
-		b = new BlockBuilder("minecraft").build("test", 1650, (b) -> new BlockLogic(b, Material.basalt)).withLitInteriorSurface(true);
 	}
 
 

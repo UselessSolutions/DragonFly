@@ -260,60 +260,61 @@ public class StaticBlockModelMojang implements StaticBlockModel {
                 final int dirY = element.flip ? -direction.getOffsetY() : direction.getOffsetY();
                 final int dirZ = element.flip ? -direction.getOffsetZ() : direction.getOffsetZ();
 
-                final int lightmapCoordTopLeft;
-                final int lightmapCoordBottomLeft;
-                final int lightmapCoordBottomRight;
-                final int lightmapCoordTopRight;
+				int lightmapCoordTopLeft = 0;
+				int lightmapCoordBottomLeft = 0;
+				int lightmapCoordBottomRight = 0;
+				int lightmapCoordTopRight = 0;
+                if (LightmapHelper.isLightmapEnabled()) {
+					if (useAO) {
+						final int dirX2;
+						final int dirY2;
+						final int dirZ2;
+						if (!isFullCube) {
+							dirX2 = 0;
+							dirY2 = 0;
+							dirZ2 = 0;
+						} else {
+							dirX2 = dirX;
+							dirY2 = dirY;
+							dirZ2 = dirZ;
+						}
 
-                if (useAO) {
-                    final int dirX2;
-                    final int dirY2;
-                    final int dirZ2;
-                    if (!isFullCube) {
-                        dirX2 = 0;
-                        dirY2 = 0;
-                        dirZ2 = 0;
-                    } else {
-                        dirX2 = dirX;
-                        dirY2 = dirY;
-                        dirZ2 = dirZ;
-                    }
+						final boolean topT = LIGHTING_CACHE.getOpacity(dirX2 + topX, dirY2 + topY, dirZ2 + topZ);
+						final boolean botT = LIGHTING_CACHE.getOpacity(dirX2 - topX, dirY2 - topY, dirZ2 - topZ);
+						final boolean lefT = LIGHTING_CACHE.getOpacity(dirX2 + lefX, dirY2 + lefY, dirZ2 + lefZ);
+						final boolean rigT = LIGHTING_CACHE.getOpacity(dirX2 - lefX, dirY2 - lefY, dirZ2 - lefZ);
 
-                    final boolean topT = LIGHTING_CACHE.getOpacity(dirX2 + topX, dirY2 + topY, dirZ2 + topZ);
-                    final boolean botT = LIGHTING_CACHE.getOpacity(dirX2 - topX, dirY2 - topY, dirZ2 - topZ);
-                    final boolean lefT = LIGHTING_CACHE.getOpacity(dirX2 + lefX, dirY2 + lefY, dirZ2 + lefZ);
-                    final boolean rigT = LIGHTING_CACHE.getOpacity(dirX2 - lefX, dirY2 - lefY, dirZ2 - lefZ);
+						final boolean topLefT = LIGHTING_CACHE.getOpacity(dirX2 + topX + lefX, dirY2 + topY + lefY, dirZ2 + topZ + lefZ);
+						final boolean topRigT = LIGHTING_CACHE.getOpacity(dirX2 + topX - lefX, dirY2 + topY - lefY, dirZ2 + topZ - lefZ);
+						final boolean botLefT = LIGHTING_CACHE.getOpacity(dirX2 - topX + lefX, dirY2 - topY + lefY, dirZ2 - topZ + lefZ);
+						final boolean botRigT = LIGHTING_CACHE.getOpacity(dirX2 - topX - lefX, dirY2 - topY - lefY, dirZ2 - topZ - lefZ);
 
-                    final boolean topLefT = LIGHTING_CACHE.getOpacity(dirX2 + topX + lefX, dirY2 + topY + lefY, dirZ2 + topZ + lefZ);
-                    final boolean topRigT = LIGHTING_CACHE.getOpacity(dirX2 + topX - lefX, dirY2 + topY - lefY, dirZ2 + topZ - lefZ);
-                    final boolean botLefT = LIGHTING_CACHE.getOpacity(dirX2 - topX + lefX, dirY2 - topY + lefY, dirZ2 - topZ + lefZ);
-                    final boolean botRigT = LIGHTING_CACHE.getOpacity(dirX2 - topX - lefX, dirY2 - topY - lefY, dirZ2 - topZ - lefZ);
+						final int lmcCen = getLightmap(dirX2, dirY2, dirZ2, element.lightEmission);
 
-                    final int lmcCen = getLightmap(dirX2, dirY2, dirZ2, element.lightEmission);
+						final int lmcTop = topT ? lmcCen : getLightmap(dirX2 + topX, dirY2 + topY, dirZ2 + topZ, element.lightEmission);
+						final int lmcBot = botT ? lmcCen : getLightmap(dirX2 - topX, dirY2 - topY, dirZ2 - topZ, element.lightEmission);
+						final int lmcLef = lefT ? lmcCen : getLightmap(dirX2 + lefX, dirY2 + lefY, dirZ2 + lefZ, element.lightEmission);
+						final int lmcRig = rigT ? lmcCen : getLightmap(dirX2 - lefX, dirY2 - lefY, dirZ2 - lefZ, element.lightEmission);
 
-                    final int lmcTop = topT ? lmcCen : getLightmap(dirX2 + topX, dirY2 + topY, dirZ2 + topZ, element.lightEmission);
-                    final int lmcBot = botT ? lmcCen : getLightmap(dirX2 - topX, dirY2 - topY, dirZ2 - topZ, element.lightEmission);
-                    final int lmcLef = lefT ? lmcCen : getLightmap(dirX2 + lefX, dirY2 + lefY, dirZ2 + lefZ, element.lightEmission);
-                    final int lmcRig = rigT ? lmcCen : getLightmap(dirX2 - lefX, dirY2 - lefY, dirZ2 - lefZ, element.lightEmission);
+						final int lmcTopLef = topT && lefT ? lmcLef : (topLefT ? lmcCen : getLightmap(dirX2 + topX + lefX, dirY2 + topY + lefY, dirZ2 + topZ + lefZ, element.lightEmission));
+						final int lmcBotLef = botT && lefT ? lmcLef : (botLefT ? lmcCen : getLightmap(dirX2 - topX + lefX, dirY2 - topY + lefY, dirZ2 - topZ + lefZ, element.lightEmission));
+						final int lmcTopRig = topT && rigT ? lmcRig : (topRigT ? lmcCen : getLightmap(dirX2 + topX - lefX, dirY2 + topY - lefY, dirZ2 + topZ - lefZ, element.lightEmission));
+						final int lmcBotRig = botT && rigT ? lmcRig : (botRigT ? lmcCen : getLightmap(dirX2 - topX - lefX, dirY2 - topY - lefY, dirZ2 - topZ - lefZ, element.lightEmission));
 
-                    final int lmcTopLef = topT && lefT ? lmcLef : (topLefT ? lmcCen : getLightmap(dirX2 + topX + lefX, dirY2 + topY + lefY, dirZ2 + topZ + lefZ, element.lightEmission));
-                    final int lmcBotLef = botT && lefT ? lmcLef : (botLefT ? lmcCen : getLightmap(dirX2 - topX + lefX, dirY2 - topY + lefY, dirZ2 - topZ + lefZ, element.lightEmission));
-                    final int lmcTopRig = topT && rigT ? lmcRig : (topRigT ? lmcCen : getLightmap(dirX2 + topX - lefX, dirY2 + topY - lefY, dirZ2 + topZ - lefZ, element.lightEmission));
-                    final int lmcBotRig = botT && rigT ? lmcRig : (botRigT ? lmcCen : getLightmap(dirX2 - topX - lefX, dirY2 - topY - lefY, dirZ2 - topZ - lefZ, element.lightEmission));
-
-                    lightmapCoordTopLeft = LightmapHelper.avg(lmcCen, lmcLef, lmcTop, lmcTopLef);
-                    lightmapCoordTopRight = LightmapHelper.avg(lmcCen, lmcRig, lmcTop, lmcTopRig);
-                    lightmapCoordBottomLeft = LightmapHelper.avg(lmcCen, lmcLef, lmcBot, lmcBotLef);
-                    lightmapCoordBottomRight = LightmapHelper.avg(lmcCen, lmcRig, lmcBot, lmcBotRig);
-                } else {
-                    final int lmc;
-                    if (!isFullCube) {
-                        lmc = getLightmap(0, 0, 0, element.lightEmission);
-                    } else {
-                        lmc = getLightmap(dirX, dirY, dirZ, element.lightEmission);
-                    }
-                    lightmapCoordTopLeft = lightmapCoordBottomLeft = lightmapCoordBottomRight = lightmapCoordTopRight = lmc;
-                }
+						lightmapCoordTopLeft = LightmapHelper.avg(lmcCen, lmcLef, lmcTop, lmcTopLef);
+						lightmapCoordTopRight = LightmapHelper.avg(lmcCen, lmcRig, lmcTop, lmcTopRig);
+						lightmapCoordBottomLeft = LightmapHelper.avg(lmcCen, lmcLef, lmcBot, lmcBotLef);
+						lightmapCoordBottomRight = LightmapHelper.avg(lmcCen, lmcRig, lmcBot, lmcBotRig);
+					} else {
+						final int lmc;
+						if (!isFullCube) {
+							lmc = getLightmap(0, 0, 0, element.lightEmission);
+						} else {
+							lmc = getLightmap(dirX, dirY, dirZ, element.lightEmission);
+						}
+						lightmapCoordTopLeft = lightmapCoordBottomLeft = lightmapCoordBottomRight = lightmapCoordTopRight = lmc;
+					}
+				}
 
                 float lightTR;
                 float lightBR;
@@ -381,9 +382,9 @@ public class StaticBlockModelMojang implements StaticBlockModel {
 				if (rotY != 0) { norm.rotateY(rotY * org.joml.Math.PI_OVER_2_f); }
 				if (rotZ != 0) { norm.rotateZ(rotZ * org.joml.Math.PI_OVER_2_f); }
 
-				float d1 = Math.max(0, norm.dot(light1));
-				float d2 = Math.max(0, norm.dot(light2));
-				float brightness = 0.5f + 0.5f * (d1 + d2);
+				final float d1 = Math.max(0, norm.dot(light1));
+				final float d2 = Math.max(0, norm.dot(light2));
+				final float brightness = 0.5f + 0.5f * (d1 + d2);
 
 				r *= brightness;
 				g *= brightness;
@@ -449,7 +450,7 @@ public class StaticBlockModelMojang implements StaticBlockModel {
                 Vector2fc uvsTL = element.vertexUvs[offset + VERTEX_TOP_LEFT];
                 if (uvlock) uvsTL = rotateUV(uvsTL, rotX, rotY, rotZ, element.directions[face], new Vector2f());
                 tessellator.setColorOpaque_F(colorRedTopLeft, colorGreenTopLeft, colorBlueTopLeft);
-                tessellator.setLightmapCoord(lightmapCoordTopLeft);
+                if (LightmapHelper.isLightmapEnabled()) tessellator.setLightmapCoord(lightmapCoordTopLeft);
                 tessellator.addVertexWithUV(
                     posTL.x() + x + xOff,
                     posTL.y() + y + yOff,
@@ -468,7 +469,7 @@ public class StaticBlockModelMojang implements StaticBlockModel {
                 Vector2fc uvsBL = element.vertexUvs[offset + VERTEX_BOTTOM_LEFT];
                 if (uvlock) uvsBL = rotateUV(uvsBL, rotX, rotY, rotZ, element.directions[face], new Vector2f());
                 tessellator.setColorOpaque_F(colorRedBottomLeft, colorGreenBottomLeft, colorBlueBottomLeft);
-                tessellator.setLightmapCoord(lightmapCoordBottomLeft);
+				if (LightmapHelper.isLightmapEnabled()) tessellator.setLightmapCoord(lightmapCoordBottomLeft);
                 tessellator.addVertexWithUV(
                     posBL.x() + x + xOff,
                     posBL.y() + y + yOff,
@@ -487,7 +488,7 @@ public class StaticBlockModelMojang implements StaticBlockModel {
                 Vector2fc uvsBR = element.vertexUvs[offset + VERTEX_BOTTOM_RIGHT];
                 if (uvlock) uvsBR = rotateUV(uvsBR, rotX, rotY, rotZ, element.directions[face], new Vector2f());
                 tessellator.setColorOpaque_F(colorRedBottomRight, colorGreenBottomRight, colorBlueBottomRight);
-                tessellator.setLightmapCoord(lightmapCoordBottomRight);
+				if (LightmapHelper.isLightmapEnabled()) tessellator.setLightmapCoord(lightmapCoordBottomRight);
                 tessellator.addVertexWithUV(
                     posBR.x() + x + xOff,
                     posBR.y() + y + yOff,
@@ -506,7 +507,7 @@ public class StaticBlockModelMojang implements StaticBlockModel {
                 Vector2fc uvsTR = element.vertexUvs[offset + VERTEX_TOP_RIGHT];
                 if (uvlock) uvsTR = rotateUV(uvsTR, rotX, rotY, rotZ, element.directions[face], new Vector2f());
                 tessellator.setColorOpaque_F(colorRedTopRight, colorGreenTopRight, colorBlueTopRight);
-                tessellator.setLightmapCoord(lightmapCoordTopRight);
+				if (LightmapHelper.isLightmapEnabled()) tessellator.setLightmapCoord(lightmapCoordTopRight);
                 tessellator.addVertexWithUV(
                     posTR.x() + x + xOff,
                     posTR.y() + y + yOff,

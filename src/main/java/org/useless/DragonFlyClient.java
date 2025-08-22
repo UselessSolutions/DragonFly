@@ -31,7 +31,6 @@ public class DragonFlyClient implements ModelEntrypoint {
 
 	@Override
 	public void initBlockModels(BlockModelDispatcher blockModelDispatcher) {
-		blockModelDispatcher.addDispatch(new BlockModelDFJava<>(DragonFly.b, DragonFly.loadBlockModel("minecraft:block/dragon_egg")));
 	}
 
 	@Override
