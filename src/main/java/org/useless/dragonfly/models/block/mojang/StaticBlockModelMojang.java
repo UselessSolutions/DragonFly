@@ -39,6 +39,8 @@ import static org.useless.dragonfly.data.block.mojang.CompiledBlockModelMojangDa
 public class StaticBlockModelMojang implements StaticBlockModel {
     protected static final Minecraft MC = Minecraft.getMinecraft();
     protected static final LightingCache LIGHTING_CACHE = new LightingCache();
+	protected static final @NotNull Vector3f light1 = new Vector3f(0.2f, 1.0f, -0.7f).normalize();
+	protected static final @NotNull Vector3f light2 = new Vector3f(-0.2f, 1.0f, 0.7f).normalize();
 
     protected final @NotNull CompiledBlockModelMojangData compiled;
 
@@ -240,9 +242,9 @@ public class StaticBlockModelMojang implements StaticBlockModel {
                 final boolean useAO = this.compiled.data.ambientOcclusion && MC.isAmbientOcclusionEnabled() && element.shade;
                 final boolean isFullCube = depth <= RenderBlocks.FULL_CUBE_THRESHOLD && element.shade;
 
-                final float r;
-                final float g;
-                final float b;
+                float r;
+                float g;
+                float b;
                 if (element.tintIndices[face] >= 0) {
                     final int c = color.getWorldColor(worldSource, x, y, z);
                     r = Color.redFromInt(c) / 255f;
@@ -374,6 +376,19 @@ public class StaticBlockModelMojang implements StaticBlockModel {
                     lightTL = lightBL = lightBR = lightTR = getBrightness(dirX2, dirY2, dirZ2, minBrightness);
                 }
 
+				final Vector3f norm = q.set(element.faceNormals[face]);
+				if (rotX != 0) { norm.rotateX(rotX * org.joml.Math.PI_OVER_2_f); }
+				if (rotY != 0) { norm.rotateY(rotY * org.joml.Math.PI_OVER_2_f); }
+				if (rotZ != 0) { norm.rotateZ(rotZ * org.joml.Math.PI_OVER_2_f); }
+
+				float d1 = Math.max(0, norm.dot(light1));
+				float d2 = Math.max(0, norm.dot(light2));
+				float brightness = 0.5f + 0.5f * (d1 + d2);
+
+				r *= brightness;
+				g *= brightness;
+				b *= brightness;
+
                 float colorRedBottomLeft = r;
                 float colorRedBottomRight = colorRedBottomLeft;
                 float colorRedTopRight = colorRedBottomLeft;
@@ -414,11 +429,6 @@ public class StaticBlockModelMojang implements StaticBlockModel {
                 colorBlueTopRight *= ltr;
 
                 final int offset = face * 4;
-
-                final Vector3f norm = q.set(element.faceNormals[face]);
-                if (rotX != 0) { norm.rotateX(rotX * org.joml.Math.PI_OVER_2_f); }
-                if (rotY != 0) { norm.rotateY(rotY * org.joml.Math.PI_OVER_2_f); }
-                if (rotZ != 0) { norm.rotateZ(rotZ * org.joml.Math.PI_OVER_2_f); }
 
 //                if (element.shade) {
 //                    tessellator.setNormal(norm.x(), norm.y(), norm.z());
