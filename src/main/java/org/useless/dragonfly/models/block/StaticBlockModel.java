@@ -21,7 +21,11 @@ public interface StaticBlockModel {
     /**
      * @return True if anything rendered, false otherwise
      */
-    boolean renderAttached(@NotNull BlockModel<? extends BlockLogic> sourceModel, @NotNull Tessellator tessellator, @NotNull WorldSource worldSource, int x, int y, int z, double xOff, double yOff, double zOff, boolean cullFaces, @Nullable IconCoordinate overrideTexture);
+    boolean renderAttached(@NotNull BlockModel<? extends BlockLogic> sourceModel, @NotNull Tessellator tessellator, @NotNull WorldSource worldSource,
+						   int x, int y, int z,
+						   int rotX, int rotY, int rotZ,
+						   double xOff, double yOff, double zOff,
+						   boolean uvLock, boolean cullFaces, @Nullable IconCoordinate overrideTexture);
 
     /**
      * @return Block texture to overlay when inside a block
