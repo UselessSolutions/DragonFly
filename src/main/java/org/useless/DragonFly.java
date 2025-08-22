@@ -2,6 +2,9 @@ package org.useless;
 
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.core.block.Block;
+import net.minecraft.core.block.BlockLogic;
+import net.minecraft.core.block.material.Material;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,8 +16,10 @@ import org.useless.dragonfly.data.block.mojang.state.ModelPart;
 import org.useless.dragonfly.data.entity.mojang.EntityGeometryMojangData;
 import org.useless.dragonfly.models.entity.StaticEntityModel;
 import org.useless.util.AnimationHelper;
+import turniplabs.halplibe.helper.BlockBuilder;
 import turniplabs.halplibe.util.GameStartEntrypoint;
 
+import java.util.Map;
 import java.util.Objects;
 import java.util.Random;
 

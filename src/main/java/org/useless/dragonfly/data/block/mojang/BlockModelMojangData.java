@@ -12,6 +12,7 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.google.gson.stream.JsonReader;
 import com.mojang.logging.LogUtils;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.render.texturepack.TexturePackList;
 import net.minecraft.core.util.HardIllegalArgumentException;
 import net.minecraft.core.util.collection.NamespaceID;
@@ -28,12 +29,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import static org.useless.DragonFly.DEFAULT_NAMESPACE;
 
 /**
  * <p>Modern Minecraft Block Model Data scheme as laid out on the {@see <a href="https://minecraft.wiki/w/Model#Block_models">minecraft.wiki/w/Model#Block_models</a>} page of the minecraft wiki.</p>
@@ -55,6 +55,8 @@ public class BlockModelMojangData implements BlockModelData {
         builder.registerTypeAdapter(DisplayPos.class, new DisplayPos.Serializer());
         return builder;
     }
+
+    protected static final String DEFAULT_NAMESPACE = "minecraft";
 
     protected static final String DEFAULT_PARENT = null;
     protected static final boolean DEFAULT_AMBIENT_OCCLUSION = true;
@@ -93,7 +95,7 @@ public class BlockModelMojangData implements BlockModelData {
     /**
      * Each direction's color index, -1 represents no color
      */
-    public final @Nullable Map<@NotNull Direction, @NotNull Integer> particleIndices;
+    public final @Nullable Map<@NotNull Direction, Integer> particleIndices;
 
     /**
      * Contains all the elements of the model.
@@ -109,7 +111,7 @@ public class BlockModelMojangData implements BlockModelData {
         @Nullable final Integer renderLayer,
         @Nullable final Map<@NotNull String, @NotNull DisplayPos> displayPositions,
         @Nullable final Map<@NotNull String, @NotNull String> textures,
-        @Nullable final Map<@NotNull Direction, @NotNull Integer> particleIndices,
+        @Nullable final Map<@NotNull Direction, Integer> particleIndices,
         @Nullable final List<@NotNull Element> elements)
     {
         this.modelId = id.makePermanent();
@@ -120,7 +122,7 @@ public class BlockModelMojangData implements BlockModelData {
             if (parentData != null) {
                 this.displayPositions = new HashMap<>();
                 this.textures = new HashMap<>();
-                this.particleIndices = new HashMap<>();
+                this.particleIndices = new EnumMap<>(Direction.class);
                 // Elements overrides parent's elements rather than merges them like other fields
                 this.elements = (parentData.elements != null && elements == null) ? new ArrayList<>(parentData.elements) : elements;
                 this.renderLayer = (parentData.renderLayer != null && renderLayer == null) ? parentData.renderLayer : renderLayer;
@@ -176,10 +178,10 @@ public class BlockModelMojangData implements BlockModelData {
     public static class Builder {
         protected @Nullable String parent = DEFAULT_PARENT;
         protected boolean ambientOcclusion = DEFAULT_AMBIENT_OCCLUSION;
-        protected int renderLayer = DEFAULT_RENDER_LAYER;
+        protected @Nullable Integer renderLayer = null;
         protected @Nullable Map<@NotNull String, @NotNull DisplayPos> displayPosMap = null;
         protected @Nullable Map<@NotNull String, @NotNull String> textures = null;
-        protected @Nullable Map<@NotNull Direction, @NotNull Integer> particleIndices = null;
+        protected @Nullable Map<@NotNull Direction, Integer> particleIndices = null;
         protected @Nullable List<Element. @NotNull Builder> elements = null;
 
         public @NotNull Builder setParent(@Nullable final String parent) {
@@ -231,8 +233,8 @@ public class BlockModelMojangData implements BlockModelData {
             return this.textures;
         }
 
-        private @NotNull Map<@NotNull Direction, @NotNull Integer> prepareParticleIndicesMap() {
-            if (this.particleIndices == null) this.particleIndices = new HashMap<>();
+        private @NotNull Map<@NotNull Direction, Integer> prepareParticleIndicesMap() {
+            if (this.particleIndices == null) this.particleIndices = new EnumMap<>(Direction.class);
             return this.particleIndices;
         }
 
@@ -341,6 +343,21 @@ public class BlockModelMojangData implements BlockModelData {
             final BlockModelMojangData model = data.build(texturePackList, namespace + ":" + value);
             modelDataCache.put(model.modelId().toString(), model);
             return model;
+        }
+
+        private static @NotNull BlockModelMojangData MISSING_MODEL = new Builder()
+            .addElement(new Element.Builder(0, 0, 0, 16, 16, 16)
+                .addFace(Direction.UP, new Face.Builder("minecraft:block/missing"))
+                .addFace(Direction.DOWN, new Face.Builder("minecraft:block/missing"))
+                .addFace(Direction.NORTH, new Face.Builder("minecraft:block/missing"))
+                .addFace(Direction.SOUTH, new Face.Builder("minecraft:block/missing"))
+                .addFace(Direction.WEST, new Face.Builder("minecraft:block/missing"))
+                .addFace(Direction.EAST, new Face.Builder("minecraft:block/missing"))
+            )
+            .setAO(true)
+            .build(Minecraft.getMinecraft().texturePackList, "minecraft:block/missing");
+        public static @NotNull BlockModelMojangData getMissingModel() {
+            return MISSING_MODEL;
         }
 
         public static void resetCache() {

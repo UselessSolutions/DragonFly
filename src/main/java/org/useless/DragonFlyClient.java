@@ -5,6 +5,8 @@ import net.minecraft.client.render.TileEntityRenderDispatcher;
 import net.minecraft.client.render.block.color.BlockColorDispatcher;
 import net.minecraft.client.render.block.model.BlockModelDispatcher;
 import net.minecraft.client.render.item.model.ItemModelDispatcher;
+import net.minecraft.core.block.Blocks;
+import org.useless.dragonfly.models.block.BlockModelDFJava;
 import turniplabs.halplibe.util.ModelEntrypoint;
 
 public class DragonFlyClient implements ModelEntrypoint {
@@ -29,7 +31,6 @@ public class DragonFlyClient implements ModelEntrypoint {
 
 	@Override
 	public void initBlockModels(BlockModelDispatcher blockModelDispatcher) {
-
 	}
 
 	@Override
