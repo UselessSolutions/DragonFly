@@ -19,7 +19,7 @@ DragonFly Allows the use of
 
 # Setup
 ### Add to project
-- Add version variable to "gradle.properties" `dragonfly_version=1.7.0-alpha.5`
+- Add version variable to "gradle.properties" `dragonfly_version=1.5.0-7.2-pre2`
 - Add mod repository to "build.gradle"
 ```
 repositories {
@@ -27,7 +27,7 @@ repositories {
 	maven { url = "https://jitpack.io" }
 }
 ```
-- Implement mod in "build.gradle" `modImplementation("useless:dragonfly:$dragonfly_version")`
+- Implement mod in "build.gradle" `modImplementation "com.github.UselessSolutions:dragonfly:${project.dragonfly_version}"`
 
 # Credits:
 - UselessBullets - Block Model Support
