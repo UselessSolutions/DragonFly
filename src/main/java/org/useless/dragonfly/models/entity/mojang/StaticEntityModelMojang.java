@@ -98,8 +98,8 @@ public class StaticEntityModelMojang implements StaticEntityModel {
         GL11.glRotated(-(transform.rotZ * MathHelper.RAD_TO_DEG) - bone.rotation[2], 0, 0, 1);
         GL11.glRotated((transform.rotY * MathHelper.RAD_TO_DEG) + bone.rotation[1], 0, 1, 0);
         GL11.glRotated(-(transform.rotX * MathHelper.RAD_TO_DEG) - bone.rotation[0], 1, 0, 0);
-        GL11.glTranslated(-bone.pivot[0], -bone.pivot[1], -bone.pivot[2]);
         GL11.glScaled(transform.scaleX, transform.scaleY, transform.scaleZ);
+        GL11.glTranslated(-bone.pivot[0], -bone.pivot[1], -bone.pivot[2]);
         return hidden;
     }
 
